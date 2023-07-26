@@ -9,7 +9,7 @@ import MapMarker from './MapMarker';
 import ColorScheme from '../../customization/ColorScheme';
 import LocationGroup from '../LocationGroup';
 import Submap from './Submap';
-import { MarkerClickCallback, LocationClickCallback } from '../../callbacks';
+import { MarkerClickCallback, LocationClickCallback, CheckAllClickCallback } from '../../callbacks';
 import mapData from '../../data/mapData.json';
 import LocationContextMenu from '../LocationContextMenu';
 import LocationGroupContextMenu from '../LocationGroupContextMenu';
@@ -21,6 +21,7 @@ type WorldMapProps = {
     handleGroupClick: MarkerClickCallback
     handleSubmapClick: MarkerClickCallback,
     handleLocationClick: LocationClickCallback,
+    handleCheckAllClick: CheckAllClickCallback,
     containerHeight: number,
     expandedGroup: string,
     activeSubmap: string,
@@ -75,6 +76,7 @@ const WorldMap = (props: WorldMapProps) => {
                             markerY={marker.markerY}
                             title={marker.region}
                             onChange={props.handleGroupClick}
+                            onCheckAll={props.handleCheckAllClick}
                             mapWidth={imgWidth}
                             colorScheme={colorScheme}
                             expandedGroup={expandedGroup}
@@ -90,6 +92,7 @@ const WorldMap = (props: WorldMapProps) => {
                         title={submap.name}
                         onMarkerChange={props.handleGroupClick}
                         onSubmapChange={props.handleSubmapClick}
+                        onCheckAll={props.handleCheckAllClick}
                         markers={submap.markers}
                         map={images.get(submap.map)}
                         mapWidth={imgWidth}

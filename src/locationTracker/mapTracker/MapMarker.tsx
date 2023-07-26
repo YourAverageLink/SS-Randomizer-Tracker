@@ -3,10 +3,11 @@ import Tippy from '@tippyjs/react';
 import { followCursor } from 'tippy.js';
 import 'react-contexify/dist/ReactContexify.css';
 import { useContextMenu } from 'react-contexify';
+import _ from 'lodash';
 import AreaCounters from '../AreaCounters';
 import Logic from '../../logic/Logic';
 import ColorScheme from '../../customization/ColorScheme';
-import { MarkerClickCallback } from '../../callbacks';
+import { CheckAllClickCallback, MarkerClickCallback } from '../../callbacks';
 import keyDownWrapper from '../../KeyDownWrapper';
 
 import sotsImage from '../../assets/hints/sots.png';
@@ -18,6 +19,7 @@ import moldarach from '../../assets/hints/moldarach.png';
 import koloktos from '../../assets/hints/koloktos.png';
 import tentalus from '../../assets/hints/tentalus.png';
 import g2 from '../../assets/hints/g2.png';
+
 
 
 
@@ -45,6 +47,7 @@ type MapMarkerProps = {
     markerY: number;
     title: string;
     onChange: MarkerClickCallback;
+    onCheckAll: CheckAllClickCallback;
     mapWidth: number;
     colorScheme: ColorScheme;
     expandedGroup: string;
@@ -52,7 +55,7 @@ type MapMarkerProps = {
 
 const MapMarker = (props: MapMarkerProps) => {
     
-    const { onChange, title, logic, markerX, markerY, mapWidth, colorScheme, expandedGroup} = props;
+    const { onChange, onCheckAll, title, logic, markerX, markerY, mapWidth, colorScheme, expandedGroup} = props;
     const remainingChecks: number = logic.getTotalCountForArea(props.title);
     const accessibleChecks: number = logic.getInLogicCountForArea(props.title);
     let markerColor: string = colorScheme.outLogic;
@@ -69,13 +72,16 @@ const MapMarker = (props: MapMarkerProps) => {
     const [barren, setBarren] = useState(false);
     const [inEffect, setInEffect] = useState(false);
     const [pathIndex, setPath] = useState(6);
+    const setAllLocationsChecked = (value: boolean) => {
+        onCheckAll(title, value);
+    }
 
     const { show } = useContextMenu({
         id: 'group-context',
     });
 
     const displayMenu = useCallback((e: MouseEvent) => {
-        show({ event: e, props: { setSots, setBarren, setPath } });
+        show({ event: e, props: { setAllLocationsChecked, setSots, setBarren, setPath } });
     }, [show]);
 
     useEffect(() => {

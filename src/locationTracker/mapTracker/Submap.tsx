@@ -5,7 +5,7 @@ import _ from 'lodash';
 import Logic from '../../logic/Logic';
 import ColorScheme from '../../customization/ColorScheme';
 import MapMarker from './MapMarker';
-import { MarkerClickCallback } from '../../callbacks';
+import { CheckAllClickCallback, MarkerClickCallback } from '../../callbacks';
 import keyDownWrapper from '../../KeyDownWrapper';
 import leaveSkyloft from '../../assets/maps/leaveSkyloft.png';
 import leaveFaron from '../../assets/maps/leaveFaron.png';
@@ -33,6 +33,7 @@ type SubmapProps = {
     colorScheme: ColorScheme;
     onSubmapChange: MarkerClickCallback;
     onMarkerChange: MarkerClickCallback;
+    onCheckAll: CheckAllClickCallback;
     markers: Array<MarkerParams>;
     activeSubmap: string;
     map: string;
@@ -123,6 +124,7 @@ const Submap = (props: SubmapProps) => {
                     markerY={marker.markerY}
                     title={marker.region}
                     onChange={props.onMarkerChange}
+                    onCheckAll={props.onCheckAll}
                     mapWidth={mapWidth}
                     colorScheme={props.colorScheme}
                     expandedGroup={expandedGroup}
