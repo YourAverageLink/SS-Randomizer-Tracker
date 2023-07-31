@@ -6,7 +6,7 @@ import Logic from '../../logic/Logic';
 import ColorScheme from '../../customization/ColorScheme';
 import MapMarker from './MapMarker';
 import DungeonMarker from './DungeonMarker';
-import { MarkerClickCallback, HintClickCallback, DungeonBindCallback } from '../../callbacks';
+import { CheckAllClickCallback, MarkerClickCallback, HintClickCallback, DungeonBindCallback } from '../../callbacks';
 import keyDownWrapper from '../../KeyDownWrapper';
 import leaveSkyloft from '../../assets/maps/leaveSkyloft.png';
 import leaveFaron from '../../assets/maps/leaveFaron.png';
@@ -36,6 +36,7 @@ type SubmapProps = {
     onMarkerChange: MarkerClickCallback;
     onHintClick: HintClickCallback;
     onDungeonBind: DungeonBindCallback;
+    onCheckAll: CheckAllClickCallback;
     markers: Array<MarkerParams>;
     dungeons: Array<MarkerParams>;
     activeSubmap: string;
@@ -56,7 +57,7 @@ const Submap = (props: SubmapProps) => {
     let remainingChecks = 0
     let accessibleChecks = 0;
     const subregionHints: Array<ReactNode> = [];
-    const { onSubmapChange, onMarkerChange, onHintClick, onDungeonBind, title, logic, markerX, markerY, mapWidth, activeSubmap, colorScheme, markers, dungeons, exitParams, expandedGroup} = props;
+    const { onSubmapChange, onMarkerChange, onHintClick, onDungeonBind, onCheckAll, title, logic, markerX, markerY, mapWidth, activeSubmap, colorScheme, markers, dungeons, exitParams, expandedGroup} = props;
     _.forEach(markers, (marker) => {
         remainingChecks += logic.getTotalCountForArea(marker.region);
         accessibleChecks += logic.getInLogicCountForArea(marker.region);
@@ -158,6 +159,7 @@ const Submap = (props: SubmapProps) => {
                     title={marker.region}
                     onChange={onMarkerChange}
                     onHintClick={onHintClick}
+                    onCheckAll={onCheckAll}
                     mapWidth={mapWidth}
                     colorScheme={props.colorScheme}
                     expandedGroup={expandedGroup}
@@ -173,6 +175,7 @@ const Submap = (props: SubmapProps) => {
                     onChange={onMarkerChange}
                     onHintClick={onHintClick}
                     onDungeonBind={onDungeonBind}
+                    onCheckAll={props.onCheckAll}
                     mapWidth={mapWidth}
                     colorScheme={props.colorScheme}
                     expandedGroup={expandedGroup}

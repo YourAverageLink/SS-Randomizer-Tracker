@@ -7,7 +7,7 @@ import AreaCounters from '../AreaCounters';
 import Logic from '../../logic/Logic';
 import LogicHelper from '../../logic/LogicHelper';
 import ColorScheme from '../../customization/ColorScheme';
-import { MarkerClickCallback, HintClickCallback, DungeonBindCallback } from '../../callbacks';
+import { CheckAllClickCallback, MarkerClickCallback, HintClickCallback, DungeonBindCallback } from '../../callbacks';
 import keyDownWrapper from '../../KeyDownWrapper';
 
 import sotsImage from '../../assets/hints/sots.png';
@@ -39,6 +39,7 @@ type DungeonMarkerProps = {
     onChange: MarkerClickCallback;
     onHintClick: HintClickCallback;
     onDungeonBind: DungeonBindCallback;
+    onCheckAll: CheckAllClickCallback;
     mapWidth: number;
     colorScheme: ColorScheme;
     expandedGroup: string;
@@ -46,7 +47,7 @@ type DungeonMarkerProps = {
 
 const DungeonMarker = (props: DungeonMarkerProps) => {
     
-    const { onChange, onHintClick, onDungeonBind, title, logic, markerX, markerY, mapWidth, colorScheme, expandedGroup} = props;
+    const { onChange, onHintClick, onDungeonBind, onCheckAll, title, logic, markerX, markerY, mapWidth, colorScheme, expandedGroup} = props;
     let dungeon = '';
     if (logic.dungeonConnections !== undefined) {
         dungeon = logic.dungeonConnections[title as keyof typeof logic.dungeonConnections];
@@ -81,6 +82,11 @@ const DungeonMarker = (props: DungeonMarkerProps) => {
             onHintClick(dungeon, value);
         }
     }
+    const setAllLocationsChecked = (value: boolean) => {
+        if (hasConnection) {
+            onCheckAll(dungeon, value);
+        }
+    }
     const bindDungeon = (exit: string) => {
         onDungeonBind(title, exit)
     }
@@ -95,9 +101,9 @@ const DungeonMarker = (props: DungeonMarkerProps) => {
 
     const displayMenu = useCallback((e: MouseEvent) => {
         if (hasConnection) {
-            showBound({ event: e, props: { setHint, bindDungeon } });
+            showBound({ event: e, props: { setAllLocationsChecked, setHint, bindDungeon } });
         } else {
-            showUnbound({ event: e, props: { setHint, bindDungeon } });
+            showUnbound({ event: e, props: { setAllLocationsChecked, setHint, bindDungeon } });
         }
     }, [showBound, showUnbound]);
 

@@ -3,10 +3,11 @@ import Tippy from '@tippyjs/react';
 import { followCursor } from 'tippy.js';
 import 'react-contexify/dist/ReactContexify.css';
 import { useContextMenu } from 'react-contexify';
+import _ from 'lodash';
 import AreaCounters from '../AreaCounters';
 import Logic from '../../logic/Logic';
 import ColorScheme from '../../customization/ColorScheme';
-import { MarkerClickCallback, HintClickCallback } from '../../callbacks';
+import { CheckAllClickCallback, MarkerClickCallback, HintClickCallback } from '../../callbacks';
 import keyDownWrapper from '../../KeyDownWrapper';
 import LocationGroupContextMenu from '../LocationGroupContextMenu';
 
@@ -38,6 +39,7 @@ type MapMarkerProps = {
     title: string;
     onChange: MarkerClickCallback;
     onHintClick: HintClickCallback;
+    onCheckAll: CheckAllClickCallback;
     mapWidth: number;
     colorScheme: ColorScheme;
     expandedGroup: string;
@@ -45,7 +47,7 @@ type MapMarkerProps = {
 
 const MapMarker = (props: MapMarkerProps) => {
     
-    const { onChange, onHintClick, title, logic, markerX, markerY, mapWidth, colorScheme, expandedGroup} = props;
+    const { onChange, onHintClick, onCheckAll, title, logic, markerX, markerY, mapWidth, colorScheme, expandedGroup} = props;
     const remainingChecks: number = logic.getTotalCountForArea(props.title);
     const accessibleChecks: number = logic.getInLogicCountForArea(props.title);
     let markerColor: string = colorScheme.outLogic;
@@ -61,13 +63,16 @@ const MapMarker = (props: MapMarkerProps) => {
     const setHint = (value: string) => {
         onHintClick(title, value);
     }
+    const setAllLocationsChecked = (value: boolean) => {
+        onCheckAll(title, value);
+    }
 
     const { show } = useContextMenu({
         id: 'group-context',
     });
 
     const displayMenu = useCallback((e: MouseEvent) => {
-        show({ event: e, props: { setHint } });
+        show({ event: e, props: { setAllLocationsChecked, setHint } });
     }, [show]);
 
     let hint = '';

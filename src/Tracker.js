@@ -64,6 +64,7 @@ class Tracker extends React.Component {
         this.updateLocationLayout = this.updateLocationLayout.bind(this);
         this.handleHintClick = this.handleHintClick.bind(this);
         this.handleDungeonBind = this.handleDungeonBind.bind(this);
+        this.handleCheckAllClick = this.handleCheckAllClick.bind(this);
         // const storedState = JSON.parse(localStorage.getItem('ssrTrackerState'));
         // if (storedState) {
         //     this.importState(storedState);
@@ -191,6 +192,14 @@ class Tracker extends React.Component {
         if (dungeon !== '') {
             this.state.logic.giveItem(_.camelCase(`Entered ${dungeon}`));
         }
+        this.forceUpdate();
+    }
+
+    handleCheckAllClick(region, checked) {
+        _.forEach(this.state.logic.locationsForArea(region), (location) => {
+            location.checked = checked;
+        });
+        this.state.logic.updateAllCounters();
         this.forceUpdate();
     }
 
@@ -468,6 +477,7 @@ class Tracker extends React.Component {
                                 expandedGroup={this.state.expandedGroup}
                                 handleLocationClick={this.handleLocationClick}
                                 handleHintClick={this.handleHintClick}
+                                handleCheckAllClick={this.handleCheckAllClick}
                                 containerHeight={this.state.height * 0.95}
                                 handleSubmapClick={this.handleSubmapClick}
                                 activeSubmap={this.state.activeSubmap}
