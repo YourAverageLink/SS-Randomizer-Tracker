@@ -19,6 +19,7 @@ const polyfills = legacy({
 
 export default defineConfig(() => {
     return {
+        base: '/SS-Randomizer-Tracker/',
         build: {
             outDir: 'build',
         },

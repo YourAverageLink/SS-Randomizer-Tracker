@@ -3,7 +3,7 @@
       "target": "ESNext",
       "useDefineForClassFields": true,
       "module": "ESNext",
-      "lib": ["ESNext", "webworker"],
+      "lib": ["ES2015", "webworker"],
       "moduleResolution": "Node",
       "strict": true,
       "sourceMap": true,
