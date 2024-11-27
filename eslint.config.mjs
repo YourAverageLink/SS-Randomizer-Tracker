@@ -66,14 +66,6 @@ export default [
         },
 
         rules: {
-            indent: [
-                'error',
-                4,
-                {
-                    SwitchCase: 1,
-                },
-            ],
-
             'react/jsx-filename-extension': [
                 'error',
                 {
@@ -85,9 +77,7 @@ export default [
             'no-plusplus': ['off'],
 
             'no-param-reassign': ['error'],
-            'react/prefer-stateless-function': ['off'],
             'no-mixed-operators': ['off'],
-            'linebreak-style': ['off'],
             'no-bitwise': ['off'],
             'react/require-default-props': ['off'],
 
