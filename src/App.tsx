@@ -19,7 +19,7 @@ function App() {
 
     return (
         <ErrorBoundary FallbackComponent={ErrorPage}>
-            <Router>
+            <Router basename={$PUBLIC_URL}>
                 <Routes>
                     <Route path="/" element={<Options />} />
                     <Route path="/tracker" element={<Tracker />} />
