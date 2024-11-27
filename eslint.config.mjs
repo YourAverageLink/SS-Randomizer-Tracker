@@ -74,37 +74,15 @@ export default [
                 },
             ],
 
-            'react/jsx-indent': ['error', 4],
-            'react/jsx-indent-props': ['error', 4],
-
             'react/jsx-filename-extension': [
                 'error',
                 {
-                    extensions: ['.jsx', '.js', 'tsx'],
+                    extensions: ['.jsx', 'tsx'],
                 },
             ],
 
             'max-len': 0,
             'no-plusplus': ['off'],
-
-            'operator-linebreak': [
-                'error',
-                'after',
-                {
-                    overrides: {
-                        '?': 'before',
-                        ':': 'before',
-                    },
-                },
-            ],
-
-            'object-curly-newline': [
-                'error',
-                {
-                    multiline: true,
-                    consistent: true,
-                },
-            ],
 
             'no-param-reassign': ['error'],
             'react/prefer-stateless-function': ['off'],
@@ -112,14 +90,6 @@ export default [
             'linebreak-style': ['off'],
             'no-bitwise': ['off'],
             'react/require-default-props': ['off'],
-
-            'lines-between-class-members': [
-                'error',
-                'always',
-                {
-                    exceptAfterSingleLine: true,
-                },
-            ],
 
             '@typescript-eslint/no-floating-promises': 'off',
             '@typescript-eslint/no-unsafe-argument': 'error',
