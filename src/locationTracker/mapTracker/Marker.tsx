@@ -60,7 +60,7 @@ export function Marker({
                     tabIndex={0}
                     onContextMenu={onContextMenu}
                 >
-                    <span style={markerStyle} id="marker">
+                    <span style={markerStyle}>
                         {children}
                     </span>
                 </div>

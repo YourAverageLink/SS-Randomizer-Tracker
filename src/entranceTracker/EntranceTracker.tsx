@@ -141,7 +141,7 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
     return (
         <Modal show={show} onHide={onHide} size="lg">
             <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
+                <Modal.Title>
                     Entrances
                 </Modal.Title>
             </Modal.Header>
