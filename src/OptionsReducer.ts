@@ -135,10 +135,9 @@ export type LoadingState =
         error: string;
     };
 
-function convertError(e: any) {
+function convertError(e: unknown) {
     return e
-        ? (typeof e === 'object' && 'message' in e)
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        ? (typeof e === 'object' && e != null && 'message' in e)
             ? (e.message as string)
             : JSON.stringify(e)
         : 'Unknown error';

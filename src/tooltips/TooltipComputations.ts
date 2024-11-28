@@ -125,6 +125,7 @@ function createWorker() {
             './worker/Worker',
             import.meta.url,
         ),
+        { type: "module" }
     );
 
     const cleanup = () => {

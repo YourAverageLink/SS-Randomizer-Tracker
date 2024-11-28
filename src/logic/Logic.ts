@@ -532,7 +532,7 @@ export function parseLogic(raw: RawLogic): Logic {
                     locationId.includes('Goddess Cube at Ride') ||
                     locationId.includes('Gossip Stone in Temple of Time Area'))
             ) {
-                // FIXME fix the data
+                // The data has been fixed but we support old versions
                 region = 'Lanayru Desert';
             }
             if (!region) {

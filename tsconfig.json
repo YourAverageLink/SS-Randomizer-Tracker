@@ -3,8 +3,11 @@
       "target": "es6",
       "lib": [
         "dom",
-        "dom.iterable",
-        "esnext"
+        "ES2015"
+      ],
+      "types": [
+        "vite/client",
+        "vitest/globals"
       ],
       "allowJs": true,
       "skipLibCheck": true,
@@ -24,6 +27,8 @@
       "jsx": "react-jsx"
     },
     "include": [
-      "src"
+      "src",
+      "vite.config.js",
+      "eslint.config.js"
     ]
 }

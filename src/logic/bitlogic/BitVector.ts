@@ -103,7 +103,7 @@ export class BitVector {
     }
 
     /** Iterates over all set bits in this BitVector. */
-    iter(): IterableIterator<number> {
+    iter() {
         return this.intSet.values()
     }
 

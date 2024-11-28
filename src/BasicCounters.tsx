@@ -34,9 +34,7 @@ export default function BasicCounters() {
                 disabled={!relevantExits.length}
                 content={<EntrancesTooltip exits={relevantExits} />}
             >
-                <p>
-                    <>{`Entrances Accessible: ${state.numExitsAccessible}`}</>
-                </p>
+                <p>{`Entrances Accessible: ${state.numExitsAccessible}`}</p>
             </Tooltip>
         </div>
     );

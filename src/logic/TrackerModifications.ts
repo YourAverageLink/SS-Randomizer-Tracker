@@ -64,7 +64,7 @@ export function getInitialItems(
     const items: TrackerState['inventory'] = {};
     const add = (item: InventoryItem, count: number = 1) => {
         items[item] ??= 0;
-        items[item]! += count;
+        items[item] += count;
     };
     add('Sailcloth');
     if (settings['starting-tablet-count'] === 3) {

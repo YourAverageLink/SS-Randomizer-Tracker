@@ -35,12 +35,12 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
     const entrancePools = useSelector(entrancePoolsSelector);
 
     const [exitSearch, setExitSearch] = useState('');
-    const [entranceSearch, setEntranceSeach] = useState('');
+    const [entranceSearch, setEntranceSearch] = useState('');
     const [clickthrough, setClickthrough] = useState(true);
 
     const clearFilters = () => {
         setExitSearch('');
-        setEntranceSeach('');
+        setEntranceSearch('');
     };
 
     const entranceOptions: Record<string, Entrance[]> = useMemo(
@@ -160,7 +160,7 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
                         <FormControl
                             type="search"
                             placeholder="Search entrances"
-                            onChange={(e) => setEntranceSeach(e.target.value)}
+                            onChange={(e) => setEntranceSearch(e.target.value)}
                             value={entranceSearch}
                         />
                     </Col>

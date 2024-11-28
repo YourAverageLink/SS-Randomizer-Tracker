@@ -4,10 +4,10 @@ test('flattenFalse', () => {
     const expr = new BooleanExpression([], Op.Or);
 
     expect(expr.flatten()).toMatchInlineSnapshot(`
-        BooleanExpression {
-          "items": Array [],
-          "type": "or",
-        }
+      BooleanExpression {
+        "items": [],
+        "type": "or",
+      }
     `);
 });
 
@@ -17,11 +17,11 @@ test('removeDuplicateChildrenFalse', () => {
     // This is wrong
     expect(expr.removeDuplicateChildren((a, b) => a === b))
         .toMatchInlineSnapshot(`
-        BooleanExpression {
-          "items": Array [],
-          "type": "and",
-        }
-    `);
+          BooleanExpression {
+            "items": [],
+            "type": "and",
+          }
+        `);
 });
 
 test('flattenAnother', () => {
@@ -32,9 +32,9 @@ test('flattenAnother', () => {
 
     // This is wrong
     expect(expr.flatten()).toMatchInlineSnapshot(`
-        BooleanExpression {
-          "items": Array [],
-          "type": "or",
-        }
+      BooleanExpression {
+        "items": [],
+        "type": "or",
+      }
     `);
 });

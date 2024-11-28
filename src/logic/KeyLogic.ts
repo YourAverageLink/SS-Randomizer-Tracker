@@ -162,7 +162,6 @@ export function keyData(
                 locations.push({
                     item: smallKey,
                     count: i,
-                    // eslint-disable-next-line no-loop-func
                     potentialChecks: checksThatCanContainSmallKey.filter((c) =>
                         logicState.test(logic.itemBits[c]),
                     ),

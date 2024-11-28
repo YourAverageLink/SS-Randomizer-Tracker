@@ -32,7 +32,6 @@ class PackedBitsReader {
 
             const mask = ((1 << bitsToRead) - 1) << this.currentBitIndex;
             const currentByte = this.bytes[this.currentByteIndex];
-            // eslint-disable-next-line operator-assignment
             value = ((currentByte & mask) >> this.currentBitIndex) << bitsRead | value;
 
             this.currentBitIndex += bitsToRead;

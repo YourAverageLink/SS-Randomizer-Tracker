@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 21.x]
+        node-version: [20.x, 23.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -25,6 +25,7 @@ jobs:
     - run: npm install
     - run: npm run build
     - run: npm run test
+    - run: npm run lint
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:
@@ -39,14 +40,15 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/new-logic-tracker'
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js 21.x
+      - name: Use Node.js 23.x
         uses: actions/setup-node@v4
         with:
-          node-version: 21.x
+          node-version: 23.x
           cache: 'npm'
       - run: npm install
-      - run: git apply ./deploy_to_subdir.patch
       - run: npm run build
+      # All paths should resolve to index.html, but on GitHub
+      # Pages our only workaround is serving the app from 404 too
       - run: cp build/index.html build/404.html
       - name: Deploy
         uses: crazy-max/ghaction-github-pages@v4

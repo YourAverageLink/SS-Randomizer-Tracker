@@ -72,6 +72,7 @@ export class LogicalExpression {
      */
     removeDuplicates() {
         const terms: BitVector[] = [];
+        // eslint-disable-next-line sonarjs/prefer-for-of, sonarjs/no-labels
         nextTerm: for (let i = 0; i < this.conjunctions.length; i++) {
             const candidate = this.conjunctions[i];
             const toRemove: number[] = [];
@@ -109,8 +110,10 @@ export class LogicalExpression {
         let useful = false;
 
         const otherTerms = other.conjunctions;
+        // eslint-disable-next-line sonarjs/prefer-for-of, sonarjs/no-labels
         nextTerm: for (let i = 0; i < otherTerms.length; i++) {
             const candidate = otherTerms[i];
+            // eslint-disable-next-line sonarjs/prefer-for-of
             for (let j = 0; j < self.length; j++) {
                 const existing = self[j];
                 if (existing.isSubsetOf(candidate)) {

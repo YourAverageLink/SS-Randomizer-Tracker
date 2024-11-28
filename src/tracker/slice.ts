@@ -89,10 +89,7 @@ const trackerSlice = createSlice({
             action: PayloadAction<{ checkId: string; markChecked?: boolean }>,
         ) => {
             const { checkId } = action.payload;
-            const add =
-                action.payload.markChecked !== undefined
-                    ? action.payload.markChecked
-                    : !state.checkedChecks.includes(checkId);
+            const add = action.payload.markChecked ?? !state.checkedChecks.includes(checkId);
             if (add) {
                 state.checkedChecks.push(checkId);
             } else {

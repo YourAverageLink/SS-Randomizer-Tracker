@@ -60,6 +60,7 @@ function Expr({
                             parentOp={expr.op}
                         />
                     )),
+                    // eslint-disable-next-line sonarjs/jsx-no-useless-fragment
                     <>{` ${expr.op} `}</>,
                 )}
                 {parentOp && ')'}

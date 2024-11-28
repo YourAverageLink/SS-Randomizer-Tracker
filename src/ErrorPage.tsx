@@ -6,12 +6,11 @@ import { clearStoredRemote } from './LocalStorage';
 export default function ErrorPage({
     error,
 }: {
-    error: any;
+    error: unknown;
     resetErrorBoundary: () => void;
 }) {
     const errorMsg =
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        'message' in error ? (error.message as string) : JSON.stringify(error);
+        typeof error === 'object' && error != null && 'message' in error ? (error.message as string) : JSON.stringify(error);
     return (
         <div>
             <p>Something went wrong. Try reloading the page, reset the tracker, or load a different logic version:</p>

@@ -70,7 +70,7 @@ export function formatRemote(ref: RemoteReference) {
 const prBranchPattern = /^https:\/\/github.com\/([^/]+)\/ssrando\/tree\/([^/]+)$/;
 const extendedPrBranchPattern = /^https:\/\/github.com\/([^/]+)\/([^/]+)\/(?:tree|releases\/tag)\/([^/]+)$/;
 const branchPattern = /^([^/]+)(?:[/|:])([^/]+)$/;
-const versionPattern = /^v[0-9]+\.[0-9]+\.[0-9]+$/;
+const versionPattern = /^v\d+\.\d+\.\d+$/;
 
 export function parseRemote(remote: string): RemoteReference | undefined {
     // eslint-disable-next-line no-param-reassign

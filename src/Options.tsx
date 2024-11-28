@@ -235,9 +235,7 @@ function LaunchButtons({
                             marginLeft: 4,
                         }}
                     >
-                        {counters && (
-                            <>{`${counters.numChecked}/${counters.numRemaining}`}</>
-                        )}
+                        {counters && `${counters.numChecked}/${counters.numRemaining}`}
                     </span>
                 </div>
             </Button>

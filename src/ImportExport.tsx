@@ -22,13 +22,13 @@ function doExport(): ThunkResult {
         const exportVal: ExportState = { state, version, logicBranch };
         const exportstring = JSON.stringify(exportVal, undefined, '\t');
         const blob = new Blob([exportstring], { type: 'json' });
-        const e = document.createEvent('MouseEvents'); const
-            a = document.createElement('a');
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
         a.download = `${filename}.json`;
-        a.href = window.URL.createObjectURL(blob);
+        a.href = url;
         a.dataset.downloadurl = ['json', a.download, a.href].join(':');
-        e.initEvent('click');
-        a.dispatchEvent(e);
+        a.click();
+        window.URL.revokeObjectURL(url);
     };
 }
 
@@ -71,7 +71,7 @@ export function ImportButton({ setLogicBranch }: { setLogicBranch: (branch: Remo
             if (!e.target?.result) {
                 return;
             }
-            doImport(e.target.result.toString())
+            doImport(e.target.result as string);
         };
     }
 

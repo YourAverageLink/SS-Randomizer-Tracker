@@ -65,6 +65,7 @@ const ItemTracker = ({
     } satisfies CSSProperties;
 
     return (
+        // eslint-disable-next-line sonarjs/table-header
         <table>
             <tbody>
                 <tr>

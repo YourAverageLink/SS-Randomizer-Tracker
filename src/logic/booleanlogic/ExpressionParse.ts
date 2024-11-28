@@ -1,5 +1,5 @@
 import _ from "lodash";
-import BooleanExpression, { Item } from "./BooleanExpression";
+import BooleanExpression, { Item, Op } from "./BooleanExpression";
 import { BitVector } from "../bitlogic/BitVector";
 import { andToDnf } from "../bitlogic/LogicalExpression";
 
@@ -41,11 +41,11 @@ export function booleanExprToLogicalExpr(
 ): BitVector[] {
     if (BooleanExpression.isExpression(expr)) {
         switch (expr.type) {
-            case 'or':
+            case Op.Or:
                 return expr.items.flatMap((item) =>
                     booleanExprToLogicalExpr(item, lookup),
                 );
-            case 'and': {
+            case Op.And: {
                 const mapped = expr.items.map((i) => booleanExprToLogicalExpr(i, lookup));
                 return andToDnf(mapped);
             }
@@ -53,14 +53,15 @@ export function booleanExprToLogicalExpr(
                 throw new Error('unreachable');
             }
         }
+    }
+
+
+    if (expr === 'True') {
+        return [new BitVector()];
+    } else if (expr === 'False') {
+        return [];
     } else {
-        if (expr === 'True') {
-            return [new BitVector()];
-        } else if (expr === 'False') {
-            return [];
-        } else {
-            const bit_idx = lookup(expr);
-            return [new BitVector().setBit(bit_idx)];
-        }
+        const bit_idx = lookup(expr);
+        return [new BitVector().setBit(bit_idx)];
     }
 }

@@ -67,24 +67,27 @@ function useGroupContextMenuHandlers() {
 
     const checkAll = useCallback(
         (params: AreaCtxProps | ExitCtxProps) => {
-            params.props!.area &&
+            if (params.props!.area) {
                 dispatch(checkOrUncheckAll(params.props!.area, true));
+            }
         },
         [dispatch],
     );
 
     const checkAllInLogic = useCallback(
         (params: AreaCtxProps | ExitCtxProps) => {
-            params.props!.area &&
+            if (params.props!.area) {
                 dispatch(checkOrUncheckAll(params.props!.area, true, /* onlyInLogic */ true));
+            }
         },
         [dispatch],
     );
 
     const uncheckAll = useCallback(
         (params: AreaCtxProps | ExitCtxProps) => {
-            params.props!.area &&
+            if (params.props!.area) {
                 dispatch(checkOrUncheckAll(params.props!.area, false));
+            }
         },
         [dispatch],
     );
