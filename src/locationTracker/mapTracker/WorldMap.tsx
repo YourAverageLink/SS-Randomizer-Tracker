@@ -10,9 +10,14 @@ import Submap, { EntranceMarkerParams } from './Submap';
 import mapData from '../../data/mapData.json';
 import LocationContextMenu from '../LocationContextMenu';
 import LocationGroupContextMenu from '../LocationGroupContextMenu';
-import { areasSelector } from '../../tracker/selectors';
+import { areaHintSelector, areasSelector } from '../../tracker/selectors';
 import { useSelector } from 'react-redux';
 import StartingEntranceMarker from './StartingEntranceMarker';
+import AreaCounters from '../AreaCounters';
+import { decodeHint } from '../Hints';
+import { useContextMenu } from '../context-menu';
+import { LocationGroupContextMenuProps } from '../LocationGroupHeader';
+import { useCallback, MouseEvent } from 'react';
 
 type WorldMapProps = {
     imgWidth: number,
@@ -79,7 +84,6 @@ const WorldMap = (props: WorldMapProps) => {
                             title={marker.region}
                             onGlickGroup={handleGroupClick}
                             mapWidth={imgWidth}
-                            expandedGroup={expandedGroup}
                         />
                     </div>
                 ))}
@@ -96,7 +100,6 @@ const WorldMap = (props: WorldMapProps) => {
                         map={images[submap.map]}
                         mapWidth={imgWidth}
                         exitParams={submap.exitParams}
-                        expandedGroup={expandedGroup}
                         activeSubmap={activeSubmap}
                     />
                 ))}
@@ -109,9 +112,60 @@ const WorldMap = (props: WorldMapProps) => {
     const areas = useSelector(areasSelector);
 
     const selectedArea = expandedGroup && areas.find((a) => a.name === expandedGroup) || undefined;
+    const areaHint = useSelector(areaHintSelector(selectedArea?.name ?? ''));
+    const hint = areaHint && decodeHint(areaHint);
+
+    const show = useContextMenu<LocationGroupContextMenuProps>({
+        id: 'group-context',
+    }).show;
+
+    const displayMenu = useCallback((e: MouseEvent) => {
+        if (selectedArea) {
+            show({ event: e, props: { area: selectedArea.name } });
+        }
+    }, [selectedArea, show]);
+
+    const locationHeader = selectedArea && (
+        <div
+            className="flex-container"
+            tabIndex={0}
+            role="button"
+            onContextMenu={displayMenu}
+            style={{
+                display: 'flex',
+                flexDirection: 'row',
+                width: imgWidth,
+                position: 'relative',
+                top: imgHeight + 10,
+            }}
+        >
+            <div style={{ flexGrow: 1, margin: '2%' }}>
+                <h3>{selectedArea.name}</h3>
+            </div>
+            <div style={{ margin: '1%' }}>
+                <span>
+                    {hint && (
+                        <img
+                            style={{ height: '40px' }}
+                            src={hint.image}
+                            alt={hint.description}
+                        />
+                    )}
+                </span>
+            </div>
+            <div style={{ margin: '2%' }}>
+                <h3>
+                    <AreaCounters
+                        totalChecksLeftInArea={selectedArea.numChecksRemaining}
+                        totalChecksAccessible={selectedArea.numChecksAccessible}
+                    />
+                </h3>
+            </div>
+        </div>
+    );
     
     const locationList = (
-        <div style={{position:'relative', top: imgHeight * 1.1 + 30, display:'flex'}}>
+        <div style={{position:'relative', top: imgHeight + 10, display:'flex'}}>
             {
                 selectedArea && (
                     <Col>
@@ -130,6 +184,7 @@ const WorldMap = (props: WorldMapProps) => {
     return (
         <div>
             {worldMap}
+            {locationHeader}
             {locationList}
         </div>
     );
