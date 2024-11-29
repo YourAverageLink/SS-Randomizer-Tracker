@@ -1,6 +1,6 @@
 
 import LocationGroupHeader from "./LocationGroupHeader";
-import LocationGroup from "./LocationGroup";
+import { Locations } from "./Locations";
 import '../locationTracker/locationTracker.css'
 import { Col, Row } from "react-bootstrap";
 import LocationGroupContextMenu from "./LocationGroupContextMenu";
@@ -43,17 +43,15 @@ export function NewLocationTracker({ containerHeight, activeArea, setActiveArea 
                 </ul>
             </Row>
             {selectedArea && (
-                <Row
+                <div
                     style={{
                         height: containerHeight / 2,
                         overflowY: 'auto',
                         overflowX: 'visible',
                     }}
                 >
-                    <LocationGroup
-                        locations={selectedArea.checks}
-                    />
-                </Row>
+                    <Locations hintRegion={selectedArea} />
+                </div>
             )}
         </Col>
     );

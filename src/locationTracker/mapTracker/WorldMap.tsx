@@ -1,11 +1,9 @@
-import { Row, Col } from 'react-bootstrap';
 import skyMap from '../../assets/maps/Sky.png';
 import faronMap from '../../assets/maps/Faron.png';
 import eldinMap from '../../assets/maps/Eldin.png';
 import lanayruMap from '../../assets/maps/Lanayru.png';
 import skyloftMap from '../../assets/maps/Skyloft.png';
 import MapMarker from './MapMarker';
-import LocationGroup from '../LocationGroup';
 import Submap, { EntranceMarkerParams } from './Submap';
 import mapData from '../../data/mapData.json';
 import LocationContextMenu from '../LocationContextMenu';
@@ -18,6 +16,7 @@ import { decodeHint } from '../Hints';
 import { useContextMenu } from '../context-menu';
 import { LocationGroupContextMenuProps } from '../LocationGroupHeader';
 import { useCallback, MouseEvent } from 'react';
+import { Locations } from '../Locations';
 
 type WorldMapProps = {
     imgWidth: number,
@@ -165,18 +164,25 @@ const WorldMap = (props: WorldMapProps) => {
     );
     
     const locationList = (
-        <div style={{position:'relative', top: imgHeight + 10, display:'flex'}}>
-            {
-                selectedArea && (
-                    <Col>
-                        <Row style={{ width: imgWidth, height: containerHeight * 0.35, overflowY: 'scroll', overflowX: 'visible' }}>
-                            <LocationGroup
-                                locations={selectedArea.checks}
-                            />
-                        </Row>
-                    </Col>
-                )
-            }
+        <div
+            style={{
+                position: 'relative',
+                top: imgHeight + 10,
+                display: 'flex',
+            }}
+        >
+            {selectedArea && (
+                <div
+                    style={{
+                        width: imgWidth,
+                        height: containerHeight * 0.35,
+                        overflowY: 'scroll',
+                        overflowX: 'visible',
+                    }}
+                >
+                    <Locations hintRegion={selectedArea} />
+                </div>
+            )}
         </div>
     );
 

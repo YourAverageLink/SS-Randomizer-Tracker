@@ -52,6 +52,7 @@ export function computeSemiLogic(
     checkedChecks: Set<string>,
     inventory: Record<InventoryItem, number>,
     inLogicBits: BitVector,
+    isCheckBanned: (checkId: string) => boolean,
     dungeonKeyLogic: PotentialLocations[],
     settingsRequirements: Requirements,
     checkHints: Record<string, string | undefined>,

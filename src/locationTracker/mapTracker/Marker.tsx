@@ -51,20 +51,19 @@ export function Marker({
     };
 
     return (
-        <div>
-            <Tooltip content={tooltip} placement="bottom" followCursor>
-                <div
-                    onClick={onClick}
-                    onKeyDown={onClick}
-                    role="button"
-                    tabIndex={0}
-                    onContextMenu={onContextMenu}
-                >
-                    <span style={markerStyle}>
-                        {children}
-                    </span>
-                </div>
-            </Tooltip>
-        </div>
+        <Tooltip content={tooltip} placement="top">
+            <div
+                onClick={onClick}
+                onKeyDown={onClick}
+                role="button"
+                tabIndex={0}
+                onContextMenu={onContextMenu}
+                style={markerStyle}
+            >
+                <span>
+                    {children}
+                </span>
+            </div>
+        </Tooltip>
     );
 }

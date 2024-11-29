@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import generateFile from 'vite-plugin-generate-file';
+import sassDts from 'vite-plugin-sass-dts';
 import makeManifest from './manifest.js';
 
 // It'd be really nice to have polyfills actually working in Vite,
@@ -30,6 +31,7 @@ export default defineConfig(({ mode }) => {
             $PUBLIC_URL: JSON.stringify(baseUrl),
         },
         plugins: [
+            sassDts(),
             react(),
             generateFile({
                 output: 'manifest.json',

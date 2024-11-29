@@ -13,7 +13,6 @@ import EntranceTracker from './entranceTracker/EntranceTracker';
 import DungeonTracker from './itemTracker/DungeonTracker';
 import GridTracker from './itemTracker/GridTracker';
 import ItemTracker from './itemTracker/ItemTracker';
-import ExtraLocationTracker from './locationTracker/ExtraLocationTracker';
 import { NewLocationTracker } from './locationTracker/LocationTracker';
 import { MakeTooltipsAvailable } from './tooltips/TooltipHooks';
 import CustomizationModal from './customization/CustomizationModal';
@@ -126,21 +125,6 @@ function Tracker() {
                     <Row>
                         <DungeonTracker setActiveArea={setActiveArea} />
                     </Row>
-                    <Row
-                        style={{
-                            paddingRight: '10%',
-                            paddingTop: '2.5%',
-                            height: '100%',
-                            overflow: 'auto',
-                        }}
-                    >
-                        <Col>
-                            <ExtraLocationTracker
-                                activeArea={activeArea}
-                                setActiveArea={setActiveArea}
-                            />
-                        </Col>
-                    </Row>
                 </Col>
             </>
         );
@@ -171,21 +155,6 @@ function Tracker() {
                 >
                     <Row>
                         <BasicCounters />
-                    </Row>
-                    <Row
-                        style={{
-                            paddingRight: '10%',
-                            paddingTop: '2.5%',
-                            height: '100%',
-                            overflow: 'auto',
-                        }}
-                    >
-                        <Col>
-                            <ExtraLocationTracker
-                                activeArea={activeArea}
-                                setActiveArea={setActiveArea}
-                            />
-                        </Col>
                     </Row>
                 </Col>
             </>
