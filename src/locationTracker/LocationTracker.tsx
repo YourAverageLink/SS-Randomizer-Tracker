@@ -1,8 +1,6 @@
 
 import LocationGroupHeader from "./LocationGroupHeader";
 import { Locations } from "./Locations";
-import '../locationTracker/locationTracker.css'
-import { Col, Row } from "react-bootstrap";
 import LocationGroupContextMenu from "./LocationGroupContextMenu";
 import LocationContextMenu from "./LocationContextMenu";
 import { useSelector } from "react-redux";
@@ -15,17 +13,17 @@ export function NewLocationTracker({ containerHeight, activeArea, setActiveArea 
     const selectedArea = activeArea && areas.find((a) => a.name === activeArea) || undefined;
 
     return (
-        <Col className="location-tracker">
+        <div className="location-tracker">
             <LocationContextMenu />
             <LocationGroupContextMenu />
-            <Row
+            <div
                 style={{
                     height: containerHeight / 2,
                     overflowY: 'auto',
                     overflowX: 'visible',
                 }}
             >
-                <ul style={{ padding: '2%' }}>
+                <div style={{ padding: '2%' }}>
                     {areas
                         .filter(
                             (area) =>
@@ -40,8 +38,8 @@ export function NewLocationTracker({ containerHeight, activeArea, setActiveArea 
                                 area={value}
                             />
                         ))}
-                </ul>
-            </Row>
+                </div>
+            </div>
             {selectedArea && (
                 <div
                     style={{
@@ -53,6 +51,6 @@ export function NewLocationTracker({ containerHeight, activeArea, setActiveArea 
                     <Locations hintRegion={selectedArea} />
                 </div>
             )}
-        </Col>
+        </div>
     );
 }

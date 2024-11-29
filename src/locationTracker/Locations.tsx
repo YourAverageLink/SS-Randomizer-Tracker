@@ -1,7 +1,7 @@
-import { HintRegion } from "../logic/Locations";
-import LocationGroup from "./LocationGroup";
+import { HintRegion } from '../logic/Locations';
+import LocationGroup from './LocationGroup';
 
-export function Locations({hintRegion}: {hintRegion: HintRegion<string>}) {
+export function Locations({ hintRegion }: { hintRegion: HintRegion<string> }) {
     return (
         <>
             <LocationGroup locations={hintRegion.checks} />
@@ -32,9 +32,7 @@ export function Locations({hintRegion}: {hintRegion: HintRegion<string>}) {
             {Boolean(hintRegion.exits.length) && (
                 <>
                     <hr />
-                    <LocationGroup
-                        locations={hintRegion.exits}
-                    />
+                    <LocationGroup locations={hintRegion.exits} />
                 </>
             )}
         </>

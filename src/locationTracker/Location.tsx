@@ -6,6 +6,7 @@ import images from '../itemTracker/Images';
 import placeholderImg from '../assets/slot test.png';
 import goddessCubeImg from '../assets/sidequests/goddess_cube.png';
 import gossipStoneImg from '../assets/sidequests/gossip_stone.png';
+import exitImg from '../assets/dungeons/entrance.png';
 import { useEntrancePath, useTooltipExpr } from '../tooltips/TooltipHooks';
 import RequirementsTooltip from './RequirementsTooltip';
 import { useDispatch, useSelector } from 'react-redux';
@@ -93,7 +94,10 @@ function CheckIcon({check}: {check: Check}) {
     const isCheckBanned = useSelector(isCheckBannedSelector);
     let name: string | undefined = undefined;
     let src: string | undefined = undefined;
-    if (check.type === 'gossip_stone') {
+    if (check.type === 'exit') {
+        name = 'Exit';
+        src = exitImg;
+    } else if (check.type === 'gossip_stone') {
         name = 'Gossip Stone';
         src = gossipStoneImg;
     } else if (check.type === 'tr_cube') {
@@ -183,9 +187,7 @@ export function Exit({
                         <span style={style}>{check.checkName}</span>
                         <span>↳{exit.entrance?.name ?? 'Select entrance...'}</span>
                     </div>
-                    <div className={styles.hintItem}>
-                        🚪
-                    </div>
+                    <CheckIcon check={check} />
                 </div>
             </Tooltip>
         </>
