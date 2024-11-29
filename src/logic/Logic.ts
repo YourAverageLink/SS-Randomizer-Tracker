@@ -535,6 +535,16 @@ export function parseLogic(raw: RawLogic): Logic {
                 // The data has been fixed but we support old versions
                 region = 'Lanayru Desert';
             }
+
+            if (
+                region === 'Eldin Volcano' &&
+                (locationId.includes('Gossip Stone in Upper Platform Cave') ||
+                    locationId.includes('Gossip Stone in Lower Platform Cave'))
+            ) {
+                // TODO discuss changing the upstream data
+                region = 'Bokoblin Base';
+            }
+
             if (!region) {
                 throw new Error(`check ${locationId} has no region?`);
             }
