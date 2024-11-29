@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
     OptionType,
     OptionValue,
@@ -72,13 +73,25 @@ export const swordsToAdd = {
     'True Master Sword': 6,
 };
 
-export const knownNoGossipStoneHintDistros = [
-    '2D Dowsing & Fi Hints',
-    'Boss Keysanity Fi Hints',
-    'Dowsing & Fi Hints',
-    'Remlits Tournament',
-    'Strong Dowsing All Dungeons',
+const s3RacingBannedGossipStones = [
+    'Gossip Stone in Shipyard',
+    'Gossip Stone in Temple of Time Area',
+    'Gossip Stone in Lower Platform Cave',
+    'Gossip Stone in Upper Platform Cave',
 ];
+const isS3RacingGossipStone = (stoneId: string) =>
+    !s3RacingBannedGossipStones.some((s) => stoneId.includes(s));
+
+export const doesHintDistroUseGossipStone: Record<string, ((stoneId: string) => boolean) | undefined> = {
+    '2D Dowsing & Fi Hints': _.stubFalse,
+    'Boss Keysanity Fi Hints': _.stubFalse,
+    'Dowsing & Fi Hints': _.stubFalse,
+    'Remlits Tournament': _.stubFalse,
+    'Strong Dowsing All Dungeons': _.stubFalse,
+    'Pre-S3 Base': isS3RacingGossipStone,
+    'Pre-S3 Variant': isS3RacingGossipStone,
+};
+
 
 // These requirements are populated based on required dungeons
 

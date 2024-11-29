@@ -42,11 +42,19 @@ describe('full logic tests', () => {
     beforeAll(async () => {
         store = createStore();
 
-        const loader = async (fileName: string) =>
-            await fs.promises.readFile(`./testData/${fileName}.yaml`, 'utf-8');
+        const loader = async (fileName: string) => {
+            if (fileName.includes('presets')) {
+                return "{}";
+            }
+            return await fs.promises.readFile(
+                `./testData/${fileName}`,
+                'utf-8',
+            );
+        }
+            
         const [logic, options] = await getAndPatchLogic(loader);
         defaultSet = defaultSettings(options);
-        store.dispatch(loadLogic({ logic, options, remote: main, remoteName: 'ssrando/main' }));
+        store.dispatch(loadLogic({ logic, options, presets: {}, remote: main, remoteName: 'ssrando/main' }));
     });
 
     // Before each test, must reset our tracker to default

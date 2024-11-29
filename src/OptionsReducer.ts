@@ -13,7 +13,7 @@ import { RemoteReference, loadRemoteLogic } from './loader/LogicLoader';
 import { getStoredRemote } from './LocalStorage';
 import { withCancel } from './utils/CancelToken';
 import _ from 'lodash';
-import { RawLogic } from './logic/UpstreamTypes';
+import { RawLogic, RawPresets } from './logic/UpstreamTypes';
 import { delay } from './utils/Promises';
 
 const defaultUpstream: RemoteReference = {
@@ -145,7 +145,7 @@ function convertError(e: unknown) {
 
 async function loadRemote(
     remote: RemoteReference,
-): Promise<[RawLogic, OptionDefs, string] | string> {
+): Promise<[RawLogic, OptionDefs, RawPresets, string] | string> {
     try {
         return await loadRemoteLogic(remote);
     } catch (e) {
@@ -194,12 +194,13 @@ export function useOptionsState() {
                             error: result,
                         });
                     } else {
-                        const [logic, options, remoteName] = result;
+                        const [logic, options, presets, remoteName] = result;
                         setLoadingState(undefined);
                         setLoadedBundle({
                             logic,
                             options,
                             remote: state.selectedRemote,
+                            presets,
                             remoteName,
                         });
                     }

@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState } from 'react';
+import React, { CSSProperties, useMemo, useState } from 'react';
 import { OptionsAction } from './OptionsReducer';
 import { AllTypedOptions } from './permalink/SettingsTypes';
 import { LogicBundle } from './logic/slice';
@@ -6,8 +6,8 @@ import { Button, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from './store/store';
 import { Preset, addPreset, removePreset } from './saves/slice';
-import { formatRemote } from './loader/LogicLoader';
-import { encodePermalink } from './permalink/Settings';
+import { formatRemote, RemoteReference } from './loader/LogicLoader';
+import { encodePermalink, validateSettings } from './permalink/Settings';
 import { useSyncSavesToLocalStorage } from './LocalStorage';
 
 export function OptionsPresets({
@@ -38,6 +38,17 @@ export function OptionsPresets({
     );
 }
 
+function permaifyRelease(
+    logic: LogicBundle,
+): Exclude<RemoteReference, { type: 'latestRelease' }> {
+    return logic.remote.type === 'latestRelease'
+        ? {
+              type: 'releaseVersion',
+              versionTag: logic.remoteName,
+          }
+        : logic.remote;
+}
+
 function PresetsModal({
     currentLogic,
     currentSettings,
@@ -52,6 +63,27 @@ function PresetsModal({
     onHide: () => void;
 }) {
     const presets = useSelector((state: RootState) => state.saves.presets);
+    const remotePresets: Preset[] | undefined = useMemo(
+        () =>
+            currentLogic &&
+            Object.entries(currentLogic?.presets).map(([name, data]) => {
+                const validatedSettings = validateSettings(
+                    currentLogic.options,
+                    data,
+                );
+                return {
+                    id: `remote-${name}`,
+                    name,
+                    remote: permaifyRelease(currentLogic),
+                    settings: validatedSettings,
+                    visualPermalink: encodePermalink(
+                        currentLogic.options,
+                        validatedSettings,
+                    ),
+                } satisfies Preset;
+            }),
+        [currentLogic],
+    );
 
     return (
         <Modal show={show} onHide={onHide}>
@@ -62,6 +94,7 @@ function PresetsModal({
             </Modal.Header>
             <Modal.Body className="show-grid">
                 <div style={{ display: 'flex', flexFlow: 'column nowrap' }}>
+                    {remotePresets?.map((p) => (<PresetRow preset={p} isRemotePreset dispatch={dispatch} key={p.id} onHide={onHide} />))}
                     {presets.map((p) => (<PresetRow preset={p} dispatch={dispatch} key={p.id} onHide={onHide} />))}
                     {currentLogic && currentSettings && <AddPresetRow currentLogic={currentLogic} currentSettings={currentSettings} />}
                 </div>
@@ -77,10 +110,12 @@ function PresetRow({
     preset,
     dispatch,
     onHide,
+    isRemotePreset,
 }: {
     preset: Preset;
     dispatch: React.Dispatch<OptionsAction>;
     onHide: () => void;
+    isRemotePreset?: boolean;
 }) {
     const appDispatch = useAppDispatch();
     return (
@@ -99,18 +134,20 @@ function PresetRow({
         >
             <div style={{ display: 'flex', flexFlow: 'nowrap' }}>
                 {preset.name}
-                <div style={{ marginLeft: 'auto' }}>
-                    <Button
-                        onClick={(e) => {
-                            if (confirm(`Delete Preset ${preset.name}?`)) {
-                                appDispatch(removePreset(preset.id));
-                            }
-                            e.stopPropagation();
-                        }}
-                    >
-                        🗑️
-                    </Button>
-                </div>
+                {!isRemotePreset && (
+                    <div style={{ marginLeft: 'auto' }}>
+                        <Button
+                            onClick={(e) => {
+                                if (confirm(`Delete Preset ${preset.name}?`)) {
+                                    appDispatch(removePreset(preset.id));
+                                }
+                                e.stopPropagation();
+                            }}
+                        >
+                            🗑️
+                        </Button>
+                    </div>
+                )}
             </div>
             <div style={{ fontSize: '12px', whiteSpace: 'nowrap' }}>
                 {formatRemote(preset.remote)}
@@ -148,13 +185,7 @@ function AddPresetRow({
                 dispatch(
                     addPreset({
                         name,
-                        remote:
-                            currentLogic.remote.type === 'latestRelease'
-                                ? {
-                                    type: 'releaseVersion',
-                                    versionTag: currentLogic.remoteName,
-                                }
-                                : currentLogic.remote,
+                        remote: permaifyRelease(currentLogic),
                         settings: currentSettings,
                         visualPermalink: encodePermalink(
                             currentLogic.options,

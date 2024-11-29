@@ -1,5 +1,5 @@
 import { load } from 'js-yaml';
-import { RawLogic } from '../logic/UpstreamTypes';
+import { RawLogic, RawPresets } from '../logic/UpstreamTypes';
 import { MultiChoiceOption, OptionDefs } from '../permalink/SettingsTypes';
 import { getLatestRelease } from './ReleasesLoader';
 
@@ -105,7 +105,7 @@ export function parseRemote(remote: string): RemoteReference | undefined {
 }
 
 const baseFileUrl = (remoteUrl: string, file: string) =>
-    `${remoteUrl}/${file}.yaml`;
+    `${remoteUrl}/${file}`;
 
 const loadFileFromUrl = async (url: string) => {
     const response = await fetch(url);
@@ -123,7 +123,7 @@ const loadFile = async (baseUrl: string, file: string) => {
 
 export async function loadRemoteLogic(
     remote: RemoteReference,
-): Promise<[RawLogic, OptionDefs, string]> {
+): Promise<[RawLogic, OptionDefs, RawPresets, string]> {
     const [baseUrl, remoteName] = await resolveRemote(remote);
     const loader = (file: string) => loadFile(baseUrl, file);
 
@@ -134,14 +134,20 @@ export async function loadRemoteLogic(
 }
 
 export async function getAndPatchLogic(loader: (fileName: string) => Promise<string>) {
-    const parse = async <T, >(file: string) => {
+    const parseYaml = async <T, >(file: string) => {
         const text = await loader(file);
         return load(text) as T;
     }
 
-    const [logic, options] = await Promise.all([
-        parse<RawLogic>('dump'),
-        parse<OptionDefs>('options'),
+    const parseJson = async <T, >(file: string) => {
+        const text = await loader(file);
+        return JSON.parse(text) as T;
+    }
+
+    const [logic, options, presets] = await Promise.all([
+        parseYaml<RawLogic>('dump.yaml'),
+        parseYaml<OptionDefs>('options.yaml'),
+        parseJson<RawPresets>('gui/presets/default_presets.json'),
     ]);
 
     // We need to patch the "excluded locations" option with the actual checks from logic.
@@ -160,5 +166,6 @@ export async function getAndPatchLogic(loader: (fileName: string) => Promise<str
     return [
         logic,
         patchedOptions,
+        presets,
     ] as const;
 }

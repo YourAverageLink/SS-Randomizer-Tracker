@@ -113,7 +113,7 @@ export type LogicOption =
 const optionCategorization: Record<string, readonly LogicOption[]> =
     optionCategorization_;
 
-const wellKnownRemotes = [LATEST_STRING, 'ssrando/main'];
+const wellKnownRemotes = [LATEST_STRING, 'YourAverageLink/pre-s3', 'ssrando/main'];
 
 /**
  * The default landing page for the tracker. Allows choosing logic source, permalink, and settings,
@@ -270,14 +270,15 @@ function useRemoteOptions() {
     const githubReleases = useReleases();
 
     return useMemo(() => {
-
         const niceRemoteName = (remote: string) => {
             if (remote === LATEST_STRING) {
                 return githubReleases
-                    ? `${githubReleases.latest} (Latest Stable Release)`
+                    ? `Latest Stable Release (${githubReleases.latest})`
                     : `Latest Stable Release`;
             } else if (remote === 'ssrando/main') {
-                return `${remote} (Latest Development Build)`;
+                return `Latest Development Build (${remote})`;
+            } else if (remote === 'YourAverageLink/pre-s3') {
+                return `Season 3 Racing Prerelease (${remote})`;
             }
     
             return remote;
@@ -337,13 +338,17 @@ function LogicChooser({
         <div className="optionsCategory logicChooser">
             <legend>
                 Randomizer Version
-                {loadedRemoteName && `: ${loadedRemoteName}`}
+                {activeOption
+                    ? `: ${activeOption.label}`
+                    : loadedRemoteName && `: ${loadedRemoteName}`}
             </legend>
             <Tabs
                 defaultActiveKey="wellKnown"
                 onSelect={(e) => {
                     if (e === 'raw') {
-                        inputRef.current?.setInput(formatRemote(selectedRemote));
+                        inputRef.current?.setInput(
+                            formatRemote(selectedRemote),
+                        );
                     }
                 }}
             >
