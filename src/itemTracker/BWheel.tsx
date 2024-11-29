@@ -108,7 +108,7 @@ const BWheel = ({ width: wid }: BWheelProps) => {
                 <Item itemName="Gust Bellows" imgWidth={bellowsWidth} />
             </div>
             {tumbleWeed && <div
-                id="gustBellows"
+                id="tumbleWeed"
                 style={{
                     position: 'relative',
                     bottom: wid / 1.75 + 600 / wid,

@@ -48,7 +48,7 @@ export default function CustomizationModal({
     return (
         <Modal show={show} onHide={onHide}>
             <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
+                <Modal.Title>
                     Tracker Customization
                 </Modal.Title>
             </Modal.Header>

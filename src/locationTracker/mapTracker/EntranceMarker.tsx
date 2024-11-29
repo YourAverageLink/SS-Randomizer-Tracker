@@ -1,8 +1,12 @@
-import { CSSProperties, useCallback } from 'react';
+import { useCallback } from 'react';
 import 'react-contexify/dist/ReactContexify.css';
-import AreaCounters from '../AreaCounters';
 import { useSelector } from 'react-redux';
-import { areaHintSelector, areasSelector, exitsSelector, inLogicBitsSelector } from '../../tracker/selectors';
+import {
+    areaHintSelector,
+    areasSelector,
+    exitsSelector,
+    inLogicBitsSelector,
+} from '../../tracker/selectors';
 import { useContextMenu } from '../context-menu';
 import { TriggerEvent } from 'react-contexify';
 import { RootState } from '../../store/store';
@@ -12,8 +16,8 @@ import HintDescription, { decodeHint } from '../Hints';
 import { ExitMapping } from '../../logic/Locations';
 import { useTooltipExpr } from '../../tooltips/TooltipHooks';
 import RequirementsTooltip from '../RequirementsTooltip';
-import Tooltip from '../../additionalComponents/Tooltip';
 import { LocationGroupContextMenuProps } from '../LocationGroupHeader';
+import { Marker } from './Marker';
 
 type EntranceMarkerProps = {
     markerX: number;
@@ -22,7 +26,6 @@ type EntranceMarkerProps = {
     title: string;
     mapWidth: number;
     active: boolean;
-    expandedGroup: string | undefined;
     onGlickGroup: (group: string) => void;
 };
 
@@ -30,11 +33,11 @@ export interface MapExitContextMenuProps {
     exitMapping: ExitMapping;
     /** destination area! */
     area: string | undefined;
-};
+}
 
 const EntranceMarker = (props: EntranceMarkerProps) => {
     
-    const { title, exitId, markerX, markerY, mapWidth, active, expandedGroup, onGlickGroup } = props;
+    const { title, exitId, markerX, markerY, mapWidth, active, onGlickGroup } = props;
     const exit = useSelector((state: RootState) => exitsSelector(state).find((e) => e.exit.id === exitId))!;
     const inLogicBits = useSelector(inLogicBitsSelector);
     const logic = useSelector(logicSelector);
@@ -107,21 +110,6 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
 
     const hint = areaHint && decodeHint(areaHint);
 
-    const markerStyle: CSSProperties = {
-        position: 'absolute',
-        top: `${markerY}%`,
-        left: `${markerX}%`,
-        borderRadius: (isDungeon ? '0px' : '200px'),
-        background: `var(--scheme-${markerColor})`,
-        color: 'black',
-        width: mapWidth / 18,
-        height: mapWidth / 18,
-        border: '2px solid #000000',
-        textAlign: 'center',
-        fontSize: mapWidth / 27,
-        lineHeight: '1.2',
-    };
-
     // Only calculate tooltip if this region is shown
     const requirements = useTooltipExpr(exit.exit.id, active);
 
@@ -137,7 +125,7 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
                 </div>
                 {hint && <HintDescription hint={hint} />}
             </center>
-        )
+        );
     } else {
         tooltip = (
             <center>
@@ -147,7 +135,7 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
                 </div>
                 <div> Click to Attach {isDungeon ? 'Dungeon' : 'Silent Realm'} </div>
             </center>
-        )
+        );
     }
 
     const handleClick = (e: TriggerEvent) => {
@@ -167,52 +155,19 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
     };
 
     return (
-        <div>
-            <Tooltip content={tooltip} placement="bottom" followCursor>
-                <div
-                    onClick={handleClick}
-                    onKeyDown={handleClick}
-                    role="button"
-                    tabIndex={0}
-                    onContextMenu={displayMenu}
-                >
-                    <span style={markerStyle} id="marker">
-                        {(Boolean(accessibleChecks)) && accessibleChecks}
-                        {!hasConnection && '?'}
-                    </span>
-                </div>
-            </Tooltip>
-            {expandedGroup === region && area && (
-                <div
-                    className="flex-container"
-                    onClick={handleClick}
-                    onKeyDown={handleClick}
-                    tabIndex={0}
-                    role="button"
-                    onContextMenu={displayMenu}
-                    style={{display: 'flex', flexDirection: 'row', width: mapWidth}}
-                >
-                    <div style={{flexGrow: 1, margin: '2%'}}>
-                        <h3>
-                            {region}
-                        </h3>
-                    </div>
-                    <div style={{ margin: '1%' }}>
-                        <span>
-                            {hint && <img style={{ height: '40px' }} src={hint.image} alt={hint.description} />}
-                        </span>
-                    </div>
-                    <div style={{margin: '2%'}}>
-                        <h3>
-                            <AreaCounters
-                                totalChecksLeftInArea={area.numChecksRemaining}
-                                totalChecksAccessible={area.numChecksAccessible}
-                            />
-                        </h3>
-                    </div>
-                </div>
-            )}
-        </div>
+        <Marker
+            x={markerX}
+            y={markerY}
+            variant={title.includes('Trial Gate') ? 'circle' : 'square'}
+            color={markerColor}
+            mapWidth={mapWidth}
+            tooltip={tooltip}
+            onClick={handleClick}
+            onContextMenu={displayMenu}
+        >
+            {Boolean(accessibleChecks) && accessibleChecks}
+            {!hasConnection && '?'}
+        </Marker>
     );
 };
 

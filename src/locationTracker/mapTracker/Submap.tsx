@@ -1,4 +1,4 @@
-import { CSSProperties, useCallback } from 'react';
+import { useCallback } from 'react';
 import _ from 'lodash';
 import ColorScheme from '../../customization/ColorScheme';
 import MapMarker from './MapMarker';
@@ -16,7 +16,7 @@ import HintDescription, { DecodedHint, decodeHint } from '../Hints';
 import { RootState } from '../../store/store';
 import { useContextMenu } from '../context-menu';
 import { TriggerEvent } from 'react-contexify';
-import Tooltip from '../../additionalComponents/Tooltip';
+import { Marker } from './Marker';
 
 export type RegionMarkerParams = {
     region: string,
@@ -42,21 +42,6 @@ export interface BirdStatueContextMenuProps {
     province: string;
 };
 
-type SubmapProps = {
-    markerX: number;
-    markerY: number;
-    title: string;
-    onGroupChange: (region: string | undefined) => void;
-    onSubmapChange: (submap: string | undefined) => void;
-    markers: RegionMarkerParams[];
-    entranceMarkers: EntranceMarkerParams[];
-    activeSubmap: string | undefined;
-    map: string;
-    mapWidth: number;
-    exitParams: ExitParams;
-    expandedGroup: string | undefined;
-};
-
 const images: Record<string, string> = {
     leaveSkyloft,
     leaveFaron,
@@ -69,11 +54,34 @@ function getExit(logic: Logic, marker: EntranceMarkerParams) {
     return { exitId, exitName: logic.areaGraph.exits[exitId].short_name };
 }
 
-const Submap = (props: SubmapProps) => {
+const Submap = ({
+    onSubmapChange,
+    onGroupChange,
+    title,
+    markerX,
+    markerY,
+    map,
+    mapWidth,
+    activeSubmap,
+    markers,
+    entranceMarkers,
+    exitParams,
+}: {
+    markerX: number;
+    markerY: number;
+    title: string;
+    onGroupChange: (region: string | undefined) => void;
+    onSubmapChange: (submap: string | undefined) => void;
+    markers: RegionMarkerParams[];
+    entranceMarkers: EntranceMarkerParams[];
+    activeSubmap: string | undefined;
+    map: string;
+    mapWidth: number;
+    exitParams: ExitParams;
+}) => {
     let remainingChecks = 0
     let accessibleChecks = 0;
     const subregionHints: { hint: DecodedHint, area: string }[] = [];
-    const { onSubmapChange, onGroupChange, title, markerX, markerY, mapWidth, activeSubmap, markers, entranceMarkers, exitParams, expandedGroup} = props;
     const areas = useSelector(areasSelector);
     const exits = useSelector(exitsSelector);
     const hints = useSelector((state: RootState) => state.tracker.hints);
@@ -131,21 +139,6 @@ const Submap = (props: SubmapProps) => {
         markerColor = exitCheck.logicalState;
     }
 
-    const markerStyle: CSSProperties = {
-        position: 'absolute',
-        top: `${markerY}%`,
-        left: `${markerX}%`,
-        borderRadius: '5px',
-        background: `var(--scheme-${markerColor})`,
-        color: 'black',
-        width: mapWidth / 18,
-        height: mapWidth / 18,
-        border: '2px solid #000000',
-        textAlign: 'center',
-        fontSize: mapWidth / 27,
-        lineHeight: '1.2',
-    };
-
     const tooltip = (
         <center>
             <div> {title} ({accessibleChecks}/{remainingChecks}) </div>
@@ -159,7 +152,7 @@ const Submap = (props: SubmapProps) => {
         id: 'birdstatue-context',
     });
 
-    const handleClick = (e: React.UIEvent) => {
+    const handleClick = (e: TriggerEvent | React.UIEvent) => {
         if (e.type === 'contextmenu') {
             e.preventDefault();
         } else {
@@ -177,7 +170,7 @@ const Submap = (props: SubmapProps) => {
         [show, title],
     );
 
-    const handleBack = (e: React.UIEvent) => {
+    const handleBack = (e: TriggerEvent | React.UIEvent) => {
         if (e.type === 'contextmenu') {
             e.preventDefault();
             onSubmapChange(undefined);
@@ -187,24 +180,23 @@ const Submap = (props: SubmapProps) => {
     };
 
     const markerElement = (
-        <Tooltip content={tooltip} placement="bottom" followCursor>
-            <div
-                onClick={handleClick}
-                onKeyDown={keyDownWrapper(handleClick)}
-                role="button"
-                tabIndex={0}
-                onContextMenu={displayMenu}
-            >
-                <span style={markerStyle} id="marker">
-                    {(accessibleChecks > 0) ? accessibleChecks : needsBirdStatueSanityExit ? '?' : ''}
-                </span>
-            </div>
-        </Tooltip>
+        <Marker
+            x={markerX}
+            y={markerY}
+            variant={title.includes('Silent Realm') ? 'circle' : 'rounded'}
+            color={markerColor}
+            mapWidth={mapWidth}
+            tooltip={tooltip}
+            onClick={handleClick}
+            onContextMenu={displayMenu}
+        >
+            {(accessibleChecks > 0) ? accessibleChecks : needsBirdStatueSanityExit ? '?' : ''}
+        </Marker>
     );
 
     const mapElement = (
         <div>
-            <img src={props.map} alt={`${title} Map`} width={mapWidth} style={{position: 'relative'}} onContextMenu={handleBack}/>
+            <img src={map} alt={`${title} Map`} width={mapWidth} style={{position: 'relative'}} onContextMenu={handleBack}/>
             {markers.map((marker) => (
                 <MapMarker
                     key={marker.region}
@@ -212,7 +204,6 @@ const Submap = (props: SubmapProps) => {
                     markerY={marker.markerY}
                     title={marker.region}
                     mapWidth={mapWidth}
-                    expandedGroup={expandedGroup}
                     onGlickGroup={onGroupChange}
                 />
             ))}
@@ -225,7 +216,6 @@ const Submap = (props: SubmapProps) => {
                         markerY={entrance.markerY}
                         title={exitName}
                         mapWidth={mapWidth}
-                        expandedGroup={expandedGroup}
                         active={title === activeSubmap}
                         exitId={exitId}
                         onGlickGroup={onGroupChange}
