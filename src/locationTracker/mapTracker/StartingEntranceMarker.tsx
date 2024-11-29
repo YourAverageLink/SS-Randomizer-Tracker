@@ -37,8 +37,8 @@ const StartingEntranceMarker = ({ mapWidth }: { mapWidth: number }) => {
                 onHide={() => setShowEntranceDialog(false)}
             />
             <Marker
-                x={85}
-                y={40}
+                x={40}
+                y={85}
                 variant="square"
                 color={markerColor}
                 mapWidth={mapWidth}
