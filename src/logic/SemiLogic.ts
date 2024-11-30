@@ -48,6 +48,7 @@ export function getAllTricksEnabledRequirements(
 
 export function computeSemiLogic(
     logic: Logic,
+    isCheckBanned: (checkId: string) => boolean,
     checkedChecks: Set<string>,
     inventory: Record<InventoryItem, number>,
     inLogicBits: BitVector,
@@ -66,6 +67,7 @@ export function computeSemiLogic(
     while (
         semiLogicStep(
             logic,
+            isCheckBanned,
             dungeonKeyLogic,
             settingsRequirements,
             semiLogicState,
@@ -89,6 +91,7 @@ export function computeSemiLogic(
     while (
         semiLogicStep(
             logic,
+            isCheckBanned,
             dungeonKeyLogic,
             settingsRequirementsWithTricks,
             semiLogicState,
@@ -103,6 +106,7 @@ export function computeSemiLogic(
 
 function semiLogicStep(
     logic: Logic,
+    isCheckBanned: (checkId: string) => boolean,
     dungeonKeyLogic: PotentialLocations[],
     settingsRequirements: Requirements,
     state: SemiLogicState,
@@ -134,7 +138,8 @@ function semiLogicStep(
         if (state.semiLogicBits.test(logic.itemBits[checkId])) {
             if (
                 checkDef.type === 'loose_crystal' &&
-                !state.assumedChecks.has(checkId)
+                !state.assumedChecks.has(checkId) &&
+                !isCheckBanned(checkId)
             ) {
                 state.assumedChecks.add(checkId);
                 changed = true;

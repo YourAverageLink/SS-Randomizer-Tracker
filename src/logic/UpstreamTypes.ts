@@ -1,3 +1,5 @@
+import { OptionValue } from "../permalink/SettingsTypes";
+
 export enum TimeOfDay {
     DayOnly = 1,
     NightOnly = 2,
@@ -67,4 +69,8 @@ export interface RawLogic {
     dungeon_completion_requirements: {
         [dungeon: string]: string,
     }
+}
+
+export interface RawPresets {
+    [presetName: string]: Record<string, OptionValue>;
 }

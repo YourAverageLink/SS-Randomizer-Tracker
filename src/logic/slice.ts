@@ -1,6 +1,6 @@
 import { OptionDefs } from '../permalink/SettingsTypes';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { RawLogic } from './UpstreamTypes';
+import { RawLogic, RawPresets } from './UpstreamTypes';
 import { RemoteReference } from '../loader/LogicLoader';
 
 /**
@@ -11,6 +11,8 @@ export interface LogicBundle {
     logic: RawLogic;
     /** options.yaml */
     options: OptionDefs;
+    /** gui/presets/default_presets.json */
+    presets: RawPresets;
     /** the remote we loaded from */
     remote: RemoteReference;
     /** the human-readable data (for Latest version, this is the latest) */

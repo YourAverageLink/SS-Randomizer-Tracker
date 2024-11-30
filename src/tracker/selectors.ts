@@ -9,11 +9,11 @@ import { RootState } from '../store/store';
 import { currySelector } from '../utils/redux';
 import {
     completeTriforceReq,
+    doesHintDistroUseGossipStone,
     gotOpeningReq,
     gotRaisingReq,
     hordeDoorReq,
     impaSongCheck,
-    knownNoGossipStoneHintDistros,
     runtimeOptions,
     swordsToAdd,
 } from '../logic/ThingsThatWouldBeNiceToHaveInTheDump';
@@ -552,7 +552,7 @@ export const areaHiddenSelector = createSelector(
     },
 );
 
-const isCheckBannedSelector = createSelector(
+export const isCheckBannedSelector = createSelector(
     [
         logicSelector,
         areaNonprogressSelector,
@@ -619,24 +619,24 @@ const isCheckBannedSelector = createSelector(
             return cube && areaNonprogress(logic.checks[cube].area!);
         };
 
-        const gossipStonesBanned =
-            knownNoGossipStoneHintDistros.includes(hintDistro);
+        const gossipStoneUsed = doesHintDistroUseGossipStone[hintDistro] ?? _.stubTrue;
 
-        return (checkId: string, check: LogicalCheck) =>
-            // Loose crystal checks can be banned to not require picking them up
-            // in logic, but we want to allow marking them as collected.
-            (check.type !== 'loose_crystal' &&
-                (bannedChecks.has(check.name) ||
-                    areaNonprogress(logic.checks[checkId].area!))) ||
-            isExcessRelic(check) ||
-            isBannedChestViaCube(checkId) ||
-            isBannedCubeCheckViaChest(checkId, check) ||
-            (rupeesExcluded && check.type === 'rupee') ||
-            (banBeedle && check.type === 'beedle_shop') ||
-            (banGearShop && check.type === 'gear_shop') ||
-            (banPotionShop && check.type === 'potion_shop') ||
-            (!tadtoneSanity && check.type === 'tadtone') ||
-            (gossipStonesBanned && check.type === 'gossip_stone');
+        return (checkId: string) => {
+            const check = logic.checks[checkId];
+            return (
+                bannedChecks.has(check.name) ||
+                areaNonprogress(logic.checks[checkId].area!) ||
+                isExcessRelic(check) ||
+                isBannedChestViaCube(checkId) ||
+                isBannedCubeCheckViaChest(checkId, check) ||
+                (rupeesExcluded && check.type === 'rupee') ||
+                (banBeedle && check.type === 'beedle_shop') ||
+                (banGearShop && check.type === 'gear_shop') ||
+                (banPotionShop && check.type === 'potion_shop') ||
+                (!tadtoneSanity && check.type === 'tadtone') ||
+                (check.type === 'gossip_stone' && !gossipStoneUsed(checkId))
+            );
+        };
     },
 );
 
@@ -698,6 +698,7 @@ export const inTrickLogicBitsSelector = createSelector(
 const semiLogicBitsSelector = createSelector(
     [
         logicSelector,
+        isCheckBannedSelector,
         checkedChecksSelector,
         inventorySelector,
         inLogicBitsSelector,
@@ -810,8 +811,12 @@ export const areasSelector = createSelector(
         return _.compact(
             logic.hintRegions.map((area): HintRegion | undefined => {
                 const checks = logic.checksByHintRegion[area];
+                // Loose crystal checks can be banned to not require picking them up
+                // in logic, but we want to allow marking them as collected.
                 const progressChecks = checks.filter(
-                    (check) => !isCheckBanned(check, logic.checks[check]),
+                    (check) =>
+                        !isCheckBanned(check) ||
+                        logic.checks[check].type === 'loose_crystal',
                 );
 
                 const [extraChecks, regularChecks_] = _.partition(
