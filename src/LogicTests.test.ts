@@ -543,4 +543,18 @@ describe('full logic tests', () => {
         updateSettings('random-start-entrance', 'Any');
         expect(readSelector(totalCountersSelector).numExitsAccessible).toBe(1);
     });
+
+    it('does not consider banned crystals in semilogic', () => {
+        updateSettingsWithReset('starting-crystal-packs', 3);
+        store.dispatch(clickItem({ item: 'Progressive Beetle', take: false }));
+        store.dispatch(clickItem({ item: 'Clawshots', take: false }));
+        
+        const bat30Check = findCheckId("Batreaux's House", '30 Crystals');
+        expect(checkState(bat30Check)).toBe('semiLogic');
+
+        updateSettings('excluded-locations', [
+            "Upper Skyloft - Crystal in Link's Room",
+        ]);
+        expect(checkState(bat30Check)).toBe('outLogic');
+    });
 });
