@@ -552,7 +552,7 @@ export const areaHiddenSelector = createSelector(
     },
 );
 
-const isCheckBannedSelector = createSelector(
+export const isCheckBannedSelector = createSelector(
     [
         logicSelector,
         areaNonprogressSelector,

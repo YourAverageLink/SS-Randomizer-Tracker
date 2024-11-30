@@ -9,10 +9,11 @@ import '../locationTracker/Location.css';
 import { useEntrancePath, useTooltipExpr } from '../tooltips/TooltipHooks';
 import RequirementsTooltip from './RequirementsTooltip';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkHintSelector, checkSelector } from '../tracker/selectors';
+import { checkHintSelector, checkSelector, isCheckBannedSelector } from '../tracker/selectors';
 import { clickCheck } from '../tracker/slice';
 import PathTooltip from './PathTooltip';
 import Tooltip from '../additionalComponents/Tooltip';
+import { RootState } from '../store/store';
 
 export interface LocationContextMenuProps {
     checkId: string;
@@ -25,6 +26,7 @@ export default function Location({
 }) {
     const dispatch = useDispatch();
     const hintItem = useSelector(checkHintSelector(id));
+    const isBanned = useSelector((state: RootState) => isCheckBannedSelector(state)(id));
 
     const check = useSelector(checkSelector(id));
 
@@ -60,6 +62,12 @@ export default function Location({
             <>
                 <RequirementsTooltip requirements={expr} />
                 {path && <><hr /><PathTooltip segments={path} /></>}
+                {isBanned && (
+                    <span style={{ color: 'grey', fontStyle: 'italic' }}>
+                        This location is excluded by current settings and
+                        will never be logically required.
+                    </span>
+                )}
             </>
         }>
             <div
