@@ -97,7 +97,7 @@ export interface GeneratedOptions {
     /** Damage Multiplier */
     'damage-multiplier': number;
     /** Hint Distribution */
-    'hint-distribution': 'Weak' | 'Balanced' | 'Junk' | 'Co-op S1' | 'S2 - 2D' | 'S2 - 3D' | 'S2 - 3D EUD Off' | 'CDMC' | 'Dowsing & Fi Hints' | '2D Dowsing & Fi Hints' | 'Boss Keysanity Fi Hints' | 'Strong Dowsing All Dungeons' | 'Remlits Tournament' | 'Custom';
+    'hint-distribution': 'Weak' | 'Balanced' | 'Junk' | 'CDMC' | 'Dowsing & Fi Hints' | '2D Dowsing & Fi Hints' | 'Boss Keysanity Fi Hints' | 'Strong Dowsing All Dungeons' | 'Remlits Tournament' | 'Fi & Gossip Stones' | 'Custom';
     /** Starting Items */
     'starting-items': string[];
     /** Starting Gratitude Crystal Packs */
@@ -140,4 +140,8 @@ export interface GeneratedOptions {
     'trial-treasure-amount': number;
     /** Random Starting Statues */
     'random-start-statues': boolean;
+    /** Random Puzzles */
+    'random-puzzles': boolean;
+    /** Ammo Availability */
+    'ammo-availability': 'Scarce' | 'Vanilla' | 'Useful' | 'Plentiful';
 }

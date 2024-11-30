@@ -81,6 +81,7 @@ const optionCategorization_ = {
         'randomize-entrances',
         'randomize-dungeon-entrances',
         'randomize-trials',
+        'random-puzzles',
     ],
     Convenience: [
         'open-lake-floria',

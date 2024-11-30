@@ -52,6 +52,7 @@ export const runtimeOptions: OptionMapping[] = [
     m('Nonlethal Hot Cave', 'damage-multiplier', (val) => val < 12),
     m('Upgraded Skyward Strike option', 'upgraded-skyward-strike', true),
     m('FS Lava Flow option', 'fs-lava-flow', true),
+    m('No Random Puzzles option', 'random-puzzles', false),
 
     // https://github.com/NindyBK/ssrnppbuild/pull/1
     m('Open Dungeon Shortcuts option', 'open-shortcuts', 'All Dungeons'),
