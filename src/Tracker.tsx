@@ -126,7 +126,7 @@ function Tracker() {
                     <Row>
                         <DungeonTracker setActiveArea={setActiveArea} />
                     </Row>
-                    <Row>
+                    <Row style={{height: '100%'}}>
                         <HintsTracker />
                     </Row>
                 </Col>
@@ -160,7 +160,7 @@ function Tracker() {
                     <Row>
                         <BasicCounters />
                     </Row>
-                    <Row>
+                    <Row style={{height: '100%'}}>
                         <HintsTracker />
                     </Row>
                 </Col>
