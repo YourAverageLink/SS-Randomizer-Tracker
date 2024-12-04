@@ -106,7 +106,7 @@ export function computeSemiLogic(
 
 function semiLogicStep(
     logic: Logic,
-    _isCheckBanned: (checkId: string) => boolean,
+    isCheckBanned: (checkId: string) => boolean,
     dungeonKeyLogic: PotentialLocations[],
     settingsRequirements: Requirements,
     state: SemiLogicState,
@@ -138,8 +138,8 @@ function semiLogicStep(
         if (state.semiLogicBits.test(logic.itemBits[checkId])) {
             if (
                 checkDef.type === 'loose_crystal' &&
-                !state.assumedChecks.has(checkId) // &&
-                // !isCheckBanned(checkId)
+                !state.assumedChecks.has(checkId) &&
+                !isCheckBanned(checkId)
             ) {
                 state.assumedChecks.add(checkId);
                 changed = true;
