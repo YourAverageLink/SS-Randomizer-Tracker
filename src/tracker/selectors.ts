@@ -702,7 +702,6 @@ const semiLogicBitsSelector = createSelector(
         checkedChecksSelector,
         inventorySelector,
         inLogicBitsSelector,
-        isCheckBannedSelector,
         dungeonKeyLogicSelector,
         settingsRequirementsSelector,
         checkHintsSelector,

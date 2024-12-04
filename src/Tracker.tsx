@@ -22,6 +22,7 @@ import { Link, Navigate } from 'react-router-dom';
 import { isLogicLoadedSelector } from './logic/selectors';
 import { ExportButton } from './ImportExport';
 import { useSyncTrackerStateToLocalStorage } from './LocalStorage';
+import { HintsTracker } from './hints/HintsTracker';
 
 function subscribeToWindowResize(callback: () => void) {
     window.addEventListener('resize', callback);
@@ -125,6 +126,9 @@ function Tracker() {
                     <Row>
                         <DungeonTracker setActiveArea={setActiveArea} />
                     </Row>
+                    <Row>
+                        <HintsTracker />
+                    </Row>
                 </Col>
             </>
         );
@@ -155,6 +159,9 @@ function Tracker() {
                 >
                     <Row>
                         <BasicCounters />
+                    </Row>
+                    <Row>
+                        <HintsTracker />
                     </Row>
                 </Col>
             </>

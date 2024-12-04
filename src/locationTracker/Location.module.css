@@ -27,6 +27,11 @@
     }
 }
 
+.tooltipNote {
+    font-style: italic;
+    color: grey;
+}
+
 .exit {
     display: flex;
     flex-flow: column wrap;

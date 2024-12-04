@@ -3,6 +3,7 @@ declare const classNames: {
     readonly checked: 'checked';
     readonly text: 'text';
     readonly hintItem: 'hintItem';
+    readonly tooltipNote: 'tooltipNote';
     readonly exit: 'exit';
 };
 export = classNames;

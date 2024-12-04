@@ -66,7 +66,7 @@ function CheckLocation({
                 <RequirementsTooltip requirements={expr} />
                 {path && <><hr /><PathTooltip segments={path} /></>}
                 {isBanned && (
-                    <span style={{ color: 'grey', fontStyle: 'italic' }}>
+                    <span className={styles.tooltipNote}>
                         This location is excluded by current settings and
                         will never be logically required.
                     </span>

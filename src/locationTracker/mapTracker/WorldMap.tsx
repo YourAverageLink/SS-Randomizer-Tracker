@@ -71,7 +71,9 @@ const WorldMap = (props: WorldMapProps) => {
             <div>
                 {!activeSubmap &&
                     <>
-                        <img src={skyMap} alt="World Map" width={imgWidth}/>
+                        <img src={skyMap} alt="World Map" width={imgWidth} onContextMenu={(e) => {
+                            e.preventDefault();
+                        }} />
                         <StartingEntranceMarker mapWidth={imgWidth} />
                     </>
                 }

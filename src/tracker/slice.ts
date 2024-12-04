@@ -40,6 +40,10 @@ export interface TrackerState {
      * Fully decoded settings.
      */
     settings: Partial<AllTypedOptions>;
+    /**
+     * A plaintext text area for the user to track hints.
+     */
+    userHintsText: string;
 }
 
 const initialState: TrackerState = {
@@ -51,6 +55,7 @@ const initialState: TrackerState = {
     hints: {},
     checkHints: {},
     settings: {},
+    userHintsText: "",
 };
 
 export function preloadedTrackerState(): TrackerState {
@@ -165,6 +170,13 @@ const trackerSlice = createSlice({
             state.checkHints[checkId] = hint;
             state.hasBeenModified = true;
         },
+        setHintsText: (
+            state,
+            action: PayloadAction<string>
+        ) => {
+            state.userHintsText = action.payload;
+            state.hasBeenModified ||= action.payload !== '';
+        },
         acceptSettings: (
             state,
             action: PayloadAction<{ settings: AllTypedOptions }>,
@@ -192,6 +204,6 @@ const trackerSlice = createSlice({
     },
 });
 
-export const { clickItem, clickCheck, setItemCounts, clickDungeonName, bulkEditChecks, mapEntrance, acceptSettings, setCheckHint, reset, setHint, loadTracker } = trackerSlice.actions;
+export const { clickItem, clickCheck, setItemCounts, clickDungeonName, bulkEditChecks, mapEntrance, acceptSettings, setCheckHint, reset, setHint, setHintsText, loadTracker } = trackerSlice.actions;
 
 export default trackerSlice.reducer;
