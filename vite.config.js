@@ -31,7 +31,9 @@ export default defineConfig(({ mode }) => {
             $PUBLIC_URL: JSON.stringify(baseUrl),
         },
         plugins: [
-            sassDts(),
+            sassDts({
+                prettierFilePath: './.prettierrc.json',
+            }),
             react(),
             generateFile({
                 output: 'manifest.json',

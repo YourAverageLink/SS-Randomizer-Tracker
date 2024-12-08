@@ -71,6 +71,7 @@ const WorldMap = (props: WorldMapProps) => {
             <div>
                 {!activeSubmap &&
                     <>
+                        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
                         <img src={skyMap} alt="World Map" width={imgWidth} onContextMenu={(e) => {
                             e.preventDefault();
                         }} />
