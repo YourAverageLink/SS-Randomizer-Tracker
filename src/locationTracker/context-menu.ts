@@ -1,4 +1,4 @@
-import { ShowContextMenuParams, UseContextMenuParams, useContextMenu as contexifyUseContextMenu } from "react-contexify";
+import { ShowContextMenuParams, UseContextMenuParams, useContextMenu as useContexifyContextMenu } from "react-contexify";
 
 type MakeOptional<Type, Key extends keyof Type> = Omit<Type, Key> & Partial<Pick<Type, Key>>;
 
@@ -7,5 +7,5 @@ export function useContextMenu<ShowProps, UseProps = undefined>(params: UseConte
     show: (params: MakeOptional<ShowContextMenuParams<ShowProps>, 'id'>) => void;
     hideAll: () => void;
 } {
-    return contexifyUseContextMenu(params);
+    return useContexifyContextMenu(params);
 }

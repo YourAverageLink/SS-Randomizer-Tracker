@@ -11,7 +11,7 @@ class EntranceGraph extends React.Component {
 
     constructor() {
         super({});
-        this.state = {
+        // this.state = {
             // data: {
             //     nodes: [
             //         EntranceGraph.createNode('Sealed Grounds Spiral'),
@@ -32,7 +32,7 @@ class EntranceGraph extends React.Component {
             //     ],
             // },
             // selectedNode: undefined,
-        };
+        // };
     }
 
     render() {

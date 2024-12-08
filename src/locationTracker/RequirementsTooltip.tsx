@@ -1,8 +1,8 @@
 import React from 'react';
 import './RequirementsTooltip.css';
-import { cloneElement } from 'react';
 import { Op } from '../logic/booleanlogic/BooleanExpression';
 import { RootTooltipExpression, TooltipExpression } from '../tooltips/TooltipExpression';
+import { addDividers } from '../utils/React';
 
 export default function RequirementsTooltip({
     requirements,
@@ -51,7 +51,7 @@ function Expr({
     if (expr.type === 'expr') {
         return (
             <>
-                {parentOp && '('}
+                {parentOp !== undefined && '('}
                 {addDividers(
                     expr.items.map((val, idx) => (
                         <Expr
@@ -62,7 +62,7 @@ function Expr({
                     )),
                     <>{` ${expr.op} `}</>,
                 )}
-                {parentOp && ')'}
+                {parentOp !== undefined && ')'}
             </>
         );
     } else {
@@ -78,13 +78,4 @@ function Expr({
     }
 }
 
-/** places a divider between each element of arr */
-function addDividers<T extends React.ReactNode>(
-    arr: T[],
-    divider: React.ReactElement,
-): React.ReactNode[] {
-    return arr.flatMap((e, i) => [
-        i ? cloneElement(divider, { key: `divider-${i}` }) : null,
-        e,
-    ]);
-}
+
