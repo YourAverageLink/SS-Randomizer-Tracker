@@ -196,6 +196,7 @@ const Submap = ({
 
     const mapElement = (
         <div>
+            {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
             <img src={map} alt={`${title} Map`} width={mapWidth} style={{position: 'relative'}} onContextMenu={handleBack}/>
             {markers.map((marker) => (
                 <MapMarker

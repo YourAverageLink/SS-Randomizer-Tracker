@@ -137,7 +137,7 @@ function PresetRow({
                     <div style={{ marginLeft: 'auto' }}>
                         <Button
                             onClick={(e) => {
-                                if (confirm(`Delete Preset ${preset.name}?`)) {
+                                if (window.confirm(`Delete Preset ${preset.name}?`)) {
                                     appDispatch(removePreset(preset.id));
                                 }
                                 e.stopPropagation();
@@ -176,7 +176,7 @@ function AddPresetRow({
         <div
             role="button"
             onClick={() => {
-                const name = prompt('Enter preset name');
+                const name = window.prompt('Enter preset name');
                 if (!name) {
                     return;
                 }

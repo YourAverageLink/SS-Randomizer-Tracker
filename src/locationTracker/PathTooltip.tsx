@@ -1,5 +1,4 @@
-import React from 'react';
-import { cloneElement } from 'react';
+import { addDividers } from '../utils/React';
 
 export default function PathTooltip({
     segments,
@@ -11,15 +10,4 @@ export default function PathTooltip({
             {addDividers(segments, <><br />→ </>)}
         </div>
     );
-}
-
-/** places a divider between each element of arr */
-function addDividers<T extends React.ReactNode>(
-    arr: T[],
-    divider: React.ReactElement,
-): React.ReactNode[] {
-    return arr.flatMap((e, i) => [
-        i ? cloneElement(divider, { key: `divider-${i}` }) : null,
-        e,
-    ]);
 }

@@ -37,7 +37,6 @@ export default function Exit({
             <div
                 className="location-container"
                 style={{ cursor: 'default' }}
-                tabIndex={0}
             >
                 <Row>
                     <Tooltip content={

@@ -1,70 +1,69 @@
-import react from 'eslint-plugin-react';
+import react from '@eslint-react/eslint-plugin';
+import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
-import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
 import sonarjs from 'eslint-plugin-sonarjs';
-import vitestGlobals from 'eslint-plugin-vitest-globals';
 import { fixupPluginRules } from '@eslint/compat';
-import globals from 'globals';
-import tsParser from '@typescript-eslint/parser';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all,
-});
-
-export default [
+export default tseslint.config(
+    { name: 'eslint/recommended', ...eslint.configs.recommended },
+    reactPlugin.configs.flat['jsx-runtime'],
     {
-        ignores: ['scripts/*'],
-    },
-    ...compat.extends(
-        'eslint:recommended',
-        'plugin:react/recommended',
-        'plugin:react/jsx-runtime',
-        'plugin:@typescript-eslint/recommended-requiring-type-checking',
-        'prettier',
-        'plugin:vitest-globals/recommended',
-    ),
-    sonarjs.configs.recommended,
-    {
-        plugins: {
-            react,
-            'react-hooks': fixupPluginRules(reactHooks),
-            '@typescript-eslint': typescriptEslint,
-            'vitest-globals': vitestGlobals,
-        },
-
+        name: 'typescript-eslint/parser-options',
         languageOptions: {
-            globals: {
-                ...globals.browser,
-                ...vitestGlobals.environments.env.globals,
-            },
-
-            parser: tsParser,
-            ecmaVersion: 'latest',
-            sourceType: 'module',
-
             parserOptions: {
-                ecmaFeatures: {
-                    jsx: true,
-                },
-
-                project: './tsconfig.json',
+                project: true,
+                tsconfigRootDir: import.meta.dirname,
             },
         },
-
+    },
+    ...tseslint.configs.recommendedTypeChecked,
+    { name: 'sonarjs/recommended', ...sonarjs.configs.recommended },
+    {
+        name: 'react',
+        ...reactPlugin.configs.flat.recommended,
         settings: {
             react: {
                 version: 'detect',
             },
         },
-
+    },
+    {
+        name: 'react-hooks',
+        plugins: {
+            'react-hooks': fixupPluginRules(reactHooks),
+        },
+        rules: reactHooks.configs.recommended.rules,
+    },
+    {
+        name: 'jsx-a11y',
+        files: ['**/*.tsx'],
+        plugins: {
+          'jsx-a11y': fixupPluginRules(jsxA11y),
+        },
+        rules: {
+          'jsx-a11y/aria-props': 'error',
+          'jsx-a11y/aria-proptypes': 'error',
+          'jsx-a11y/aria-role': 'error',
+          'jsx-a11y/aria-unsupported-elements': 'error',
+          'jsx-a11y/autocomplete-valid': 'error',
+          'jsx-a11y/label-has-associated-control': 'error',
+          'jsx-a11y/no-noninteractive-element-interactions': 'error',
+          'jsx-a11y/no-noninteractive-element-to-interactive-role': 'error',
+          'jsx-a11y/no-noninteractive-tabindex': 'error',
+          'jsx-a11y/no-redundant-roles': 'error',
+          'jsx-a11y/role-has-required-aria-props': 'error',
+          'jsx-a11y/role-supports-aria-props': 'error',
+        },
+      },
+    {
+        name: 'eslint-react',
+        ...react.configs['recommended-type-checked'],
+    },
+    {
+        name: 'ss-randomizer-tracker-custom',
         rules: {
             'react/jsx-filename-extension': [
                 'error',
@@ -74,12 +73,15 @@ export default [
             ],
 
             'max-len': 0,
-            'no-plusplus': ['off'],
 
             'no-param-reassign': ['error'],
-            'no-mixed-operators': ['off'],
             'no-bitwise': ['off'],
             'react/require-default-props': ['off'],
+            'react/react-in-jsx-scope': 'off',
+
+            '@eslint-react/prefer-read-only-props': 'off',
+            '@eslint-react/no-array-index-key': 'off',
+            '@eslint-react/hooks-extra/no-direct-set-state-in-use-effect': 'off',
 
             '@typescript-eslint/no-floating-promises': 'off',
             '@typescript-eslint/no-unsafe-argument': 'error',
@@ -107,4 +109,4 @@ export default [
             'sonarjs/todo-tag': 'off',
         },
     },
-];
+);
