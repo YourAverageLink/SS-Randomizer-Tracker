@@ -119,7 +119,6 @@ function PresetRow({
 }) {
     const appDispatch = useAppDispatch();
     return (
-        // eslint-disable-next-line sonarjs/mouse-events-a11y
         <div
             role="button"
             onClick={() => {
@@ -174,7 +173,6 @@ function AddPresetRow({
 }) {
     const dispatch = useDispatch();
     return (
-        // eslint-disable-next-line sonarjs/mouse-events-a11y
         <div
             role="button"
             onClick={() => {
