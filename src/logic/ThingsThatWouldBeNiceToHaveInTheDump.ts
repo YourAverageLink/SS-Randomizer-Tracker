@@ -91,6 +91,7 @@ export const doesHintDistroUseGossipStone: Record<string, ((stoneId: string) => 
     'Strong Dowsing All Dungeons': _.stubFalse,
     'Pre-S3 Base': isS3RacingGossipStone,
     'Pre-S3 Variant': isS3RacingGossipStone,
+    'Season 3 Tournament': isS3RacingGossipStone,
 };
 
 
