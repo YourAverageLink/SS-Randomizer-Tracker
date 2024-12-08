@@ -5,7 +5,7 @@ import styles from './LocationGroup.module.css';
 import clsx from 'clsx';
 import _ from 'lodash';
 
-function reorderLocationsForGrid(locations: string[]) {
+function reorderLocationsForGrid<T>(locations: T[]) {
     const partitionPoint = Math.ceil(locations.length / 2);
     return _.compact(
         _.flatten(

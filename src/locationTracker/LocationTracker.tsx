@@ -6,11 +6,23 @@ import LocationContextMenu from "./LocationContextMenu";
 import { useSelector } from "react-redux";
 import { areasSelector } from "../tracker/selectors";
 import { isDungeon } from "../logic/Locations";
+import { InterfaceAction, InterfaceState } from "../tracker/TrackerInterfaceReducer";
+import EntranceChooser from "./EntranceChooser";
 
-export function NewLocationTracker({ containerHeight, activeArea, setActiveArea }: { containerHeight: number; activeArea: string | undefined, setActiveArea: (area: string) => void }) {
+export function NewLocationTracker({
+    containerHeight,
+    interfaceState,
+    interfaceDispatch
+}: {
+    containerHeight: number;
+    interfaceState: InterfaceState;
+    interfaceDispatch: React.Dispatch<InterfaceAction>;
+}) {
     const areas = useSelector(areasSelector);
-
+    const activeArea = interfaceState.type === 'viewingChecks' ? interfaceState.hintRegion : undefined;
     const selectedArea = activeArea && areas.find((a) => a.name === activeArea) || undefined;
+    const setActiveArea = (area: string) =>
+        interfaceDispatch({ type: 'selectHintRegion', hintRegion: area });
 
     return (
         <div className="location-tracker">
@@ -49,6 +61,25 @@ export function NewLocationTracker({ containerHeight, activeArea, setActiveArea 
                     }}
                 >
                     <Locations hintRegion={selectedArea} />
+                </div>
+            )}
+            {interfaceState.type === 'choosingEntrance' && (
+                <div
+                    style={{
+                        height: containerHeight / 2,
+                        overflowY: 'auto',
+                        overflowX: 'visible',
+                    }}
+                >
+                    <EntranceChooser
+                        exitId={interfaceState.exitId}
+                        onChoose={(entranceId) =>
+                            interfaceDispatch({
+                                type: 'cancelChooseEntrance',
+                                selectedEntrance: entranceId,
+                            })
+                        }
+                    />
                 </div>
             )}
         </div>

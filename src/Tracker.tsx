@@ -23,6 +23,7 @@ import { isLogicLoadedSelector } from './logic/selectors';
 import { ExportButton } from './ImportExport';
 import { useSyncTrackerStateToLocalStorage } from './LocalStorage';
 import { HintsTracker } from './hints/HintsTracker';
+import { useTrackerInterfaceReducer } from './tracker/TrackerInterfaceReducer';
 
 function subscribeToWindowResize(callback: () => void) {
     window.addEventListener('resize', callback);
@@ -71,12 +72,14 @@ function Tracker() {
 
     const [showCustomizationDialog, setShowCustomizationDialog] = useState(false);
     const [showEntranceDialog, setShowEntranceDialog] = useState(false);
-    const [activeArea, setActiveArea] = useState<string | undefined>(undefined);
-    const [activeSubmap, setActiveSubmap] = useState<string | undefined>(undefined);
     const itemLayout = useSelector(itemLayoutSelector);
     const locationLayout = useSelector(locationLayoutSelector);
 
     useSyncTrackerStateToLocalStorage();
+
+    const [trackerInterfaceState, trackerInterfaceDispatch] = useTrackerInterfaceReducer();
+
+    const setActiveArea = (area: string) => trackerInterfaceDispatch({ type: 'selectHintRegion', hintRegion: area })
 
     let itemTracker;
     if (itemLayout === 'inventory') {
@@ -108,8 +111,8 @@ function Tracker() {
                 </Col>
                 <Col>
                     <NewLocationTracker
-                        activeArea={activeArea}
-                        setActiveArea={setActiveArea}
+                        interfaceDispatch={trackerInterfaceDispatch}
+                        interfaceState={trackerInterfaceState}
                         containerHeight={height * 0.95}
                     />
                 </Col>
@@ -142,11 +145,9 @@ function Tracker() {
                 <Col xs={6}>
                     <WorldMap
                         imgWidth={width * 0.5}
-                        handleGroupClick={setActiveArea}
-                        handleSubmapClick={setActiveSubmap}
                         containerHeight={height * 0.95}
-                        expandedGroup={activeArea}
-                        activeSubmap={activeSubmap}
+                        interfaceDispatch={trackerInterfaceDispatch}
+                        interfaceState={trackerInterfaceState}
                     />
                 </Col>
                 <Col

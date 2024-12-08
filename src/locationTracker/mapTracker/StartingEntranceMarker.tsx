@@ -1,17 +1,14 @@
-import { useCallback, useState } from 'react';
 import 'react-contexify/dist/ReactContexify.css';
 import { useSelector } from 'react-redux';
 import { exitsSelector, settingSelector } from '../../tracker/selectors';
 import ColorScheme from '../../customization/ColorScheme';
-import EntranceSelectionDialog from '../EntranceSelectionDialog';
 import { Marker } from './Marker';
+import { startingEntrancePool } from '../../logic/Entrances';
 
-const StartingEntranceMarker = ({ mapWidth }: { mapWidth: number }) => {
+const StartingEntranceMarker = ({ mapWidth, onClick }: { mapWidth: number; onClick: () => void }) => {
     
     const startingEntranceRando = useSelector(settingSelector('random-start-entrance')) !== 'Vanilla';
-    const startMapping = useSelector(exitsSelector).find((e) => e.exit.id === '\\Start')!;
-    const [showEntranceDialog, setShowEntranceDialog] = useState(false);
-    const showDialog = useCallback(() => setShowEntranceDialog(true), []);
+    const startMapping = useSelector(exitsSelector).find((e) => e.canAssign && e.rule.pool === startingEntrancePool)!;
 
     if (!startingEntranceRando) {
         return null;
@@ -31,11 +28,6 @@ const StartingEntranceMarker = ({ mapWidth }: { mapWidth: number }) => {
 
     return (
         <>
-            <EntranceSelectionDialog
-                exitId={startMapping.exit.id}
-                show={showEntranceDialog}
-                onHide={() => setShowEntranceDialog(false)}
-            />
             <Marker
                 x={40}
                 y={85}
@@ -43,7 +35,7 @@ const StartingEntranceMarker = ({ mapWidth }: { mapWidth: number }) => {
                 color={markerColor}
                 mapWidth={mapWidth}
                 tooltip={tooltip}
-                onClick={showDialog}
+                onClick={onClick}
             >
                 {!hasSelectedEntrance && '?'}
             </Marker>

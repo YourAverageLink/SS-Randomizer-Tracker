@@ -17,15 +17,9 @@ import { useContextMenu } from '../context-menu';
 import { LocationGroupContextMenuProps } from '../LocationGroupHeader';
 import { useCallback, MouseEvent } from 'react';
 import { Locations } from '../Locations';
+import { InterfaceAction, InterfaceState } from '../../tracker/TrackerInterfaceReducer';
+import EntranceChooser from '../EntranceChooser';
 
-type WorldMapProps = {
-    imgWidth: number,
-    handleGroupClick: (group: string | undefined) => void
-    handleSubmapClick: (submap: string | undefined) => void,
-    containerHeight: number,
-    expandedGroup: string | undefined,
-    activeSubmap: string | undefined,
-};
 
 const images: Record<string, string> = {
     skyloftMap,
@@ -34,9 +28,19 @@ const images: Record<string, string> = {
     lanayruMap,
 };
 
-const WorldMap = (props: WorldMapProps) => {
-    const { containerHeight, activeSubmap, expandedGroup, handleGroupClick, handleSubmapClick } = props;
-    let { imgWidth } = props;
+function WorldMap({
+imgWidth: imgWidth_,
+containerHeight,
+interfaceState,
+interfaceDispatch,
+}: 
+{
+    imgWidth: number,
+    containerHeight: number,
+    interfaceState: InterfaceState;
+    interfaceDispatch: React.Dispatch<InterfaceAction>;
+}) {
+    let imgWidth = imgWidth_;
     // original image dimensions
     const aspectRatio = 843/465;
     let imgHeight = imgWidth / aspectRatio;
@@ -65,7 +69,23 @@ const WorldMap = (props: WorldMapProps) => {
         sky,
     ];
 
-
+    const activeSubmap = interfaceState.mapView;
+    const handleGroupClick = (hintRegion: string | undefined) => {
+        if (hintRegion) {
+            interfaceDispatch({ type: 'selectHintRegion', hintRegion })
+        } else {
+            interfaceDispatch({ type: 'leaveMapView' });
+        }
+    };
+    const expandedGroup = interfaceState.type === 'viewingChecks' ? interfaceState.hintRegion : undefined;
+    const handleSubmapClick = (submap: string | undefined) => {
+        if (submap) {
+            interfaceDispatch({ type: 'selectMapView', province: submap });
+        } else {
+            interfaceDispatch({ type: 'leaveMapView' });
+        }
+    };
+    
     const worldMap = (
         <div style={{position:'absolute', width:imgWidth, height:imgWidth / aspectRatio}}>
             <div>
@@ -75,7 +95,8 @@ const WorldMap = (props: WorldMapProps) => {
                         <img src={skyMap} alt="World Map" width={imgWidth} onContextMenu={(e) => {
                             e.preventDefault();
                         }} />
-                        <StartingEntranceMarker mapWidth={imgWidth} />
+                        {/* TODO maybe refactor */}
+                        <StartingEntranceMarker mapWidth={imgWidth} onClick={() => interfaceDispatch({ type: 'chooseEntrance', exitId: '\\Start' })} />
                     </>
                 }
                 {markers.map((marker) => (
@@ -129,7 +150,6 @@ const WorldMap = (props: WorldMapProps) => {
 
     const locationHeader = selectedArea && (
         <div
-            className="flex-container"
             tabIndex={0}
             role="button"
             onContextMenu={displayMenu}
@@ -184,6 +204,24 @@ const WorldMap = (props: WorldMapProps) => {
                     }}
                 >
                     <Locations hintRegion={selectedArea} />
+                </div>
+            )}
+            {interfaceState.type === 'choosingEntrance' && (
+                <div
+                    style={{
+                        width: imgWidth,
+                        height: containerHeight * 0.35,
+                    }}
+                >
+                    <EntranceChooser
+                        exitId={interfaceState.exitId}
+                        onChoose={(entranceId) =>
+                            interfaceDispatch({
+                                type: 'cancelChooseEntrance',
+                                selectedEntrance: entranceId,
+                            })
+                        }
+                    />
                 </div>
             )}
         </div>
