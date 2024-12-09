@@ -114,7 +114,23 @@ export type LogicOption =
 const optionCategorization: Record<string, readonly LogicOption[]> =
     optionCategorization_;
 
-const wellKnownRemotes = [LATEST_STRING, 'YourAverageLink/pre-s3', 'ssrando/main'];
+const wellKnownRemotes: {
+    prettyName: string;
+    remoteName: string;
+}[] = [
+    {
+        prettyName: 'Latest Stable Release',
+        remoteName: LATEST_STRING,
+    },
+    {
+        prettyName: 'Racing Season 3',
+        remoteName: 'alkalineace/season-3',
+    },
+    {
+        prettyName: 'Latest Development Build',
+        remoteName: 'ssrando/main',
+    },
+];
 
 /**
  * The default landing page for the tracker. Allows choosing logic source, permalink, and settings,
@@ -271,23 +287,19 @@ function useRemoteOptions() {
     const githubReleases = useReleases();
 
     return useMemo(() => {
-        const niceRemoteName = (remote: string) => {
-            if (remote === LATEST_STRING) {
+        const niceRemoteName = (remoteName: string, prettyName: string) => {
+            if (remoteName === LATEST_STRING) {
                 return githubReleases
-                    ? `Latest Stable Release (${githubReleases.latest})`
-                    : `Latest Stable Release`;
-            } else if (remote === 'ssrando/main') {
-                return `Latest Development Build (${remote})`;
-            } else if (remote === 'YourAverageLink/pre-s3') {
-                return `Season 3 Racing Prerelease (${remote})`;
+                    ? `${prettyName} (${githubReleases.latest})`
+                    : prettyName;
+            } else {
+                return `${prettyName} (${remoteName})`;
             }
-    
-            return remote;
         };
 
-        const remotes = wellKnownRemotes.map((remote) => ({
-            value: parseRemote(remote)!,
-            label: niceRemoteName(remote),
+        const remotes = wellKnownRemotes.map(({ prettyName, remoteName }) => ({
+            value: parseRemote(remoteName)!,
+            label: niceRemoteName(remoteName, prettyName),
         }));
 
         if (githubReleases) {
