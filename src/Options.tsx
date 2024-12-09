@@ -123,8 +123,8 @@ const wellKnownRemotes: {
         remoteName: LATEST_STRING,
     },
     {
-        prettyName: 'Season 3 Racing',
-        remoteName: 'YourAverageLink/season-3',
+        prettyName: 'Racing Season 3',
+        remoteName: 'alkalineace/season-3',
     },
     {
         prettyName: 'Latest Development Build',
