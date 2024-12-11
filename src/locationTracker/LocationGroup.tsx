@@ -19,9 +19,11 @@ function reorderLocationsForGrid<T>(locations: T[]) {
 
 export default function LocationGroup({
     locations,
+    onChooseEntrance,
 }: {
     /* the list of locations this group contains */
     locations: string[];
+    onChooseEntrance: (exitId: string) => void;
 }) {
     const mapMode = useSelector(locationLayoutSelector) === 'map';
     const orderedLocations = mapMode
@@ -35,7 +37,7 @@ export default function LocationGroup({
         >
             {orderedLocations.map((location) => (
                 <div key={location} className={styles.locationCell}>
-                    <Location id={location} />
+                    <Location onChooseEntrance={onChooseEntrance} id={location} />
                 </div>
             ))}
         </div>

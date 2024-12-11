@@ -23,6 +23,7 @@ export function NewLocationTracker({
     const selectedArea = activeArea && areas.find((a) => a.name === activeArea) || undefined;
     const setActiveArea = (area: string) =>
         interfaceDispatch({ type: 'selectHintRegion', hintRegion: area });
+    const onChooseEntrance = (exitId: string) => interfaceDispatch({ type: 'chooseEntrance', exitId });
 
     return (
         <div className="location-tracker">
@@ -60,7 +61,7 @@ export function NewLocationTracker({
                         overflowX: 'visible',
                     }}
                 >
-                    <Locations hintRegion={selectedArea} />
+                    <Locations onChooseEntrance={onChooseEntrance} hintRegion={selectedArea} />
                 </div>
             )}
             {interfaceState.type === 'choosingEntrance' && (

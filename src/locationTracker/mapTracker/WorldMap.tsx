@@ -29,12 +29,11 @@ const images: Record<string, string> = {
 };
 
 function WorldMap({
-imgWidth: imgWidth_,
-containerHeight,
-interfaceState,
-interfaceDispatch,
-}: 
-{
+    imgWidth: imgWidth_,
+    containerHeight,
+    interfaceState,
+    interfaceDispatch,
+}: {
     imgWidth: number,
     containerHeight: number,
     interfaceState: InterfaceState;
@@ -85,6 +84,8 @@ interfaceDispatch,
             interfaceDispatch({ type: 'leaveMapView' });
         }
     };
+
+    const onChooseEntrance = (exitId: string) => interfaceDispatch({ type: 'chooseEntrance', exitId });
     
     const worldMap = (
         <div style={{position:'absolute', width:imgWidth, height:imgWidth / aspectRatio}}>
@@ -118,6 +119,7 @@ interfaceDispatch,
                         title={submap.name}
                         onGroupChange={handleGroupClick}
                         onSubmapChange={handleSubmapClick}
+                        onChooseEntrance={onChooseEntrance}
                         markers={submap.markers}
                         entranceMarkers={submap.entranceMarkers as EntranceMarkerParams[]}
                         map={images[submap.map]}
@@ -203,7 +205,7 @@ interfaceDispatch,
                         overflowX: 'visible',
                     }}
                 >
-                    <Locations hintRegion={selectedArea} />
+                    <Locations onChooseEntrance={onChooseEntrance} hintRegion={selectedArea} />
                 </div>
             )}
             {interfaceState.type === 'choosingEntrance' && (

@@ -1,14 +1,24 @@
 import { HintRegion } from '../logic/Locations';
 import LocationGroup from './LocationGroup';
 
-export function Locations({ hintRegion }: { hintRegion: HintRegion<string> }) {
+export function Locations({
+    hintRegion,
+    onChooseEntrance,
+}: {
+    hintRegion: HintRegion<string>;
+    onChooseEntrance: (exitId: string) => void;
+}) {
     return (
         <>
-            <LocationGroup locations={hintRegion.checks} />
+            <LocationGroup
+                onChooseEntrance={onChooseEntrance}
+                locations={hintRegion.checks}
+            />
             {Boolean(hintRegion.extraChecks.loose_crystal?.length) && (
                 <>
                     <hr />
                     <LocationGroup
+                        onChooseEntrance={onChooseEntrance}
                         locations={hintRegion.extraChecks.loose_crystal!}
                     />
                 </>
@@ -17,6 +27,7 @@ export function Locations({ hintRegion }: { hintRegion: HintRegion<string> }) {
                 <>
                     <hr />
                     <LocationGroup
+                        onChooseEntrance={onChooseEntrance}
                         locations={hintRegion.extraChecks.tr_cube!}
                     />
                 </>
@@ -25,6 +36,7 @@ export function Locations({ hintRegion }: { hintRegion: HintRegion<string> }) {
                 <>
                     <hr />
                     <LocationGroup
+                        onChooseEntrance={onChooseEntrance}
                         locations={hintRegion.extraChecks.gossip_stone!}
                     />
                 </>
@@ -32,7 +44,10 @@ export function Locations({ hintRegion }: { hintRegion: HintRegion<string> }) {
             {Boolean(hintRegion.exits.length) && (
                 <>
                     <hr />
-                    <LocationGroup locations={hintRegion.exits} />
+                    <LocationGroup
+                        onChooseEntrance={onChooseEntrance}
+                        locations={hintRegion.exits}
+                    />
                 </>
             )}
         </>

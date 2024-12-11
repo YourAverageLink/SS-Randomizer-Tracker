@@ -14,7 +14,6 @@ import { AreaGraph, Logic } from '../../logic/Logic';
 import { logicSelector } from '../../logic/selectors';
 import HintDescription, { DecodedHint, decodeHint } from '../Hints';
 import { RootState } from '../../store/store';
-import { useContextMenu } from '../context-menu';
 import { TriggerEvent } from 'react-contexify';
 import { Marker } from './Marker';
 
@@ -38,10 +37,6 @@ export type ExitParams = {
     top: number
 }
 
-export interface BirdStatueContextMenuProps {
-    province: string;
-};
-
 const images: Record<string, string> = {
     leaveSkyloft,
     leaveFaron,
@@ -57,6 +52,7 @@ function getExit(logic: Logic, marker: EntranceMarkerParams) {
 const Submap = ({
     onSubmapChange,
     onGroupChange,
+    onChooseEntrance,
     title,
     markerX,
     markerY,
@@ -72,6 +68,7 @@ const Submap = ({
     title: string;
     onGroupChange: (region: string | undefined) => void;
     onSubmapChange: (submap: string | undefined) => void;
+    onChooseEntrance: (exitId: string) => void;
     markers: RegionMarkerParams[];
     entranceMarkers: EntranceMarkerParams[];
     activeSubmap: string | undefined;
@@ -146,11 +143,7 @@ const Submap = ({
             {needsBirdStatueSanityExit && <div>Right-click to choose Statue</div>}
             {subregionHints.map(({hint, area}) => <HintDescription key={area} hint={hint} area={area} />)}
         </center>
-    )
-
-    const { show } = useContextMenu<BirdStatueContextMenuProps>({
-        id: 'birdstatue-context',
-    });
+    );
 
     const handleClick = (e: TriggerEvent | React.UIEvent) => {
         if (e.type === 'contextmenu') {
@@ -160,14 +153,16 @@ const Submap = ({
         }
     };
 
+    const birdStatueExitId = birdStatueSanityPool && birdStatueSanityPool.exit;
+
     const displayMenu = useCallback(
-        (e: TriggerEvent) => {
-            show({
-                event: e,
-                props: { province: title },
-            });
+        (e: React.UIEvent) => {
+            if (birdStatueExitId) {
+                onChooseEntrance(birdStatueExitId);
+            }
+            e.preventDefault();
         },
-        [show, title],
+        [birdStatueExitId, onChooseEntrance],
     );
 
     const handleBack = (e: TriggerEvent | React.UIEvent) => {

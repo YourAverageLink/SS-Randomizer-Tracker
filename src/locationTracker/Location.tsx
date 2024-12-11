@@ -1,6 +1,6 @@
 import keyDownWrapper from '../KeyDownWrapper';
 import { useContextMenu } from './context-menu';
-import { CSSProperties, useCallback, useState } from 'react';
+import { CSSProperties, useCallback } from 'react';
 import { TriggerEvent } from 'react-contexify';
 import images from '../itemTracker/Images';
 import placeholderImg from '../assets/slot test.png';
@@ -16,7 +16,6 @@ import PathTooltip from './PathTooltip';
 import Tooltip from '../additionalComponents/Tooltip';
 import clsx from 'clsx';
 import styles from './Location.module.css';
-import EntranceSelectionDialog from './EntranceSelectionDialog';
 import { RootState } from '../store/store';
 import { Check } from '../logic/Locations';
 
@@ -24,10 +23,16 @@ export interface LocationContextMenuProps {
     checkId: string;
 }
 
-export default function Location({ id }: { id: string }) {
+export default function Location({
+    id,
+    onChooseEntrance,
+}: {
+    id: string;
+    onChooseEntrance: (exitId: string) => void;
+}) {
     const check = useSelector(checkSelector(id));
     if (check.type === 'exit') {
-        return <Exit id={id} />;
+        return <Exit onChooseEntrance={onChooseEntrance} id={id} />;
     } else {
         return <CheckLocation id={id} />;
     }
@@ -129,16 +134,17 @@ function CheckIcon({check}: {check: Check}) {
 
 export function Exit({
     id,
+    onChooseEntrance,
     // setActiveArea,
 }: {
     id: string;
+    onChooseEntrance: (exitId: string) => void;
     // TODO
     // setActiveArea: (area: string) => void;
 }) {
     const dispatch = useDispatch();
     const exit = useSelector((state: RootState) => exitsSelector(state).find((e) => e.exit.id === id))!;
     const check = useSelector(checkSelector(id));
-    const [showEntranceDialog, setShowEntranceDialog] = useState(false);
 
     const style = {
         color: check.checked ? `var(--scheme-checked)` : `var(--scheme-${check.logicalState})`,
@@ -147,15 +153,10 @@ export function Exit({
     const expr = useTooltipExpr(id);
     const path = useEntrancePath(id);
 
-    const onClick = () => setShowEntranceDialog(true);
+    const onClick = () => onChooseEntrance(id);
 
     return (
         <>
-            <EntranceSelectionDialog
-                exitId={id}
-                show={showEntranceDialog}
-                onHide={() => setShowEntranceDialog(false)}
-            />
             <Tooltip
                 content={
                     <>

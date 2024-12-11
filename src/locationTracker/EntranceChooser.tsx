@@ -40,18 +40,20 @@ export default function EntranceChooser({ exitId, onChoose }: { exitId: string, 
                         !usedEntrances[pool].includes(entrance.id),
                 )
                 .filter(({ name }) =>
-                    matches(name.toLowerCase(), filterText.toUpperCase()),
+                    matches(name.toLowerCase(), filterText.toLowerCase()),
                 )
                 .map(({ id, name }) => ({
                     value: id,
                     label: name,
                 }));
 
-            entrances.unshift({ value: RESET_OPTION, label: 'Reset' });
+            if (exit.entrance) {
+                entrances.unshift({ value: RESET_OPTION, label: 'Reset' });
+            }
 
             return entrances;
         }
-    }, [entrancePools, exit.canAssign, exit.rule, filterText, usedEntrances]);
+    }, [entrancePools, exit.canAssign, exit.entrance, exit.rule, filterText, usedEntrances]);
 
     const onClickEntrance = (value: string) => {
         if (value === RESET_OPTION) {
