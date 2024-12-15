@@ -1,11 +1,15 @@
 import { useSelector } from 'react-redux';
 import { areaGraphSelector } from '../logic/selectors';
-import mapData from '../data/mapData.json';
 import { exitsSelector } from '../tracker/selectors';
-import { Logic } from '../logic/Logic';
+import { AreaGraph, Logic } from '../logic/Logic';
 import { ExitMapping } from '../logic/Locations';
 import { useReducer } from 'react';
 import { startingEntrancePool } from '../logic/Entrances';
+import {
+    getOwningProvince,
+    MapModel,
+} from '../locationTracker/mapTracker/MapModel';
+import { mapModelSelector } from '../locationTracker/mapTracker/Selectors';
 
 export type InterfaceState =
     | {
@@ -64,40 +68,6 @@ export type InterfaceAction =
           selectedEntrance: string | undefined;
       };
 
-function getMarkers(
-    data: (typeof mapData)[
-        | 'skyloftSubmap'
-        | 'eldinSubmap'
-        | 'faronSubmap'
-        | 'lanayruSubmap'],
-) {
-    const ret: Record<string, string> = {};
-    for (const marker of data.markers) {
-        ret[marker.region] = data.name;
-    }
-    return ret;
-}
-
-const hintRegionToMapView: Record<string, string | undefined> = {
-    [mapData.thunderhead.region]: undefined,
-    [mapData.sky.region]: undefined,
-    ...getMarkers(mapData.skyloftSubmap),
-    ...getMarkers(mapData.eldinSubmap),
-    ...getMarkers(mapData.faronSubmap),
-    ...getMarkers(mapData.lanayruSubmap),
-};
-
-function getSubmapForHintRegion(
-    region: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _areaGraph: Logic['areaGraph'],
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _exits: ExitMapping[],
-): string | undefined {
-    // TODO: Dungeons, Silent Realms
-    return hintRegionToMapView[region];
-}
-
 function getHintRegionForEntrance(
     entranceId: string,
     areaGraph: Logic['areaGraph'],
@@ -125,11 +95,18 @@ function getInitialState(exits: ExitMapping[]): InterfaceState {
     };
 }
 
-function interfaceReducer(areaGraph: Logic['areaGraph'], exits: ExitMapping[]) {
+function interfaceReducer(
+    mapModel: MapModel,
+    areaGraph: AreaGraph,
+    exits: ExitMapping[],
+) {
     return (
-        state: InterfaceStateInternal,
+        state_: InterfaceStateInternal,
         action: InterfaceAction,
     ): InterfaceStateInternal => {
+        // Make sure initial state is resolved
+        const state =
+            state_.type === 'initial' ? getInitialState(exits) : state_;
         switch (action.type) {
             case 'selectMapView': {
                 if (state.type === 'choosingEntrance') {
@@ -151,11 +128,7 @@ function interfaceReducer(areaGraph: Logic['areaGraph'], exits: ExitMapping[]) {
             case 'selectHintRegion':
                 return {
                     type: 'viewingChecks',
-                    mapView: getSubmapForHintRegion(
-                        action.hintRegion,
-                        areaGraph,
-                        exits,
-                    ),
+                    mapView: getOwningProvince(mapModel, action.hintRegion),
                     hintRegion: action.hintRegion,
                 };
             case 'leaveMapView':
@@ -171,10 +144,7 @@ function interfaceReducer(areaGraph: Logic['areaGraph'], exits: ExitMapping[]) {
                 return {
                     type: 'choosingEntrance',
                     exitId: action.exitId,
-                    mapView:
-                        state.type !== 'initial'
-                            ? state.mapView
-                            : getInitialState(exits).mapView,
+                    mapView: state.mapView,
                     previousHintRegion:
                         state.type === 'viewingChecks'
                             ? state.hintRegion
@@ -193,7 +163,7 @@ function interfaceReducer(areaGraph: Logic['areaGraph'], exits: ExitMapping[]) {
                     type: 'viewingChecks',
                     hintRegion,
                     mapView: hintRegion
-                        ? getSubmapForHintRegion(hintRegion, areaGraph, exits)
+                        ? getOwningProvince(mapModel, hintRegion)
                         : undefined,
                 };
             }
@@ -209,10 +179,11 @@ export function useTrackerInterfaceReducer(): [
     InterfaceState,
     React.Dispatch<InterfaceAction>,
 ] {
+    const mapModel = useSelector(mapModelSelector);
     const areaGraph = useSelector(areaGraphSelector);
     const exits = useSelector(exitsSelector);
     const [internalTrackerState, dispatch] = useReducer(
-        interfaceReducer(areaGraph, exits),
+        interfaceReducer(mapModel, areaGraph, exits),
         undefined,
         () => initialMapState,
     );

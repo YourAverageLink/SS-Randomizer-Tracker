@@ -4,7 +4,7 @@ import eldinMap from '../../assets/maps/Eldin.png';
 import lanayruMap from '../../assets/maps/Lanayru.png';
 import skyloftMap from '../../assets/maps/Skyloft.png';
 import MapMarker from './MapMarker';
-import Submap, { EntranceMarkerParams } from './Submap';
+import Submap from './Submap';
 import mapData from '../../data/mapData.json';
 import LocationContextMenu from '../LocationContextMenu';
 import LocationGroupContextMenu from '../LocationGroupContextMenu';
@@ -19,6 +19,7 @@ import { useCallback, MouseEvent } from 'react';
 import { Locations } from '../Locations';
 import { InterfaceAction, InterfaceState } from '../../tracker/TrackerInterfaceReducer';
 import EntranceChooser from '../EntranceChooser';
+import { mapModelSelector } from './Selectors';
 
 
 const images: Record<string, string> = {
@@ -47,26 +48,8 @@ function WorldMap({
         imgHeight = containerHeight * 0.55;
         imgWidth = imgHeight * aspectRatio;
     }
-    const {
-        skyloftSubmap,
-        faronSubmap,
-        eldinSubmap,
-        lanayruSubmap,
-        thunderhead,
-        sky,
-    } = mapData;
 
-    const submaps = [
-        faronSubmap,
-        skyloftSubmap,
-        eldinSubmap,
-        lanayruSubmap,
-    ];
-
-    const markers = [
-        thunderhead,
-        sky,
-    ];
+    const mapModel = useSelector(mapModelSelector);
 
     const activeSubmap = interfaceState.mapView;
     const handleGroupClick = (hintRegion: string | undefined) => {
@@ -96,38 +79,40 @@ function WorldMap({
                         <img src={skyMap} alt="World Map" width={imgWidth} onContextMenu={(e) => {
                             e.preventDefault();
                         }} />
-                        {/* TODO maybe refactor */}
-                        <StartingEntranceMarker mapWidth={imgWidth} onClick={() => interfaceDispatch({ type: 'chooseEntrance', exitId: '\\Start' })} />
+                        <StartingEntranceMarker mapWidth={imgWidth} onClick={(exitId) => interfaceDispatch({ type: 'chooseEntrance', exitId })} />
                     </>
                 }
-                {markers.map((marker) => (
-                    <div key={marker.region} style={{display:(!activeSubmap ? '' : 'none')}}>
+                {mapModel.regions.map((marker) => (
+                    <div key={marker.hintRegion} style={{display:(!activeSubmap ? '' : 'none')}}>
                         <MapMarker
                             markerX={marker.markerX}
                             markerY={marker.markerY}
-                            title={marker.region}
+                            title={marker.hintRegion!}
                             onGlickGroup={handleGroupClick}
                             mapWidth={imgWidth}
                         />
                     </div>
                 ))}
-                {submaps.map((submap) => (
-                    <Submap
-                        key={submap.name}
-                        markerX={submap.markerX}
-                        markerY={submap.markerY}
-                        title={submap.name}
-                        onGroupChange={handleGroupClick}
-                        onSubmapChange={handleSubmapClick}
-                        onChooseEntrance={onChooseEntrance}
-                        markers={submap.markers}
-                        entranceMarkers={submap.entranceMarkers as EntranceMarkerParams[]}
-                        map={images[submap.map]}
-                        mapWidth={imgWidth}
-                        exitParams={submap.exitParams}
-                        activeSubmap={activeSubmap}
-                    />
-                ))}
+                {mapModel.provinces.map((submap) => {
+                    const entry = mapData[submap.provinceId];
+                    return (
+                        <Submap
+                            key={submap.provinceId}
+                            provinceId={submap.provinceId}
+                            markerX={entry.markerX}
+                            markerY={entry.markerY}
+                            title={submap.name}
+                            onGroupChange={handleGroupClick}
+                            onSubmapChange={handleSubmapClick}
+                            onChooseEntrance={onChooseEntrance}
+                            markers={submap.regions}
+                            map={images[entry.map]}
+                            mapWidth={imgWidth}
+                            exitParams={entry.exitParams}
+                            activeSubmap={activeSubmap}
+                        />
+                    )
+                })}
             </div>
             <LocationContextMenu />
             <LocationGroupContextMenu />
