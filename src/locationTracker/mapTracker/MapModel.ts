@@ -80,26 +80,33 @@ function getProvince(
     };
 }
 
+type ProvinceResult = {
+    type: 'ok',
+    result: string | undefined,
+} | {
+    type: 'err',
+};
+
 /** For a given hint region, get the owning map view. */
 export function getOwningProvince(
     model: MapModel,
     hintRegion: string,
-): string | undefined {
+): ProvinceResult {
     for (const region of model.regions) {
         if (region.hintRegion === hintRegion) {
-            return undefined;
+            return { type: 'ok', result: undefined };
         }
     }
 
     for (const province of model.provinces) {
         for (const region of province.regions) {
             if (region.hintRegion === hintRegion) {
-                return province.provinceId;
+                return { type: 'ok', result: province.provinceId };
             }
         }
     }
 
-    return undefined;
+    return { type: 'err' };
 }
 
 export function getMapModel(

@@ -41,23 +41,23 @@ export default tseslint.config(
         name: 'jsx-a11y',
         files: ['**/*.tsx'],
         plugins: {
-          'jsx-a11y': fixupPluginRules(jsxA11y),
+            'jsx-a11y': fixupPluginRules(jsxA11y),
         },
         rules: {
-          'jsx-a11y/aria-props': 'error',
-          'jsx-a11y/aria-proptypes': 'error',
-          'jsx-a11y/aria-role': 'error',
-          'jsx-a11y/aria-unsupported-elements': 'error',
-          'jsx-a11y/autocomplete-valid': 'error',
-          'jsx-a11y/label-has-associated-control': 'error',
-          'jsx-a11y/no-noninteractive-element-interactions': 'error',
-          'jsx-a11y/no-noninteractive-element-to-interactive-role': 'error',
-          'jsx-a11y/no-noninteractive-tabindex': 'error',
-          'jsx-a11y/no-redundant-roles': 'error',
-          'jsx-a11y/role-has-required-aria-props': 'error',
-          'jsx-a11y/role-supports-aria-props': 'error',
+            'jsx-a11y/aria-props': 'error',
+            'jsx-a11y/aria-proptypes': 'error',
+            'jsx-a11y/aria-role': 'error',
+            'jsx-a11y/aria-unsupported-elements': 'error',
+            'jsx-a11y/autocomplete-valid': 'error',
+            'jsx-a11y/label-has-associated-control': 'error',
+            'jsx-a11y/no-noninteractive-element-interactions': 'error',
+            'jsx-a11y/no-noninteractive-element-to-interactive-role': 'error',
+            'jsx-a11y/no-noninteractive-tabindex': 'error',
+            'jsx-a11y/no-redundant-roles': 'error',
+            'jsx-a11y/role-has-required-aria-props': 'error',
+            'jsx-a11y/role-supports-aria-props': 'error',
         },
-      },
+    },
     {
         name: 'eslint-react',
         ...react.configs['recommended-type-checked'],
@@ -71,6 +71,18 @@ export default tseslint.config(
             'no-bitwise': ['off'],
             'no-debugger': 'error',
             'no-implicit-coercion': 'error',
+            'no-restricted-imports': [
+                'error',
+                {
+                    patterns: [
+                        {
+                            group: ['testing/*'],
+                            message:
+                                'You cannot use test helpers in regular code.',
+                        },
+                    ],
+                },
+            ],
             'no-restricted-globals': [
                 'error',
                 'alert',
@@ -118,7 +130,8 @@ export default tseslint.config(
 
             '@eslint-react/prefer-read-only-props': 'off',
             '@eslint-react/no-array-index-key': 'off',
-            '@eslint-react/hooks-extra/no-direct-set-state-in-use-effect': 'off',
+            '@eslint-react/hooks-extra/no-direct-set-state-in-use-effect':
+                'off',
 
             '@typescript-eslint/no-floating-promises': 'off',
             '@typescript-eslint/no-unsafe-argument': 'error',
@@ -145,6 +158,14 @@ export default tseslint.config(
             'sonarjs/no-nested-assignment': 'off',
             'sonarjs/no-unused-expressions': 'off',
             'sonarjs/todo-tag': 'off',
+        },
+    },
+    {
+        name: 'tests',
+        files: ['**/*.test.ts'],
+        rules: {
+            // We don't want to allow importing test modules in app modules, but of course you can do it in other test modules.
+            'no-restricted-imports': 'off',
         },
     },
 );

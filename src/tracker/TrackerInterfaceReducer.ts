@@ -125,12 +125,20 @@ function interfaceReducer(
                 };
             }
 
-            case 'selectHintRegion':
+            case 'selectHintRegion': {
+                const owningProvince = getOwningProvince(
+                    mapModel,
+                    action.hintRegion,
+                );
                 return {
                     type: 'viewingChecks',
-                    mapView: getOwningProvince(mapModel, action.hintRegion),
+                    mapView:
+                        owningProvince.type === 'ok'
+                            ? owningProvince.result
+                            : state.mapView,
                     hintRegion: action.hintRegion,
                 };
+            }
             case 'leaveMapView':
                 return {
                     type: 'viewingChecks',
@@ -159,12 +167,16 @@ function interfaceReducer(
                     : state.type === 'choosingEntrance'
                       ? state.previousHintRegion
                       : undefined;
+                const owningProvince = hintRegion
+                    ? getOwningProvince(mapModel, hintRegion)
+                    : undefined;
                 return {
                     type: 'viewingChecks',
                     hintRegion,
-                    mapView: hintRegion
-                        ? getOwningProvince(mapModel, hintRegion)
-                        : undefined,
+                    mapView:
+                        owningProvince?.type === 'ok'
+                            ? owningProvince.result
+                            : state.mapView,
                 };
             }
         }
