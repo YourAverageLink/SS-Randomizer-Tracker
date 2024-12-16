@@ -197,7 +197,7 @@ function WorldMap({
                 <div
                     style={{
                         width: imgWidth,
-                        height: containerHeight * 0.35,
+                        height: containerHeight * 0.40,
                     }}
                 >
                     <EntranceChooser

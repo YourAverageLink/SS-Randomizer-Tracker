@@ -182,6 +182,7 @@ const Submap = ({
                             active={provinceId === activeSubmap}
                             exitId={marker.exitId}
                             onGlickGroup={onGroupChange}
+                            onChooseEntrance={onChooseEntrance}
                         />
                     );
                 }

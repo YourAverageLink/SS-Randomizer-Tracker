@@ -10,7 +10,7 @@ import {
 import { LocationGroupContextMenuProps } from './LocationGroupHeader';
 import { bulkEditChecks, mapEntrance, setHint } from '../tracker/slice';
 import { MapExitContextMenuProps } from './mapTracker/EntranceMarker';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
     areasSelector,
     checkSelector,
@@ -229,21 +229,15 @@ function LocationGroupContextMenu() {
                 pool="dungeons"
                 canChooseEntrance={areDungeonEntrancesRandomized}
             />
-            <UnboundEntranceMenu id="unbound-dungeon-context" pool="dungeons" />
             <BoundEntranceMenu
                 id="dungeon-unrequired-context"
                 pool="dungeons_unrequired"
                 canChooseEntrance={areDungeonEntrancesRandomized}
             />
-            <UnboundEntranceMenu id="unbound-dungeon-unrequired-context" pool="dungeons_unrequired" />
             <BoundEntranceMenu
                 id="trial-context"
                 pool="silent_realms"
                 canChooseEntrance={randomSilentRealms}
-            />
-            <UnboundEntranceMenu
-                id="unbound-trial-context"
-                pool="silent_realms"
             />
         </>
     );
@@ -338,41 +332,5 @@ function BoundEntranceMenu({
         </Menu>
     );
 }
-
-function UnboundEntranceMenu({
-    id,
-    pool,
-}: {
-    id: string;
-    pool: TrackerLinkedEntrancePool;
-}) {
-    const dispatch = useDispatch();
-    const usedEntrances = useSelector(usedEntrancesSelector);
-    const entrancePools = useSelector(entrancePoolsSelector);
-
-    const handleMapEntrance = useCallback(
-        (exit: string, entrance: string) =>
-            dispatch(
-                mapEntrance({
-                    from: exit,
-                    to: entrance,
-                }),
-            ),
-        [dispatch],
-    );
-
-    return (
-        <Menu id={id}>
-            {createBindSubmenu(
-                entrancePools,
-                new Set(usedEntrances[pool]),
-                pool,
-                handleMapEntrance,
-                false,
-            )}
-        </Menu>
-    );
-}
-
 
 export default LocationGroupContextMenu;

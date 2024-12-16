@@ -27,6 +27,7 @@ type EntranceMarkerProps = {
     mapWidth: number;
     active: boolean;
     onGlickGroup: (group: string) => void;
+    onChooseEntrance: (exitId: string) => void;
 };
 
 export interface MapExitContextMenuProps {
@@ -37,7 +38,7 @@ export interface MapExitContextMenuProps {
 
 const EntranceMarker = (props: EntranceMarkerProps) => {
     
-    const { title, exitId, markerX, markerY, mapWidth, active, onGlickGroup } = props;
+    const { title, exitId, markerX, markerY, mapWidth, active, onGlickGroup, onChooseEntrance } = props;
     const exit = useSelector((state: RootState) => exitsSelector(state).find((e) => e.exit.id === exitId))!;
     const inLogicBits = useSelector(inLogicBitsSelector);
     const logic = useSelector(logicSelector);
@@ -72,14 +73,6 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
         exit.rule.type === 'random' &&
         Boolean(exit.rule.isKnownIrrelevant);
 
-    const showUnbound = useContextMenu<MapExitContextMenuProps>({
-        id: isDungeon
-            ? isUnrequiredDungeon
-                ? 'unbound-dungeon-unrequired-context'
-                : 'unbound-dungeon-context'
-            : 'unbound-trial-context',
-    }).show;
-
     const showBound = useContextMenu<MapExitContextMenuProps>({
         id: isDungeon
             ? isUnrequiredDungeon
@@ -95,6 +88,7 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
     const destinationRegionName = exit.entrance && logic.areaGraph.entranceHintRegions[exit.entrance.id];
 
     const displayMenu = useCallback((e: TriggerEvent) => {
+        e.preventDefault();
         if (!exit.canAssign) {
             if (exit.entrance) {
                 showGroup({event: e, props: { area: exit.entrance?.region }})
@@ -102,9 +96,9 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
         } else if (hasConnection) {
             showBound({ event: e, props: { exitMapping: exit, area: destinationRegionName } });
         } else {
-            showUnbound({ event: e, props: { exitMapping: exit, area: destinationRegionName } });
+            onChooseEntrance(exitId);
         }
-    }, [destinationRegionName, exit, hasConnection, showBound, showGroup, showUnbound]);
+    }, [destinationRegionName, exit, exitId, hasConnection, onChooseEntrance, showBound, showGroup]);
 
     const areaHint = useSelector(areaHintSelector(destinationRegionName ?? ''));
 
