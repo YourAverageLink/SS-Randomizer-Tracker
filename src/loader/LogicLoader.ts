@@ -4,6 +4,8 @@ import { MultiChoiceOption, OptionDefs } from '../permalink/SettingsTypes';
 import { getLatestRelease } from './ReleasesLoader';
 
 export const LATEST_STRING = 'Latest';
+// Fallback in case the GitHub API is unreachable or rate limited
+const LATEST_KNOWN_RELEASE = 'v2.2.0';
 
 export type RemoteReference =
     | {
@@ -27,7 +29,7 @@ async function resolveRemote(ref: RemoteReference): Promise<[url: string, name: 
                 const latest = await getLatestRelease();
                 return [`https://raw.githubusercontent.com/ssrando/ssrando/${latest}`, latest];
             } catch (e) {
-                throw new Error(
+                console.error(
                     'Could not retrieve latest release from GitHub: ' +
                         (e
                             ? typeof e === 'object' && 'message' in e
@@ -35,6 +37,7 @@ async function resolveRemote(ref: RemoteReference): Promise<[url: string, name: 
                                 : JSON.stringify(e)
                             : 'Unknown error'),
                 );
+                return [`https://raw.githubusercontent.com/ssrando/ssrando/${LATEST_KNOWN_RELEASE}`, LATEST_KNOWN_RELEASE];
             }
         case 'releaseVersion':
             // Hack: This is a custom logic dump backported to 2.1.1
