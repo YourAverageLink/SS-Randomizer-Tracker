@@ -115,7 +115,7 @@ function WorldMap({
                 })}
             </div>
             <LocationContextMenu />
-            <LocationGroupContextMenu />
+            <LocationGroupContextMenu interfaceDispatch={interfaceDispatch} />
         </div>
     );
 

@@ -4,7 +4,6 @@ import { exitsSelector } from '../tracker/selectors';
 import { AreaGraph, Logic } from '../logic/Logic';
 import { ExitMapping } from '../logic/Locations';
 import { useReducer } from 'react';
-import { startingEntrancePool } from '../logic/Entrances';
 import {
     getOwningProvince,
     MapModel,
@@ -75,18 +74,35 @@ function getHintRegionForEntrance(
     return areaGraph.entranceHintRegions[entranceId];
 }
 
-function getInitialState(exits: ExitMapping[]): InterfaceState {
+function getInitialState(mapModel: MapModel, areaGraph: AreaGraph, exits: ExitMapping[]): InterfaceState {
     const startingExit = exits.find(
-        (e) => e.canAssign && e.rule.pool === startingEntrancePool,
-    );
+        (e) => e.exit.id === '\\Start',
+    )!;
 
-    if (startingExit) {
+    // If the user needs to select a starting entrance, prompt first
+    if (startingExit.canAssign && !startingExit.entrance) {
         return {
             type: 'choosingEntrance',
             mapView: undefined,
             exitId: startingExit.exit.id,
             previousHintRegion: undefined,
         };
+    }
+
+    // Otherwise select the starting area
+    if (startingExit.entrance) {
+        const hintRegion = getHintRegionForEntrance(
+            startingExit.entrance.id,
+            areaGraph,
+        );
+        const result = getOwningProvince(mapModel, hintRegion);
+        const mapView = result.type === 'ok' ? result.result : undefined;
+        return {
+            type: 'viewingChecks',
+            mapView,
+            hintRegion,
+        };
+
     }
     return {
         type: 'viewingChecks',
@@ -106,7 +122,7 @@ function interfaceReducer(
     ): InterfaceStateInternal => {
         // Make sure initial state is resolved
         const state =
-            state_.type === 'initial' ? getInitialState(exits) : state_;
+            state_.type === 'initial' ? getInitialState(mapModel, areaGraph, exits) : state_;
         switch (action.type) {
             case 'selectMapView': {
                 if (state.type === 'choosingEntrance') {
@@ -202,7 +218,7 @@ export function useTrackerInterfaceReducer(): [
 
     if (internalTrackerState.type === 'initial') {
         // Resolve initial state
-        return [getInitialState(exits), dispatch];
+        return [getInitialState(mapModel, areaGraph, exits), dispatch];
     }
 
     return [internalTrackerState, dispatch];

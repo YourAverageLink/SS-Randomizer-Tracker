@@ -28,7 +28,7 @@ export function NewLocationTracker({
     return (
         <div className="location-tracker">
             <LocationContextMenu />
-            <LocationGroupContextMenu />
+            <LocationGroupContextMenu interfaceDispatch={interfaceDispatch} />
             <div
                 style={{
                     height: containerHeight / 2,

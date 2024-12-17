@@ -8,22 +8,20 @@ import {
     ItemParams,
 } from 'react-contexify';
 import { LocationGroupContextMenuProps } from './LocationGroupHeader';
-import { bulkEditChecks, mapEntrance, setHint } from '../tracker/slice';
+import { bulkEditChecks, setHint } from '../tracker/slice';
 import { MapExitContextMenuProps } from './mapTracker/EntranceMarker';
 import { useSelector } from 'react-redux';
 import {
     areasSelector,
     checkSelector,
-    entrancePoolsSelector,
     settingSelector,
-    usedEntrancesSelector,
 } from '../tracker/selectors';
 import { TrackerLinkedEntrancePool } from '../logic/Logic';
 import { bosses } from './Hints';
 import { ThunkResult, useAppDispatch } from '../store/store';
 import hintItems from '../data/hintItems.json';
 import { HintItem } from './LocationContextMenu';
-import { EntrancePool } from '../logic/Entrances';
+import { InterfaceAction } from '../tracker/TrackerInterfaceReducer';
 
 type AreaCtxProps<T = void> = ItemParams<LocationGroupContextMenuProps, T>;
 type ExitCtxProps<T = void> = ItemParams<MapExitContextMenuProps, T>;
@@ -207,7 +205,11 @@ function useAreaContextMenuItems() {
     ];
 }
 
-function LocationGroupContextMenu() {
+function LocationGroupContextMenu({
+    interfaceDispatch,
+}: {
+    interfaceDispatch: React.Dispatch<InterfaceAction>;
+}) {
     const randomEntrances = useSelector(settingSelector('randomize-entrances'));
     const randomDungeonEntrances = useSelector(
         settingSelector('randomize-dungeon-entrances'),
@@ -221,114 +223,57 @@ function LocationGroupContextMenu() {
 
     return (
         <>
-            <Menu id="group-context">
-                {areaMenuItems}
-            </Menu>
+            <Menu id="group-context">{areaMenuItems}</Menu>
             <BoundEntranceMenu
-                id="dungeon-context"
+                menuId="dungeon-context"
                 pool="dungeons"
                 canChooseEntrance={areDungeonEntrancesRandomized}
+                interfaceDispatch={interfaceDispatch}
             />
             <BoundEntranceMenu
-                id="dungeon-unrequired-context"
+                menuId="dungeon-unrequired-context"
                 pool="dungeons_unrequired"
                 canChooseEntrance={areDungeonEntrancesRandomized}
+                interfaceDispatch={interfaceDispatch}
             />
             <BoundEntranceMenu
-                id="trial-context"
+                menuId="trial-context"
                 pool="silent_realms"
                 canChooseEntrance={randomSilentRealms}
+                interfaceDispatch={interfaceDispatch}
             />
         </>
     );
 }
 
-// Wow it turns out getting any sort of dynamic data into React-Contexify is a massive pain,
-// so this is kind of annoying and not as generic but /shrug
-
-// contexify breaks down if items are wrapped in nodes, so this is not a component!!!
-function createBindSubmenu(
-    entrancePools: Record<string, EntrancePool>,
-    usedEntrances: Set<string>,
-    pool: TrackerLinkedEntrancePool,
-    chooseEntrance: (exitId: string, entranceId: string) => void,
-    disabled: boolean,
-) {
-
-    if (!entrancePools[pool]) {
-        return undefined;
-    }
-
-    const name = pool === 'silent_realms' ? 'Silent Realm' : 'Dungeon';
-    return (
-        <Submenu disabled={disabled} label={`Bind ${name} to Entrance`}>
-            {entrancePools[pool].entrances.map(
-                ({id, name}) => {
-                    return (
-                        <Item
-                            key={name}
-                            disabled={usedEntrances.has(id)}
-                            onClick={(params: ExitCtxProps) =>
-                                chooseEntrance(
-                                    params.props!.exitMapping.exit.id,
-                                    id,
-                                )
-                            }
-                        >
-                            {name}
-                        </Item>
-                    );
-                },
-            )}
-        </Submenu>
-    );
-}
-
 function BoundEntranceMenu({
-    id,
+    menuId,
     pool,
     canChooseEntrance,
+    interfaceDispatch,
 }: {
-    id: string;
+    menuId: string;
     pool: TrackerLinkedEntrancePool;
     canChooseEntrance: boolean;
+    interfaceDispatch: React.Dispatch<InterfaceAction>;
 }) {
-    const dispatch = useAppDispatch();
-    const usedEntrances = useSelector(usedEntrancesSelector);
     const areaMenuItems = useAreaContextMenuItems();
-    const entrancePools = useSelector(entrancePoolsSelector);
 
-    const handleMapEntrance = useCallback(
-        (exit: string, entrance: string) =>
-            dispatch(
-                mapEntrance({
-                    from: exit,
-                    to: entrance,
-                }),
-            ),
-        [dispatch],
-    );
-
-    const unbindEntrance = useCallback(
+    const manageEntrance = useCallback(
         (params: ExitCtxProps) =>
-            dispatch(mapEntrance({
-                from: params.props!.exitMapping.exit.id,
-                to: undefined,
-            })),
-        [dispatch],
+            interfaceDispatch({
+                type: 'chooseEntrance',
+                exitId: params.props!.exitMapping.exit.id,
+            }),
+        [interfaceDispatch],
     );
+
+    const name = pool === 'silent_realms' ? 'Silent Realm' : 'Dungeon';
 
     return (
-        <Menu id={id}>
+        <Menu id={menuId}>
             {areaMenuItems}
-            {createBindSubmenu(
-                entrancePools,
-                new Set(usedEntrances[pool]),
-                pool,
-                handleMapEntrance,
-                !canChooseEntrance,
-            )}
-            <Item key="unbindEntrance" onClick={unbindEntrance}>Unbind Entrance</Item>
+            {canChooseEntrance && <Item key="manageEntrance" onClick={manageEntrance}>Select {name} Entrance</Item>}
         </Menu>
     );
 }
