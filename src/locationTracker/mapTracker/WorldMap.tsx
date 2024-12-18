@@ -1,12 +1,10 @@
-import { Row, Col } from 'react-bootstrap';
 import skyMap from '../../assets/maps/Sky.png';
 import faronMap from '../../assets/maps/Faron.png';
 import eldinMap from '../../assets/maps/Eldin.png';
 import lanayruMap from '../../assets/maps/Lanayru.png';
 import skyloftMap from '../../assets/maps/Skyloft.png';
 import MapMarker from './MapMarker';
-import LocationGroup from '../LocationGroup';
-import Submap, { EntranceMarkerParams } from './Submap';
+import Submap from './Submap';
 import mapData from '../../data/mapData.json';
 import LocationContextMenu from '../LocationContextMenu';
 import LocationGroupContextMenu from '../LocationGroupContextMenu';
@@ -18,15 +16,11 @@ import { decodeHint } from '../Hints';
 import { useContextMenu } from '../context-menu';
 import { LocationGroupContextMenuProps } from '../LocationGroupHeader';
 import { useCallback, MouseEvent } from 'react';
+import { Locations } from '../Locations';
+import { InterfaceAction, InterfaceState } from '../../tracker/TrackerInterfaceReducer';
+import EntranceChooser from '../EntranceChooser';
+import { mapModelSelector } from './Selectors';
 
-type WorldMapProps = {
-    imgWidth: number,
-    handleGroupClick: (group: string | undefined) => void
-    handleSubmapClick: (submap: string | undefined) => void,
-    containerHeight: number,
-    expandedGroup: string | undefined,
-    activeSubmap: string | undefined,
-};
 
 const images: Record<string, string> = {
     skyloftMap,
@@ -35,9 +29,18 @@ const images: Record<string, string> = {
     lanayruMap,
 };
 
-const WorldMap = (props: WorldMapProps) => {
-    const { containerHeight, activeSubmap, expandedGroup, handleGroupClick, handleSubmapClick } = props;
-    let { imgWidth } = props;
+function WorldMap({
+    imgWidth: imgWidth_,
+    containerHeight,
+    interfaceState,
+    interfaceDispatch,
+}: {
+    imgWidth: number,
+    containerHeight: number,
+    interfaceState: InterfaceState;
+    interfaceDispatch: React.Dispatch<InterfaceAction>;
+}) {
+    let imgWidth = imgWidth_;
     // original image dimensions
     const aspectRatio = 843/465;
     let imgHeight = imgWidth / aspectRatio;
@@ -45,67 +48,74 @@ const WorldMap = (props: WorldMapProps) => {
         imgHeight = containerHeight * 0.55;
         imgWidth = imgHeight * aspectRatio;
     }
-    const {
-        skyloftSubmap,
-        faronSubmap,
-        eldinSubmap,
-        lanayruSubmap,
-        thunderhead,
-        sky,
-    } = mapData;
 
-    const submaps = [
-        faronSubmap,
-        skyloftSubmap,
-        eldinSubmap,
-        lanayruSubmap,
-    ];
+    const mapModel = useSelector(mapModelSelector);
 
-    const markers = [
-        thunderhead,
-        sky,
-    ];
+    const activeSubmap = interfaceState.mapView;
+    const handleGroupClick = (hintRegion: string | undefined) => {
+        if (hintRegion) {
+            interfaceDispatch({ type: 'selectHintRegion', hintRegion })
+        } else {
+            interfaceDispatch({ type: 'leaveMapView' });
+        }
+    };
+    const expandedGroup = interfaceState.type === 'viewingChecks' ? interfaceState.hintRegion : undefined;
+    const handleSubmapClick = (submap: string | undefined) => {
+        if (submap) {
+            interfaceDispatch({ type: 'selectMapView', province: submap });
+        } else {
+            interfaceDispatch({ type: 'leaveMapView' });
+        }
+    };
 
-
+    const onChooseEntrance = (exitId: string) => interfaceDispatch({ type: 'chooseEntrance', exitId });
+    
     const worldMap = (
         <div style={{position:'absolute', width:imgWidth, height:imgWidth / aspectRatio}}>
             <div>
                 {!activeSubmap &&
                     <>
-                        <img src={skyMap} alt="World Map" width={imgWidth}/>
-                        <StartingEntranceMarker mapWidth={imgWidth} />
+                        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
+                        <img src={skyMap} alt="World Map" width={imgWidth} onContextMenu={(e) => {
+                            e.preventDefault();
+                        }} />
+                        <StartingEntranceMarker mapWidth={imgWidth} onClick={(exitId) => interfaceDispatch({ type: 'chooseEntrance', exitId })} />
                     </>
                 }
-                {markers.map((marker) => (
-                    <div key={marker.region} style={{display:(!activeSubmap ? '' : 'none')}}>
+                {mapModel.regions.map((marker) => (
+                    <div key={marker.hintRegion} style={{display:(!activeSubmap ? '' : 'none')}}>
                         <MapMarker
                             markerX={marker.markerX}
                             markerY={marker.markerY}
-                            title={marker.region}
+                            title={marker.hintRegion!}
                             onGlickGroup={handleGroupClick}
                             mapWidth={imgWidth}
                         />
                     </div>
                 ))}
-                {submaps.map((submap) => (
-                    <Submap
-                        key={submap.name}
-                        markerX={submap.markerX}
-                        markerY={submap.markerY}
-                        title={submap.name}
-                        onGroupChange={handleGroupClick}
-                        onSubmapChange={handleSubmapClick}
-                        markers={submap.markers}
-                        entranceMarkers={submap.entranceMarkers as EntranceMarkerParams[]}
-                        map={images[submap.map]}
-                        mapWidth={imgWidth}
-                        exitParams={submap.exitParams}
-                        activeSubmap={activeSubmap}
-                    />
-                ))}
+                {mapModel.provinces.map((submap) => {
+                    const entry = mapData[submap.provinceId];
+                    return (
+                        <Submap
+                            key={submap.provinceId}
+                            provinceId={submap.provinceId}
+                            markerX={entry.markerX}
+                            markerY={entry.markerY}
+                            title={submap.name}
+                            onGroupChange={handleGroupClick}
+                            onSubmapChange={handleSubmapClick}
+                            onChooseEntrance={onChooseEntrance}
+                            markers={submap.regions}
+                            map={images[entry.map]}
+                            mapWidth={imgWidth}
+                            exitParams={entry.exitParams}
+                            activeSubmap={activeSubmap}
+                        />
+                    )
+                })}
             </div>
             <LocationContextMenu />
-            <LocationGroupContextMenu />
+            <LocationGroupContextMenu interfaceDispatch={interfaceDispatch} />
         </div>
     );
 
@@ -127,7 +137,6 @@ const WorldMap = (props: WorldMapProps) => {
 
     const locationHeader = selectedArea && (
         <div
-            className="flex-container"
             tabIndex={0}
             role="button"
             onContextMenu={displayMenu}
@@ -165,18 +174,43 @@ const WorldMap = (props: WorldMapProps) => {
     );
     
     const locationList = (
-        <div style={{position:'relative', top: imgHeight + 10, display:'flex'}}>
-            {
-                selectedArea && (
-                    <Col>
-                        <Row style={{ width: imgWidth, height: containerHeight * 0.35, overflowY: 'scroll', overflowX: 'visible' }}>
-                            <LocationGroup
-                                locations={selectedArea.checks}
-                            />
-                        </Row>
-                    </Col>
-                )
-            }
+        <div
+            style={{
+                position: 'relative',
+                top: imgHeight + 10,
+                display: 'flex',
+            }}
+        >
+            {selectedArea && (
+                <div
+                    style={{
+                        width: imgWidth,
+                        height: containerHeight * 0.35,
+                        overflowY: 'scroll',
+                        overflowX: 'visible',
+                    }}
+                >
+                    <Locations onChooseEntrance={onChooseEntrance} hintRegion={selectedArea} />
+                </div>
+            )}
+            {interfaceState.type === 'choosingEntrance' && (
+                <div
+                    style={{
+                        width: imgWidth,
+                        height: containerHeight * 0.40,
+                    }}
+                >
+                    <EntranceChooser
+                        exitId={interfaceState.exitId}
+                        onChoose={(entranceId) =>
+                            interfaceDispatch({
+                                type: 'cancelChooseEntrance',
+                                selectedEntrance: entranceId,
+                            })
+                        }
+                    />
+                </div>
+            )}
         </div>
     );
 

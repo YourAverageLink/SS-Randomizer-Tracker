@@ -13,7 +13,6 @@ import EntranceTracker from './entranceTracker/EntranceTracker';
 import DungeonTracker from './itemTracker/DungeonTracker';
 import GridTracker from './itemTracker/GridTracker';
 import ItemTracker from './itemTracker/ItemTracker';
-import ExtraLocationTracker from './locationTracker/ExtraLocationTracker';
 import { NewLocationTracker } from './locationTracker/LocationTracker';
 import { MakeTooltipsAvailable } from './tooltips/TooltipHooks';
 import CustomizationModal from './customization/CustomizationModal';
@@ -23,6 +22,8 @@ import { Link, Navigate } from 'react-router-dom';
 import { isLogicLoadedSelector } from './logic/selectors';
 import { ExportButton } from './ImportExport';
 import { useSyncTrackerStateToLocalStorage } from './LocalStorage';
+import { HintsTracker } from './hints/HintsTracker';
+import { useTrackerInterfaceReducer } from './tracker/TrackerInterfaceReducer';
 
 function subscribeToWindowResize(callback: () => void) {
     window.addEventListener('resize', callback);
@@ -71,12 +72,14 @@ function Tracker() {
 
     const [showCustomizationDialog, setShowCustomizationDialog] = useState(false);
     const [showEntranceDialog, setShowEntranceDialog] = useState(false);
-    const [activeArea, setActiveArea] = useState<string | undefined>(undefined);
-    const [activeSubmap, setActiveSubmap] = useState<string | undefined>(undefined);
     const itemLayout = useSelector(itemLayoutSelector);
     const locationLayout = useSelector(locationLayoutSelector);
 
     useSyncTrackerStateToLocalStorage();
+
+    const [trackerInterfaceState, trackerInterfaceDispatch] = useTrackerInterfaceReducer();
+
+    const setActiveArea = (area: string) => trackerInterfaceDispatch({ type: 'selectHintRegion', hintRegion: area })
 
     let itemTracker;
     if (itemLayout === 'inventory') {
@@ -108,8 +111,8 @@ function Tracker() {
                 </Col>
                 <Col>
                     <NewLocationTracker
-                        activeArea={activeArea}
-                        setActiveArea={setActiveArea}
+                        interfaceDispatch={trackerInterfaceDispatch}
+                        interfaceState={trackerInterfaceState}
                         containerHeight={height * 0.95}
                     />
                 </Col>
@@ -126,20 +129,8 @@ function Tracker() {
                     <Row>
                         <DungeonTracker setActiveArea={setActiveArea} />
                     </Row>
-                    <Row
-                        style={{
-                            paddingRight: '10%',
-                            paddingTop: '2.5%',
-                            height: '100%',
-                            overflow: 'auto',
-                        }}
-                    >
-                        <Col>
-                            <ExtraLocationTracker
-                                activeArea={activeArea}
-                                setActiveArea={setActiveArea}
-                            />
-                        </Col>
+                    <Row style={{height: '100%'}}>
+                        <HintsTracker />
                     </Row>
                 </Col>
             </>
@@ -154,11 +145,9 @@ function Tracker() {
                 <Col xs={6}>
                     <WorldMap
                         imgWidth={width * 0.5}
-                        handleGroupClick={setActiveArea}
-                        handleSubmapClick={setActiveSubmap}
                         containerHeight={height * 0.95}
-                        expandedGroup={activeArea}
-                        activeSubmap={activeSubmap}
+                        interfaceDispatch={trackerInterfaceDispatch}
+                        interfaceState={trackerInterfaceState}
                     />
                 </Col>
                 <Col
@@ -172,20 +161,8 @@ function Tracker() {
                     <Row>
                         <BasicCounters />
                     </Row>
-                    <Row
-                        style={{
-                            paddingRight: '10%',
-                            paddingTop: '2.5%',
-                            height: '100%',
-                            overflow: 'auto',
-                        }}
-                    >
-                        <Col>
-                            <ExtraLocationTracker
-                                activeArea={activeArea}
-                                setActiveArea={setActiveArea}
-                            />
-                        </Col>
+                    <Row style={{height: '100%'}}>
+                        <HintsTracker />
                     </Row>
                 </Col>
             </>

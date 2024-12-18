@@ -240,6 +240,9 @@ export const requiredDungeonsSelector = createSelector(
 
 /**
  * Describes which entrances are available for a given pool (dungeons, silent realms, starting, ...)
+ * This is a bit overkill because it keeps all pools available at all times, but it
+ * used to be necessary when we allowed context menus to select entrances, since
+ * context menus had to be always rendered and there wasn't a way to include
  */
 export const entrancePoolsSelector = createSelector(
     [

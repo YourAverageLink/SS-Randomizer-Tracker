@@ -1,31 +1,42 @@
 
 import LocationGroupHeader from "./LocationGroupHeader";
-import LocationGroup from "./LocationGroup";
-import '../locationTracker/locationTracker.css'
-import { Col, Row } from "react-bootstrap";
+import { Locations } from "./Locations";
 import LocationGroupContextMenu from "./LocationGroupContextMenu";
 import LocationContextMenu from "./LocationContextMenu";
 import { useSelector } from "react-redux";
 import { areasSelector } from "../tracker/selectors";
 import { isDungeon } from "../logic/Locations";
+import { InterfaceAction, InterfaceState } from "../tracker/TrackerInterfaceReducer";
+import EntranceChooser from "./EntranceChooser";
 
-export function NewLocationTracker({ containerHeight, activeArea, setActiveArea }: { containerHeight: number; activeArea: string | undefined, setActiveArea: (area: string) => void }) {
+export function NewLocationTracker({
+    containerHeight,
+    interfaceState,
+    interfaceDispatch
+}: {
+    containerHeight: number;
+    interfaceState: InterfaceState;
+    interfaceDispatch: React.Dispatch<InterfaceAction>;
+}) {
     const areas = useSelector(areasSelector);
-
+    const activeArea = interfaceState.type === 'viewingChecks' ? interfaceState.hintRegion : undefined;
     const selectedArea = activeArea && areas.find((a) => a.name === activeArea) || undefined;
+    const setActiveArea = (area: string) =>
+        interfaceDispatch({ type: 'selectHintRegion', hintRegion: area });
+    const onChooseEntrance = (exitId: string) => interfaceDispatch({ type: 'chooseEntrance', exitId });
 
     return (
-        <Col className="location-tracker">
+        <div className="location-tracker">
             <LocationContextMenu />
-            <LocationGroupContextMenu />
-            <Row
+            <LocationGroupContextMenu interfaceDispatch={interfaceDispatch} />
+            <div
                 style={{
                     height: containerHeight / 2,
                     overflowY: 'auto',
                     overflowX: 'visible',
                 }}
             >
-                <ul style={{ padding: '2%' }}>
+                <div style={{ padding: '2%' }}>
                     {areas
                         .filter(
                             (area) =>
@@ -40,21 +51,38 @@ export function NewLocationTracker({ containerHeight, activeArea, setActiveArea 
                                 area={value}
                             />
                         ))}
-                </ul>
-            </Row>
+                </div>
+            </div>
             {selectedArea && (
-                <Row
+                <div
                     style={{
                         height: containerHeight / 2,
                         overflowY: 'auto',
                         overflowX: 'visible',
                     }}
                 >
-                    <LocationGroup
-                        locations={selectedArea.checks}
-                    />
-                </Row>
+                    <Locations onChooseEntrance={onChooseEntrance} hintRegion={selectedArea} />
+                </div>
             )}
-        </Col>
+            {interfaceState.type === 'choosingEntrance' && (
+                <div
+                    style={{
+                        height: containerHeight / 2,
+                        overflowY: 'auto',
+                        overflowX: 'visible',
+                    }}
+                >
+                    <EntranceChooser
+                        exitId={interfaceState.exitId}
+                        onChoose={(entranceId) =>
+                            interfaceDispatch({
+                                type: 'cancelChooseEntrance',
+                                selectedEntrance: entranceId,
+                            })
+                        }
+                    />
+                </div>
+            )}
+        </div>
     );
 }

@@ -48,12 +48,12 @@ export default function LocationGroupHeader({
 
     return (
         <Row
-            className={'group-container'}
             onClick={onClick}
             onKeyDown={keyDownWrapper(onClick)}
             role="button"
             tabIndex={0}
             onContextMenu={displayMenu}
+            style={{ userSelect: 'none' }}
         >
             <Col sm={7}>
                 <h3 style={{ cursor: 'pointer' }}>

@@ -49,7 +49,7 @@ export type ExitRule =
       };
 
 const fullErPool = 'TR_FULL_ER';
-const startingEntrancePool = 'TR_STARTING_ENTRANCE';
+export const startingEntrancePool = 'TR_STARTING_ENTRANCE';
 
 export function getAllowedStartingEntrances(
     logic: Logic,

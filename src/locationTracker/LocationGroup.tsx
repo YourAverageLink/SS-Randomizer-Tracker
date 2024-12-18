@@ -1,38 +1,33 @@
 import { useSelector } from 'react-redux';
 import Location from './Location';
-import { Col, Row } from 'react-bootstrap';
 import { locationLayoutSelector } from '../customization/selectors';
-import _ from 'lodash';
+import styles from './LocationGroup.module.css';
+import clsx from 'clsx';
+import { reorderLocationsForGrid } from '../utils/Collections';
 
 export default function LocationGroup({
     locations,
+    onChooseEntrance,
 }: {
     /* the list of locations this group contains */
     locations: string[];
+    onChooseEntrance: (exitId: string) => void;
 }) {
     const mapMode = useSelector(locationLayoutSelector) === 'map';
-    const numColumns = mapMode ? 2 : 1;
-    const locationRows = locations.map((location) => (
-        <Row
-            key={location}
-            style={{
-                paddingTop: '2%',
-                paddingBottom: '2%',
-                border: `1px solid var(--scheme-text)`,
-            }}
-        >
-            <Location id={location} />
-        </Row>
-    ));
-    const locationColumns = _.chunk(
-        locationRows,
-        Math.ceil(_.size(locationRows) / numColumns),
-    );
+    const orderedLocations = mapMode
+        ? reorderLocationsForGrid(locations)
+        : locations;
     return (
-        <>
-            {locationColumns.map((rows, index) => (
-                <Col key={index}>{rows}</Col>
+        <div
+            className={clsx(styles.locationGroup, {
+                [styles.wide]: mapMode,
+            })}
+        >
+            {orderedLocations.map((location) => (
+                <div key={location} className={styles.locationCell}>
+                    <Location onChooseEntrance={onChooseEntrance} id={location} />
+                </div>
             ))}
-        </>
+        </div>
     );
 }

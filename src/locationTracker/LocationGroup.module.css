@@ -1,0 +1,17 @@
+.locationGroup {
+    display: grid;
+
+    grid-template-columns: 1fr;
+    gap: 1px;
+    padding: 1px;
+
+    &.wide {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.locationCell {
+    min-height: 45px;
+    /* padding: 2%; */ 
+    outline: 1px solid var(--scheme-text);
+}

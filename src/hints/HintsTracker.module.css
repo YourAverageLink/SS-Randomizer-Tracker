@@ -1,0 +1,13 @@
+.hintsTracker {
+    margin: 2%;
+}
+
+.hintsTextArea {
+    resize: none;
+    width: 100%;
+    height: 100%;
+    max-height: 450px;
+
+    color: var(--scheme-text);
+    background: var(--scheme-background);
+}

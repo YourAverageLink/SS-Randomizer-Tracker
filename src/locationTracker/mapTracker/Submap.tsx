@@ -10,26 +10,12 @@ import leaveEldin from '../../assets/maps/leaveEldin.png';
 import leaveLanayru from '../../assets/maps/leaveLanayru.png';
 import { useSelector } from 'react-redux';
 import { areasSelector, checkSelector, exitsSelector, settingSelector } from '../../tracker/selectors';
-import { AreaGraph, Logic } from '../../logic/Logic';
-import { logicSelector } from '../../logic/selectors';
+import { areaGraphSelector } from '../../logic/selectors';
 import HintDescription, { DecodedHint, decodeHint } from '../Hints';
 import { RootState } from '../../store/store';
-import { useContextMenu } from '../context-menu';
 import { TriggerEvent } from 'react-contexify';
 import { Marker } from './Marker';
-
-export type RegionMarkerParams = {
-    region: string,
-    markerX: number,
-    markerY: number,
-};
-
-export type EntranceMarkerParams = {
-    exitPool: keyof AreaGraph['linkedEntrancePools']
-    entryName: string;
-    markerX: number,
-    markerY: number,
-};
+import { MapHintRegion } from './MapModel';
 
 export type ExitParams = {
     image: string,
@@ -38,10 +24,6 @@ export type ExitParams = {
     top: number
 }
 
-export interface BirdStatueContextMenuProps {
-    province: string;
-};
-
 const images: Record<string, string> = {
     leaveSkyloft,
     leaveFaron,
@@ -49,14 +31,11 @@ const images: Record<string, string> = {
     leaveLanayru,
 };
 
-function getExit(logic: Logic, marker: EntranceMarkerParams) {
-    const exitId = logic.areaGraph.linkedEntrancePools[marker.exitPool][marker.entryName].exits[0];
-    return { exitId, exitName: logic.areaGraph.exits[exitId].short_name };
-}
-
 const Submap = ({
     onSubmapChange,
     onGroupChange,
+    onChooseEntrance,
+    provinceId,
     title,
     markerX,
     markerY,
@@ -64,16 +43,16 @@ const Submap = ({
     mapWidth,
     activeSubmap,
     markers,
-    entranceMarkers,
     exitParams,
 }: {
     markerX: number;
     markerY: number;
     title: string;
+    provinceId: string;
     onGroupChange: (region: string | undefined) => void;
     onSubmapChange: (submap: string | undefined) => void;
-    markers: RegionMarkerParams[];
-    entranceMarkers: EntranceMarkerParams[];
+    onChooseEntrance: (exitId: string) => void;
+    markers: MapHintRegion[];
     activeSubmap: string | undefined;
     map: string;
     mapWidth: number;
@@ -86,7 +65,7 @@ const Submap = ({
     const exits = useSelector(exitsSelector);
     const hints = useSelector((state: RootState) => state.tracker.hints);
     _.forEach(markers, (marker) => {
-        const area = areas.find((area) => area.name === marker.region);
+        const area = areas.find((area) => area.name === marker.hintRegion);
         if (area) {
             remainingChecks += area.numChecksRemaining;
             accessibleChecks += area.numChecksAccessible;
@@ -95,24 +74,9 @@ const Submap = ({
                 subregionHints.push({ area: area.name, hint: decodeHint(hint) });
             }
         }
-    })
+    });
 
-    const logic = useSelector(logicSelector);
-    
-    _.forEach(entranceMarkers, (marker) => {
-        const exit = getExit(logic, marker);
-        const exitMapping = exits.find((e) => e.exit.id === exit.exitId)!;
-        const areaName = exitMapping.entrance && logic.areaGraph.entranceHintRegions[exitMapping.entrance.id];
-        const area = areas.find((area) => area.name === areaName);
-        if (area) {
-            remainingChecks += area.numChecksRemaining;
-            accessibleChecks += area.numChecksAccessible;
-            const hint = hints[area.name];
-            if (hint) {
-                subregionHints.push({ area: area.name, hint: decodeHint(hint) });
-            }
-        }
-    })
+    const areaGraph = useSelector(areaGraphSelector);
 
     let markerColor: keyof ColorScheme = 'outLogic';
     if (accessibleChecks !== 0) {
@@ -125,9 +89,8 @@ const Submap = ({
         markerColor = 'checked';
     }
 
-    // TODO create a generic Marker component and separate some of this code
     const birdSanityOn = useSelector(settingSelector('random-start-statues'));
-    const birdStatueSanityPool = birdSanityOn && logic.areaGraph.birdStatueSanity[title];
+    const birdStatueSanityPool = birdSanityOn && areaGraph.birdStatueSanity[title];
     const needsBirdStatueSanityExit = birdStatueSanityPool && !exits.find((e) => e.exit.id === birdStatueSanityPool.exit && e.entrance);
     const exitCheck = useSelector(
         (state: RootState) =>
@@ -146,28 +109,26 @@ const Submap = ({
             {needsBirdStatueSanityExit && <div>Right-click to choose Statue</div>}
             {subregionHints.map(({hint, area}) => <HintDescription key={area} hint={hint} area={area} />)}
         </center>
-    )
-
-    const { show } = useContextMenu<BirdStatueContextMenuProps>({
-        id: 'birdstatue-context',
-    });
+    );
 
     const handleClick = (e: TriggerEvent | React.UIEvent) => {
         if (e.type === 'contextmenu') {
             e.preventDefault();
         } else {
-            onSubmapChange(title);
+            onSubmapChange(provinceId);
         }
     };
 
+    const birdStatueExitId = birdStatueSanityPool && birdStatueSanityPool.exit;
+
     const displayMenu = useCallback(
-        (e: TriggerEvent) => {
-            show({
-                event: e,
-                props: { province: title },
-            });
+        (e: React.UIEvent) => {
+            if (birdStatueExitId) {
+                onChooseEntrance(birdStatueExitId);
+            }
+            e.preventDefault();
         },
-        [show, title],
+        [birdStatueExitId, onChooseEntrance],
     );
 
     const handleBack = (e: TriggerEvent | React.UIEvent) => {
@@ -198,30 +159,33 @@ const Submap = ({
         <div>
             {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
             <img src={map} alt={`${title} Map`} width={mapWidth} style={{position: 'relative'}} onContextMenu={handleBack}/>
-            {markers.map((marker) => (
-                <MapMarker
-                    key={marker.region}
-                    markerX={marker.markerX}
-                    markerY={marker.markerY}
-                    title={marker.region}
-                    mapWidth={mapWidth}
-                    onGlickGroup={onGroupChange}
-                />
-            ))}
-            {entranceMarkers.map((entrance) => {
-                const { exitId, exitName } = getExit(logic, entrance);
-                return (
-                    <EntranceMarker
-                        key={exitId}
-                        markerX={entrance.markerX}
-                        markerY={entrance.markerY}
-                        title={exitName}
-                        mapWidth={mapWidth}
-                        active={title === activeSubmap}
-                        exitId={exitId}
-                        onGlickGroup={onGroupChange}
-                    />
-                );
+            {markers.map((marker) => {
+                if (marker.type === 'hint_region') {
+                    return (
+                        <MapMarker
+                            key={marker.hintRegion}
+                            markerX={marker.markerX}
+                            markerY={marker.markerY}
+                            title={marker.hintRegion!}
+                            mapWidth={mapWidth}
+                            onGlickGroup={onGroupChange}
+                        />
+                    )
+                } else {
+                    return (
+                        <EntranceMarker
+                            key={marker.exitId}
+                            markerX={marker.markerX}
+                            markerY={marker.markerY}
+                            title={areaGraph.exits[marker.exitId].short_name}
+                            mapWidth={mapWidth}
+                            active={provinceId === activeSubmap}
+                            exitId={marker.exitId}
+                            onGlickGroup={onGroupChange}
+                            onChooseEntrance={onChooseEntrance}
+                        />
+                    );
+                }
             })}
             <div
                 onKeyDown={keyDownWrapper(handleBack)}
@@ -237,7 +201,7 @@ const Submap = ({
     
     return (
         <div className="submap">
-            <div style={{display:(title === activeSubmap ? '' : 'none')}}>
+            <div style={{display:(provinceId === activeSubmap ? '' : 'none')}}>
                 {mapElement}
             </div>
             <div style={{display:(!activeSubmap ? '' : 'none')}}>
