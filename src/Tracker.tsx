@@ -178,47 +178,47 @@ function Tracker() {
             }}
         >
             <Container fluid style={{ height: '100%' }}>
-                <Row style={{ height: '100%' }}>
-                    {mainTracker}
-                </Row>
-                <Row
+                <Row style={{ height: '100%' }}>{mainTracker}</Row>
+                <div
                     style={{
                         position: 'fixed',
                         bottom: 0,
+                        left: 0,
                         background: 'lightgrey',
                         width: '100%',
-                        padding: '0.5%',
                         height: height * 0.05,
                         alignContent: 'center',
+                        display: 'flex',
+                        flexFlow: 'row nowrap',
+                        justifyContent: 'space-around',
+                        alignItems: 'center',
                     }}
                 >
-                    <Col>
-                        <ExportButton />
-                    </Col>
-                    <Col>
+                    <div>
                         <Link to="/">
-                            <Button>
-                                Options
-                            </Button>
+                            <Button>← Options</Button>
                         </Link>
-                    </Col>
-                    <Col>
-                        <Button
-                            variant="primary"
-                            onClick={() => setShowCustomizationDialog(true)}
-                        >
-                            Customization
-                        </Button>
-                    </Col>
-                    <Col>
+                    </div>
+                    <div>
+                        <ExportButton />
+                    </div>
+                    <div>
                         <Button
                             variant="primary"
                             onClick={() => setShowEntranceDialog(true)}
                         >
                             Entrances
                         </Button>
-                    </Col>
-                </Row>
+                    </div>
+                    <div>
+                        <Button
+                            variant="primary"
+                            onClick={() => setShowCustomizationDialog(true)}
+                        >
+                            Customization
+                        </Button>
+                    </div>
+                </div>
             </Container>
             <CustomizationModal
                 show={showCustomizationDialog}
