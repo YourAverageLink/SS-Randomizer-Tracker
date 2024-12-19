@@ -1,4 +1,4 @@
-@import "bootstrap/dist/css/bootstrap.css";
+@import "bootstrap/dist/css/bootstrap.min.css";
 
 :root {
   --bs-body-bg: var(--scheme-background);

@@ -1,10 +1,11 @@
-import './dungeons.css';
 import keyDownWrapper from '../../../KeyDownWrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { dungeonCompletedSelector, requiredDungeonsSelector } from '../../../tracker/selectors';
 import { DungeonName as DungeonNameType } from '../../../logic/Locations';
 import { RootState } from '../../../store/store';
 import { clickDungeonName } from '../../../tracker/slice';
+import styles from './DungeonName.module.css'
+import clsx from 'clsx';
 
 type DungeonNameProps = {
     dungeonAbbr: string;
@@ -22,10 +23,6 @@ const DungeonName = (props: DungeonNameProps) => {
         color: `var(--scheme-${required ? 'required' : 'unrequired'})`,
     };
 
-    const completedState = completed
-        ? 'complete'
-        : 'incomplete';
-
     const dungeonChange = () => dungeonName !== 'Sky Keep' && dispatch(clickDungeonName({ dungeonName }));
     const onRightClick = (e: React.UIEvent) => {
         setActiveArea(dungeonName);
@@ -40,7 +37,7 @@ const DungeonName = (props: DungeonNameProps) => {
             tabIndex={0}
             onContextMenu={onRightClick}
         >
-            <span className={`${completedState} dungeonName`} style={currentStyle}>
+            <span className={clsx(styles.dungeonName, { [styles.complete]: completed })} style={currentStyle}>
                 {dungeonAbbr}
             </span>
         </div>

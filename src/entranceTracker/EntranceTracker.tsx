@@ -112,7 +112,7 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
                 }}
             >
                 <Col style={{ display: 'flex', alignItems: 'center' }}><span>{exit.exit.name}</span></Col>
-                <Col>
+                <Col style={{ minWidth: 0 }}>
                     <Select
                         styles={selectStyles<false, Entrance>()}
                         value={exit.entrance && { label: exit.entrance.name, value: exit.entrance.id }}

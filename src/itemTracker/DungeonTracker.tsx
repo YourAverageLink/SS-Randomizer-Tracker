@@ -21,7 +21,6 @@ import eldinTrialGate from '../assets/bosses/eldinTrialGate.png';
 import DungeonName from './items/dungeons/DungeonName';
 import DungeonIcon from './items/dungeons/DungeonIcon';
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
 import AreaCounters from '../locationTracker/AreaCounters';
 import HintMarker from '../hints/HintMarker';
 import { useSelector } from 'react-redux';
@@ -31,6 +30,7 @@ import {
     DungeonName as DungeonNameType,
     isDungeon,
 } from '../logic/Locations';
+import styles from './DungeonTracker.module.css';
 
 const silentRealmData: Record<string, string> = {
     'Faron Silent Realm': faronTrialGate,
@@ -135,31 +135,12 @@ export default function DungeonTracker({
         position: 'relative',
         top: width * -0.05,
     };
-    const trialStyle: CSSProperties = {
-        position: 'relative',
-        margin: '0.5%',
-        left: '-1.5%',
-        top: '-2%',
-    };
-    const trialHintStyle: CSSProperties = {
-        position: 'relative',
-        margin: '0.5%',
-        left: '2%',
-        top: '-2%',
-    };
-    const trialCheckStyle: CSSProperties = {
-        position: 'relative',
-        margin: '0.5%',
-        left: '2%',
-        top: '-2%',
-    };
 
     const hideEtKeyPieces = useSelector(settingSelector('open-et'));
 
     return (
-        <Col
-            // style={{ padding: 0 }}
-            id="dungeonTracker"
+        <div
+            className={styles.dungeonTracker}
             ref={divElement}
         >
             <table style={keysStyle}>
@@ -264,41 +245,31 @@ export default function DungeonTracker({
                 </tbody>
             </table>
             {!compact && (
-                <>
-                    <Row style={trialHintStyle}>
-                        {silentRealms.map((area) => (
-                            <Col key={area.name}>
-                                <HintMarker width={secondRowWidth / 4} />
-                            </Col>
-                        ))}
-                    </Row>
-                    <Row style={trialStyle}>
+                <div className={styles.trials}>
                         {silentRealms.map((a) => (
-                            <Col key={a.name}>
-                                <DungeonIcon
-                                    image={silentRealmData[a.name]}
-                                    iconLabel={a.name}
-                                    area={a.name}
-                                    width={secondRowWidth}
-                                    groupClicked={() => setActiveArea(a.name)}
-                                />
-                            </Col>
+                            <HintMarker key={`hint-${a.name}`} width={secondRowWidth / 4} />
                         ))}
-                    </Row>
-                    <Row style={trialCheckStyle}>
                         {silentRealms.map((a) => (
-                            <Col key={a.name}>
-                                <AreaCounters
-                                    totalChecksLeftInArea={a.numChecksRemaining}
-                                    totalChecksAccessible={
-                                        a.numChecksAccessible
-                                    }
-                                />
-                            </Col>
+                            <DungeonIcon
+                                key={`icon-${a.name}`}
+                                image={silentRealmData[a.name]}
+                                iconLabel={a.name}
+                                area={a.name}
+                                width={secondRowWidth}
+                                groupClicked={() => setActiveArea(a.name)}
+                            />
                         ))}
-                    </Row>
-                </>
+                        {silentRealms.map((a) => (
+                            <AreaCounters
+                                key={`counters-${a.name}`}
+                                totalChecksLeftInArea={a.numChecksRemaining}
+                                totalChecksAccessible={
+                                    a.numChecksAccessible
+                                }
+                            />
+                        ))}
+                </div>
             )}
-        </Col>
+        </div>
     );
 }
