@@ -1,5 +1,4 @@
 import React from 'react';
-import './RequirementsTooltip.css';
 import { Op } from '../logic/booleanlogic/BooleanExpression';
 import { RootTooltipExpression, TooltipExpression } from '../tooltips/TooltipExpression';
 import { addDividers } from '../utils/React';

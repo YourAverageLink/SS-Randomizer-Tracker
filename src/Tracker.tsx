@@ -109,7 +109,7 @@ function Tracker() {
                 <Col>
                     {itemTracker}
                 </Col>
-                <Col>
+                <Col style={{ zIndex: 1 }}>
                     <NewLocationTracker
                         interfaceDispatch={trackerInterfaceDispatch}
                         interfaceState={trackerInterfaceState}
@@ -142,7 +142,7 @@ function Tracker() {
                     {itemTracker}
                     <DungeonTracker setActiveArea={setActiveArea} compact />
                 </Col>
-                <Col xs={6}>
+                <Col xs={6} style={{ zIndex: 1 }}>
                     <WorldMap
                         imgWidth={width * 0.5}
                         containerHeight={height * 0.95}

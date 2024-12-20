@@ -1,8 +1,5 @@
 import { useCallback } from 'react';
-import { Col, Row } from 'react-bootstrap';
-
 import AreaCounters from './AreaCounters';
-
 import 'react-contexify/dist/ReactContexify.css';
 import keyDownWrapper from '../KeyDownWrapper';
 import { TriggerEvent } from 'react-contexify';
@@ -11,17 +8,21 @@ import { HintRegion } from '../logic/Locations';
 import { useSelector } from 'react-redux';
 import { areaHintSelector } from '../tracker/selectors';
 import { decodeHint } from './Hints';
+import styles from './LocationGroupHeader.module.css';
+import clsx from 'clsx';
 
 export interface LocationGroupContextMenuProps {
-    area: string,
+    area: string;
 }
 
 export default function LocationGroupHeader({
     area,
     setActiveArea,
+    alignCounters,
 }: {
-    area: HintRegion,
-    setActiveArea: (area: string) => void,
+    area: HintRegion;
+    setActiveArea: (area: string) => void;
+    alignCounters?: boolean;
 }) {
     const onClick = useCallback(
         () => setActiveArea(area.name),
@@ -47,32 +48,32 @@ export default function LocationGroupHeader({
     const hint = areaHint && decodeHint(areaHint);
 
     return (
-        <Row
+        <div
             onClick={onClick}
             onKeyDown={keyDownWrapper(onClick)}
             role="button"
             tabIndex={0}
             onContextMenu={displayMenu}
-            style={{ userSelect: 'none' }}
+            className={styles.locationGroupHeader}
         >
-            <Col sm={7}>
-                <h3 style={{ cursor: 'pointer' }}>
-                    {area.name}
-                </h3>
-            </Col>
-            <Col sm={2}>
-                <span>
-                    {hint && <img style={{ height: '40px' }} src={hint.image} alt={hint.description} />}
-                </span>
-            </Col>
-            <Col sm={1}>
+            <div className={styles.name}>
+                <h3>{area.name}</h3>
+            </div>
+            <div className={styles.hint}>
+                {hint && <img src={hint.image} alt={hint.description} />}
+            </div>
+            <div
+                className={clsx(styles.counter, {
+                    [styles.align]: alignCounters,
+                })}
+            >
                 <h3>
                     <AreaCounters
                         totalChecksLeftInArea={area.numChecksRemaining}
                         totalChecksAccessible={area.numChecksAccessible}
                     />
                 </h3>
-            </Col>
-        </Row>
+            </div>
+        </div>
     );
 }

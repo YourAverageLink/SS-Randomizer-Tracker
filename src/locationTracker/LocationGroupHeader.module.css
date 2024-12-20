@@ -1,0 +1,28 @@
+.locationGroupHeader {
+    user-select: none;
+    display: flex;
+    flex-flow: row nowrap;
+
+    .name {
+        flex: 1 1 auto;
+    }
+
+    .hint {
+        flex: 0 0 10%;
+        text-align: center;
+        margin-left: auto;
+
+        img {
+            margin: auto;
+            height: 40px;
+        }
+    }
+
+    .counter {
+        flex: 0 0 10%;
+        margin-left: auto;
+        &.align {
+            text-align: right;
+        }
+    }
+}
