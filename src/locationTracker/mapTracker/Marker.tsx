@@ -51,7 +51,9 @@ export function Marker({
     };
 
     return (
-        <Tooltip content={tooltip} placement="top">
+        // I really don't like followCursor here but otherwise the tooltip teleports to (0, 0)
+        // when the marker is removed, which may overlap with the item or dungeon tracker
+        <Tooltip content={tooltip} placement="bottom" followCursor>
             <div
                 onClick={onClick}
                 onKeyDown={onClick}
