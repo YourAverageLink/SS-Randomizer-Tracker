@@ -26,7 +26,7 @@ export default function BasicCounters() {
     );
 
     return (
-        <div className="Counters">
+        <div>
             <p>{`Locations Checked: ${state.numChecked}`}</p>
             <p>{`Locations Accessible: ${state.numAccessible}`}</p>
             <p>{`Locations Remaining: ${state.numRemaining}`}</p>

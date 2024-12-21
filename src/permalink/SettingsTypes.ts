@@ -1,4 +1,4 @@
-import { LogicOption } from '../Options';
+import { LogicOption } from '../options/Options';
 import { GeneratedOptions } from './GeneratedOptions';
 
 export type BaseOption = {

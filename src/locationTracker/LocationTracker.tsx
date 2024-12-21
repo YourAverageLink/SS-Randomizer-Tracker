@@ -26,7 +26,7 @@ export function NewLocationTracker({
     const onChooseEntrance = (exitId: string) => interfaceDispatch({ type: 'chooseEntrance', exitId });
 
     return (
-        <div className="location-tracker">
+        <div>
             <LocationContextMenu />
             <LocationGroupContextMenu interfaceDispatch={interfaceDispatch} />
             <div

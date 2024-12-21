@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import FullAcknowledgement from './FullAcknowledgement';
-import Options from './Options';
+import Options from './options/Options';
 import Tracker from './Tracker';
 import { useSelector } from 'react-redux';
 import { colorSchemeSelector } from './customization/selectors';

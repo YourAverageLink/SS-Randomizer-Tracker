@@ -212,7 +212,7 @@ const Submap = ({
     );
     
     return (
-        <div className="submap">
+        <div>
             <div style={{display:(provinceId === activeSubmap ? '' : 'none')}}>
                 {mapElement}
             </div>

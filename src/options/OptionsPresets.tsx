@@ -1,14 +1,15 @@
 import React, { CSSProperties, useMemo, useState } from 'react';
 import { OptionsAction } from './OptionsReducer';
-import { AllTypedOptions } from './permalink/SettingsTypes';
-import { LogicBundle } from './logic/slice';
+import { AllTypedOptions } from '../permalink/SettingsTypes';
+import { LogicBundle } from '../logic/slice';
 import { Button, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from './store/store';
-import { Preset, addPreset, removePreset } from './saves/slice';
-import { formatRemote, RemoteReference } from './loader/LogicLoader';
-import { encodePermalink, validateSettings } from './permalink/Settings';
-import { useSyncSavesToLocalStorage } from './LocalStorage';
+import { RootState, useAppDispatch } from '../store/store';
+import { Preset, addPreset, removePreset } from '../saves/slice';
+import { formatRemote, RemoteReference } from '../loader/LogicLoader';
+import { encodePermalink, validateSettings } from '../permalink/Settings';
+import { useSyncSavesToLocalStorage } from '../LocalStorage';
+import styles from './OptionsPresets.module.css'
 
 export function OptionsPresets({
     style,
@@ -93,7 +94,7 @@ function PresetsModal({
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body className="show-grid">
-                <div style={{ display: 'flex', flexFlow: 'column nowrap' }}>
+                <div className={styles.presetList}>
                     {remotePresets?.map((p) => (<PresetRow preset={p} isRemotePreset dispatch={dispatch} key={p.id} onHide={onHide} />))}
                     {presets.map((p) => (<PresetRow preset={p} dispatch={dispatch} key={p.id} onHide={onHide} />))}
                     {currentLogic && currentSettings && <AddPresetRow currentLogic={currentLogic} currentSettings={currentSettings} />}
@@ -129,12 +130,12 @@ function PresetRow({
                 });
                 onHide();
             }}
-            className="presetRow"
+            className={styles.presetRow}
         >
-            <div style={{ display: 'flex', flexFlow: 'nowrap' }}>
+            <div className={styles.header}>
                 {preset.name}
                 {!isRemotePreset && (
-                    <div style={{ marginLeft: 'auto' }}>
+                    <div>
                         <Button
                             onClick={(e) => {
                                 if (window.confirm(`Delete Preset ${preset.name}?`)) {
@@ -148,14 +149,11 @@ function PresetRow({
                     </div>
                 )}
             </div>
-            <div style={{ fontSize: '12px', whiteSpace: 'nowrap' }}>
+            <div className={styles.body}>
                 {formatRemote(preset.remote)}
-                <span className="presetLogicStringSep"></span>
+                <span className={styles.presetLogicStringSep}></span>
                 <span
-                    style={{
-                        overflowWrap: 'break-word',
-                        whiteSpace: 'pre-line',
-                    }}
+                    className={styles.permalink}
                 >
                     {preset.visualPermalink}
                 </span>
@@ -192,7 +190,7 @@ function AddPresetRow({
                     }),
                 );
             }}
-            className="presetRow"
+            className={styles.presetRow}
         >
             +
         </div>

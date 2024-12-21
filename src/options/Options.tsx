@@ -1,10 +1,9 @@
-import './options.css';
 import {
     AllTypedOptions,
     OptionDefs,
     OptionValue,
     OptionsCommand,
-} from './permalink/SettingsTypes';
+} from '../permalink/SettingsTypes';
 import {
     forwardRef,
     useCallback,
@@ -14,8 +13,8 @@ import {
     useRef,
     useState,
 } from 'react';
-import { decodePermalink, encodePermalink } from './permalink/Settings';
-import { Option } from './permalink/SettingsTypes';
+import { decodePermalink, encodePermalink } from '../permalink/Settings';
+import { Option } from '../permalink/SettingsTypes';
 import {
     Button,
     Col,
@@ -31,24 +30,26 @@ import {
     RemoteReference,
     formatRemote,
     parseRemote,
-} from './loader/LogicLoader';
-import { acceptSettings, reset } from './tracker/slice';
-import Acknowledgement from './Acknowledgment';
+} from '../loader/LogicLoader';
+import { acceptSettings, reset } from '../tracker/slice';
+import Acknowledgement from '../Acknowledgment';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from './store/store';
+import { useAppDispatch } from '../store/store';
 import { range } from 'lodash';
-import { LogicBundle, loadLogic } from './logic/slice';
+import { LogicBundle, loadLogic } from '../logic/slice';
 import Select, { MultiValue, ActionMeta, SingleValue } from 'react-select';
-import { selectStyles } from './customization/ComponentStyles';
+import { selectStyles } from '../customization/ComponentStyles';
 import _ from 'lodash';
-import DiscordButton from './additionalComponents/DiscordButton';
+import DiscordButton from '../additionalComponents/DiscordButton';
 import React from 'react';
-import { ImportButton } from './ImportExport';
-import Tooltip from './additionalComponents/Tooltip';
+import { ImportButton } from '../ImportExport';
+import Tooltip from '../additionalComponents/Tooltip';
 import { LoadingState, OptionsAction, useOptionsState } from './OptionsReducer';
-import { useReleases } from './loader/ReleasesLoader';
+import { useReleases } from '../loader/ReleasesLoader';
 import { satisfies as semverSatisfies } from 'semver';
 import { OptionsPresets } from './OptionsPresets';
+import styles from './Options.module.css';
+import clsx from 'clsx';
 
 /** The tracker will only show these options, and tracker logic code is only allowed to access these! */
 const optionCategorization_ = {
@@ -170,8 +171,8 @@ export default function Options() {
 
     return (
         <Container fluid>
-            <div className="optionsPage">
-                <div className="logicAndPermalink">
+            <div className={styles.optionsPage}>
+                <div className={styles.logicAndPermalink}>
                     <LogicChooser
                         selectedRemote={selectedRemote}
                         dispatch={dispatch}
@@ -241,16 +242,12 @@ function LaunchButtons({
     );
 
     return (
-        <div className="launchButtons">
+        <div className={styles.launchButtons}>
             <Button disabled={!canResume} onClick={() => confirmLaunch()}>
-                <div style={{ display: 'flex', flexFlow: 'column nowrap' }}>
+                <div className={styles.continueButton}>
                     <span>Continue Tracker</span>
                     <span
-                        style={{
-                            fontSize: 14,
-                            justifySelf: 'flex-start',
-                            marginLeft: 4,
-                        }}
+                        className={styles.counters}
                     >
                         {counters && `${counters.numChecked}/${counters.numRemaining}`}
                     </span>
@@ -348,7 +345,7 @@ function LogicChooser({
     };
 
     return (
-        <div className="optionsCategory logicChooser">
+        <div className={clsx(styles.optionsCategory, styles.logicChooser)}>
             <legend>
                 Randomizer Version
                 {activeOption
@@ -422,9 +419,9 @@ const PlaintextLogicInput = forwardRef(function PlaintextLogicInput(
         <div>
             <input
                 type="text"
-                className={
-                    (badFormat ? 'optionsBadRemote' : '') + ' form-control'
-                }
+                className={clsx('form-control', {
+                    [styles.optionsBadRemote]: badFormat,
+                })}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
             />
@@ -480,11 +477,11 @@ function PermalinkChooser({
     );
 
     return (
-        <div className="optionsCategory permalinkChooser">
+        <div className={clsx(styles.optionsCategory, styles.permalinkChooser)}>
             <legend>Settings String</legend>
             <input
                 type="text"
-                className="permalinkInput form-control"
+                className={clsx(styles.permalinkInput, 'form-control')}
                 disabled={!permalink}
                 placeholder="Select a Randomizer version first"
                 value={permalink ?? ''}
@@ -505,13 +502,13 @@ function OptionsList({
     dispatch: React.Dispatch<OptionsAction>;
 }) {
     return (
-        <div className="optionsCategory">
+        <div className={styles.optionsCategory}>
             <Tabs defaultActiveKey="Shuffles">
                 {Object.entries(optionCategorization).map(
                     ([title, categoryOptions]) => {
                         return (
                             <Tab eventKey={title} key={title} title={title}>
-                                <div className="optionsTab">
+                                <div className={styles.optionsTab}>
                                     {categoryOptions.map((command) => {
                                         const entry = options.find(
                                             (o) => o.command === command,
@@ -691,10 +688,9 @@ function OptionTooltip({ children }: { children: string }) {
                 <React.Fragment key={index}>
                     {index % 2 === 1 && <br />}
                     <span
-                        style={{
-                            whiteSpace: 'pre-wrap',
-                            fontWeight: index % 2 === 1 ? 'bold' : 'normal',
-                        }}
+                        className={clsx(styles.optionsTooltip, {
+                            [styles.bold]: index % 2 === 1,
+                        })}
                     >
                         {part}
                     </span>

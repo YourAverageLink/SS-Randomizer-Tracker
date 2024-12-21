@@ -44,6 +44,23 @@
     column-gap: 4px;
 }
 
+.continueButton {
+    display: flex;
+    flex-flow: column nowrap;
+
+    .counters {
+        font-size: 14px;
+        margin-left: 4px;
+    }
+}
+
+.optionsTooltip {
+    white-space: pre-wrap;
+    &.bold {
+        font-weight: bold;
+    }
+}
+
 .optionsCategory {
     border: thick solid;
     padding: 0% 1% 1% 1%;
@@ -58,28 +75,4 @@
 
 .optionsBadRemote {
     border: 1px solid red;
-}
-
-
-.presetRow {
-    color: var(--scheme-text);
-    min-height: 40px;
-    border: 1px solid grey;
-    width: 100%;
-    padding: 4px;
-    user-select: none;
-    cursor: pointer;
-}
-
-.presetRow:hover {
-    background-color: #0d6efd;
-    color: var(--scheme-background);
-}
-
-.presetLogicStringSep {
-    margin: 0 4px;
-}
-
-.presetLogicStringSep::before {
-    content: '⋅';
 }
