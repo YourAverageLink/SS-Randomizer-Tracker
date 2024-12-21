@@ -157,12 +157,8 @@ function interfaceReducer(
             }
             case 'leaveMapView':
                 return {
-                    type: 'viewingChecks',
+                    ...state,
                     mapView: undefined,
-                    hintRegion:
-                        state.type === 'viewingChecks'
-                            ? state.hintRegion
-                            : undefined,
                 };
             case 'chooseEntrance':
                 return {

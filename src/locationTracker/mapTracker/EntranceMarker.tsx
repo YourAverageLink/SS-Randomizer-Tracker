@@ -28,6 +28,7 @@ type EntranceMarkerProps = {
     active: boolean;
     onGlickGroup: (group: string) => void;
     onChooseEntrance: (exitId: string) => void;
+    selected: boolean;
 };
 
 export interface MapExitContextMenuProps {
@@ -38,7 +39,7 @@ export interface MapExitContextMenuProps {
 
 const EntranceMarker = (props: EntranceMarkerProps) => {
     
-    const { title, exitId, markerX, markerY, mapWidth, active, onGlickGroup, onChooseEntrance } = props;
+    const { title, exitId, markerX, markerY, mapWidth, active, onGlickGroup, onChooseEntrance, selected } = props;
     const exit = useSelector((state: RootState) => exitsSelector(state).find((e) => e.exit.id === exitId))!;
     const inLogicBits = useSelector(inLogicBitsSelector);
     const logic = useSelector(logicSelector);
@@ -158,6 +159,7 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
             tooltip={tooltip}
             onClick={handleClick}
             onContextMenu={displayMenu}
+            selected={selected}
         >
             {Boolean(accessibleChecks) && accessibleChecks}
             {!hasConnection && '?'}

@@ -16,10 +16,11 @@ type MapMarkerProps = {
     title: string;
     onGlickGroup: (region: string) => void;
     mapWidth: number;
+    selected: boolean;
 };
 
 const MapMarker = (props: MapMarkerProps) => {
-    const { onGlickGroup, title, markerX, markerY, mapWidth} = props;
+    const { onGlickGroup, title, markerX, markerY, mapWidth, selected } = props;
     const area = useSelector((state: RootState) => areasSelector(state).find((a) => a.name === title))!;
     const remainingChecks = area?.numChecksRemaining;
     const accessibleChecks = area?.numChecksAccessible;
@@ -71,6 +72,7 @@ const MapMarker = (props: MapMarkerProps) => {
             tooltip={tooltip}
             onClick={handleClick}
             onContextMenu={displayMenu}
+            selected={selected}
         >
             {Boolean(accessibleChecks) && accessibleChecks}
         </Marker>

@@ -1,0 +1,19 @@
+.marker {
+    position: absolute;
+    color: black;
+    border: 2px solid #000000;
+    text-align: center;
+    line-height: 1.2;
+
+    &.square {
+        border-radius: 0;
+    }
+
+    &.rounded {
+        border-radius: 8px;
+    }
+
+    &.circle {
+        border-radius: 200px;
+    }
+}

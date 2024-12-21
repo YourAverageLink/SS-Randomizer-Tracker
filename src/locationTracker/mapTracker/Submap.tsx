@@ -44,6 +44,7 @@ const Submap = ({
     activeSubmap,
     markers,
     exitParams,
+    currentRegionOrExit,
 }: {
     markerX: number;
     markerY: number;
@@ -57,6 +58,7 @@ const Submap = ({
     map: string;
     mapWidth: number;
     exitParams: ExitParams;
+    currentRegionOrExit: string | undefined;
 }) => {
     let remainingChecks = 0
     let accessibleChecks = 0;
@@ -150,6 +152,7 @@ const Submap = ({
             tooltip={tooltip}
             onClick={handleClick}
             onContextMenu={displayMenu}
+            selected={currentRegionOrExit === birdStatueExitId}
         >
             {(accessibleChecks > 0) ? accessibleChecks : needsBirdStatueSanityExit ? '?' : ''}
         </Marker>
@@ -169,6 +172,10 @@ const Submap = ({
                             title={marker.hintRegion!}
                             mapWidth={mapWidth}
                             onGlickGroup={onGroupChange}
+                            selected={
+                                marker.hintRegion !== undefined &&
+                                    marker.hintRegion === currentRegionOrExit
+                            }
                         />
                     )
                 } else {
@@ -181,6 +188,11 @@ const Submap = ({
                             mapWidth={mapWidth}
                             active={provinceId === activeSubmap}
                             exitId={marker.exitId}
+                            selected={
+                                marker.exitId == currentRegionOrExit ||
+                                (marker.hintRegion !== undefined &&
+                                    marker.hintRegion === currentRegionOrExit)
+                            }
                             onGlickGroup={onGroupChange}
                             onChooseEntrance={onChooseEntrance}
                         />

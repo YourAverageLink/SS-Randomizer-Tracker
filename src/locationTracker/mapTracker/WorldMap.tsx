@@ -65,6 +65,11 @@ function WorldMap({
     };
 
     const onChooseEntrance = (exitId: string) => interfaceDispatch({ type: 'chooseEntrance', exitId });
+
+    const currentRegionOrExit =
+        interfaceState.type === 'choosingEntrance'
+            ? interfaceState.exitId
+            : interfaceState.hintRegion;
     
     const worldMap = (
         <div style={{position:'absolute', width:imgWidth, height:imgWidth / aspectRatio}}>
@@ -75,7 +80,7 @@ function WorldMap({
                         <img src={skyMap} alt="World Map" width={imgWidth} onContextMenu={(e) => {
                             e.preventDefault();
                         }} />
-                        <StartingEntranceMarker mapWidth={imgWidth} onClick={(exitId) => interfaceDispatch({ type: 'chooseEntrance', exitId })} />
+                        <StartingEntranceMarker mapWidth={imgWidth} onClick={(exitId) => interfaceDispatch({ type: 'chooseEntrance', exitId })} selected={currentRegionOrExit === '\\Start'} />
                     </>
                 }
                 {mapModel.regions.map((marker) => (
@@ -86,6 +91,7 @@ function WorldMap({
                             title={marker.hintRegion!}
                             onGlickGroup={handleGroupClick}
                             mapWidth={imgWidth}
+                            selected={marker.hintRegion === currentRegionOrExit}
                         />
                     </div>
                 ))}
@@ -106,6 +112,7 @@ function WorldMap({
                             mapWidth={imgWidth}
                             exitParams={entry.exitParams}
                             activeSubmap={activeSubmap}
+                            currentRegionOrExit={currentRegionOrExit}
                         />
                     )
                 })}

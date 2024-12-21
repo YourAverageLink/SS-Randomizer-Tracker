@@ -406,6 +406,16 @@ export function parseLogic(raw: RawLogic): Logic {
         const terms = booleanExprToLogicalExpr(
             parseExpression(expr),
             (item: string) => {
+                if (raw.checks[item]) {
+                    // check whether a check is mentioned by requirements.
+                    // This should not be a thing because it means that the location
+                    // cannot be banned. Again something the rando should enforce...
+                    console.error(
+                        'check location',
+                        raw.checks[item].short_name,
+                        'is mentioned by a requirement, which makes it unbannable',
+                    );
+                }
                 // If an expression looks at "goddess cube in X", require the actual item instead.
                 const actualItem = cubeCheckToCubeCollected[item] ?? item;
                 return itemBits[actualItem];

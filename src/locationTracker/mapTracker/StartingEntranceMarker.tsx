@@ -5,7 +5,7 @@ import ColorScheme from '../../customization/ColorScheme';
 import { Marker } from './Marker';
 import { startingEntrancePool } from '../../logic/Entrances';
 
-const StartingEntranceMarker = ({ mapWidth, onClick }: { mapWidth: number; onClick: (exitId: string) => void }) => {
+const StartingEntranceMarker = ({ mapWidth, onClick, selected }: { mapWidth: number; onClick: (exitId: string) => void; selected: boolean }) => {
     
     const startingEntranceRando = useSelector(settingSelector('random-start-entrance')) !== 'Vanilla';
     const startMapping = useSelector(exitsSelector).find((e) => e.canAssign && e.rule.pool === startingEntrancePool)!;
@@ -36,6 +36,7 @@ const StartingEntranceMarker = ({ mapWidth, onClick }: { mapWidth: number; onCli
                 mapWidth={mapWidth}
                 tooltip={tooltip}
                 onClick={() => onClick(startMapping.exit.id)}
+                selected={selected}
             >
                 {!hasSelectedEntrance && '?'}
             </Marker>
