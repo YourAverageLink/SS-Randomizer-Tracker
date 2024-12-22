@@ -4,11 +4,7 @@ import unrequired from '../assets/No_Entrance.png';
 import required from '../assets/Entrance.png';
 import keyDownWrapper from '../KeyDownWrapper';
 
-type HintMarkerProps = {
-    width: number;
-};
-
-const HintMarker = ({ width }: HintMarkerProps) => {
+const HintMarker = () => {
     const [current, setCurrent] = useState(0);
 
     const images = [unknown, unrequired, required];
@@ -25,8 +21,9 @@ const HintMarker = ({ width }: HintMarkerProps) => {
             onKeyDown={keyDownWrapper(handleClick)}
             role="button"
             tabIndex={0}
+            style={{width: '100%'}}
         >
-            <img src={images[current]} alt={altTexts[current]} width={width} />
+            <img src={images[current]} alt={altTexts[current]} style={{width: '100%'}} />
         </div>
     );
 };

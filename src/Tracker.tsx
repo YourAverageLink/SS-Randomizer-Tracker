@@ -1,12 +1,10 @@
 import {
+    useLayoutEffect,
     useMemo,
     useState,
     useSyncExternalStore,
 } from 'react';
 import { Button } from 'react-bootstrap';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
 import { useSelector } from 'react-redux';
 import BasicCounters from './BasicCounters';
 import EntranceTracker from './entranceTracker/EntranceTracker';
@@ -81,6 +79,23 @@ function Tracker() {
 
     const setActiveArea = (area: string) => trackerInterfaceDispatch({ type: 'selectHintRegion', hintRegion: area })
 
+    useLayoutEffect(() => {
+        document.querySelector('html')?.classList.add('overflowHidden');
+        return () => document.querySelector('html')?.classList.remove('overflowHidden');
+    }, []);
+
+    // Warning: Layout horrors below.
+    // This main tracker area used to be implemented with react-bootstrap's
+    // Row and Col types while importing bootstrap v4 AND bootstrap v5 CSS
+    // at the same time, and then there was some manual adjustment and
+    // styling to get things to behave. So there's a bit of a chicken-and-egg
+    // problem where much of the calculations and widths rely on the bootstrap
+    // styles, both in this component and the subcomponents. bootstrap has been
+    // removed from everything in <Tracker> and below, but we need some of the existing
+    // styles so that e.g. the item tracker width calculations match up and I don't
+    // want to revamp the main layout yet until more components behave predictably
+    // and use modern CSS solutions with fewer manual calculations.
+
     let itemTracker;
     if (itemLayout === 'inventory') {
         itemTracker = (
@@ -106,79 +121,101 @@ function Tracker() {
     if (locationLayout === 'list') {
         mainTracker = (
             <>
-                <Col>
-                    {itemTracker}
-                </Col>
-                <Col style={{ zIndex: 1 }}>
-                    <NewLocationTracker
-                        interfaceDispatch={trackerInterfaceDispatch}
-                        interfaceState={trackerInterfaceState}
-                        containerHeight={height * 0.95}
-                    />
-                </Col>
-                <Col
+                <div style={{ flex: '0 0 auto', width: '33.333%' }}>
+                    <div style={{ padding: '0 0.75rem' }}>{itemTracker}</div>
+                </div>
+                <div style={{ flex: '0 0 auto', width: '33.333%', zIndex: 1 }}>
+                    <div style={{ padding: '0 0.75rem' }}>
+                        <NewLocationTracker
+                            interfaceDispatch={trackerInterfaceDispatch}
+                            interfaceState={trackerInterfaceState}
+                            containerHeight={height * 0.95}
+                        />
+                    </div>
+                </div>
+                <div
                     style={{
-                        display: 'flex',
-                        flexFlow: 'column nowrap',
+                        flex: '0 0 auto',
                         height: '100%',
+                        width: '33.333%',
                     }}
                 >
-                    <Row>
+                    <div
+                        style={{
+                            padding: '0 0.75rem',
+                            display: 'flex',
+                            height: '100%',
+                            flexFlow: 'column nowrap',
+                            gap: '2%',
+                            paddingBottom: '2%',
+                        }}
+                    >
                         <BasicCounters />
-                    </Row>
-                    <Row>
                         <DungeonTracker setActiveArea={setActiveArea} />
-                    </Row>
-                    <Row style={{height: '100%'}}>
-                        <HintsTracker />
-                    </Row>
-                </Col>
+                        <div style={{ height: '100%' }}>
+                            <HintsTracker />
+                        </div>
+                    </div>
+                </div>
             </>
         );
     } else {
         mainTracker = (
             <>
-                <Col xs={4}>
-                    {itemTracker}
-                    <DungeonTracker setActiveArea={setActiveArea} compact />
-                </Col>
-                <Col xs={6} style={{ zIndex: 1 }}>
-                    <WorldMap
-                        imgWidth={width * 0.5}
-                        containerHeight={height * 0.95}
-                        interfaceDispatch={trackerInterfaceDispatch}
-                        interfaceState={trackerInterfaceState}
-                    />
-                </Col>
-                <Col
-                    xs={2}
+                <div style={{ flex: '0 0 auto', width: '33.333%' }}>
+                    <div style={{padding: '0 0.75rem'}}>
+                        <DungeonTracker setActiveArea={setActiveArea} compact />
+                        {itemTracker}
+                    </div>
+                </div>
+                <div style={{ zIndex: 1, flex: '0 0 auto', width: '50%' }}>
+                    <div style={{padding: '0 0.75rem'}}>
+                        <WorldMap
+                            imgWidth={width * 0.5}
+                            containerHeight={height * 0.95}
+                            interfaceDispatch={trackerInterfaceDispatch}
+                            interfaceState={trackerInterfaceState}
+                        />
+                    </div>
+                </div>
+                <div
                     style={{
-                        display: 'flex',
-                        flexFlow: 'column nowrap',
+                        flex: '0 0 auto',
                         height: '100%',
+                        width: '16.666667%'
                     }}
                 >
-                    <Row>
+                    <div
+                        style={{
+                            padding: '0 0.75rem',
+                            display: 'flex',
+                            height: '100%',
+                            flexFlow: 'column nowrap',
+                            gap: '2%',
+                        }}
+                    >
                         <BasicCounters />
-                    </Row>
-                    <Row style={{height: '100%'}}>
-                        <HintsTracker />
-                    </Row>
-                </Col>
+                        <div style={{height: '100%'}}>
+                            <HintsTracker />
+                        </div>
+                    </div>
+                </div>
             </>
         );
     }
 
     return (
-        <div
-            style={{
-                height: height * 0.95,
-                overflow: 'hidden',
-                background: 'var(--scheme-background)',
-            }}
-        >
-            <Container fluid style={{ height: '100%' }}>
-                <Row style={{ height: '100%' }}>{mainTracker}</Row>
+        <>
+            <div
+                style={{
+                    position: 'absolute',
+                    width: '100vw',
+                    height: '100vh',
+                    overflow: 'hidden',
+                    background: 'var(--scheme-background)',
+                }}
+            >
+                <div style={{ height: '95%', position: 'relative', zIndex: 0, display: 'flex', flexFlow: 'row nowrap' }}>{mainTracker}</div>
                 <div
                     style={{
                         position: 'fixed',
@@ -186,7 +223,7 @@ function Tracker() {
                         left: 0,
                         background: 'lightgrey',
                         width: '100%',
-                        height: height * 0.05,
+                        height: '5%',
                         alignContent: 'center',
                         display: 'flex',
                         flexFlow: 'row nowrap',
@@ -219,7 +256,7 @@ function Tracker() {
                         </Button>
                     </div>
                 </div>
-            </Container>
+            </div>
             <CustomizationModal
                 show={showCustomizationDialog}
                 onHide={() => setShowCustomizationDialog(false)}
@@ -228,6 +265,6 @@ function Tracker() {
                 show={showEntranceDialog}
                 onHide={() => setShowEntranceDialog(false)}
             />
-        </div>
+        </>
     );
 }

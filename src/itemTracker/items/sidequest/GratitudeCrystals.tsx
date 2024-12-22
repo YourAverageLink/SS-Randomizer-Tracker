@@ -45,11 +45,11 @@ const GratitudeCrystals = (props: GratitudeCrystalsProps) => {
             onKeyDown={keyDownWrapper(handleClick)}
             role="button"
             tabIndex={0}
+            style={{ width: imgWidth }}
         >
             <img
                 src={itemImages[current]}
                 alt="Gratitude Crystals"
-                width={imgWidth}
             />
         </div>
     );

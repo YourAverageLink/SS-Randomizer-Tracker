@@ -18,7 +18,6 @@ import { Option } from '../permalink/SettingsTypes';
 import {
     Button,
     Col,
-    Container,
     FormCheck,
     FormLabel,
     Row,
@@ -170,7 +169,7 @@ export default function Options() {
     );
 
     return (
-        <Container fluid>
+        <>
             <div className={styles.optionsPage}>
                 <div className={styles.logicAndPermalink}>
                     <LogicChooser
@@ -197,9 +196,9 @@ export default function Options() {
                         dispatch={dispatch}
                     />
                 )}
+                <Acknowledgement />
             </div>
-            <Acknowledgement />
-        </Container>
+        </>
     );
 }
 

@@ -26,15 +26,15 @@ export default function BasicCounters() {
     );
 
     return (
-        <div>
-            <p>{`Locations Checked: ${state.numChecked}`}</p>
-            <p>{`Locations Accessible: ${state.numAccessible}`}</p>
-            <p>{`Locations Remaining: ${state.numRemaining}`}</p>
+        <div style={{display: 'flex', flexFlow: 'column nowrap', gap: '16px'}}>
+            <span>{`Locations Checked: ${state.numChecked}`}</span>
+            <span>{`Locations Accessible: ${state.numAccessible}`}</span>
+            <span>{`Locations Remaining: ${state.numRemaining}`}</span>
             <Tooltip
                 disabled={!relevantExits.length}
                 content={<EntrancesTooltip exits={relevantExits} />}
             >
-                <p>{`Entrances Accessible: ${state.numExitsAccessible}`}</p>
+                <span>{`Entrances Accessible: ${state.numExitsAccessible}`}</span>
             </Tooltip>
         </div>
     );

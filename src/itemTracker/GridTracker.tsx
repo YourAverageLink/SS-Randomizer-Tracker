@@ -49,7 +49,7 @@ const GridTracker = ({ maxHeight, width, mapMode: map }: GridTrackerProps) => {
     }
 
     const tableStyle = {
-        marginTop: (map ? (imgWidth / 1.5) + 50 : 0),
+        marginTop: (map ? 2 : 0),
     }
     const emptyTabWidth = imgWidth * 2.5;
     const emeraldWidth = emptyTabWidth * 0.54;
@@ -276,7 +276,7 @@ const GridTracker = ({ maxHeight, width, mapMode: map }: GridTrackerProps) => {
                         />
                     </td>
                     <td>
-                        <div style={{ position: 'relative' }}>
+                        <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
                             <CounterItem
                                 itemName="Song of the Hero"
                                 imgWidth={imgWidth}

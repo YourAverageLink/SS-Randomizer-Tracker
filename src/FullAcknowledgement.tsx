@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { Row, Col, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Contributor from './additionalComponents/Contributor';
@@ -17,8 +16,8 @@ function ContributorTable({
 }) {
     return (
         <>
-            {_.map(contributorsList, (contributor) => (
-                <Col>
+            {contributorsList.map((contributor) => (
+                <Col key={contributor.name}>
                     <Row>
                         <Col>
                             <Contributor
@@ -27,8 +26,8 @@ function ContributorTable({
                             />
                         </Col>
                     </Row>
-                    {_.map(contributor.attributions, (attribution) => (
-                        <Row>
+                    {contributor.attributions.map((attribution, index) => (
+                        <Row key={index}>
                             <Col>{attribution}</Col>
                         </Row>
                     ))}
@@ -49,8 +48,8 @@ export default function FullAcknowledgement() {
             <Row>
                 <Col className="ack-group-header">Lead Developer</Col>
             </Row>
-            {_.map(contributors.creators, (creator) => (
-                <Contributor name={creator.name} links={creator.links} />
+            {contributors.creators.map((creator) => (
+                <Contributor key={creator.name} name={creator.name} links={creator.links} />
             ))}
             <Row />
             <Row>

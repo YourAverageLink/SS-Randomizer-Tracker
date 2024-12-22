@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Contributor from './additionalComponents/Contributor';
@@ -14,7 +13,7 @@ export default function Acknowledgement() {
                 </Col>
             </Row>
             {
-                _.map(contributors.creators, (creator) => (
+                contributors.creators.map((creator) => (
                     <Contributor key={creator.name} name={creator.name} links={creator.links} />
                 ))
             }
@@ -25,7 +24,7 @@ export default function Acknowledgement() {
                 </Col>
             </Row>
             {
-                _.map(contributors.contributors, (contributor) => (
+                contributors.contributors.map((contributor) => (
                     <Contributor key={contributor.name} name={contributor.name} links={contributor.links} />
                 ))
             }

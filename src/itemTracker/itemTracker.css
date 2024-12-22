@@ -99,4 +99,8 @@
 
 .item-container {
     outline-style: none;
+    > img {
+        width: 100%;
+        justify-self: center;
+    }
 }

@@ -53,7 +53,7 @@ const CounterItem = (props: CounterItemProps) => {
     const image = current === 0 ? itemImages[0] : itemImages[1];
     const className = ignoreItemClass ? '' : 'item';
 
-    const style: CSSProperties = { position: 'relative', textAlign: 'center' };
+    const style: CSSProperties = { position: 'relative', textAlign: 'center', width: imgWidth };
     
 
     if (asSpan) {
@@ -67,7 +67,7 @@ const CounterItem = (props: CounterItemProps) => {
                 role="button"
                 tabIndex={0}
             >
-                <img src={image} alt={itemName} width={imgWidth} />
+                <img src={image} alt={itemName} />
                 {current > 0 && (
                     <div
                         style={{
@@ -107,7 +107,7 @@ const CounterItem = (props: CounterItemProps) => {
             role="button"
             tabIndex={0}
         >
-            <img src={image} alt={itemName} width={imgWidth} />
+            <img src={image} alt={itemName} />
             {current > 0 && (
                 <div
                     style={{
