@@ -26,6 +26,7 @@
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     justify-items: center;
+    margin-top: 2%;
 
     .hintsMarker {
         width: 25%;

@@ -169,36 +169,34 @@ export default function Options() {
     );
 
     return (
-        <>
-            <div className={styles.optionsPage}>
-                <div className={styles.logicAndPermalink}>
-                    <LogicChooser
-                        selectedRemote={selectedRemote}
-                        dispatch={dispatch}
-                        loadingState={loadingState}
-                        loadedRemoteName={loaded?.remoteName}
-                    />
-                    <PermalinkChooser dispatch={dispatch} options={loaded?.options} settings={settings} />
-                </div>
-                <LaunchButtons
-                    hasChanges={hasChanges}
-                    counters={counters}
-                    loaded={Boolean(loaded)}
-                    launch={launch}
+        <div className={styles.optionsPage}>
+            <div className={styles.logicAndPermalink}>
+                <LogicChooser
+                    selectedRemote={selectedRemote}
                     dispatch={dispatch}
-                    currentLogic={loaded}
-                    currentSettings={settings}
+                    loadingState={loadingState}
+                    loadedRemoteName={loaded?.remoteName}
                 />
-                {loaded && (
-                    <OptionsList
-                        options={loaded.options}
-                        settings={settings!}
-                        dispatch={dispatch}
-                    />
-                )}
-                <Acknowledgement />
+                <PermalinkChooser dispatch={dispatch} options={loaded?.options} settings={settings} />
             </div>
-        </>
+            <LaunchButtons
+                hasChanges={hasChanges}
+                counters={counters}
+                loaded={Boolean(loaded)}
+                launch={launch}
+                dispatch={dispatch}
+                currentLogic={loaded}
+                currentSettings={settings}
+            />
+            {loaded && (
+                <OptionsList
+                    options={loaded.options}
+                    settings={settings!}
+                    dispatch={dispatch}
+                />
+            )}
+            <Acknowledgement />
+        </div>
     );
 }
 

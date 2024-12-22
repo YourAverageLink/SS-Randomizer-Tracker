@@ -1,10 +1,10 @@
 import { CSSProperties } from 'react';
-import './itemTracker.css';
 import BWheel from './BWheel';
 import SwordBlock from './SwordBlock';
 import SongBlock from './SongBlock';
 import QuestItems from './QuestItems';
 import AdditionalItems from './AdditionalItems';
+import styles from './ItemTracker.module.css';
 
 type ItemTrackerProps = {
     maxWidth: number;
@@ -66,7 +66,7 @@ const ItemTracker = ({
 
     return (
         // eslint-disable-next-line sonarjs/table-header
-        <table>
+        <table className={styles.inGameTracker}>
             <tbody>
                 <tr>
                     <td style={swordBlockStyle}>

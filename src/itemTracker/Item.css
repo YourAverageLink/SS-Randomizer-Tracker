@@ -1,0 +1,8 @@
+/* this should be a :global class but vite simply doesn't generate a class name here??? */ 
+.item-container {
+    outline-style: none;
+    > img {
+        width: 100%;
+        justify-self: center;
+    }
+}

@@ -142,12 +142,11 @@ function Tracker() {
                 >
                     <div
                         style={{
-                            padding: '0 0.75rem',
+                            padding: '0 0.75rem 2% 0.75rem',
                             display: 'flex',
                             height: '100%',
                             flexFlow: 'column nowrap',
                             gap: '2%',
-                            paddingBottom: '2%',
                         }}
                     >
                         <BasicCounters />

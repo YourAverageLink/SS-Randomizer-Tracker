@@ -124,7 +124,6 @@ export default function DungeonTracker({
                                             ? smallKeyImages
                                             : undefined
                                     }
-                                    ignoreItemClass
                                 />
                             </div>
                         )}
@@ -142,7 +141,6 @@ export default function DungeonTracker({
                                         ? `${d.name} Boss Key`
                                         : 'Stone of Trials'
                                 }
-                                ignoreItemClass
                             />
                         </div>
                     </React.Fragment>
