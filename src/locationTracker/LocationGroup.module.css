@@ -12,6 +12,5 @@
 
 .locationCell {
     min-height: 45px;
-    /* padding: 2%; */ 
     outline: 1px solid var(--scheme-text);
 }

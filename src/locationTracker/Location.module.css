@@ -1,5 +1,6 @@
 .location {
     user-select: none;
+    font-size: large;
 
     height: 100%;
 
@@ -11,7 +12,7 @@
     }
 
     .text {
-        margin: 2%;
+        margin: 1.5% 2%;
     }
 
     .hintItem {
