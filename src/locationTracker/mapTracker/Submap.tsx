@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import _ from 'lodash';
 import ColorScheme from '../../customization/ColorScheme';
 import MapMarker from './MapMarker';
 import EntranceMarker from './EntranceMarker';
@@ -66,7 +65,7 @@ const Submap = ({
     const areas = useSelector(areasSelector);
     const exits = useSelector(exitsSelector);
     const hints = useSelector((state: RootState) => state.tracker.hints);
-    _.forEach(markers, (marker) => {
+    for (const marker of markers) {
         const area = areas.find((area) => area.name === marker.hintRegion);
         if (area) {
             remainingChecks += area.numChecksRemaining;
@@ -76,7 +75,7 @@ const Submap = ({
                 subregionHints.push({ area: area.name, hint: decodeHint(hint) });
             }
         }
-    });
+    }
 
     const areaGraph = useSelector(areaGraphSelector);
 
