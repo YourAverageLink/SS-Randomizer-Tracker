@@ -1,6 +1,6 @@
 import { getStoredCustomization } from '../LocalStorage';
-import ColorScheme, { lightColorScheme } from './ColorScheme';
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { type ColorScheme, lightColorScheme } from './ColorScheme';
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export type ItemLayout = 'grid' | 'inventory';
 export type LocationLayout = 'list' | 'map';

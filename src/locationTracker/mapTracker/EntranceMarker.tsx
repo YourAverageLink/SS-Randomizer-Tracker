@@ -8,15 +8,15 @@ import {
     inLogicBitsSelector,
 } from '../../tracker/selectors';
 import { useContextMenu } from '../context-menu';
-import { TriggerEvent } from 'react-contexify';
-import { RootState } from '../../store/store';
+import type { TriggerEvent } from 'react-contexify';
+import type { RootState } from '../../store/store';
 import { logicSelector } from '../../logic/selectors';
-import ColorScheme from '../../customization/ColorScheme';
+import type { ColorScheme } from '../../customization/ColorScheme';
 import HintDescription, { decodeHint } from '../Hints';
-import { ExitMapping } from '../../logic/Locations';
+import type { ExitMapping } from '../../logic/Locations';
 import { useTooltipExpr } from '../../tooltips/TooltipHooks';
 import RequirementsTooltip from '../RequirementsTooltip';
-import { LocationGroupContextMenuProps } from '../LocationGroupHeader';
+import type { LocationGroupContextMenuProps } from '../LocationGroupHeader';
 import { Marker } from './Marker';
 
 type EntranceMarkerProps = {

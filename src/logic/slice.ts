@@ -1,7 +1,7 @@
-import { OptionDefs } from '../permalink/SettingsTypes';
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { RawLogic, RawPresets } from './UpstreamTypes';
-import { RemoteReference } from '../loader/LogicLoader';
+import type { OptionDefs } from '../permalink/SettingsTypes';
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
+import type { RawLogic, RawPresets } from './UpstreamTypes';
+import type { RemoteReference } from '../loader/LogicLoader';
 
 /**
  * Relevant data loaded from an ssrando upstream.

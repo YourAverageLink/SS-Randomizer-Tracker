@@ -1,7 +1,7 @@
 // Please don't use interfaces here - messages need to be exact since we cannot afford
 // accidentally serializing huge or unserializable data.
 
-import { Logic } from '../../logic/Logic';
+import type { Logic } from '../../logic/Logic';
 
 /** The part of Logic that we can send across to a web worker, only the parts we need for tooltips. */
 export type LeanLogic = Pick<Logic, 'allItems' | 'impliedBy' | 'itemBits'>;

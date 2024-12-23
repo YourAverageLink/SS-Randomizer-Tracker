@@ -1,12 +1,12 @@
 import { Modal, Button, Container, Row, Col, FormCheck } from 'react-bootstrap';
 import ColorBlock from './ColorBlock';
-import ColorScheme, { darkColorScheme, lightColorScheme } from './ColorScheme';
-import { CounterBasis, ItemLayout, LocationLayout, setColorScheme, setCounterBasis, setEnabledSemilogicTricks, setItemLayout, setLocationLayout, setTrackTumbleweed, setTrickSemiLogic } from './slice';
+import { type ColorScheme, darkColorScheme, lightColorScheme } from './ColorScheme';
+import { type CounterBasis, type ItemLayout, type LocationLayout, setColorScheme, setCounterBasis, setEnabledSemilogicTricks, setItemLayout, setLocationLayout, setTrackTumbleweed, setTrickSemiLogic } from './slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { colorSchemeSelector, counterBasisSelector, itemLayoutSelector, locationLayoutSelector, trickSemiLogicSelector, trickSemiLogicTrickListSelector, tumbleweedSelector } from './selectors';
 import { useCallback, useMemo } from 'react';
 import { selectStyles } from './ComponentStyles';
-import Select, { ActionMeta, MultiValue } from 'react-select';
+import Select, { type ActionMeta, type MultiValue } from 'react-select';
 import Tooltip from '../additionalComponents/Tooltip';
 import { optionsSelector } from '../logic/selectors';
 

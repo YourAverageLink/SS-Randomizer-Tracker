@@ -6,7 +6,7 @@ import LocationContextMenu from "./LocationContextMenu";
 import { useSelector } from "react-redux";
 import { areasSelector } from "../tracker/selectors";
 import { isDungeon } from "../logic/Locations";
-import { InterfaceAction, InterfaceState } from "../tracker/TrackerInterfaceReducer";
+import type { InterfaceAction, InterfaceState } from "../tracker/TrackerInterfaceReducer";
 import EntranceChooser from "./EntranceChooser";
 
 export function NewLocationTracker({

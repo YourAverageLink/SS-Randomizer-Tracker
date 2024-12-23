@@ -1,14 +1,14 @@
-import { MouseEvent, useCallback } from 'react';
+import { type MouseEvent, useCallback } from 'react';
 import 'react-contexify/dist/ReactContexify.css';
-import ColorScheme from '../../customization/ColorScheme';
+import type { ColorScheme } from '../../customization/ColorScheme';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
+import type { RootState } from '../../store/store';
 import { areaHintSelector, areasSelector } from '../../tracker/selectors';
 import HintDescription, { decodeHint } from '../Hints';
 import { useContextMenu } from '../context-menu';
-import { LocationGroupContextMenuProps } from '../LocationGroupHeader';
+import type { LocationGroupContextMenuProps } from '../LocationGroupHeader';
 import { Marker } from './Marker';
-import { TriggerEvent } from 'react-contexify';
+import type { TriggerEvent } from 'react-contexify';
 
 type MapMarkerProps = {
     markerX: number;

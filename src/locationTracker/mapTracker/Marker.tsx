@@ -1,7 +1,7 @@
-import { CSSProperties } from 'react';
-import ColorScheme from '../../customization/ColorScheme';
+import type { CSSProperties } from 'react';
+import type { ColorScheme } from '../../customization/ColorScheme';
 import Tooltip from '../../additionalComponents/Tooltip';
-import { TriggerEvent } from 'react-contexify';
+import type { TriggerEvent } from 'react-contexify';
 import styles from './Marker.module.css';
 import clsx from 'clsx';
 

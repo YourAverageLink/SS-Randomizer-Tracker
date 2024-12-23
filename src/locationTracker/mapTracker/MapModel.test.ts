@@ -1,5 +1,5 @@
-import { TypedOptions } from '../../permalink/SettingsTypes';
-import { AppAction, RootState } from '../../store/store';
+import type { TypedOptions } from '../../permalink/SettingsTypes';
+import type { AppAction, RootState } from '../../store/store';
 import { createTestLogic } from '../../testing/TestingUtils';
 import { allSettingsSelector } from '../../tracker/selectors';
 import { acceptSettings, mapEntrance } from '../../tracker/slice';

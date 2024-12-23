@@ -1,4 +1,4 @@
-import { LogicalState } from '../logic/Locations';
+import type { LogicalState } from '../logic/Locations';
 
 export type ColorScheme = { [logicalState in LogicalState]: string } & {
     background: string;
@@ -26,5 +26,3 @@ export const darkColorScheme: ColorScheme = {
     text: '#FFFFFF',
     checked: '#B6B6B6',
 };
-
-export default ColorScheme;

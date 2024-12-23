@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { useCallback } from 'react';
-import { Menu, Item, Separator, Submenu, ItemParams } from 'react-contexify';
+import { Menu, Item, Separator, Submenu, type ItemParams } from 'react-contexify';
 
 import hintItems from '../data/hintItems.json';
-import { LocationContextMenuProps } from './Location';
+import type { LocationContextMenuProps } from './Location';
 import { useDispatch } from 'react-redux';
 import { clickCheck, setCheckHint } from '../tracker/slice';
 import images from '../itemTracker/Images';

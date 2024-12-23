@@ -1,6 +1,6 @@
-import { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
+import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
 import { BitVector } from './bitlogic/BitVector';
-import { itemName, Logic } from './Logic';
+import { itemName, type Logic } from './Logic';
 import {
     cubeCheckToCubeCollected,
     dungeonCompletionItems,

@@ -1,10 +1,10 @@
-import { TypedOptions } from '../permalink/SettingsTypes';
-import { InventoryItem, isItem } from './Inventory';
+import type { TypedOptions } from '../permalink/SettingsTypes';
+import { type InventoryItem, isItem } from './Inventory';
 import goddessCubesList_ from '../data/goddessCubes2.json';
 import _ from 'lodash';
 import { swordsToAdd } from './ThingsThatWouldBeNiceToHaveInTheDump';
-import { DungeonName } from './Locations';
-import { TrackerState } from '../tracker/slice';
+import type { DungeonName } from './Locations';
+import type { TrackerState } from '../tracker/slice';
 
 const collectedCubeSuffix = '_TR_Cube_Collected';
 

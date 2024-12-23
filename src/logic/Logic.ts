@@ -2,11 +2,11 @@ import _ from 'lodash';
 import { BitVector } from './bitlogic/BitVector';
 import { LogicalExpression } from './bitlogic/LogicalExpression';
 import {
-    RawLogic,
-    RawArea,
+    type RawLogic,
+    type RawArea,
     TimeOfDay,
-    RawEntrance,
-    RawExit,
+    type RawEntrance,
+    type RawExit,
 } from './UpstreamTypes';
 import {
     cubeCheckToCubeCollected,
@@ -14,7 +14,7 @@ import {
     dungeonCompletionItems,
 } from './TrackerModifications';
 import {
-    Requirements,
+    type Requirements,
     mergeRequirements,
     removeDuplicates,
     shallowSimplify,

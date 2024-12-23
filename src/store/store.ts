@@ -1,4 +1,4 @@
-import { ThunkAction, configureStore } from '@reduxjs/toolkit';
+import { type ThunkAction, configureStore } from '@reduxjs/toolkit';
 import customization, {
     preloadedCustomizationState,
 } from '../customization/slice';

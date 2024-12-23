@@ -6,7 +6,7 @@ import {
 } from './tracker/selectors';
 import Tooltip from './additionalComponents/Tooltip';
 import { counterBasisSelector } from './customization/selectors';
-import { ExitMapping, LogicalState } from './logic/Locations';
+import type { ExitMapping, LogicalState } from './logic/Locations';
 import styles from './BasicCounters.module.css';
 
 export default function BasicCounters() {

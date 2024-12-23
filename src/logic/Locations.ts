@@ -1,5 +1,5 @@
-import { ExitRule } from './Entrances';
-import { LogicalCheck } from './Logic';
+import type { ExitRule } from './Entrances';
+import type { LogicalCheck } from './Logic';
 
 export interface HintRegion<N extends string = string> {
     name: N;

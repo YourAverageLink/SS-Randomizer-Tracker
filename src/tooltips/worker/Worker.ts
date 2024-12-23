@@ -10,7 +10,7 @@ import {
     deserializeLogicalExpression,
     serializeBooleanExpression,
 } from './Utils';
-import { LeanLogic, WorkerRequest, WorkerResponse } from './Types';
+import type { LeanLogic, WorkerRequest, WorkerResponse } from './Types';
 import BooleanExpression from '../../logic/booleanlogic/BooleanExpression';
 import { dnfToRequirementExpr } from './Algorithms';
 

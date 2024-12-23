@@ -1,14 +1,14 @@
 import _ from 'lodash';
-import { TypedOptions } from '../permalink/SettingsTypes';
-import { LinkedEntrancePool, Logic, TrackerLinkedEntrancePool } from './Logic';
+import type { TypedOptions } from '../permalink/SettingsTypes';
+import type { LinkedEntrancePool, Logic, TrackerLinkedEntrancePool } from './Logic';
 import {
     bannedExitsAndEntrances,
     lmfSecondExit,
     nonRandomizedEntrances,
     nonRandomizedExits,
 } from './ThingsThatWouldBeNiceToHaveInTheDump';
-import { TrackerState } from '../tracker/slice';
-import { DungeonName, ExitMapping } from './Locations';
+import type { TrackerState } from '../tracker/slice';
+import type { DungeonName, ExitMapping } from './Locations';
 
 export interface Entrance {
     name: string;

@@ -1,8 +1,8 @@
 import { setCounterBasis, setEnabledSemilogicTricks, setTrickSemiLogic } from './customization/slice';
-import { InventoryItem, itemMaxes } from './logic/Inventory';
-import { LogicalState } from './logic/Locations';
-import { TypedOptions } from './permalink/SettingsTypes';
-import { AppAction, RootState} from './store/store';
+import { type InventoryItem, itemMaxes } from './logic/Inventory';
+import type { LogicalState } from './logic/Locations';
+import type { TypedOptions } from './permalink/SettingsTypes';
+import type { AppAction, RootState} from './store/store';
 import { createTestLogic } from './testing/TestingUtils';
 import {
     allSettingsSelector,

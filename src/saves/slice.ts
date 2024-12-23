@@ -1,6 +1,6 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { AllTypedOptions } from '../permalink/SettingsTypes';
-import { RemoteReference } from '../loader/LogicLoader';
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
+import type { AllTypedOptions } from '../permalink/SettingsTypes';
+import type { RemoteReference } from '../loader/LogicLoader';
 import { v4 as uuidv4 } from 'uuid';
 import { getStoredSaves } from '../LocalStorage';
 

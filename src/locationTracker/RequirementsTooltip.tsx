@@ -1,6 +1,6 @@
 import React from 'react';
 import { Op } from '../logic/booleanlogic/BooleanExpression';
-import { RootTooltipExpression, TooltipExpression } from '../tooltips/TooltipExpression';
+import type { RootTooltipExpression, TooltipExpression } from '../tooltips/TooltipExpression';
 import { addDividers } from '../utils/React';
 
 export default function RequirementsTooltip({

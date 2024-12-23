@@ -1,4 +1,4 @@
-import { HintRegion } from '../logic/Locations';
+import type { HintRegion } from '../logic/Locations';
 import LocationGroup from './LocationGroup';
 
 export function Locations({

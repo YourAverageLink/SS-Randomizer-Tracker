@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import ColorScheme from '../../customization/ColorScheme';
+import type { ColorScheme } from '../../customization/ColorScheme';
 import MapMarker from './MapMarker';
 import EntranceMarker from './EntranceMarker';
 import keyDownWrapper from '../../KeyDownWrapper';
@@ -10,11 +10,11 @@ import leaveLanayru from '../../assets/maps/leaveLanayru.png';
 import { useSelector } from 'react-redux';
 import { areasSelector, checkSelector, exitsSelector, settingSelector } from '../../tracker/selectors';
 import { areaGraphSelector } from '../../logic/selectors';
-import HintDescription, { DecodedHint, decodeHint } from '../Hints';
-import { RootState } from '../../store/store';
-import { TriggerEvent } from 'react-contexify';
+import HintDescription, { type DecodedHint, decodeHint } from '../Hints';
+import type { RootState } from '../../store/store';
+import type { TriggerEvent } from 'react-contexify';
 import { Marker } from './Marker';
-import { MapHintRegion } from './MapModel';
+import type { MapHintRegion } from './MapModel';
 
 export type ExitParams = {
     image: string,

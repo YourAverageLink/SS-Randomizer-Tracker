@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { ExitMapping } from './Locations';
-import { AreaGraph } from './Logic';
+import type { ExitMapping } from './Locations';
+import type { AreaGraph } from './Logic';
 import { BitVector } from './bitlogic/BitVector';
 import { TimeOfDay } from './UpstreamTypes';
 

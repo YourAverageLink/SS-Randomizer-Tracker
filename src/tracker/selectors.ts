@@ -4,8 +4,8 @@ import {
     logicSelector,
     optionsSelector,
 } from '../logic/selectors';
-import { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
-import { RootState } from '../store/store';
+import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
+import type { RootState } from '../store/store';
 import { currySelector } from '../utils/redux';
 import {
     completeTriforceReq,
@@ -18,15 +18,15 @@ import {
     swordsToAdd,
 } from '../logic/ThingsThatWouldBeNiceToHaveInTheDump';
 import {
-    HintRegion,
-    Check,
-    DungeonName,
-    ExitMapping,
+    type HintRegion,
+    type Check,
+    type DungeonName,
+    type ExitMapping,
     dungeonNames,
     isDungeon,
-    LogicalState,
+    type LogicalState,
 } from '../logic/Locations';
-import { Logic, LogicalCheck, itemName } from '../logic/Logic';
+import { type Logic, type LogicalCheck, itemName } from '../logic/Logic';
 import {
     cubeCheckToCubeCollected,
     cubeCheckToGoddessChestCheck,
@@ -41,7 +41,7 @@ import _ from 'lodash';
 import { LogicalExpression } from '../logic/bitlogic/LogicalExpression';
 import { TimeOfDay } from '../logic/UpstreamTypes';
 import {
-    Requirements,
+    type Requirements,
     computeLeastFixedPoint,
     mergeRequirements,
 } from '../logic/bitlogic/BitLogic';
@@ -50,7 +50,7 @@ import { LogicBuilder } from '../logic/LogicBuilder';
 import { exploreAreaGraph } from '../logic/Pathfinding';
 import { keyData } from '../logic/KeyLogic';
 import { BitVector } from '../logic/bitlogic/BitVector';
-import { InventoryItem, itemMaxes } from '../logic/Inventory';
+import { type InventoryItem, itemMaxes } from '../logic/Inventory';
 import {
     getAllowedStartingEntrances,
     getEntrancePools,

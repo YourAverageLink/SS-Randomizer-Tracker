@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import Item from './Item';
 import allImages from './Images';
 import swordBlock from '../assets/Sword_Block.png';

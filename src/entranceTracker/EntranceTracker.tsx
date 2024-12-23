@@ -7,8 +7,8 @@ import {
     FormCheck,
     FormControl,
 } from 'react-bootstrap';
-import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
-import Select, { ActionMeta, SingleValue } from 'react-select';
+import { FixedSizeList as List, type ListChildComponentProps } from 'react-window';
+import Select, { type ActionMeta, type SingleValue } from 'react-select';
 import { useDispatch, useSelector } from 'react-redux';
 import { entrancePoolsSelector, exitsSelector, usedEntrancesSelector } from '../tracker/selectors';
 import { mapEntrance } from '../tracker/slice';

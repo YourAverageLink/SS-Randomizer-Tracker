@@ -1,10 +1,10 @@
 import { BitVector } from '../../logic/bitlogic/BitVector';
 import { LogicalExpression } from '../../logic/bitlogic/LogicalExpression';
 import BooleanExpression, {
-    Item,
+    type Item,
     Op,
 } from '../../logic/booleanlogic/BooleanExpression';
-import { SerializedBooleanExpression, SerializedItem } from './Types';
+import type { SerializedBooleanExpression, SerializedItem } from './Types';
 
 export function deserializeLogicalExpression(
     expr: number[][],

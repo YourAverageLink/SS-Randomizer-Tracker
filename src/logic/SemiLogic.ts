@@ -1,11 +1,11 @@
-import { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
+import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
 import { mapInventory, getAdditionalItems } from '../tracker/selectors';
-import { InventoryItem, isItem, itemMaxes } from './Inventory';
-import { PotentialLocations, getSemiLogicKeys } from './KeyLogic';
-import { Logic } from './Logic';
+import { type InventoryItem, isItem, itemMaxes } from './Inventory';
+import { type PotentialLocations, getSemiLogicKeys } from './KeyLogic';
+import type { Logic } from './Logic';
 import { LogicBuilder } from './LogicBuilder';
 import { cubeCheckToCubeCollected } from './TrackerModifications';
-import { Requirements, computeLeastFixedPoint, mergeRequirements } from './bitlogic/BitLogic';
+import { type Requirements, computeLeastFixedPoint, mergeRequirements } from './bitlogic/BitLogic';
 import { BitVector } from './bitlogic/BitVector';
 
 export interface SemiLogicState {

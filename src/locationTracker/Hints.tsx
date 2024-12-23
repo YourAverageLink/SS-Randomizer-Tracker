@@ -7,7 +7,7 @@ import moldarach from '../assets/hints/moldarach.png';
 import koloktos from '../assets/hints/koloktos.png';
 import tentalus from '../assets/hints/tentalus.png';
 import g2 from '../assets/hints/g2.png';
-import ColorScheme from '../customization/ColorScheme';
+import type { ColorScheme } from '../customization/ColorScheme';
 import images from '../itemTracker/Images';
 import placeholderImg from '../assets/slot test.png';
 

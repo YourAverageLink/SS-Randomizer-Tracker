@@ -1,6 +1,6 @@
 import PackedBitsWriter from './PackedBitsWriter';
 import PackedBitsReader from './PackedBitsReader';
-import { Option, OptionValue, OptionDefs, AllTypedOptions, OptionsCommand } from './SettingsTypes';
+import type { Option, OptionValue, OptionDefs, AllTypedOptions, OptionsCommand } from './SettingsTypes';
 
 export function decodePermalink(
     optionDefs: OptionDefs,

@@ -1,4 +1,4 @@
-import { Requirements } from './bitlogic/BitLogic';
+import type { Requirements } from './bitlogic/BitLogic';
 import { BitVector } from './bitlogic/BitVector';
 import { LogicalExpression } from './bitlogic/LogicalExpression';
 

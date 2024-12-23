@@ -1,5 +1,5 @@
-import { ExitMapping } from '../../logic/Locations';
-import { AreaGraph } from '../../logic/Logic';
+import type { ExitMapping } from '../../logic/Locations';
+import type { AreaGraph } from '../../logic/Logic';
 import mapData from '../../data/mapData.json';
 
 export type MapHintRegion = {

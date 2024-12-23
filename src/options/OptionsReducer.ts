@@ -1,19 +1,19 @@
 import { useEffect, useMemo, useReducer, useState } from 'react';
-import {
+import type {
     AllTypedOptions,
     OptionDefs,
     OptionValue,
     OptionsCommand,
 } from '../permalink/SettingsTypes';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store/store';
+import type { RootState } from '../store/store';
 import { totalCountersSelector } from '../tracker/selectors';
 import { validateSettings } from '../permalink/Settings';
-import { RemoteReference, loadRemoteLogic } from '../loader/LogicLoader';
+import { type RemoteReference, loadRemoteLogic } from '../loader/LogicLoader';
 import { getStoredRemote } from '../LocalStorage';
 import { withCancel } from '../utils/CancelToken';
 import _ from 'lodash';
-import { RawLogic, RawPresets } from '../logic/UpstreamTypes';
+import type { RawLogic, RawPresets } from '../logic/UpstreamTypes';
 import { delay } from '../utils/Promises';
 
 const defaultUpstream: RemoteReference = {

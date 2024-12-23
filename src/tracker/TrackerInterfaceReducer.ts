@@ -1,12 +1,12 @@
 import { useSelector } from 'react-redux';
 import { areaGraphSelector } from '../logic/selectors';
 import { exitsSelector } from '../tracker/selectors';
-import { AreaGraph, Logic } from '../logic/Logic';
-import { ExitMapping } from '../logic/Locations';
+import type { AreaGraph, Logic } from '../logic/Logic';
+import type { ExitMapping } from '../logic/Locations';
 import { useReducer } from 'react';
 import {
     getOwningProvince,
-    MapModel,
+    type MapModel,
 } from '../locationTracker/mapTracker/MapModel';
 import { mapModelSelector } from '../locationTracker/mapTracker/Selectors';
 

@@ -1,4 +1,4 @@
-import { ShowContextMenuParams, UseContextMenuParams, useContextMenu as useContexifyContextMenu } from "react-contexify";
+import { type ShowContextMenuParams, type UseContextMenuParams, useContextMenu as useContexifyContextMenu } from "react-contexify";
 
 type MakeOptional<Type, Key extends keyof Type> = Omit<Type, Key> & Partial<Pick<Type, Key>>;
 
