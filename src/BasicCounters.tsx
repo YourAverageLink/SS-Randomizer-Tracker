@@ -7,6 +7,7 @@ import {
 import Tooltip from './additionalComponents/Tooltip';
 import { counterBasisSelector } from './customization/selectors';
 import { ExitMapping, LogicalState } from './logic/Locations';
+import styles from './BasicCounters.module.css';
 
 export default function BasicCounters() {
     const state = useSelector(totalCountersSelector);
@@ -26,15 +27,20 @@ export default function BasicCounters() {
     );
 
     return (
-        <div style={{display: 'flex', flexFlow: 'column nowrap', gap: '16px'}}>
-            <span>{`Locations Checked: ${state.numChecked}`}</span>
-            <span>{`Locations Accessible: ${state.numAccessible}`}</span>
-            <span>{`Locations Remaining: ${state.numRemaining}`}</span>
+        <div className={styles.counters}>
+            <div className={styles.counter}>{state.numChecked}</div>
+            <div>Locations Checked</div>
+            <div className={styles.counter}>{state.numAccessible}</div>
+            <div>Locations Accessible</div>
+            <div className={styles.counter}>{state.numRemaining}</div>
+            <div>Locations Remaining</div>
+
+            <div className={styles.counter}>{state.numExitsAccessible}</div>
             <Tooltip
                 disabled={!relevantExits.length}
                 content={<EntrancesTooltip exits={relevantExits} />}
             >
-                <span>{`Entrances Accessible: ${state.numExitsAccessible}`}</span>
+                <div>Entrances Accessible</div>
             </Tooltip>
         </div>
     );
@@ -45,7 +51,9 @@ function EntrancesTooltip({ exits }: { exits: ExitMapping[] }) {
         <ul>
             {exits.map((e) => (
                 <li key={e.exit.id}>
-                    <span style={{ color: '#00AFFF' }}>{e.exit.name}</span>
+                    <span className={styles.accessibleEntrance}>
+                        {e.exit.name}
+                    </span>
                 </li>
             ))}
         </ul>
