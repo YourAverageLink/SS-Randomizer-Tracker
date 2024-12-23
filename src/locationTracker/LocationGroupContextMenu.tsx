@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { useCallback } from 'react';
 import {
     Menu,
@@ -174,7 +173,7 @@ function useAreaContextMenuItems() {
         <Item key="uncheckAll" onClick={uncheckAll}>Uncheck All</Item>,
         <Separator key="sep1" />,
         <Submenu key="path"  label="Set Path">
-            {_.map(bosses, (bossName, bossIndex) => (
+            {bosses.map((bossName, bossIndex) => (
                 <Item
                     key={bossName}
                     onClick={handlePathClick}
@@ -187,9 +186,9 @@ function useAreaContextMenuItems() {
         <Item key="sots" onClick={handleSotsClick}>Set SotS</Item>,
         <Item key="barren" onClick={handleBarrenClick}>Set Barren</Item>,
         <Submenu key="item" label="Set Item">
-            {_.map(hintItems, (items, category) => (
+            {Object.entries(hintItems).map(([category, items]) => (
                 <Submenu key={category} label={category}>
-                    {_.map(items, (listItem) => (
+                    {items.map((listItem) => (
                         <Item
                             key={listItem}
                             onClick={handleSetItemClick}

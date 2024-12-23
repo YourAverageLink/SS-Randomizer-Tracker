@@ -58,9 +58,9 @@ export default function LocationContextMenu() {
             <Item onClick={handleUncheckClick}>Uncheck</Item>
             <Separator />
             <Submenu label="Set Item">
-                {_.map(hintItems, (items, category) => (
+                {Object.entries(hintItems).map(([category, items]) => (
                     <Submenu key={category} label={category}>
-                        {_.map(items, (listItem) => (
+                        {items.map((listItem) => (
                             <Item
                                 key={listItem}
                                 onClick={handleSetItemClick}

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import PackedBitsWriter from './PackedBitsWriter';
 import PackedBitsReader from './PackedBitsReader';
 import { Option, OptionValue, OptionDefs, AllTypedOptions, OptionsCommand } from './SettingsTypes';
@@ -10,7 +9,7 @@ export function decodePermalink(
     const permaNoSeed = permalink.split('#')[0];
     const settings: Partial<Record<OptionsCommand, OptionValue>> = {};
     const reader = PackedBitsReader.fromBase64(permaNoSeed);
-    _.forEach(optionDefs, (option) => {
+    for (const option of optionDefs) {
         if (option.permalink !== false) {
             if (option.type === 'boolean') {
                 settings[option.command] = reader.read(1) === 1;
@@ -18,28 +17,28 @@ export function decodePermalink(
                 settings[option.command] = reader.read(option.bits);
             } else if (option.type === 'multichoice') {
                 const values: string[] = [];
-                _.forEach(option.choices, (choice) => {
+                for (const choice of option.choices) {
                     if (reader.read(1)) {
                         values.push(choice);
                     }
-                });
+                }
                 settings[option.command] = values;
             } else if (option.type === 'singlechoice') {
                 settings[option.command] =
                     option.choices[reader.read(option.bits)];
             }
         }
-    });
+    }
     return settings as AllTypedOptions;
 }
 
 export function defaultSettings(optionDefs: OptionDefs): AllTypedOptions {
     const settings: Partial<Record<OptionsCommand, OptionValue>> = {};
-    _.forEach(optionDefs, (option) => {
+    for (const option of optionDefs) {
         if (option.permalink !== false) {
             settings[option.command] = option.default;
         }
-    });
+    }
     return settings as AllTypedOptions;
 }
 
@@ -50,7 +49,7 @@ function validateValue(option: Option, value: unknown): OptionValue | undefined 
         case 'singlechoice':
             return typeof value === 'string' && option.choices.includes(value) ? value : undefined;
         case 'multichoice': {
-            return _.isArray(value) ? value : undefined;
+            return Array.isArray(value) ? value : undefined;
         }
         case 'int':
             return typeof value === 'number' &&
@@ -81,7 +80,7 @@ export function encodePermalink(
     settings: AllTypedOptions,
 ): string {
     const writer = new PackedBitsWriter();
-    _.forEach(optionDefs, (option) => {
+    for (const option of optionDefs) {
         if (option.permalink !== false) {
             if (option.type === 'boolean') {
                 writer.write(settings[option.command] ? 1 : 0, 1);
@@ -89,7 +88,7 @@ export function encodePermalink(
                 writer.write(settings[option.command] as number, option.bits);
             } else if (option.type === 'multichoice') {
                 const values = [...(settings[option.command] as string[])];
-                _.forEach(option.choices, (choice) => {
+                for (const choice of option.choices) {
                     writer.write(values.includes(choice) ? 1 : 0, 1);
                     // ensure the items are included the correct number of times
                     if (
@@ -98,7 +97,7 @@ export function encodePermalink(
                     ) {
                         values.splice(values.indexOf(choice), 1);
                     }
-                });
+                }
             } else if (option.type === 'singlechoice') {
                 writer.write(
                     option.choices.indexOf(settings[option.command] as string),
@@ -106,7 +105,7 @@ export function encodePermalink(
                 );
             }
         }
-    });
+    }
     writer.flush();
     return writer.toBase64();
 }

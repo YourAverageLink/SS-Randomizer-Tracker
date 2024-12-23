@@ -5,7 +5,6 @@ import { Logic, LogicalCheck, isRegularItemCheck } from './Logic';
 import { Requirements, computeLeastFixedPoint, mergeRequirements } from './bitlogic/BitLogic';
 import { BitVector } from './bitlogic/BitVector';
 import { mapInventory } from '../tracker/selectors';
-import _ from 'lodash';
 import { TypedOptions } from '../permalink/SettingsTypes';
 
 export interface PotentialLocations {
@@ -155,7 +154,7 @@ export function keyData(
             checksThatCanContainSmallKey,
         );
 
-        const inventory = _.clone(fullInventoryNoKeys);
+        const inventory = { ...fullInventoryNoKeys };
         let logicState = baselineLogicState;
         if (smallKey && checksThatCanContainSmallKey && canDoSmallKeyLogic) {
             for (let i = 1; i <= itemMaxes[smallKey]; i++) {
