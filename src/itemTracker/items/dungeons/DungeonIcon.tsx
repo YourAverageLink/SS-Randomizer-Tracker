@@ -3,7 +3,7 @@ import keyDownWrapper from '../../../KeyDownWrapper';
 type DungeonIconProps = {
     image: string;
     iconLabel: string;
-    width: number;
+    width?: number;
     groupClicked: (group: string) => void;
     area: string;
 };
@@ -19,8 +19,9 @@ const DungeonIcon = (props: DungeonIconProps) => {
             role="button"
             tabIndex={0}
             onKeyDown={keyDownWrapper(onClick)}
+            style={{...(width ? {} : { width: '100%' })}}
         >
-            <img src={image} alt={iconLabel} width={width} />
+            <img src={image} alt={iconLabel} width={width} style={{...(width ? {} : { width: '100%' })}} />
         </div>
     );
 };

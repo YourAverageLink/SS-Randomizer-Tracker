@@ -1,0 +1,15 @@
+.counters {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    row-gap: 16px;
+    column-gap: 8px;
+}
+
+.counter {
+    text-align: right;
+    font-weight: bold;
+}
+
+.accessibleEntrance {
+    color: var(--scheme-inLogic);
+}

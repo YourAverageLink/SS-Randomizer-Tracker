@@ -3,16 +3,16 @@ import keyDownWrapper from '../../../KeyDownWrapper';
 import { totalGratitudeCrystalsSelector } from '../../../tracker/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { clickItem } from '../../../tracker/slice';
+import '../../Item.css';
 
 type GratitudeCrystalsProps = {
     images?: string[];
     imgWidth: number;
-    ignoreItemClass?: boolean;
     grid?: boolean;
 };
 
 const GratitudeCrystals = (props: GratitudeCrystalsProps) => {
-    const { images, imgWidth, ignoreItemClass, grid } = props;
+    const { images, imgWidth, grid } = props;
     const dispatch = useDispatch();
     const handleClick = (e: React.UIEvent) => {
         if (e.type === 'click') {
@@ -26,7 +26,6 @@ const GratitudeCrystals = (props: GratitudeCrystalsProps) => {
     const count = useSelector(totalGratitudeCrystalsSelector);
 
     const current = count >= 1 ? 1 : 0;
-    const className = ignoreItemClass ? '' : 'item';
     let itemImages;
     if (!images) {
         if (grid) {
@@ -39,17 +38,17 @@ const GratitudeCrystals = (props: GratitudeCrystalsProps) => {
     }
     return (
         <div
-            className={`item-container ${className}`}
+            className="item-container"
             onClick={handleClick}
             onContextMenu={handleClick}
             onKeyDown={keyDownWrapper(handleClick)}
             role="button"
             tabIndex={0}
+            style={{ width: imgWidth }}
         >
             <img
                 src={itemImages[current]}
                 alt="Gratitude Crystals"
-                width={imgWidth}
             />
         </div>
     );

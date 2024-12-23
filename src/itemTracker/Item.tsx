@@ -4,27 +4,22 @@ import { InventoryItem } from '../logic/Inventory';
 import { useDispatch, useSelector } from 'react-redux';
 import { rawItemCountSelector } from '../tracker/selectors';
 import { clickItem } from '../tracker/slice';
+import clsx from 'clsx';
+import './Item.css';
 
 type ItemProps = {
     images?: string[];
     itemName: InventoryItem;
     imgWidth?: number | string;
-    ignoreItemClass?: boolean;
     grid?: boolean;
+    className?: string;
 };
 
 const Item = (props: ItemProps) => {
-    const {
-        itemName,
-        ignoreItemClass,
-        images,
-        grid,
-        imgWidth,
-    } = props;
+    const { itemName, images, grid, imgWidth, className } = props;
 
     const dispatch = useDispatch();
     const count = useSelector(rawItemCountSelector(itemName));
-    const className = ignoreItemClass ? '' : 'item';
 
     let itemImages: string[];
     if (!images) {
@@ -48,14 +43,15 @@ const Item = (props: ItemProps) => {
 
     return (
         <div
-            className={`item-container ${className}`}
+            className={clsx('item-container', className)}
             onClick={handleClick}
             onContextMenu={handleClick}
             onKeyDown={keyDownWrapper(handleClick)}
             role="button"
             tabIndex={0}
+            style={{ width: imgWidth }}
         >
-            <img src={itemImages[count]} alt={itemName} width={imgWidth} />
+            <img src={itemImages[count]} alt={itemName} />
         </div>
     );
 };

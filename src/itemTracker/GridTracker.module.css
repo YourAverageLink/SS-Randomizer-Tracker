@@ -1,0 +1,5 @@
+.itemGrid {
+    :global(.item-container) {
+        margin: auto;
+    }
+}

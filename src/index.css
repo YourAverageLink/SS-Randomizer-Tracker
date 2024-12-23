@@ -34,6 +34,12 @@ body {
   color: var(--scheme-text);
 }
 
+/* Set by the main tracker on the whole document so that tooltips that are
+   temporarily scrolled out of bounds don't create scrollbars... */
+.overflowHidden {
+  overflow: hidden;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

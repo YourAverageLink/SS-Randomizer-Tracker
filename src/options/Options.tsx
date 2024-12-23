@@ -18,7 +18,6 @@ import { Option } from '../permalink/SettingsTypes';
 import {
     Button,
     Col,
-    Container,
     FormCheck,
     FormLabel,
     Row,
@@ -170,36 +169,34 @@ export default function Options() {
     );
 
     return (
-        <Container fluid>
-            <div className={styles.optionsPage}>
-                <div className={styles.logicAndPermalink}>
-                    <LogicChooser
-                        selectedRemote={selectedRemote}
-                        dispatch={dispatch}
-                        loadingState={loadingState}
-                        loadedRemoteName={loaded?.remoteName}
-                    />
-                    <PermalinkChooser dispatch={dispatch} options={loaded?.options} settings={settings} />
-                </div>
-                <LaunchButtons
-                    hasChanges={hasChanges}
-                    counters={counters}
-                    loaded={Boolean(loaded)}
-                    launch={launch}
+        <div className={styles.optionsPage}>
+            <div className={styles.logicAndPermalink}>
+                <LogicChooser
+                    selectedRemote={selectedRemote}
                     dispatch={dispatch}
-                    currentLogic={loaded}
-                    currentSettings={settings}
+                    loadingState={loadingState}
+                    loadedRemoteName={loaded?.remoteName}
                 />
-                {loaded && (
-                    <OptionsList
-                        options={loaded.options}
-                        settings={settings!}
-                        dispatch={dispatch}
-                    />
-                )}
+                <PermalinkChooser dispatch={dispatch} options={loaded?.options} settings={settings} />
             </div>
+            <LaunchButtons
+                hasChanges={hasChanges}
+                counters={counters}
+                loaded={Boolean(loaded)}
+                launch={launch}
+                dispatch={dispatch}
+                currentLogic={loaded}
+                currentSettings={settings}
+            />
+            {loaded && (
+                <OptionsList
+                    options={loaded.options}
+                    settings={settings!}
+                    dispatch={dispatch}
+                />
+            )}
             <Acknowledgement />
-        </Container>
+        </div>
     );
 }
 
