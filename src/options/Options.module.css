@@ -7,8 +7,14 @@
 
 .optionsPage {
     width: 90%;
-    margin: 0% 5%;
-    margin-top: 5%;
+    margin: 2% 5% 0% 5%;
+
+    h1 {
+        text-align: center;
+        font-family: HyliaSerif;
+        font-size: 4rem;
+        margin-bottom: 1%;
+    }
 
     > * input {
         width: 100%;
@@ -19,6 +25,7 @@
     display: grid;
     grid-template-areas: "logic permalink";
     grid-template-columns: 30% 70%;
+    gap: 2px;
 
     @media (max-width: 1000px) {
         grid-template-areas:

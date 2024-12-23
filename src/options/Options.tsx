@@ -170,6 +170,7 @@ export default function Options() {
 
     return (
         <div className={styles.optionsPage}>
+            <h1>Skyward Sword Randomizer Tracker</h1>
             <div className={styles.logicAndPermalink}>
                 <LogicChooser
                     selectedRemote={selectedRemote}
@@ -195,6 +196,7 @@ export default function Options() {
                     dispatch={dispatch}
                 />
             )}
+            <hr />
             <Acknowledgement />
         </div>
     );
