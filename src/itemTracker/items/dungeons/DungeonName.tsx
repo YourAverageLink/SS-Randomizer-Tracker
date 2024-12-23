@@ -1,8 +1,8 @@
 import keyDownWrapper from '../../../KeyDownWrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { dungeonCompletedSelector, requiredDungeonsSelector } from '../../../tracker/selectors';
-import { DungeonName as DungeonNameType } from '../../../logic/Locations';
-import { RootState } from '../../../store/store';
+import type { DungeonName as DungeonNameType } from '../../../logic/Locations';
+import type { RootState } from '../../../store/store';
 import { clickDungeonName } from '../../../tracker/slice';
 import styles from './DungeonName.module.css'
 import clsx from 'clsx';

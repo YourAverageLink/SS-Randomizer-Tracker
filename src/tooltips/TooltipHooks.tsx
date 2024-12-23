@@ -1,5 +1,5 @@
 import {
-    ReactNode,
+    type ReactNode,
     createContext,
     useCallback,
     useContext,
@@ -22,10 +22,10 @@ import {
 } from '../tracker/selectors';
 import { logicSelector, optionsSelector } from '../logic/selectors';
 import {
-    RootTooltipExpression,
+    type RootTooltipExpression,
     booleanExprToTooltipExpr,
 } from './TooltipExpression';
-import { ExplorationNode } from '../logic/Pathfinding';
+import type { ExplorationNode } from '../logic/Pathfinding';
 import { trickSemiLogicSelector, trickSemiLogicTrickListSelector } from '../customization/selectors';
 import { mergeRequirements } from '../logic/bitlogic/BitLogic';
 

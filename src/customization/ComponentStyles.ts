@@ -1,4 +1,4 @@
-import { StylesConfig } from 'react-select';
+import { type StylesConfig } from 'react-select';
 
 export function selectStyles<IsMulti extends boolean, Option>(): StylesConfig<Option, IsMulti> {
     return {

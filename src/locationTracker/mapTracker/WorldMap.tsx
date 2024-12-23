@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux';
 import StartingEntranceMarker from './StartingEntranceMarker';
 import LocationGroupHeader from '../LocationGroupHeader';
 import { Locations } from '../Locations';
-import { InterfaceAction, InterfaceState } from '../../tracker/TrackerInterfaceReducer';
+import type { InterfaceAction, InterfaceState } from '../../tracker/TrackerInterfaceReducer';
 import EntranceChooser from '../EntranceChooser';
 import { mapModelSelector } from './Selectors';
 

@@ -1,6 +1,6 @@
-import { AppAction, RootState, Store, createStore } from '../store/store';
-import { getAndPatchLogic, RemoteReference } from '../loader/LogicLoader';
-import { AllTypedOptions } from '../permalink/SettingsTypes';
+import { type AppAction, type RootState, type Store, createStore } from '../store/store';
+import { getAndPatchLogic, type RemoteReference } from '../loader/LogicLoader';
+import type { AllTypedOptions } from '../permalink/SettingsTypes';
 
 import fs from 'node:fs';
 import { loadLogic } from '../logic/slice';

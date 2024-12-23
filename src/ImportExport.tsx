@@ -1,8 +1,8 @@
-import { ChangeEvent, useCallback } from 'react';
+import { type ChangeEvent, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { ThunkResult, useAppDispatch } from './store/store';
-import { TrackerState, loadTracker } from './tracker/slice';
-import { RemoteReference } from './loader/LogicLoader';
+import { type ThunkResult, useAppDispatch } from './store/store';
+import { type TrackerState, loadTracker } from './tracker/slice';
+import type { RemoteReference } from './loader/LogicLoader';
 import { Button } from 'react-bootstrap';
 
 const version = 'SSRANDO-TRACKER-NG-V2';

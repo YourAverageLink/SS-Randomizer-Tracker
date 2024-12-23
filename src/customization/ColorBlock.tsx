@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { SketchPicker } from 'react-color';
-import ColorScheme from './ColorScheme';
+import type { ColorScheme } from './ColorScheme';
 
 export default function ColorBlock({
     colorName,

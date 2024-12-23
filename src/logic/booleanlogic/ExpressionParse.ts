@@ -1,5 +1,5 @@
 import _ from "lodash";
-import BooleanExpression, { Item, Op } from "./BooleanExpression";
+import BooleanExpression, { type Item, Op } from "./BooleanExpression";
 import { BitVector } from "../bitlogic/BitVector";
 import { andToDnf } from "../bitlogic/LogicalExpression";
 

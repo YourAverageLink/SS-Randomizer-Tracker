@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import Item from './Item';
 import GratitudeCrystals from './items/sidequest/GratitudeCrystals';
 import CrystalCounter from './items/sidequest/CrystalCounter';

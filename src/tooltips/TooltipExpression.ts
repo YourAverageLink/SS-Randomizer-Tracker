@@ -1,12 +1,12 @@
-import { Logic } from '../logic/Logic';
+import type { Logic } from '../logic/Logic';
 import BooleanExpression, {
     Op,
-    ReducerArg,
+    type ReducerArg,
 } from '../logic/booleanlogic/BooleanExpression';
-import { LogicalState } from '../logic/Locations';
+import type { LogicalState } from '../logic/Locations';
 import prettyItemNames_ from '../data/prettyItemNames.json';
 import _ from 'lodash';
-import { InventoryItem, itemOrder } from '../logic/Inventory';
+import { type InventoryItem, itemOrder } from '../logic/Inventory';
 
 const prettyItemNames: Record<
     string,

@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import Item from './Item';
 import miscItemBlock from '../assets/misc_items_block.png';
 import { useSelector } from 'react-redux';

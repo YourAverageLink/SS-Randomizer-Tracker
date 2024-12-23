@@ -1,11 +1,11 @@
-import { Logic } from '../logic/Logic';
+import type { Logic } from '../logic/Logic';
 import { getTooltipOpaqueBits } from '../logic/Inventory';
 import BooleanExpression from '../logic/booleanlogic/BooleanExpression';
-import {
+import type {
     BitLogic,
 } from '../logic/bitlogic/BitLogic';
-import { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
-import { WorkerRequest, WorkerResponse } from './worker/Types';
+import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
+import type { WorkerRequest, WorkerResponse } from './worker/Types';
 import { deserializeBooleanExpression, serializeLogicalExpression } from './worker/Utils';
 import _ from 'lodash';
 

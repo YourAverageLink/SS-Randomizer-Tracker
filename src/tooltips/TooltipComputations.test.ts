@@ -1,13 +1,13 @@
 import { LogicalExpression } from '../logic/bitlogic/LogicalExpression';
 import BooleanExpression, {
-    Item,
+    type Item,
 } from '../logic/booleanlogic/BooleanExpression';
 import {
     booleanExprToLogicalExpr,
     parseExpression,
 } from '../logic/booleanlogic/ExpressionParse';
 import { dnfToRequirementExpr } from './worker/Algorithms';
-import { LeanLogic } from './worker/Types';
+import type { LeanLogic } from './worker/Types';
 
 function stringifyExpression(expr: Item): string {
     if (BooleanExpression.isExpression(expr)) {

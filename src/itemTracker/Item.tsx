@@ -1,6 +1,6 @@
 import allImages from './Images';
 import keyDownWrapper from '../KeyDownWrapper';
-import { InventoryItem } from '../logic/Inventory';
+import type { InventoryItem } from '../logic/Inventory';
 import { useDispatch, useSelector } from 'react-redux';
 import { rawItemCountSelector } from '../tracker/selectors';
 import { clickItem } from '../tracker/slice';

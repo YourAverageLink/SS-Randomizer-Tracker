@@ -1,6 +1,6 @@
 import { load } from 'js-yaml';
-import { RawLogic, RawPresets } from '../logic/UpstreamTypes';
-import { MultiChoiceOption, OptionDefs } from '../permalink/SettingsTypes';
+import type { RawLogic, RawPresets } from '../logic/UpstreamTypes';
+import type { MultiChoiceOption, OptionDefs } from '../permalink/SettingsTypes';
 import { getLatestRelease } from './ReleasesLoader';
 
 export const LATEST_STRING = 'Latest';

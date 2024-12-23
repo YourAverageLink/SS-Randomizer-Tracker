@@ -1,11 +1,11 @@
 import { produce } from 'immer';
-import { InventoryItem, itemMaxes } from './Inventory';
+import { type InventoryItem, itemMaxes } from './Inventory';
 import { dungeonNames, isRegularDungeon } from './Locations';
-import { Logic, LogicalCheck, isRegularItemCheck } from './Logic';
-import { Requirements, computeLeastFixedPoint, mergeRequirements } from './bitlogic/BitLogic';
+import { type Logic, type LogicalCheck, isRegularItemCheck } from './Logic';
+import { type Requirements, computeLeastFixedPoint, mergeRequirements } from './bitlogic/BitLogic';
 import { BitVector } from './bitlogic/BitVector';
 import { mapInventory } from '../tracker/selectors';
-import { TypedOptions } from '../permalink/SettingsTypes';
+import type { TypedOptions } from '../permalink/SettingsTypes';
 
 export interface PotentialLocations {
     item: InventoryItem;

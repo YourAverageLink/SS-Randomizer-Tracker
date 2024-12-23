@@ -2,9 +2,9 @@ import _ from 'lodash';
 import { BitVector } from '../../logic/bitlogic/BitVector';
 import { LogicalExpression } from '../../logic/bitlogic/LogicalExpression';
 import BooleanExpression, {
-    Item,
+    type Item,
 } from '../../logic/booleanlogic/BooleanExpression';
-import { LeanLogic } from './Types';
+import type { LeanLogic } from './Types';
 
 function simplifier(logic: LeanLogic) {
     return (a: string, b: string) => {

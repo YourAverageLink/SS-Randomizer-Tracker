@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import songBlock from '../assets/Song_Block.png';
 
 import Item from './Item';

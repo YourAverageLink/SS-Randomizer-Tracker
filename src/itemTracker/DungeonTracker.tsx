@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 
 import Item from './Item';
 import g1 from '../assets/bosses/g1.png';
@@ -25,8 +25,8 @@ import HintMarker from '../hints/HintMarker';
 import { useSelector } from 'react-redux';
 import { areasSelector, settingSelector } from '../tracker/selectors';
 import {
-    HintRegion,
-    DungeonName as DungeonNameType,
+    type HintRegion,
+    type DungeonName as DungeonNameType,
     isDungeon,
 } from '../logic/Locations';
 import styles from './DungeonTracker.module.css';

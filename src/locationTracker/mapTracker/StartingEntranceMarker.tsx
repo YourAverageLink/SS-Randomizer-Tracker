@@ -1,7 +1,7 @@
 import 'react-contexify/dist/ReactContexify.css';
 import { useSelector } from 'react-redux';
 import { exitsSelector, settingSelector } from '../../tracker/selectors';
-import ColorScheme from '../../customization/ColorScheme';
+import type { ColorScheme } from '../../customization/ColorScheme';
 import { Marker } from './Marker';
 import { startingEntrancePool } from '../../logic/Entrances';
 

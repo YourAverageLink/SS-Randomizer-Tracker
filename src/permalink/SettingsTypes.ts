@@ -1,5 +1,5 @@
-import { LogicOption } from '../options/Options';
-import { GeneratedOptions } from './GeneratedOptions';
+import type { LogicOption } from '../options/Options';
+import type { GeneratedOptions } from './GeneratedOptions';
 
 export type BaseOption = {
     permalink: boolean | undefined;

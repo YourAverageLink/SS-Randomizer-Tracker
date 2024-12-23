@@ -4,23 +4,23 @@ import {
     Item,
     Separator,
     Submenu,
-    ItemParams,
+    type ItemParams,
 } from 'react-contexify';
-import { LocationGroupContextMenuProps } from './LocationGroupHeader';
+import type { LocationGroupContextMenuProps } from './LocationGroupHeader';
 import { bulkEditChecks, setHint } from '../tracker/slice';
-import { MapExitContextMenuProps } from './mapTracker/EntranceMarker';
+import type { MapExitContextMenuProps } from './mapTracker/EntranceMarker';
 import { useSelector } from 'react-redux';
 import {
     areasSelector,
     checkSelector,
     settingSelector,
 } from '../tracker/selectors';
-import { TrackerLinkedEntrancePool } from '../logic/Logic';
+import type { TrackerLinkedEntrancePool } from '../logic/Logic';
 import { bosses } from './Hints';
-import { ThunkResult, useAppDispatch } from '../store/store';
+import { type ThunkResult, useAppDispatch } from '../store/store';
 import hintItems from '../data/hintItems.json';
 import { HintItem } from './LocationContextMenu';
-import { InterfaceAction } from '../tracker/TrackerInterfaceReducer';
+import type { InterfaceAction } from '../tracker/TrackerInterfaceReducer';
 
 type AreaCtxProps<T = void> = ItemParams<LocationGroupContextMenuProps, T>;
 type ExitCtxProps<T = void> = ItemParams<MapExitContextMenuProps, T>;

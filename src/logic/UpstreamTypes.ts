@@ -1,4 +1,4 @@
-import { OptionValue } from "../permalink/SettingsTypes";
+import type { OptionValue } from '../permalink/SettingsTypes';
 
 export enum TimeOfDay {
     DayOnly = 1,

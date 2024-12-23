@@ -1,4 +1,4 @@
-import {
+import type {
     AllTypedOptions,
     OptionDefs,
     OptionValue,
@@ -14,7 +14,7 @@ import {
     useState,
 } from 'react';
 import { decodePermalink, encodePermalink } from '../permalink/Settings';
-import { Option } from '../permalink/SettingsTypes';
+import type { Option } from '../permalink/SettingsTypes';
 import {
     Button,
     Col,
@@ -26,7 +26,7 @@ import {
 } from 'react-bootstrap';
 import {
     LATEST_STRING,
-    RemoteReference,
+    type RemoteReference,
     formatRemote,
     parseRemote,
 } from '../loader/LogicLoader';
@@ -35,15 +35,15 @@ import Acknowledgement from '../Acknowledgment';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../store/store';
 import { range } from 'lodash';
-import { LogicBundle, loadLogic } from '../logic/slice';
-import Select, { MultiValue, ActionMeta, SingleValue } from 'react-select';
+import { type LogicBundle, loadLogic } from '../logic/slice';
+import Select, { type MultiValue, type ActionMeta, type SingleValue } from 'react-select';
 import { selectStyles } from '../customization/ComponentStyles';
 import _ from 'lodash';
 import DiscordButton from '../additionalComponents/DiscordButton';
 import React from 'react';
 import { ImportButton } from '../ImportExport';
 import Tooltip from '../additionalComponents/Tooltip';
-import { LoadingState, OptionsAction, useOptionsState } from './OptionsReducer';
+import { type LoadingState, type OptionsAction, useOptionsState } from './OptionsReducer';
 import { useReleases } from '../loader/ReleasesLoader';
 import { satisfies as semverSatisfies } from 'semver';
 import { OptionsPresets } from './OptionsPresets';

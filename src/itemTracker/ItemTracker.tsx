@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import BWheel from './BWheel';
 import SwordBlock from './SwordBlock';
 import SongBlock from './SongBlock';

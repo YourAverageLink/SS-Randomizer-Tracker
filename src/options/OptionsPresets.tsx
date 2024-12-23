@@ -1,12 +1,12 @@
-import React, { CSSProperties, useMemo, useState } from 'react';
-import { OptionsAction } from './OptionsReducer';
-import { AllTypedOptions } from '../permalink/SettingsTypes';
-import { LogicBundle } from '../logic/slice';
+import React, { type CSSProperties, useMemo, useState } from 'react';
+import type { OptionsAction } from './OptionsReducer';
+import type { AllTypedOptions } from '../permalink/SettingsTypes';
+import type { LogicBundle } from '../logic/slice';
 import { Button, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '../store/store';
-import { Preset, addPreset, removePreset } from '../saves/slice';
-import { formatRemote, RemoteReference } from '../loader/LogicLoader';
+import { type RootState, useAppDispatch } from '../store/store';
+import { type Preset, addPreset, removePreset } from '../saves/slice';
+import { formatRemote, type RemoteReference } from '../loader/LogicLoader';
 import { encodePermalink, validateSettings } from '../permalink/Settings';
 import { useSyncSavesToLocalStorage } from '../LocalStorage';
 import styles from './OptionsPresets.module.css'

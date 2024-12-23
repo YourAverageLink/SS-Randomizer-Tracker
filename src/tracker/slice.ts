@@ -1,9 +1,9 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { AllTypedOptions } from '../permalink/SettingsTypes';
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
+import type { AllTypedOptions } from '../permalink/SettingsTypes';
 import { getInitialItems } from '../logic/TrackerModifications';
-import { RegularDungeon } from '../logic/Locations';
-import { InventoryItem, isItem, itemMaxes } from '../logic/Inventory';
-import { Hint } from '../locationTracker/Hints';
+import type { RegularDungeon } from '../logic/Locations';
+import { type InventoryItem, isItem, itemMaxes } from '../logic/Inventory';
+import type { Hint } from '../locationTracker/Hints';
 import { getStoredTrackerState } from '../LocalStorage';
 
 export interface TrackerState {

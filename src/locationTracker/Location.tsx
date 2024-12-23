@@ -1,7 +1,7 @@
 import keyDownWrapper from '../KeyDownWrapper';
 import { useContextMenu } from './context-menu';
-import { CSSProperties, useCallback } from 'react';
-import { TriggerEvent } from 'react-contexify';
+import { type CSSProperties, useCallback } from 'react';
+import type { TriggerEvent } from 'react-contexify';
 import images from '../itemTracker/Images';
 import placeholderImg from '../assets/slot test.png';
 import goddessCubeImg from '../assets/sidequests/goddess_cube.png';
@@ -16,8 +16,8 @@ import PathTooltip from './PathTooltip';
 import Tooltip from '../additionalComponents/Tooltip';
 import clsx from 'clsx';
 import styles from './Location.module.css';
-import { RootState } from '../store/store';
-import { Check } from '../logic/Locations';
+import type { RootState } from '../store/store';
+import type { Check } from '../logic/Locations';
 
 export interface LocationContextMenuProps {
     checkId: string;
