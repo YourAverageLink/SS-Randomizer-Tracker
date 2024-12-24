@@ -3,5 +3,7 @@ declare const classNames: {
     readonly square: 'square';
     readonly rounded: 'rounded';
     readonly circle: 'circle';
+    readonly submarkers: 'submarkers';
+    readonly submarker: 'submarker';
 };
 export = classNames;

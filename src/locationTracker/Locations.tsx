@@ -1,3 +1,4 @@
+import React from 'react';
 import type { HintRegion } from '../logic/Locations';
 import LocationGroup from './LocationGroup';
 
@@ -12,43 +13,23 @@ export function Locations({
         <>
             <LocationGroup
                 onChooseEntrance={onChooseEntrance}
-                locations={hintRegion.checks}
+                locations={hintRegion.checks.list}
             />
-            {Boolean(hintRegion.extraChecks.loose_crystal?.length) && (
-                <>
-                    <hr />
-                    <LocationGroup
-                        onChooseEntrance={onChooseEntrance}
-                        locations={hintRegion.extraChecks.loose_crystal!}
-                    />
-                </>
-            )}
-            {Boolean(hintRegion.extraChecks.tr_cube?.length) && (
-                <>
-                    <hr />
-                    <LocationGroup
-                        onChooseEntrance={onChooseEntrance}
-                        locations={hintRegion.extraChecks.tr_cube!}
-                    />
-                </>
-            )}
-            {Boolean(hintRegion.extraChecks.gossip_stone?.length) && (
-                <>
-                    <hr />
-                    <LocationGroup
-                        onChooseEntrance={onChooseEntrance}
-                        locations={hintRegion.extraChecks.gossip_stone!}
-                    />
-                </>
-            )}
-            {Boolean(hintRegion.exits.length) && (
-                <>
-                    <hr />
-                    <LocationGroup
-                        onChooseEntrance={onChooseEntrance}
-                        locations={hintRegion.exits}
-                    />
-                </>
+            {(
+                ['loose_crystal', 'tr_cube', 'gossip_stone', 'exits'] as const
+            ).map(
+                (type) =>
+                    Boolean(hintRegion.extraLocations[type]?.list.length) && (
+                        <React.Fragment key={type}>
+                            <hr />
+                            <LocationGroup
+                                onChooseEntrance={onChooseEntrance}
+                                locations={
+                                    hintRegion.extraLocations[type]!.list
+                                }
+                            />
+                        </React.Fragment>
+                    ),
             )}
         </>
     );

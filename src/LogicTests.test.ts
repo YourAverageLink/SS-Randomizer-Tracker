@@ -177,15 +177,15 @@ describe('full logic tests', () => {
 
     it('handles semilogic counters', () => {
         const area = tester.findArea('Batreaux\'s House');
-        expect(area.numChecksRemaining).toBeGreaterThan(0);
-        expect(area.numChecksAccessible).toBe(0);
+        expect(area.checks.numRemaining).toBeGreaterThan(0);
+        expect(area.checks.numAccessible).toBe(0);
         const totalCounter = readSelector(totalCountersSelector).numAccessible;
 
         dispatch(setCounterBasis('semilogic'));
 
         const areaWithSemilogic = tester.findArea('Batreaux\'s House');
-        expect(areaWithSemilogic.numChecksRemaining).toBeGreaterThan(0);
-        expect(areaWithSemilogic.numChecksAccessible).toBe(2);
+        expect(areaWithSemilogic.checks.numRemaining).toBeGreaterThan(0);
+        expect(areaWithSemilogic.checks.numAccessible).toBe(2);
 
         const totalCounterWithSemilogic = readSelector(totalCountersSelector).numAccessible;
         expect(totalCounterWithSemilogic).toBeGreaterThan(totalCounter);

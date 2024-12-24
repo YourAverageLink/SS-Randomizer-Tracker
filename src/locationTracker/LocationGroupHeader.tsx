@@ -69,8 +69,8 @@ export default function LocationGroupHeader({
             >
                 <h3>
                     <AreaCounters
-                        totalChecksLeftInArea={area.numChecksRemaining}
-                        totalChecksAccessible={area.numChecksAccessible}
+                        totalChecksLeftInArea={area.checks.numRemaining}
+                        totalChecksAccessible={area.checks.numAccessible}
                     />
                 </h3>
             </div>
