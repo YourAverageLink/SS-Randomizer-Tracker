@@ -61,7 +61,7 @@ export function Marker({
 
     const submarkersStyle: CSSProperties = {
         top: `${y}%`,
-        height: markerSize,
+        height: 1.5 * markerSize,
     };
 
     if (submarkerPlacement === 'left') {

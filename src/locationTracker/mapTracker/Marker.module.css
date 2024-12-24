@@ -28,6 +28,7 @@
         color: black;
         border: 1px solid #000000;
         border-radius: 4px;
+        display: flex;
 
         img {
             width: 100%;
