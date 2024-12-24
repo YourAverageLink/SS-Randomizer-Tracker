@@ -1,21 +1,35 @@
 import type { ExitRule } from './Entrances';
 import type { LogicalCheck } from './Logic';
 
+export interface CheckGroup {
+    /**
+     * A flat list of all checks in this group. May include some
+     * non-progress checks, e.g. banned gratitude crystals.
+     */
+    list: string[];
+    /** The number of progress checks, excluding banned crystals. */
+    numTotal: number;
+    /**
+     * The number of uncollected progress checks that are currently
+     * considered in logic.
+     */
+    numAccessible: number;
+    /** The number of uncollected progress checks. */
+    numRemaining: number;
+}
+
 export interface HintRegion<N extends string = string> {
     name: N;
     nonProgress: boolean;
     hidden: boolean;
-    numTotalChecks: number;
-    numChecksRemaining: number;
-    numChecksAccessible: number;
-    numExitsAccessible: number;
-    checks: string[];
-    extraChecks: {
-        tr_cube?: string[];
-        loose_crystal?: string[];
-        gossip_stone?: string[];
+
+    checks: CheckGroup;
+    extraLocations: {
+        tr_cube?: CheckGroup;
+        loose_crystal?: CheckGroup;
+        gossip_stone?: CheckGroup;
+        exits?: CheckGroup;
     };
-    exits: string[];
 }
 
 export type LogicalState = 'outLogic' | 'inLogic' | 'semiLogic' | 'trickLogic';

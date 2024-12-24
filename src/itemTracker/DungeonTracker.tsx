@@ -169,10 +169,8 @@ export default function DungeonTracker({
                         {dungeons.map((d, index) => (
                             <div key={d.name} style={colspan2(index * 2)}>
                                 <AreaCounters
-                                    totalChecksLeftInArea={d.numChecksRemaining}
-                                    totalChecksAccessible={
-                                        d.numChecksAccessible
-                                    }
+                                    totalChecksLeftInArea={d.checks.numRemaining}
+                                    totalChecksAccessible={d.checks.numAccessible}
                                 />
                             </div>
                         ))}
@@ -201,8 +199,8 @@ export default function DungeonTracker({
                     {silentRealms.map((a) => (
                         <AreaCounters
                             key={`counters-${a.name}`}
-                            totalChecksLeftInArea={a.numChecksRemaining}
-                            totalChecksAccessible={a.numChecksAccessible}
+                            totalChecksLeftInArea={a.checks.numRemaining}
+                            totalChecksAccessible={a.checks.numAccessible}
                         />
                     ))}
                 </div>

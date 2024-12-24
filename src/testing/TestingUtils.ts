@@ -70,9 +70,9 @@ export function createTestLogic() {
         tryFindCheckId(areaName: string, checkName: string) {
             const area = tester.findArea(areaName);
             return (
-                area.checks.find((c) => c.includes(checkName)) ??
-                area.extraChecks.tr_cube?.find((c) => c.includes(checkName)) ??
-                area.extraChecks.gossip_stone?.find((c) =>
+                area.checks.list.find((c) => c.includes(checkName)) ??
+                area.extraLocations.tr_cube?.list.find((c) => c.includes(checkName)) ??
+                area.extraLocations.gossip_stone?.list.find((c) =>
                     c.includes(checkName),
                 )
             );
@@ -103,7 +103,7 @@ export function createTestLogic() {
          */
         findExit(areaName: string, exitName: string) {
             const area = tester.findArea(areaName);
-            const exitId = area.exits.find((e) => e.includes(exitName));
+            const exitId = area.extraLocations.exits?.list.find((e) => e.includes(exitName));
             expect(exitId).toBeTruthy();
             const exit = tester
                 .readSelector(exitsSelector)
@@ -118,7 +118,7 @@ export function createTestLogic() {
          */
         expectExitAbsent(areaName: string, exitName: string) {
             const area = tester.findArea(areaName);
-            const exitId = area.exits.find((e) => e.includes(exitName));
+            const exitId = area.extraLocations.exits?.list.find((e) => e.includes(exitName));
             expect(exitId).toBeUndefined();
         },
 

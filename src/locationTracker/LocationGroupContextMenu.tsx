@@ -37,7 +37,7 @@ function checkOrUncheckAll(area: string, markChecked: boolean, onlyInLogic = fal
     return (dispatch, getState) => {
         let checks = areasSelector(getState()).find(
             (a) => a.name === area,
-        )?.checks;
+        )?.checks.list;
 
         if (onlyInLogic) {
             checks = checks?.filter(

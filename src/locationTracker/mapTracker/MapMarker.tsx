@@ -1,6 +1,5 @@
 import { type MouseEvent, useCallback } from 'react';
 import 'react-contexify/dist/ReactContexify.css';
-import type { ColorScheme } from '../../customization/ColorScheme';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../store/store';
 import { areaHintSelector, areasSelector } from '../../tracker/selectors';
@@ -9,6 +8,7 @@ import { useContextMenu } from '../context-menu';
 import type { LocationGroupContextMenuProps } from '../LocationGroupHeader';
 import { Marker } from './Marker';
 import type { TriggerEvent } from 'react-contexify';
+import { getMarkerColor, getRegionData, getSubmarkerData } from './MapUtils';
 
 type MapMarkerProps = {
     markerX: number;
@@ -19,21 +19,12 @@ type MapMarkerProps = {
     selected: boolean;
 };
 
+
 const MapMarker = (props: MapMarkerProps) => {
     const { onGlickGroup, title, markerX, markerY, mapWidth, selected } = props;
     const area = useSelector((state: RootState) => areasSelector(state).find((a) => a.name === title))!;
-    const remainingChecks = area?.numChecksRemaining;
-    const accessibleChecks = area?.numChecksAccessible;
-    let markerColor: keyof ColorScheme = 'outLogic';
-    if (accessibleChecks !== 0) {
-        markerColor = 'semiLogic';
-    }
-    if (accessibleChecks === remainingChecks) {
-        markerColor = 'inLogic';
-    }
-    if (remainingChecks === 0) {
-        markerColor = 'checked';
-    }
+    const data = getRegionData(area);
+    const markerColor = getMarkerColor(data.checks);
 
     const { show } = useContextMenu<LocationGroupContextMenuProps>({
         id: 'group-context',
@@ -48,10 +39,10 @@ const MapMarker = (props: MapMarkerProps) => {
 
     const tooltip = (
         <center>
-            <div> {title} ({accessibleChecks}/{remainingChecks}) </div>
+            <div> {title} ({data.checks.numAccessible}/{data.checks.numRemaining}) </div>
             {hint && <HintDescription hint={hint} />}
         </center>
-    )
+    );
 
     const handleClick = (e: TriggerEvent) => {
         if (e.type === 'contextmenu') {
@@ -73,8 +64,9 @@ const MapMarker = (props: MapMarkerProps) => {
             onClick={handleClick}
             onContextMenu={displayMenu}
             selected={selected}
+            submarkers={getSubmarkerData(data)}
         >
-            {Boolean(accessibleChecks) && accessibleChecks}
+            {Boolean(data.checks.numAccessible) && data.checks.numAccessible}
         </Marker>
     );
 };

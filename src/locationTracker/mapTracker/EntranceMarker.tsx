@@ -18,6 +18,7 @@ import { useTooltipExpr } from '../../tooltips/TooltipHooks';
 import RequirementsTooltip from '../RequirementsTooltip';
 import type { LocationGroupContextMenuProps } from '../LocationGroupHeader';
 import { Marker } from './Marker';
+import { getMarkerColor, getRegionData, getSubmarkerData } from './MapUtils';
 
 type EntranceMarkerProps = {
     markerX: number;
@@ -38,41 +39,47 @@ export interface MapExitContextMenuProps {
 }
 
 const EntranceMarker = (props: EntranceMarkerProps) => {
-    
-    const { title, exitId, markerX, markerY, mapWidth, active, onGlickGroup, onChooseEntrance, selected } = props;
-    const exit = useSelector((state: RootState) => exitsSelector(state).find((e) => e.exit.id === exitId))!;
+    const {
+        title,
+        exitId,
+        markerX,
+        markerY,
+        mapWidth,
+        active,
+        onGlickGroup,
+        onChooseEntrance,
+        selected,
+    } = props;
+    const exit = useSelector((state: RootState) =>
+        exitsSelector(state).find((e) => e.exit.id === exitId),
+    )!;
     const inLogicBits = useSelector(inLogicBitsSelector);
     const logic = useSelector(logicSelector);
-    const isDungeon = Object.values(logic.areaGraph.linkedEntrancePools['dungeons']).some((ex) => ex.exits[0] === exit.exit.id);
+    const isDungeon = Object.values(
+        logic.areaGraph.linkedEntrancePools['dungeons'],
+    ).some((ex) => ex.exits[0] === exit.exit.id);
 
     const region = exit.entrance?.region;
-    const area = useSelector((state: RootState) => areasSelector(state).find((r) => r.name === region))
-
-    const hasConnection = region !== '' && region !== undefined;
-    const remainingChecks = area?.numChecksRemaining;
-    const accessibleChecks = area?.numChecksAccessible;
+    const area = useSelector((state: RootState) =>
+        areasSelector(state).find((r) => r.name === region),
+    );
+    
+    const hasConnection = area !== undefined;
     const canReach = inLogicBits.test(logic.itemBits[exit.exit.id]);
-    let markerColor: keyof ColorScheme = 'outLogic';
-    if (hasConnection) {
-        if (accessibleChecks !== 0) {
-            markerColor = 'semiLogic';
-        }
-        if (accessibleChecks === remainingChecks) {
-            markerColor = 'inLogic';
-        }
-        if (remainingChecks === 0) {
-            markerColor = 'checked';
-        }
-    } else if (canReach) {
-        markerColor = 'inLogic';
-    } else {
-        markerColor = 'checked';
-    }
-
     const isUnrequiredDungeon =
         isDungeon &&
         exit.rule.type === 'random' &&
         Boolean(exit.rule.isKnownIrrelevant);
+
+    const data = area && getRegionData(area);
+    let markerColor: keyof ColorScheme;
+    if (data) {
+        markerColor = getMarkerColor(data.checks);
+    } else if (canReach && !isUnrequiredDungeon) {
+        markerColor = 'inLogic';
+    } else {
+        markerColor = 'checked';
+    }
 
     const showBound = useContextMenu<MapExitContextMenuProps>({
         id: isDungeon
@@ -86,20 +93,38 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
         id: 'group-context',
     }).show;
 
-    const destinationRegionName = exit.entrance && logic.areaGraph.entranceHintRegions[exit.entrance.id];
+    const destinationRegionName =
+        exit.entrance && logic.areaGraph.entranceHintRegions[exit.entrance.id];
 
-    const displayMenu = useCallback((e: TriggerEvent) => {
-        e.preventDefault();
-        if (!exit.canAssign) {
-            if (exit.entrance) {
-                showGroup({event: e, props: { area: exit.entrance?.region }})
+    const displayMenu = useCallback(
+        (e: TriggerEvent) => {
+            e.preventDefault();
+            if (!exit.canAssign) {
+                if (exit.entrance) {
+                    showGroup({
+                        event: e,
+                        props: { area: exit.entrance?.region },
+                    });
+                }
+            } else if (hasConnection) {
+                showBound({
+                    event: e,
+                    props: { exitMapping: exit, area: destinationRegionName },
+                });
+            } else {
+                onChooseEntrance(exitId);
             }
-        } else if (hasConnection) {
-            showBound({ event: e, props: { exitMapping: exit, area: destinationRegionName } });
-        } else {
-            onChooseEntrance(exitId);
-        }
-    }, [destinationRegionName, exit, exitId, hasConnection, onChooseEntrance, showBound, showGroup]);
+        },
+        [
+            destinationRegionName,
+            exit,
+            exitId,
+            hasConnection,
+            onChooseEntrance,
+            showBound,
+            showGroup,
+        ],
+    );
 
     const areaHint = useSelector(areaHintSelector(destinationRegionName ?? ''));
 
@@ -110,11 +135,11 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
 
     let tooltip;
 
-    if (hasConnection) {
+    if (data) {
         tooltip = (
             <center>
                 <div> {title}</div>
-                <div> {region} ({accessibleChecks}/{remainingChecks}) </div>
+                <div> {region} ({data.checks.numAccessible}/{data.checks.numRemaining}) </div>
                 <div style={{ textAlign: 'left' }}>
                     <RequirementsTooltip requirements={requirements} />
                 </div>
@@ -124,7 +149,7 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
     } else {
         tooltip = (
             <center>
-                <div> {title} ({(canReach ? 'Accessible' : 'Inaccessible')})</div>
+                <div> {title} ({canReach ? 'Accessible' : 'Inaccessible'})</div>
                 <div style={{ textAlign: 'left' }}>
                     <RequirementsTooltip requirements={requirements} />
                 </div>
@@ -142,10 +167,10 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
                 onGlickGroup(region);
             }
             e.preventDefault();
-        } else if (!hasConnection) {
-            displayMenu(e);
-        } else {
+        } else if (region) {
             onGlickGroup(region);
+        } else {
+            displayMenu(e);
         }
     };
 
@@ -160,8 +185,9 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
             onClick={handleClick}
             onContextMenu={displayMenu}
             selected={selected}
+            submarkers={data && getSubmarkerData(data)}
         >
-            {Boolean(accessibleChecks) && accessibleChecks}
+            {Boolean(data?.checks.numAccessible) && data?.checks.numAccessible}
             {!hasConnection && '?'}
         </Marker>
     );

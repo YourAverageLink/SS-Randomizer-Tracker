@@ -25,6 +25,7 @@ import {
     dungeonNames,
     isDungeon,
     type LogicalState,
+    type CheckGroup,
 } from '../logic/Locations';
 import { type Logic, type LogicalCheck, itemName } from '../logic/Logic';
 import {
@@ -796,7 +797,6 @@ export const areasSelector = createSelector(
         getRequirementLogicalStateSelector,
         areaNonprogressSelector,
         areaHiddenSelector,
-        exitRulesSelector,
         counterBasisSelector,
     ],
     (
@@ -807,7 +807,6 @@ export const areasSelector = createSelector(
         getLogicalState,
         isAreaNonprogress,
         isAreaHidden,
-        exitRules,
         counterBasis,
     ): HintRegion[] => {
         const exitsById = _.keyBy(allExits, (e) => e.exit.id);
@@ -833,48 +832,75 @@ export const areasSelector = createSelector(
                 const nonProgress = isAreaNonprogress(area);
                 const hidden = isAreaHidden(area);
                 const regularChecks = nonProgress ? [] : regularChecks_;
-
-                const remaining = regularChecks.filter(
-                    (check) => !checkedChecks.has(check),
-                );
-
                 const shouldCount = (state: LogicalState) =>
                     counterBasis === 'logic'
                         ? state === 'inLogic'
                         : state !== 'outLogic';
 
-                const inLogic = remaining.filter((check) =>
-                    shouldCount(getLogicalState(check)),
-                );
-
-                const exits = logic.exitsByHintRegion[area].filter(
-                    (exit) => exitRules[exit]?.type === 'random',
-                );
-
-                const numExitsAccessible = exits.filter((e) => {
-                    const exitMapping = exitsById[e];
-                    return (
-                        exitMapping.canAssign &&
-                        !exitMapping.entrance &&
-                        !exitMapping.rule.isKnownIrrelevant &&
-                        shouldCount(getLogicalState(e))
+                const checkGroup = (checks: string[]): CheckGroup => {
+                    const nonBannedChecks = checks.filter((c) => !isCheckBanned(c));
+                    const remaining = nonBannedChecks.filter(
+                        (c) => !checkedChecks.has(c),
                     );
-                }).length;
+                    const accessible = remaining.filter((c) =>
+                        shouldCount(getLogicalState(c)),
+                    );
+                    return {
+                        // Intentionally include banned but shown checks in the list
+                        // of checks, but do not count them anywhere!
+                        list: checks,
+                        numTotal: nonBannedChecks.length,
+                        numAccessible: accessible.length,
+                        numRemaining: remaining.length,
+                    };
+                };
 
-                return {
-                    checks: regularChecks,
-                    exits,
-                    numTotalChecks: regularChecks.length,
-                    extraChecks: _.groupBy(
+                const extraLocations = _.mapValues(
+                    _.groupBy(
                         extraChecks,
                         (check) => logic.checks[check].type,
                     ),
+                    checkGroup,
+                );
+
+                const relevantExits = logic.exitsByHintRegion[area].filter((e) => {
+                    const exitMapping = exitsById[e];
+                    if (!exitMapping) {
+                        return false;
+                    }
+                    return (
+                        exitMapping.canAssign &&
+                        exitMapping.rule.type === 'random'
+                    );
+                });
+
+                const remainingExits = relevantExits.filter((e) => {
+                    const exitMapping = exitsById[e];
+                    return !exitMapping.entrance;
+                }); 
+
+                const accessibleExits = remainingExits.filter((e) => {
+                    const exitMapping = exitsById[e];
+                    return (
+                        exitMapping.rule.type === 'random' &&
+                        !exitMapping.rule.isKnownIrrelevant &&
+                        shouldCount(getLogicalState(e))
+                    );
+                }); 
+
+                extraLocations.exits = {
+                    list: relevantExits,
+                    numAccessible: accessibleExits.length,
+                    numRemaining: remainingExits.length,
+                    numTotal: relevantExits.length,
+                } satisfies CheckGroup;
+
+                return {
+                    checks: checkGroup(regularChecks),
+                    extraLocations,
                     nonProgress,
                     hidden,
                     name: area,
-                    numChecksRemaining: remaining.length,
-                    numChecksAccessible: inLogic.length,
-                    numExitsAccessible
                 };
             }),
         );
@@ -886,11 +912,11 @@ export const totalCountersSelector = createSelector(
     (areas, exits) => {
         const numChecked = _.sumBy(
             areas,
-            (a) => a.numTotalChecks - a.numChecksRemaining,
+            (a) => a.checks.numTotal - a.checks.numRemaining,
         );
-        const numAccessible = _.sumBy(areas, (a) => a.numChecksAccessible);
-        const numRemaining = _.sumBy(areas, (a) => a.numChecksRemaining);
-        let numExitsAccessible = _.sumBy(areas, (a) => a.numExitsAccessible);
+        const numAccessible = _.sumBy(areas, (a) => a.checks.numAccessible);
+        const numRemaining = _.sumBy(areas, (a) => a.checks.numRemaining);
+        let numExitsAccessible = _.sumBy(areas, (a) => a.extraLocations.exits?.numAccessible ?? 0);
 
         const startMapping = exits.find((e) => e.exit.id === '\\Start')!;
         const needsStartingEntrance = !startMapping.entrance;
