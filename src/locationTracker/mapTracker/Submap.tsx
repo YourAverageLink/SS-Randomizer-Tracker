@@ -7,7 +7,7 @@ import leaveFaron from '../../assets/maps/leaveFaron.png';
 import leaveEldin from '../../assets/maps/leaveEldin.png';
 import leaveLanayru from '../../assets/maps/leaveLanayru.png';
 import { useSelector } from 'react-redux';
-import { areasSelector, checkSelector, exitsSelector, settingSelector } from '../../tracker/selectors';
+import { areasSelector, checkSelector, exitsByIdSelector, settingSelector } from '../../tracker/selectors';
 import { areaGraphSelector } from '../../logic/selectors';
 import HintDescription, { type DecodedHint, decodeHint } from '../Hints';
 import type { RootState } from '../../store/store';
@@ -61,7 +61,7 @@ const Submap = ({
 }) => {
     const subregionHints: { hint: DecodedHint, area: string }[] = [];
     const areas = useSelector(areasSelector);
-    const exits = useSelector(exitsSelector);
+    const exits = useSelector(exitsByIdSelector);
     const hints = useSelector((state: RootState) => state.tracker.hints);
     let data = initialRegionData();
     for (const marker of markers) {
@@ -81,7 +81,8 @@ const Submap = ({
 
     const birdSanityOn = useSelector(settingSelector('random-start-statues'));
     const birdStatueSanityPool = birdSanityOn && areaGraph.birdStatueSanity[title];
-    const needsBirdStatueSanityExit = birdStatueSanityPool && !exits.find((e) => e.exit.id === birdStatueSanityPool.exit && e.entrance);
+    const needsBirdStatueSanityExit =
+        birdStatueSanityPool && exits[birdStatueSanityPool.exit].entrance === undefined;
     const exitCheck = useSelector(
         (state: RootState) =>
             needsBirdStatueSanityExit &&

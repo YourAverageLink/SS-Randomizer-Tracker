@@ -1,14 +1,13 @@
 import 'react-contexify/dist/ReactContexify.css';
 import { useSelector } from 'react-redux';
-import { exitsSelector, settingSelector } from '../../tracker/selectors';
+import { exitsByIdSelector, settingSelector } from '../../tracker/selectors';
 import type { ColorScheme } from '../../customization/ColorScheme';
 import { Marker } from './Marker';
-import { startingEntrancePool } from '../../logic/Entrances';
 
 const StartingEntranceMarker = ({ mapWidth, onClick, selected }: { mapWidth: number; onClick: (exitId: string) => void; selected: boolean }) => {
     
     const startingEntranceRando = useSelector(settingSelector('random-start-entrance')) !== 'Vanilla';
-    const startMapping = useSelector(exitsSelector).find((e) => e.canAssign && e.rule.pool === startingEntrancePool)!;
+    const startMapping = useSelector(exitsByIdSelector)['\\Start'];
 
     if (!startingEntranceRando) {
         return null;

@@ -46,12 +46,12 @@ type MapDataEntranceMarker =
 function getEntranceMarker(
     marker: MapDataEntranceMarker,
     areaGraph: AreaGraph,
-    exits: ExitMapping[],
+    exits: Record<string, ExitMapping>,
 ): MapHintRegion {
     const exitPool = marker.exitPool as keyof AreaGraph['linkedEntrancePools'];
     const exitId =
         areaGraph.linkedEntrancePools[exitPool][marker.entryName].exits[0];
-    const mapping = exits.find((e) => e.exit.id === exitId);
+    const mapping = exits[exitId];
     return {
         type: 'exit',
         exitPool,
@@ -65,7 +65,7 @@ function getEntranceMarker(
 function getProvince(
     provinceId: MapProvince['provinceId'],
     areaGraph: AreaGraph,
-    exits: ExitMapping[],
+    exits: Record<string, ExitMapping>,
 ): MapProvince {
     const province = mapData[provinceId];
     const getEntrance = (m: MapDataEntranceMarker) =>
@@ -111,7 +111,7 @@ export function getOwningProvince(
 
 export function getMapModel(
     areaGraph: AreaGraph,
-    exits: ExitMapping[],
+    exits: Record<string, ExitMapping>,
 ): MapModel {
     return {
         provinces: [

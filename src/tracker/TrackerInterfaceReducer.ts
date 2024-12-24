@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { areaGraphSelector } from '../logic/selectors';
-import { exitsSelector } from '../tracker/selectors';
+import { exitsByIdSelector } from '../tracker/selectors';
 import type { AreaGraph, Logic } from '../logic/Logic';
 import type { ExitMapping } from '../logic/Locations';
 import { useReducer } from 'react';
@@ -74,10 +74,8 @@ function getHintRegionForEntrance(
     return areaGraph.entranceHintRegions[entranceId];
 }
 
-function getInitialState(mapModel: MapModel, areaGraph: AreaGraph, exits: ExitMapping[]): InterfaceState {
-    const startingExit = exits.find(
-        (e) => e.exit.id === '\\Start',
-    )!;
+function getInitialState(mapModel: MapModel, areaGraph: AreaGraph, exits: Record<string, ExitMapping>): InterfaceState {
+    const startingExit = exits['\\Start'];
 
     // If the user needs to select a starting entrance, prompt first
     if (startingExit.canAssign && !startingExit.entrance) {
@@ -114,7 +112,7 @@ function getInitialState(mapModel: MapModel, areaGraph: AreaGraph, exits: ExitMa
 function interfaceReducer(
     mapModel: MapModel,
     areaGraph: AreaGraph,
-    exits: ExitMapping[],
+    exits: Record<string, ExitMapping>,
 ) {
     return (
         state_: InterfaceStateInternal,
@@ -205,7 +203,7 @@ export function useTrackerInterfaceReducer(): [
 ] {
     const mapModel = useSelector(mapModelSelector);
     const areaGraph = useSelector(areaGraphSelector);
-    const exits = useSelector(exitsSelector);
+    const exits = useSelector(exitsByIdSelector);
     const [internalTrackerState, dispatch] = useReducer(
         interfaceReducer(mapModel, areaGraph, exits),
         undefined,

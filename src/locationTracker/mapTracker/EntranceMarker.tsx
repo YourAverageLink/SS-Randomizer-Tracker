@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import {
     areaHintSelector,
     areasSelector,
-    exitsSelector,
+    exitsByIdSelector,
     inLogicBitsSelector,
 } from '../../tracker/selectors';
 import { useContextMenu } from '../context-menu';
@@ -51,8 +51,8 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
         selected,
     } = props;
     const exit = useSelector((state: RootState) =>
-        exitsSelector(state).find((e) => e.exit.id === exitId),
-    )!;
+        exitsByIdSelector(state)[exitId],
+    );
     const inLogicBits = useSelector(inLogicBitsSelector);
     const logic = useSelector(logicSelector);
     const isDungeon = Object.values(

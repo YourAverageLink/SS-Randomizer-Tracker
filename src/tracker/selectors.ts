@@ -278,6 +278,11 @@ export const exitsSelector = createSelector(
     getExits,
 );
 
+export const exitsByIdSelector = createSelector(
+    [exitsSelector],
+    (exits) => _.keyBy(exits, (e) => e.exit.id),
+)
+
 /**
  * Selects the requirements that depend on state/settings, but should still be revealed during
  * tooltip computations. Any recalculations here will cause the tooltips cache to throw away its
@@ -908,7 +913,7 @@ export const areasSelector = createSelector(
 );
 
 export const totalCountersSelector = createSelector(
-    [areasSelector, exitsSelector],
+    [areasSelector, exitsByIdSelector],
     (areas, exits) => {
         const numChecked = _.sumBy(
             areas,
@@ -918,7 +923,7 @@ export const totalCountersSelector = createSelector(
         const numRemaining = _.sumBy(areas, (a) => a.checks.numRemaining);
         let numExitsAccessible = _.sumBy(areas, (a) => a.extraLocations.exits?.numAccessible ?? 0);
 
-        const startMapping = exits.find((e) => e.exit.id === '\\Start')!;
+        const startMapping = exits['\\Start'];
         const needsStartingEntrance = !startMapping.entrance;
         if (needsStartingEntrance) {
             numExitsAccessible++;

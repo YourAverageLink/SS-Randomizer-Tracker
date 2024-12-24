@@ -4,7 +4,7 @@ import locationStyles from './Location.module.css';
 import styles from './EntranceChooser.module.css';
 import { locationLayoutSelector } from '../customization/selectors';
 import clsx from 'clsx';
-import { entrancePoolsSelector, exitsSelector, usedEntrancesSelector } from '../tracker/selectors';
+import { entrancePoolsSelector, exitsByIdSelector, usedEntrancesSelector } from '../tracker/selectors';
 import { useMemo, useState } from 'react';
 import { mapEntrance } from '../tracker/slice';
 import keyDownWrapper from '../KeyDownWrapper';
@@ -16,10 +16,10 @@ export default function EntranceChooser({ exitId, onChoose }: { exitId: string, 
     const mapMode = useSelector(locationLayoutSelector) === 'map';
 
     const dispatch = useDispatch();
-    const exits = useSelector(exitsSelector);
+    const exits = useSelector(exitsByIdSelector);
     const entrancePools = useSelector(entrancePoolsSelector);
     const usedEntrances = useSelector(usedEntrancesSelector);
-    const exit = exits.find((e) => e.exit.id === exitId)!;
+    const exit = exits[exitId];
 
     const [filterText, setFilterText] = useState('');
     

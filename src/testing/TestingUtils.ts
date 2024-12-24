@@ -10,7 +10,7 @@ import { logicSelector } from '../logic/selectors';
 import {
     areasSelector,
     entrancePoolsSelector,
-    exitsSelector,
+    exitsByIdSelector,
 } from '../tracker/selectors';
 
 const main: RemoteReference = {
@@ -106,10 +106,9 @@ export function createTestLogic() {
             const exitId = area.extraLocations.exits?.list.find((e) => e.includes(exitName));
             expect(exitId).toBeTruthy();
             const exit = tester
-                .readSelector(exitsSelector)
-                .find((e) => e.exit.id === exitId);
+                .readSelector(exitsByIdSelector)[exitId!];
             expect(exit).toBeDefined();
-            return exit!;
+            return exit;
         },
 
         /**

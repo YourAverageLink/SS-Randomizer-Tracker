@@ -10,7 +10,7 @@ import exitImg from '../assets/dungeons/entrance.png';
 import { useEntrancePath, useTooltipExpr } from '../tooltips/TooltipHooks';
 import RequirementsTooltip from './RequirementsTooltip';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkHintSelector, checkSelector, exitsSelector, isCheckBannedSelector } from '../tracker/selectors';
+import { checkHintSelector, checkSelector, exitsByIdSelector, isCheckBannedSelector } from '../tracker/selectors';
 import { clickCheck, mapEntrance } from '../tracker/slice';
 import PathTooltip from './PathTooltip';
 import Tooltip from '../additionalComponents/Tooltip';
@@ -143,7 +143,7 @@ export function Exit({
     // setActiveArea: (area: string) => void;
 }) {
     const dispatch = useDispatch();
-    const exit = useSelector((state: RootState) => exitsSelector(state).find((e) => e.exit.id === id))!;
+    const exit = useSelector((state: RootState) => exitsByIdSelector(state)[id]);
     const check = useSelector(checkSelector(id));
 
     const style = {
