@@ -22,6 +22,7 @@
     position: absolute;
     display: flex;
     flex-flow: column wrap;
+    pointer-events: none;
 
     .submarker {
         position: relative;

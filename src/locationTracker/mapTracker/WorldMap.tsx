@@ -72,7 +72,7 @@ function WorldMap({
             : interfaceState.hintRegion;
     
     const worldMap = (
-        <div style={{position:'absolute', width:imgWidth, height:imgWidth / aspectRatio}}>
+        <div style={{position:'absolute', userSelect: 'none', width:imgWidth, height:imgWidth / aspectRatio}}>
             <div>
                 {!activeSubmap &&
                     <>
