@@ -6,7 +6,6 @@ import goddessCubeImg from '../../assets/sidequests/goddess_cube.png';
 import gossipStoneImg from '../../assets/sidequests/gossip_stone.png';
 import images from '../../itemTracker/Images';
 
-export type ExtraLocationState = 'accessible' | 'remaining' | undefined;
 /**
  * Data for a single hint region, or for a province
  * comprising multiple regions on the main map.
