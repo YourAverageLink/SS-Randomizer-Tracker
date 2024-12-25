@@ -14,8 +14,11 @@ export interface SemiLogicState {
     assumedChecks: Set<string>;
 }
 
-/** Requirements that assume every trick is enabled. */
-export function getAllTricksEnabledRequirements(
+/**
+ * Requirements that assume every considered trick is enabled. Enables
+ * all tricks if consideredTricks is empty.
+ */
+export function getVisibleTricksEnabledRequirements(
     logic: Logic,
     options: OptionDefs,
     settings: TypedOptions,

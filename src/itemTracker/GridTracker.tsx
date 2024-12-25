@@ -1,10 +1,10 @@
 import type { CSSProperties } from 'react';
 import Item from './Item';
 import CrystalCounter from './items/sidequest/CrystalCounter';
-import GratitudeCrystals from './items/sidequest/GratitudeCrystals';
+import { GratitudeCrystals } from './items/sidequest/GratitudeCrystals';
 
 import noTablets from '../assets/tablets/no_tablets.png';
-import CounterItem from './items/CounterItem';
+import { CounterItem } from './items/CounterItem';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     rawItemCountSelector,
@@ -135,18 +135,15 @@ const GridTracker = ({ maxHeight, width, mapMode: map }: GridTrackerProps) => {
                 </tr>
                 <tr>
                     <td>
-                        <p
-                            style={{
-                                margin: 0,
-                                fontSize: 'small',
-                            }}
-                        >
-                            Caves
-                        </p>
                         <Item
                             itemName="Lanayru Caves Small Key"
                             imgWidth={imgWidth}
-                        />
+                            className={styles.cavesKey}
+                        >
+                            <div className={styles.cavesKeyLabel}>
+                                Caves
+                            </div>
+                        </Item>
                     </td>
                     <td>
                         <Item itemName="Sea Chart" imgWidth={imgWidth * 2/3} />
@@ -164,7 +161,6 @@ const GridTracker = ({ maxHeight, width, mapMode: map }: GridTrackerProps) => {
                         <CounterItem
                             itemName="Empty Bottle"
                             imgWidth={imgWidth}
-                            fontSize={imgWidth * 0.5}
                         />
                     </td>
                     <td style={{position: 'relative'}}>
@@ -246,7 +242,6 @@ const GridTracker = ({ maxHeight, width, mapMode: map }: GridTrackerProps) => {
                             <CounterItem
                                 itemName="Song of the Hero"
                                 imgWidth={imgWidth}
-                                fontSize={imgWidth * 0.5}
                                 grid
                             />
                         </div>
@@ -315,7 +310,6 @@ const GridTracker = ({ maxHeight, width, mapMode: map }: GridTrackerProps) => {
                     <td>
                         <CounterItem
                             itemName="Group of Tadtones"
-                            fontSize={imgWidth / 2}
                             imgWidth={imgWidth}
                         />
                     </td>
