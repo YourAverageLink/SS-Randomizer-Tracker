@@ -2,6 +2,7 @@ import React from 'react';
 import { Op } from '../logic/booleanlogic/BooleanExpression';
 import type { RootTooltipExpression, TooltipExpression } from '../tooltips/TooltipExpression';
 import { addDividers } from '../utils/React';
+import styles from './RequirementsTooltip.module.css';
 
 export default function RequirementsTooltip({
     requirements,
@@ -9,7 +10,7 @@ export default function RequirementsTooltip({
     requirements: RootTooltipExpression | undefined;
 }) {
     return (
-        <div>
+        <div className={styles.tooltip}>
             {requirements ? (
                 <TopLevelExpr
                     expr={requirements}
@@ -27,7 +28,7 @@ function TopLevelExpr({
     expr: RootTooltipExpression;
 }) {
     return (
-        <>
+        <ul>
             {expr.items.map((item, idx) => (
                 <li key={idx}>
                     <Expr
@@ -36,7 +37,7 @@ function TopLevelExpr({
                     />
                 </li>
             ))}
-        </>
+        </ul>
     );
 }
 
