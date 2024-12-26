@@ -21,7 +21,7 @@ export default function QuestItems({ width }: { width: number }) {
     };
     const cBeetleStyle: CSSProperties = {
         position: 'absolute',
-        bottom: width * 0.2,
+        bottom: width * 0.205,
         left: width / 3.26,
     };
     const rattleStyle: CSSProperties = {

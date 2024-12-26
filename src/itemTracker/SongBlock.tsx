@@ -36,13 +36,13 @@ export default function SongBlock({ width: width }: { width: number }) {
 
     const powerStyle: CSSProperties = {
         position: 'relative',
-        bottom: width / 1.81,
+        bottom: width / 1.805,
         left: width / 1.775,
     };
 
     const wisdomStyle: CSSProperties = {
         position: 'relative',
-        bottom: width / 1.81,
+        bottom: width / 1.805,
         left: width / 3.375,
     };
 

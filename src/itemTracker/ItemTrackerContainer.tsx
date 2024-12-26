@@ -1,5 +1,5 @@
 import useResizeObserver from '@react-hook/resize-observer';
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 
 /** A wrapper component for the ItemTracker that fills the available space while retaining aspect ratio */
 export function ItemTrackerContainer({
@@ -12,6 +12,16 @@ export function ItemTrackerContainer({
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
     const ref = useRef<HTMLDivElement | null>(null);
+
+    useLayoutEffect(() => {
+        const elem = ref.current;
+        if (!elem) {
+            return;
+        }
+        setWidth(elem.clientWidth);
+        setHeight(elem.clientHeight);
+      }, [ref])
+
     useResizeObserver(ref, () => {
         const elem = ref.current;
         if (!elem) {
