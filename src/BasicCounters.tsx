@@ -28,19 +28,19 @@ export default function BasicCounters() {
 
     return (
         <div className={styles.counters}>
-            <div className={styles.counter}>{state.numChecked}</div>
-            <div>Locations Checked</div>
-            <div className={styles.counter}>{state.numAccessible}</div>
-            <div>Locations Accessible</div>
-            <div className={styles.counter}>{state.numRemaining}</div>
-            <div>Locations Remaining</div>
+            <span className={styles.counter}>{state.numChecked}</span>
+            <span>Locations Checked</span>
+            <span className={styles.counter}>{state.numAccessible}</span>
+            <span>Locations Accessible</span>
+            <span className={styles.counter}>{state.numRemaining}</span>
+            <span>Locations Remaining</span>
 
-            <div className={styles.counter}>{state.numExitsAccessible}</div>
+            <span className={styles.counter}>{state.numExitsAccessible}</span>
             <Tooltip
                 disabled={!relevantExits.length}
                 content={<EntrancesTooltip exits={relevantExits} />}
             >
-                <div>Entrances Accessible</div>
+                <span>Entrances Accessible</span>
             </Tooltip>
         </div>
     );

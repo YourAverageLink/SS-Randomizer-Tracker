@@ -14,13 +14,9 @@ import { clickItem } from '../tracker/slice';
 import { tumbleweedSelector } from '../customization/selectors';
 import styles from './GridTracker.module.css';
 
-type GridTrackerProps = {
-    width: number;
-    maxHeight: number;
-    mapMode: boolean;
-};
+export const GRID_TRACKER_ASPECT_RATIO = 1.063;
 
-const GridTracker = ({ maxHeight, width, mapMode: map }: GridTrackerProps) => {
+export default function GridTracker({ width }: { width: number; }) {
     const dispatch = useDispatch();
     const handleExtraWalletClick = () => {
         dispatch(clickItem({ item: 'Extra Wallet', take: false }));
@@ -46,15 +42,8 @@ const GridTracker = ({ maxHeight, width, mapMode: map }: GridTrackerProps) => {
         top: '0%',
     };
 
-    let imgWidth = width / 10;
-    const fraction = map ? 10 : 8;
-    if (maxHeight < imgWidth * fraction) {
-        imgWidth = maxHeight / fraction;
-    }
+    const imgWidth = width / 8.1;
 
-    const tableStyle = {
-        marginTop: map ? 2 : 0,
-    };
     const emptyTabWidth = imgWidth * 2.5;
     const emeraldWidth = emptyTabWidth * 0.54;
     const rubyWidth = emptyTabWidth * 0.74;
@@ -65,7 +54,7 @@ const GridTracker = ({ maxHeight, width, mapMode: map }: GridTrackerProps) => {
     const tumbleweed = useSelector(tumbleweedSelector);
 
     return (
-        <table className={styles.itemGrid} style={tableStyle}>
+        <table className={styles.itemGrid}>
             <tbody>
                 <tr>
                     <td rowSpan={2}>
@@ -325,6 +314,4 @@ const GridTracker = ({ maxHeight, width, mapMode: map }: GridTrackerProps) => {
             </tbody>
         </table>
     );
-};
-
-export default GridTracker;
+}

@@ -6,71 +6,55 @@ import QuestItems from './QuestItems';
 import AdditionalItems from './AdditionalItems';
 import styles from './ItemTracker.module.css';
 
-type ItemTrackerProps = {
-    maxWidth: number;
-    maxHeight: number;
-    mapMode: boolean;
-};
+export const ITEM_TRACKER_ASPECT_RATIO = 0.585;
 
-const ItemTracker = ({
-    mapMode: map,
-    maxHeight,
-    maxWidth,
-}: ItemTrackerProps) => {
-    const aspectRatio = 0.65;
-    let width = maxWidth;
-    if (width > maxHeight * aspectRatio) {
-        width = maxHeight * aspectRatio; // ensure the tracker isn't so wide that it ends up too tall
-    }
+const COLUMN_WIDTH_INV = 2.10;
+const B_WHEEL_SIZE_INV = 1.27;
+
+export default function ItemTracker({ width }: { width: number }) {
     const swordBlockStyle = {
-        position: 'fixed',
-        height: 0,
-        width: width / 2.5,
-        left: 0,
-        top: (map ? width / 9 + width / 50 + 10 : 0), // scaling here is complicated 
-        margin: '0.5%',
+        position: 'absolute',
+        width: width / COLUMN_WIDTH_INV,
     } satisfies CSSProperties;
 
     const songBlockStyle = {
-        position: 'fixed',
-        width: width / 2.5,
-        left: swordBlockStyle.width * 1.1,
-        margin: '0.5%',
-        top: swordBlockStyle.top,
-        // border: '3px solid #73AD21',
+        position: 'absolute',
+        width: width / COLUMN_WIDTH_INV,
+        transform: 'translateX(-100%)',
+        left: '100%',
     } satisfies CSSProperties;
 
     const bWheelStyle = {
-        position: 'fixed',
-        width: 2 * width / 3,
-        left: swordBlockStyle.width * 0.28, // don't ask, this has to be like this so the b-wheel is somewhat centered
-        top: swordBlockStyle.top + width * 0.8,
-        margin: '0%',
+        position: 'absolute',
+        width: width / B_WHEEL_SIZE_INV,
+        transform: 'translate(-50%, -100%)',
+        left: '50%',
+        top: '100%',
     } satisfies CSSProperties;
 
     const additionalItemsStyle = {
-        position: 'fixed',
-        width: width / 2.5,
-        top: swordBlockStyle.top + width * 0.55,
-        left: width * 0.44,
-        margin: '0.5%',
+        position: 'absolute',
+        width: width / COLUMN_WIDTH_INV,
+        top: '45%',
+        transform: 'translate(-100%, -50%)',
+        left: '100%',
     } satisfies CSSProperties;
 
     const questItemsStyle = {
-        position: 'fixed',
-        width: width / 2.5,
-        top: additionalItemsStyle.top + additionalItemsStyle.top / 14,
-        left: 0,
-        margin: '0.5%',
+        position: 'absolute',
+        width: width / COLUMN_WIDTH_INV,
+        top: '45%',
+        transform: 'translateY(-50%)',
     } satisfies CSSProperties;
 
     return (
-        <>
-            {/* debugging temp
-            <div style={{position: 'fixed', height: width / aspectRatio, width, background: 'grey', margin: '0.5%', top: swordBlockStyle.top}}>
-
-            </div>
-             */}
+        <div
+            style={{
+                position: 'relative',
+                width,
+                height: width / ITEM_TRACKER_ASPECT_RATIO,
+            }}
+        >
             <div className={styles.inGameTracker}>
                 <div style={swordBlockStyle}>
                     <SwordBlock width={swordBlockStyle.width} />
@@ -88,8 +72,6 @@ const ItemTracker = ({
                     <BWheel width={bWheelStyle.width} />
                 </div>
             </div>
-        </>
+        </div>
     );
-};
-
-export default ItemTracker;
+}
