@@ -25,8 +25,6 @@ export function BasicItem({
     imgWidth?: number | string;
     /** An optional class name to customize this item's style */
     className?: string;
-    /** A label below the item to identify it ("Caves") */
-    label?: string;
     /** The item count */
     count: number;
     /** Click callback for the main item */
