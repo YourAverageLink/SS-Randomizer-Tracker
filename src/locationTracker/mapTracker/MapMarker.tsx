@@ -5,10 +5,10 @@ import type { RootState } from '../../store/store';
 import { areaHintSelector, areasSelector } from '../../tracker/selectors';
 import HintDescription, { decodeHint } from '../Hints';
 import { useContextMenu } from '../context-menu';
-import type { LocationGroupContextMenuProps } from '../LocationGroupHeader';
 import { Marker } from './Marker';
 import type { TriggerEvent } from 'react-contexify';
 import { getMarkerColor, getRegionData, getSubmarkerData } from './MapUtils';
+import type { LocationGroupContextMenuProps } from '../LocationGroupContextMenu';
 
 type MapMarkerProps = {
     markerX: number;

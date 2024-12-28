@@ -11,7 +11,7 @@ import EntranceTracker from './entranceTracker/EntranceTracker';
 import DungeonTracker from './itemTracker/DungeonTracker';
 import GridTracker, { GRID_TRACKER_ASPECT_RATIO } from './itemTracker/GridTracker';
 import ItemTracker, { ITEM_TRACKER_ASPECT_RATIO } from './itemTracker/ItemTracker';
-import { NewLocationTracker } from './locationTracker/LocationTracker';
+import { LocationTracker } from './locationTracker/LocationTracker';
 import { MakeTooltipsAvailable } from './tooltips/TooltipHooks';
 import CustomizationModal from './customization/CustomizationModal';
 import { itemLayoutSelector, locationLayoutSelector } from './customization/selectors';
@@ -23,6 +23,8 @@ import { useSyncTrackerStateToLocalStorage } from './LocalStorage';
 import { HintsTracker } from './hints/HintsTracker';
 import { useTrackerInterfaceReducer } from './tracker/TrackerInterfaceReducer';
 import { ItemTrackerContainer } from './itemTracker/ItemTrackerContainer';
+import LocationContextMenu from './locationTracker/LocationContextMenu';
+import LocationGroupContextMenu from './locationTracker/LocationGroupContextMenu';
 
 function subscribeToWindowResize(callback: () => void) {
     window.addEventListener('resize', callback);
@@ -56,7 +58,7 @@ export default function TrackerContainer() {
     // If we haven't loaded logic yet, redirect to the main menu,
     // which will take care of loading logic for us.
     if (!logicLoaded) {
-        return <Navigate to="/" />
+        return <Navigate to="/" />;
     }
 
     return (
@@ -69,21 +71,63 @@ export default function TrackerContainer() {
 function Tracker() {
     const { height, width } = useWindowDimensions();
 
-    const [showCustomizationDialog, setShowCustomizationDialog] = useState(false);
-    const [showEntranceDialog, setShowEntranceDialog] = useState(false);
-    const itemLayout = useSelector(itemLayoutSelector);
-    const locationLayout = useSelector(locationLayoutSelector);
-
     useSyncTrackerStateToLocalStorage();
-
-    const [trackerInterfaceState, trackerInterfaceDispatch] = useTrackerInterfaceReducer();
-
-    const setActiveArea = (area: string) => trackerInterfaceDispatch({ type: 'selectHintRegion', hintRegion: area })
 
     useLayoutEffect(() => {
         document.querySelector('html')?.classList.add('overflowHidden');
-        return () => document.querySelector('html')?.classList.remove('overflowHidden');
+        return () =>
+            document.querySelector('html')?.classList.remove('overflowHidden');
     }, []);
+
+    return (
+        <>
+            <div
+                style={{
+                    position: 'absolute',
+                    width: '100vw',
+                    height: '100vh',
+                    overflow: 'hidden',
+                    background: 'var(--scheme-background)',
+                }}
+            >
+                <div
+                    style={{
+                        height: '95%',
+                        position: 'relative',
+                        display: 'flex',
+                        flexFlow: 'row nowrap',
+                    }}
+                >
+                    <TrackerContents width={width} height={height * 0.95} />
+                </div>
+                <div
+                    style={{
+                        position: 'fixed',
+                        bottom: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '5%',
+                    }}
+                >
+                    <TrackerFooter />
+                </div>
+            </div>
+        </>
+    );
+}
+
+function TrackerContents({ width, height }: { width: number; height: number }) {
+    const itemLayout = useSelector(itemLayoutSelector);
+    const locationLayout = useSelector(locationLayoutSelector);
+
+    const [trackerInterfaceState, trackerInterfaceDispatch] =
+        useTrackerInterfaceReducer();
+
+    const setActiveArea = (area: string) =>
+        trackerInterfaceDispatch({
+            type: 'selectHintRegion',
+            hintRegion: area,
+        });
 
     // Warning: Layout horrors below.
     // This main tracker area used to be implemented with react-bootstrap's
@@ -114,22 +158,34 @@ function Tracker() {
         );
     }
 
+    const contextMenus = (
+        <>
+            <LocationContextMenu />
+            <LocationGroupContextMenu interfaceDispatch={trackerInterfaceDispatch} />
+        </>
+    );
 
-    let mainTracker: React.ReactNode;
     if (locationLayout === 'list') {
-        mainTracker = (
+        return (
             <>
+                {contextMenus}
                 <div style={{ flex: '0 0 auto', width: '33.333%' }}>
-                    <div style={{padding: '0.75rem', height: '100%', width: '100%'}}>
+                    <div
+                        style={{
+                            padding: '0.75rem',
+                            height: '100%',
+                            width: '100%',
+                        }}
+                    >
                         {itemTracker}
                     </div>
                 </div>
-                <div style={{ flex: '0 0 auto', width: '33.333%', zIndex: 1 }}>
+                <div style={{ flex: '0 0 auto', width: '33.333%' }}>
                     <div style={{ padding: '0 0.75rem' }}>
-                        <NewLocationTracker
+                        <LocationTracker
                             interfaceDispatch={trackerInterfaceDispatch}
                             interfaceState={trackerInterfaceState}
-                            containerHeight={height * 0.95}
+                            containerHeight={height}
                         />
                     </div>
                 </div>
@@ -159,19 +215,29 @@ function Tracker() {
             </>
         );
     } else {
-        mainTracker = (
+        return (
             <>
+                {contextMenus}
                 <div style={{ flex: '0 0 auto', width: '33.333%' }}>
-                    <div style={{padding: '0 0.75rem 0.75rem 0.75rem', display: 'flex', flexFlow: 'column', height: '100%', width: '100%', gap: '1%'}}>
+                    <div
+                        style={{
+                            padding: '0 0.75rem 0.75rem 0.75rem',
+                            display: 'flex',
+                            flexFlow: 'column',
+                            height: '100%',
+                            width: '100%',
+                            gap: '1%',
+                        }}
+                    >
                         <DungeonTracker setActiveArea={setActiveArea} compact />
                         {itemTracker}
                     </div>
                 </div>
-                <div style={{ zIndex: 1, flex: '0 0 auto', width: '50%' }}>
-                    <div style={{padding: '0 0.75rem'}}>
+                <div style={{ flex: '0 0 auto', width: '50%' }}>
+                    <div style={{ padding: '0 0.75rem' }}>
                         <WorldMap
                             imgWidth={width * 0.5}
-                            containerHeight={height * 0.95}
+                            containerHeight={height}
                             interfaceDispatch={trackerInterfaceDispatch}
                             interfaceState={trackerInterfaceState}
                         />
@@ -181,7 +247,7 @@ function Tracker() {
                     style={{
                         flex: '0 0 auto',
                         height: '100%',
-                        width: '16.666667%'
+                        width: '16.666667%',
                     }}
                 >
                     <div
@@ -194,7 +260,7 @@ function Tracker() {
                         }}
                     >
                         <BasicCounters />
-                        <div style={{height: '100%'}}>
+                        <div style={{ height: '100%' }}>
                             <HintsTracker />
                         </div>
                     </div>
@@ -202,58 +268,50 @@ function Tracker() {
             </>
         );
     }
+}
+
+function TrackerFooter() {
+    const [showCustomizationDialog, setShowCustomizationDialog] =
+        useState(false);
+    const [showEntranceDialog, setShowEntranceDialog] = useState(false);
 
     return (
         <>
             <div
                 style={{
-                    position: 'absolute',
-                    width: '100vw',
-                    height: '100vh',
-                    overflow: 'hidden',
-                    background: 'var(--scheme-background)',
+                    background: 'lightgrey',
+                    width: '100%',
+                    height: '100%',
+                    alignContent: 'center',
+                    display: 'flex',
+                    flexFlow: 'row nowrap',
+                    justifyContent: 'space-around',
+                    alignItems: 'center',
                 }}
             >
-                <div style={{ height: '95%', position: 'relative', zIndex: 0, display: 'flex', flexFlow: 'row nowrap' }}>{mainTracker}</div>
-                <div
-                    style={{
-                        position: 'fixed',
-                        bottom: 0,
-                        left: 0,
-                        background: 'lightgrey',
-                        width: '100%',
-                        height: '5%',
-                        alignContent: 'center',
-                        display: 'flex',
-                        flexFlow: 'row nowrap',
-                        justifyContent: 'space-around',
-                        alignItems: 'center',
-                    }}
-                >
-                    <div>
-                        <Link to="/">
-                            <Button>← Options</Button>
-                        </Link>
-                    </div>
-                    <div>
-                        <ExportButton />
-                    </div>
-                    <div>
-                        <Button
-                            variant="primary"
-                            onClick={() => setShowEntranceDialog(true)}
-                        >
-                            Entrances
-                        </Button>
-                    </div>
-                    <div>
-                        <Button
-                            variant="primary"
-                            onClick={() => setShowCustomizationDialog(true)}
-                        >
-                            Customization
-                        </Button>
-                    </div>
+                <div>
+                    <Link to="/">
+                        <Button>← Options</Button>
+                    </Link>
+                </div>
+                <div>
+                    <ExportButton />
+                </div>
+                <div>
+                    <Button
+                        variant="primary"
+                        onClick={() => setShowEntranceDialog(true)}
+                    >
+                        Entrances
+                    </Button>
+                </div>
+                <div>
+                    <Button
+                        variant="primary"
+                        onClick={() => setShowCustomizationDialog(true)}
+                    >
+                        Customization
+                    </Button>
                 </div>
             </div>
             <CustomizationModal

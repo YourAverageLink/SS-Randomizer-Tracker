@@ -13,12 +13,11 @@ import type { RootState } from '../../store/store';
 import { logicSelector } from '../../logic/selectors';
 import type { ColorScheme } from '../../customization/ColorScheme';
 import HintDescription, { decodeHint } from '../Hints';
-import type { ExitMapping } from '../../logic/Locations';
 import { useTooltipExpr } from '../../tooltips/TooltipHooks';
 import RequirementsTooltip from '../RequirementsTooltip';
-import type { LocationGroupContextMenuProps } from '../LocationGroupHeader';
 import { Marker } from './Marker';
 import { getMarkerColor, getRegionData, getSubmarkerData } from './MapUtils';
+import type { LocationGroupContextMenuProps, MapExitContextMenuProps } from '../LocationGroupContextMenu';
 
 type EntranceMarkerProps = {
     markerX: number;
@@ -31,12 +30,6 @@ type EntranceMarkerProps = {
     onChooseEntrance: (exitId: string) => void;
     selected: boolean;
 };
-
-export interface MapExitContextMenuProps {
-    exitMapping: ExitMapping;
-    /** destination area! */
-    area: string | undefined;
-}
 
 const EntranceMarker = (props: EntranceMarkerProps) => {
     const {

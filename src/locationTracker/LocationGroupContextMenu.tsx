@@ -6,9 +6,7 @@ import {
     Submenu,
     type ItemParams,
 } from 'react-contexify';
-import type { LocationGroupContextMenuProps } from './LocationGroupHeader';
 import { bulkEditChecks, setHint } from '../tracker/slice';
-import type { MapExitContextMenuProps } from './mapTracker/EntranceMarker';
 import { useSelector } from 'react-redux';
 import {
     areasSelector,
@@ -21,6 +19,18 @@ import { type ThunkResult, useAppDispatch } from '../store/store';
 import hintItems from '../data/hintItems.json';
 import { HintItem } from './LocationContextMenu';
 import type { InterfaceAction } from '../tracker/TrackerInterfaceReducer';
+import type { ExitMapping } from '../logic/Locations';
+
+export interface LocationGroupContextMenuProps {
+    area: string;
+}
+
+export interface MapExitContextMenuProps {
+    exitMapping: ExitMapping;
+    /** destination area! */
+    area: string | undefined;
+}
+
 
 type AreaCtxProps<T = void> = ItemParams<LocationGroupContextMenuProps, T>;
 type ExitCtxProps<T = void> = ItemParams<MapExitContextMenuProps, T>;

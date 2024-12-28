@@ -125,7 +125,6 @@ export default function GridTracker({ width }: { width: number }) {
                 <div
                     style={{
                         position: 'absolute',
-                        zIndex: 1,
                         left: 0,
                         width: '100%',
                         textAlign: 'right',
@@ -209,7 +208,6 @@ export default function GridTracker({ width }: { width: number }) {
                 <div
                     style={{
                         position: 'absolute',
-                        zIndex: 1,
                         left: 0,
                         width: '100%',
                         textAlign: 'right',
