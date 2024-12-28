@@ -1,10 +1,10 @@
 import type { CSSProperties } from 'react';
 import Item from './Item';
 import CrystalCounter from './items/sidequest/CrystalCounter';
-import GratitudeCrystals from './items/sidequest/GratitudeCrystals';
+import { GratitudeCrystals } from './items/sidequest/GratitudeCrystals';
 
 import noTablets from '../assets/tablets/no_tablets.png';
-import CounterItem from './items/CounterItem';
+import { CounterItem } from './items/CounterItem';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     rawItemCountSelector,
@@ -14,13 +14,9 @@ import { clickItem } from '../tracker/slice';
 import { tumbleweedSelector } from '../customization/selectors';
 import styles from './GridTracker.module.css';
 
-type GridTrackerProps = {
-    width: number;
-    maxHeight: number;
-    mapMode: boolean;
-};
+export const GRID_TRACKER_ASPECT_RATIO = 1.063;
 
-const GridTracker = ({ maxHeight, width, mapMode: map }: GridTrackerProps) => {
+export default function GridTracker({ width }: { width: number }) {
     const dispatch = useDispatch();
     const handleExtraWalletClick = () => {
         dispatch(clickItem({ item: 'Extra Wallet', take: false }));
@@ -46,15 +42,8 @@ const GridTracker = ({ maxHeight, width, mapMode: map }: GridTrackerProps) => {
         top: '0%',
     };
 
-    let imgWidth = width / 10;
-    const fraction = map ? 10 : 8;
-    if (maxHeight < imgWidth * fraction) {
-        imgWidth = maxHeight / fraction;
-    }
+    const imgWidth = width / 8.1;
 
-    const tableStyle = {
-        marginTop: map ? 2 : 0,
-    };
     const emptyTabWidth = imgWidth * 2.5;
     const emeraldWidth = emptyTabWidth * 0.54;
     const rubyWidth = emptyTabWidth * 0.74;
@@ -65,272 +54,191 @@ const GridTracker = ({ maxHeight, width, mapMode: map }: GridTrackerProps) => {
     const tumbleweed = useSelector(tumbleweedSelector);
 
     return (
-        <table className={styles.itemGrid} style={tableStyle}>
-            <tbody>
-                <tr>
-                    <td rowSpan={2}>
-                        <Item
-                            itemName="Progressive Sword"
-                            imgWidth={imgWidth}
-                        />
-                    </td>
-                    <td>
-                        <Item
-                            itemName="Progressive Beetle"
-                            imgWidth={imgWidth}
-                        />
-                    </td>
-                    <td>
-                        <Item
-                            itemName="Progressive Slingshot"
-                            imgWidth={imgWidth}
-                        />
-                    </td>
-                    <td>
-                        <Item itemName="Bomb Bag" imgWidth={imgWidth} />
-                    </td>
-                    <td>
-                        <Item
-                            itemName="Progressive Bug Net"
-                            imgWidth={imgWidth}
-                        />
-                    </td>
-                    <td rowSpan={2} colSpan={2}>
-                        <div style={{ position: 'relative' }}>
-                            <img src={noTablets} alt="" width={emptyTabWidth} />
-                            <div style={amberTabletStyle}>
-                                <Item
-                                    imgWidth={amberWidth}
-                                    itemName="Amber Tablet"
-                                />
-                            </div>
-                            <div style={emeraldTabletStyle}>
-                                <Item
-                                    imgWidth={emeraldWidth}
-                                    itemName="Emerald Tablet"
-                                />
-                            </div>
-                            <div style={rubyTabletStyle}>
-                                <Item
-                                    imgWidth={rubyWidth}
-                                    itemName="Ruby Tablet"
-                                />
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <Item itemName="Progressive Bow" imgWidth={imgWidth} />
-                    </td>
-                    <td>
-                        <Item itemName="Clawshots" imgWidth={imgWidth} />
-                    </td>
-                    <td>
-                        <Item itemName="Whip" imgWidth={imgWidth} />
-                    </td>
-                    <td>
-                        <Item itemName="Gust Bellows" imgWidth={imgWidth} />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p
-                            style={{
-                                margin: 0,
-                                fontSize: 'small',
-                            }}
-                        >
-                            Caves
-                        </p>
-                        <Item
-                            itemName="Lanayru Caves Small Key"
-                            imgWidth={imgWidth}
-                        />
-                    </td>
-                    <td>
-                        <Item itemName="Sea Chart" imgWidth={imgWidth * 2/3} />
-                    </td>
-                    <td>
-                        <Item itemName="Spiral Charge" imgWidth={imgWidth} />
-                    </td>
-                    <td>
-                        <Item
-                            itemName="Progressive Pouch"
-                            imgWidth={imgWidth}
-                        />
-                    </td>
-                    <td>
-                        <CounterItem
-                            itemName="Empty Bottle"
-                            imgWidth={imgWidth}
-                            fontSize={imgWidth * 0.5}
-                        />
-                    </td>
-                    <td style={{position: 'relative'}}>
-                        <div
-                            style={{
-                                position: 'absolute',
-                                zIndex: 1,
-                                left: 0,
-                                width: '100%',
-                                textAlign: 'right',
-                                bottom: '10%',
-                                lineHeight: 1,
-                            }}
-                            onClick={handleExtraWalletClick}
-                            onKeyDown={handleExtraWalletClick}
-                            tabIndex={0}
-                            role="button"
-                        >
-                            <CrystalCounter
-                                current={`+${walletCount * 300}`}
-                                fontSize={imgWidth * 0.4}
-                            />
-                        </div>
-                        <div>
-                            <Item
-                                itemName="Progressive Wallet"
-                                imgWidth={imgWidth}
-                            />
-                        </div>
-                    </td>
-                    <td>
-                        <Item
-                            itemName="Progressive Mitts"
-                            imgWidth={imgWidth}
-                            grid
-                        />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <Item
-                            itemName="Goddess's Harp"
-                            imgWidth={imgWidth}
-                            grid
-                        />
-                    </td>
-                    <td>
-                        <Item
-                            itemName="Ballad of the Goddess"
-                            imgWidth={imgWidth}
-                            grid
-                        />
-                    </td>
-                    <td>
-                        <Item
-                            itemName="Farore's Courage"
-                            imgWidth={imgWidth}
-                            grid
-                        />
-                    </td>
-                    <td>
-                        <Item
-                            itemName="Nayru's Wisdom"
-                            imgWidth={imgWidth}
-                            grid
-                        />
-                    </td>
-                    <td>
-                        <Item itemName="Din's Power" imgWidth={imgWidth} grid />
-                    </td>
-                    <td>
-                        <div
-                            style={{
-                                position: 'relative',
-                                display: 'flex',
-                                justifyContent: 'center',
-                            }}
-                        >
-                            <CounterItem
-                                itemName="Song of the Hero"
-                                imgWidth={imgWidth}
-                                fontSize={imgWidth * 0.5}
-                                grid
-                            />
-                        </div>
-                    </td>
-                    <td>
-                        <Item itemName="Triforce" imgWidth={imgWidth} grid />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <Item
-                            itemName="Water Dragon's Scale"
-                            imgWidth={imgWidth}
-                            grid
-                        />
-                    </td>
-                    <td>
-                        <Item
-                            itemName="Fireshield Earrings"
-                            imgWidth={imgWidth}
-                            grid
-                        />
-                    </td>
-                    <td>
-                        <Item
-                            itemName="Cawlin's Letter"
-                            imgWidth={imgWidth}
-                            grid
-                        />
-                    </td>
-                    <td>
-                        <Item
-                            itemName="Horned Colossus Beetle"
-                            imgWidth={imgWidth}
-                            grid
-                        />
-                    </td>
-                    <td>
-                        <Item itemName="Baby Rattle" imgWidth={imgWidth} grid />
-                    </td>
-                    <td style={{position: 'relative'}}>
-                        <div
-                            style={{
-                                position: 'absolute',
-                                zIndex: 1,
-                                left: 0,
-                                width: '100%',
-                                textAlign: 'right',
-                                bottom: 0,
-                                lineHeight: 1,
-                                pointerEvents: 'none',
-                            }}
-                        >
-                            <CrystalCounter
-                                current={crystalCount}
-                                fontSize={imgWidth * 0.5}
-                            />
-                        </div>
-                        <GratitudeCrystals imgWidth={imgWidth} grid />
-                    </td>
-                    <td>
-                        <Item itemName="Life Tree Fruit" imgWidth={imgWidth} />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <CounterItem
-                            itemName="Group of Tadtones"
-                            fontSize={imgWidth / 2}
-                            imgWidth={imgWidth}
-                        />
-                    </td>
-                    <td>
-                        <Item itemName="Scrapper" imgWidth={imgWidth} />
-                    </td>
-                    {tumbleweed && (
-                        <td>
-                            <Item itemName="Tumbleweed" imgWidth={imgWidth} />
-                        </td>
-                    )}
-                </tr>
-            </tbody>
-        </table>
+        <div className={styles.itemGrid}>
+            <div style={{ gridRow: '1 / span 2' }}>
+                <Item itemName="Progressive Sword" imgWidth={imgWidth} />
+            </div>
+            <div>
+                <Item itemName="Progressive Beetle" imgWidth={imgWidth} />
+            </div>
+            <div>
+                <Item itemName="Progressive Slingshot" imgWidth={imgWidth} />
+            </div>
+            <div>
+                <Item itemName="Bomb Bag" imgWidth={imgWidth} />
+            </div>
+            <div>
+                <Item itemName="Progressive Bug Net" imgWidth={imgWidth} />
+            </div>
+            <div
+                style={{
+                    position: 'relative',
+                    gridRow: '1 / span 2',
+                    gridColumn: '6 / span 2',
+                }}
+            >
+                <img src={noTablets} alt="" width={emptyTabWidth} />
+                <div style={amberTabletStyle}>
+                    <Item imgWidth={amberWidth} itemName="Amber Tablet" />
+                </div>
+                <div style={emeraldTabletStyle}>
+                    <Item imgWidth={emeraldWidth} itemName="Emerald Tablet" />
+                </div>
+                <div style={rubyTabletStyle}>
+                    <Item imgWidth={rubyWidth} itemName="Ruby Tablet" />
+                </div>
+            </div>
+            <div>
+                <Item itemName="Progressive Bow" imgWidth={imgWidth} />
+            </div>
+            <div>
+                <Item itemName="Clawshots" imgWidth={imgWidth} />
+            </div>
+            <div>
+                <Item itemName="Whip" imgWidth={imgWidth} />
+            </div>
+            <div>
+                <Item itemName="Gust Bellows" imgWidth={imgWidth} />
+            </div>
+            <div>
+                <Item
+                    itemName="Lanayru Caves Small Key"
+                    imgWidth={imgWidth}
+                    className={styles.cavesKey}
+                >
+                    <div className={styles.cavesKeyLabel}>Caves</div>
+                </Item>
+            </div>
+            <div>
+                <Item itemName="Sea Chart" imgWidth={(imgWidth * 2) / 3} />
+            </div>
+            <div>
+                <Item itemName="Spiral Charge" imgWidth={imgWidth} />
+            </div>
+            <div>
+                <Item itemName="Progressive Pouch" imgWidth={imgWidth} />
+            </div>
+            <div>
+                <CounterItem itemName="Empty Bottle" imgWidth={imgWidth} />
+            </div>
+            <div style={{ position: 'relative' }}>
+                <div
+                    style={{
+                        position: 'absolute',
+                        zIndex: 1,
+                        left: 0,
+                        width: '100%',
+                        textAlign: 'right',
+                        bottom: '10%',
+                        lineHeight: 1,
+                    }}
+                    onClick={handleExtraWalletClick}
+                    onKeyDown={handleExtraWalletClick}
+                    tabIndex={0}
+                    role="button"
+                >
+                    <CrystalCounter
+                        current={`+${walletCount * 300}`}
+                        fontSize={imgWidth * 0.4}
+                    />
+                </div>
+                <div>
+                    <Item itemName="Progressive Wallet" imgWidth={imgWidth} />
+                </div>
+            </div>
+            <div>
+                <Item itemName="Progressive Mitts" imgWidth={imgWidth} grid />
+            </div>
+            <div>
+                <Item itemName="Goddess's Harp" imgWidth={imgWidth} grid />
+            </div>
+            <div>
+                <Item
+                    itemName="Ballad of the Goddess"
+                    imgWidth={imgWidth}
+                    grid
+                />
+            </div>
+            <div>
+                <Item itemName="Farore's Courage" imgWidth={imgWidth} grid />
+            </div>
+            <div>
+                <Item itemName="Nayru's Wisdom" imgWidth={imgWidth} grid />
+            </div>
+            <div>
+                <Item itemName="Din's Power" imgWidth={imgWidth} grid />
+            </div>
+            <div
+                style={{
+                    position: 'relative',
+                }}
+            >
+                <CounterItem
+                    itemName="Song of the Hero"
+                    imgWidth={imgWidth}
+                    grid
+                />
+            </div>
+            <div>
+                <Item itemName="Triforce" imgWidth={imgWidth} grid />
+            </div>
+            <div>
+                <Item
+                    itemName="Water Dragon's Scale"
+                    imgWidth={imgWidth}
+                    grid
+                />
+            </div>
+            <div>
+                <Item itemName="Fireshield Earrings" imgWidth={imgWidth} grid />
+            </div>
+            <div>
+                <Item itemName="Cawlin's Letter" imgWidth={imgWidth} grid />
+            </div>
+            <div>
+                <Item
+                    itemName="Horned Colossus Beetle"
+                    imgWidth={imgWidth}
+                    grid
+                />
+            </div>
+            <div>
+                <Item itemName="Baby Rattle" imgWidth={imgWidth} grid />
+            </div>
+            <div style={{ position: 'relative' }}>
+                <div
+                    style={{
+                        position: 'absolute',
+                        zIndex: 1,
+                        left: 0,
+                        width: '100%',
+                        textAlign: 'right',
+                        bottom: 0,
+                        lineHeight: 1,
+                        pointerEvents: 'none',
+                    }}
+                >
+                    <CrystalCounter
+                        current={crystalCount}
+                        fontSize={imgWidth * 0.5}
+                    />
+                </div>
+                <GratitudeCrystals imgWidth={imgWidth} grid />
+            </div>
+            <div>
+                <Item itemName="Life Tree Fruit" imgWidth={imgWidth} />
+            </div>
+            <div>
+                <CounterItem itemName="Group of Tadtones" imgWidth={imgWidth} />
+            </div>
+            <div>
+                <Item itemName="Scrapper" imgWidth={imgWidth} />
+            </div>
+            {tumbleweed && (
+                <div>
+                    <Item itemName="Tumbleweed" imgWidth={imgWidth} />
+                </div>
+            )}
+        </div>
     );
-};
-
-export default GridTracker;
+}

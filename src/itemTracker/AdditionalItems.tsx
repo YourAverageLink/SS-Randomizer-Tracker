@@ -4,49 +4,45 @@ import miscItemBlock from '../assets/misc_items_block.png';
 import { useSelector } from 'react-redux';
 import { rawItemCountSelector } from '../tracker/selectors';
 
-type AdditionalItemsProps = {
-    width: number;
-};
-
-const AdditionalItems = ({ width }: AdditionalItemsProps) => {
+export default function AdditionalItems({ width }: { width: number }) {
     const pouchStyle: CSSProperties = {
-        position: 'relative',
-        bottom: width * 0.425 + 400 / width,
+        position: 'absolute',
+        bottom: width * 0.43,
         left: width * 0.08,
     };
     const bottleStyle: CSSProperties = {
-        position: 'relative',
-        bottom: width * 0.425 + 600 / width,
+        position: 'absolute',
+        bottom: width * 0.435,
         left: width * 0.31,
     };
     const chargeStyle: CSSProperties = {
-        position: 'relative',
-        bottom: width * 0.65 + 2000 / width,
+        position: 'absolute',
+        bottom: width * 0.435,
         left: width * 0.54,
     };
     const tadtoneStyle: CSSProperties = {
-        position: 'relative',
-        bottom: width * 0.63 + 2400 / width,
+        position: 'absolute',
+        bottom: width * 0.43,
         left: width * 0.785,
     };
     const keyStyle: CSSProperties = {
-        position: 'relative',
-        bottom: width * 0.64 + 4000 / width,
+        position: 'absolute',
+        bottom: width * 0.22,
         left: width * 0.08,
     };
     const chartStyle: CSSProperties = {
-        position: 'relative',
-        bottom: width * 0.72 + 3600 / width,
+        position: 'absolute',
+        bottom: width * 0.22,
         left: width * 0.35,
     };
     const fruitStyle: CSSProperties = {
-        position: 'relative',
-        bottom: width * 0.71 + 4000 / width,
+        position: 'absolute',
+        bottom: width * 0.22,
         left: width * 0.542,
     };
     const scrapperStyle: CSSProperties = {
-        position: 'relative',
-        bottom: width * 0.715 + 4000 / width,
+        position: 'absolute',
+        bottom: width * 0.22,
         left: width * 0.785,
     };
 
@@ -62,7 +58,7 @@ const AdditionalItems = ({ width }: AdditionalItemsProps) => {
     const tadtoneWidth = width / 7;
     const scrapperWidth = width / 6.5;
     return (
-        <div id="misc-items">
+        <div id="misc-items" style={{ display: 'flex' }}>
             <img src={miscItemBlock} alt="" width={width} />
             <div style={pouchStyle}>
                 <Item itemName="Progressive Pouch" imgWidth={pouchWidth} />
@@ -72,9 +68,9 @@ const AdditionalItems = ({ width }: AdditionalItemsProps) => {
                 <p
                     style={{
                         fontSize: width * 0.12,
-                        position: 'relative',
-                        left: '11%',
-                        bottom: `-${bottleWidth * 0.3}px`,
+                        position: 'absolute',
+                        left: width * 0.1,
+                        top: width * 0.05,
                     }}
                 >
                     {bottleCount}
@@ -88,9 +84,9 @@ const AdditionalItems = ({ width }: AdditionalItemsProps) => {
                 <p
                     style={{
                         fontSize: width * 0.12,
-                        position: 'relative',
-                        left: '10%',
-                        bottom: `-${tadtoneWidth * 0.25}px`,
+                        position: 'absolute',
+                        left: width * 0.1,
+                        top: width * 0.05,
                     }}
                 >
                     {tadtoneCount}
@@ -102,7 +98,7 @@ const AdditionalItems = ({ width }: AdditionalItemsProps) => {
                     style={{
                         margin: 0,
                         fontSize: width / 20,
-                        position: 'relative',
+                        position: 'absolute',
                         top: `${keyWidth * 0.75}px`,
                         left: '1%',
                     }}
@@ -121,6 +117,4 @@ const AdditionalItems = ({ width }: AdditionalItemsProps) => {
             </div>
         </div>
     );
-};
-
-export default AdditionalItems;
+}

@@ -1,57 +1,35 @@
 import allImages from '../../Images';
-import keyDownWrapper from '../../../KeyDownWrapper';
 import { totalGratitudeCrystalsSelector } from '../../../tracker/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { clickItem } from '../../../tracker/slice';
-import '../../Item.css';
+import { BasicItem } from '../../BasicItem';
 
-type GratitudeCrystalsProps = {
-    images?: string[];
-    imgWidth: number;
+export function GratitudeCrystals({
+    className,
+    imgWidth,
+    grid,
+}: {
+    className?: string;
+    imgWidth?: number;
     grid?: boolean;
-};
-
-const GratitudeCrystals = (props: GratitudeCrystalsProps) => {
-    const { images, imgWidth, grid } = props;
+}) {
     const dispatch = useDispatch();
-    const handleClick = (e: React.UIEvent) => {
-        if (e.type === 'click') {
-            dispatch(clickItem({ item: 'Gratitude Crystal Pack', take: false }));
-        } else if (e.type === 'contextmenu') {
-            dispatch(clickItem({ item: 'Gratitude Crystal Pack', take: true }));
-            e.preventDefault();
-        }
+    const handleClick = (take: boolean) => {
+        dispatch(clickItem({ item: 'Gratitude Crystal Pack', take }));
     };
 
     const count = useSelector(totalGratitudeCrystalsSelector);
 
-    const current = count >= 1 ? 1 : 0;
-    let itemImages;
-    if (!images) {
-        if (grid) {
-            itemImages = allImages['Gratitude Crystals Grid'];
-        } else {
-            itemImages = allImages['Gratitude Crystals'];
-        }
-    } else {
-        itemImages = images;
-    }
+    const itemImages =
+        allImages[grid ? 'Gratitude Crystals Grid' : 'Gratitude Crystals'];
     return (
-        <div
-            className="item-container"
+        <BasicItem
+            className={className}
+            itemName="Gratitude Crystals"
+            images={itemImages}
+            count={count}
+            imgWidth={imgWidth}
             onClick={handleClick}
-            onContextMenu={handleClick}
-            onKeyDown={keyDownWrapper(handleClick)}
-            role="button"
-            tabIndex={0}
-            style={{ width: imgWidth }}
-        >
-            <img
-                src={itemImages[current]}
-                alt="Gratitude Crystals"
-            />
-        </div>
+        />
     );
-};
-
-export default GratitudeCrystals;
+}

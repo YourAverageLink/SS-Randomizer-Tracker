@@ -61,7 +61,7 @@ import {
 } from '../logic/Entrances';
 import {
     computeSemiLogic,
-    getAllTricksEnabledRequirements,
+    getVisibleTricksEnabledRequirements,
 } from '../logic/SemiLogic';
 import {
     counterBasisSelector,
@@ -663,14 +663,14 @@ const dungeonKeyLogicSelector = createSelector(
 );
 
 /** A selector for the requirements that assume every trick enabled in customization is enabled. */
-const allTricksRequirementsSelector = createSelector(
+const visibleTricksRequirementsSelector = createSelector(
     [
         logicSelector,
         optionsSelector,
         settingsSelector,
         trickSemiLogicTrickListSelector,
     ],
-    getAllTricksEnabledRequirements,
+    getVisibleTricksEnabledRequirements,
 );
 
 export const inTrickLogicBitsSelector = createSelector(
@@ -680,7 +680,7 @@ export const inTrickLogicBitsSelector = createSelector(
         settingsRequirementsSelector,
         inventoryRequirementsSelector,
         checkRequirementsSelector,
-        allTricksRequirementsSelector,
+        visibleTricksRequirementsSelector,
     ],
     (
         logic,
@@ -715,7 +715,7 @@ const semiLogicBitsSelector = createSelector(
         settingsRequirementsSelector,
         checkHintsSelector,
         trickSemiLogicSelector,
-        allTricksRequirementsSelector,
+        visibleTricksRequirementsSelector,
     ],
     computeSemiLogic,
 );

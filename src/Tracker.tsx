@@ -9,8 +9,8 @@ import { useSelector } from 'react-redux';
 import BasicCounters from './BasicCounters';
 import EntranceTracker from './entranceTracker/EntranceTracker';
 import DungeonTracker from './itemTracker/DungeonTracker';
-import GridTracker from './itemTracker/GridTracker';
-import ItemTracker from './itemTracker/ItemTracker';
+import GridTracker, { GRID_TRACKER_ASPECT_RATIO } from './itemTracker/GridTracker';
+import ItemTracker, { ITEM_TRACKER_ASPECT_RATIO } from './itemTracker/ItemTracker';
 import { NewLocationTracker } from './locationTracker/LocationTracker';
 import { MakeTooltipsAvailable } from './tooltips/TooltipHooks';
 import CustomizationModal from './customization/CustomizationModal';
@@ -22,6 +22,7 @@ import { ExportButton } from './ImportExport';
 import { useSyncTrackerStateToLocalStorage } from './LocalStorage';
 import { HintsTracker } from './hints/HintsTracker';
 import { useTrackerInterfaceReducer } from './tracker/TrackerInterfaceReducer';
+import { ItemTrackerContainer } from './itemTracker/ItemTrackerContainer';
 
 function subscribeToWindowResize(callback: () => void) {
     window.addEventListener('resize', callback);
@@ -99,19 +100,16 @@ function Tracker() {
     let itemTracker;
     if (itemLayout === 'inventory') {
         itemTracker = (
-            <ItemTracker
-                maxHeight={height * (locationLayout === 'map' ? 0.9 : 1)}
-                /* this is supposed to be *a bit* more than 1/3. Min keeps it visible when the window is short */
-                maxWidth={(12 * width) / 30}
-                mapMode={locationLayout === 'map'}
+            <ItemTrackerContainer
+                aspectRatio={ITEM_TRACKER_ASPECT_RATIO}
+                itemTracker={(width) => <ItemTracker width={width} />}
             />
         );
     } else if (itemLayout === 'grid') {
         itemTracker = (
-            <GridTracker
-                width={2 * width / 5}
-                maxHeight={height}
-                mapMode={locationLayout === 'map'}
+            <ItemTrackerContainer
+                aspectRatio={GRID_TRACKER_ASPECT_RATIO}
+                itemTracker={(width) => <GridTracker width={width} />}
             />
         );
     }
@@ -122,7 +120,9 @@ function Tracker() {
         mainTracker = (
             <>
                 <div style={{ flex: '0 0 auto', width: '33.333%' }}>
-                    <div style={{ padding: '0 0.75rem' }}>{itemTracker}</div>
+                    <div style={{padding: '0.75rem', height: '100%', width: '100%'}}>
+                        {itemTracker}
+                    </div>
                 </div>
                 <div style={{ flex: '0 0 auto', width: '33.333%', zIndex: 1 }}>
                     <div style={{ padding: '0 0.75rem' }}>
@@ -162,7 +162,7 @@ function Tracker() {
         mainTracker = (
             <>
                 <div style={{ flex: '0 0 auto', width: '33.333%' }}>
-                    <div style={{padding: '0 0.75rem'}}>
+                    <div style={{padding: '0 0.75rem 0.75rem 0.75rem', display: 'flex', flexFlow: 'column', height: '100%', width: '100%', gap: '1%'}}>
                         <DungeonTracker setActiveArea={setActiveArea} compact />
                         {itemTracker}
                     </div>

@@ -3,159 +3,152 @@ import songBlock from '../assets/Song_Block.png';
 
 import Item from './Item';
 
-type SongBlockProps = {
-    width: number;
-};
-
-const SongBlock = ({ width: wid }: SongBlockProps) => {
-
+export default function SongBlock({ width: width }: { width: number }) {
     const sailclothStyle: CSSProperties = {
         position: 'relative',
-        bottom: wid / 2.02 + 300 / wid,
-        left: wid / 13.5,
+        bottom: width / 2.01,
+        left: width / 13.5,
     };
 
     const earringsStyle: CSSProperties = {
         position: 'relative',
-        bottom: wid / 4.15 + 300 / wid,
-        left: wid / 1.75,
+        bottom: width / 4.05,
+        left: width / 1.75,
     };
 
     const scaleStyle: CSSProperties = {
         position: 'relative',
-        bottom: wid / 3.9 + 100 / wid,
-        left: wid / 4,
+        bottom: width / 3.9,
+        left: width / 4,
     };
 
     const mittsStyle: CSSProperties = {
         position: 'relative',
-        bottom: wid / 2 + 400 / wid,
-        left: wid / 1.325,
+        bottom: width / 1.98,
+        left: width / 1.325,
     };
 
     const courageStyle: CSSProperties = {
         position: 'relative',
-        bottom: wid / 1.34 + 600 / wid,
-        left: wid / 1.54,
+        bottom: width / 1.325,
+        left: width / 1.54,
     };
 
     const powerStyle: CSSProperties = {
         position: 'relative',
-        bottom: wid / 1.82 + 600 / wid,
-        left: wid / 1.775,
+        bottom: width / 1.805,
+        left: width / 1.775,
     };
 
     const wisdomStyle: CSSProperties = {
         position: 'relative',
-        bottom: wid / 1.82 + 600 / wid,
-        left: wid / 3.375,
+        bottom: width / 1.805,
+        left: width / 3.375,
     };
 
     const balladStyle: CSSProperties = {
         position: 'relative',
-        bottom: wid / 1.34 + 600 / wid,
-        left: wid / 4.7,
+        bottom: width / 1.325,
+        left: width / 4.7,
     };
     const sothStyle: CSSProperties = {
         position: 'relative',
-        bottom: wid / 1.081 + 140 / wid,
-        left: wid / 3.15,
+        bottom: width / 1.081,
+        left: width / 3.15,
     };
 
     const harpStyle: CSSProperties = {
         position: 'relative',
-        bottom: wid / 1.34 + 300 / wid,
-        left: wid / 2.52,
+        bottom: width / 1.33,
+        left: width / 2.52,
     };
 
     const triforceStyle: CSSProperties = {
         position: 'relative',
-        bottom: wid / 0.77 + 600 / wid,
-        left: wid / 1.85,
+        bottom: width / 0.77,
+        left: width / 1.85,
     };
 
     const emeraldTabletStyle: CSSProperties = {
         position: 'relative',
-        bottom: wid / 0.858 + 200 / wid,
-        left: wid / 4.3,
+        bottom: width / 0.858,
+        left: width / 4.3,
     };
 
     const rubyTabletStyle: CSSProperties = {
         position: 'relative',
-        bottom: wid / 0.8 + 1000 / wid,
-        left: wid / 6.2,
+        bottom: width / 0.79,
+        left: width / 6.2,
     };
 
     const amberTabletStyle: CSSProperties = {
         position: 'relative',
-        bottom: wid / 0.7855 + 0 / wid,
-        left: wid / 13.9,
+        bottom: width / 0.788,
+        left: width / 13.9,
     };
 
-    const harpWidth = wid / 4.6;
-    const botgWidth = wid / 7;
-    const courageWidth = wid / 7;
-    const wisdomWidth = wid / 7;
-    const powerWidth = wid / 7;
-    const sothWidth = wid / 2.62;
-    const sailclothWidth = wid / 5.2;
-    const scaleWidth = wid / 5.2;
-    const earringsWidth = wid / 5.2;
-    const mittsWidth = wid / 5.2;
-    const triforceWidth = wid / 2.3;
-    const emeraldWidth = wid / 5.2;
-    const rubyWidth = wid / 3.85;
-    const amberWidth = wid / 5.57;
+    const harpWidth = width / 4.6;
+    const botgWidth = width / 7;
+    const courageWidth = width / 7;
+    const wisdomWidth = width / 7;
+    const powerWidth = width / 7;
+    const sothWidth = width / 2.62;
+    const sailclothWidth = width / 5.2;
+    const scaleWidth = width / 5.2;
+    const earringsWidth = width / 5.2;
+    const mittsWidth = width / 5.2;
+    const triforceWidth = width / 2.3;
+    const emeraldWidth = width / 5.2;
+    const rubyWidth = width / 3.85;
+    const amberWidth = width / 5.57;
 
     return (
-        <div id="songBlock">
-            <img src={songBlock} alt="" width={wid} />
+        <div>
+            <img src={songBlock} alt="" width={width} />
 
-            <div id="sailcloth" style={sailclothStyle}>
+            <div style={sailclothStyle}>
                 <Item itemName="Sailcloth" imgWidth={sailclothWidth} />
             </div>
-            <div id="earrings" style={earringsStyle}>
+            <div style={earringsStyle}>
                 <Item itemName="Fireshield Earrings" imgWidth={earringsWidth} />
             </div>
-            <div id="scale" style={scaleStyle}>
+            <div style={scaleStyle}>
                 <Item itemName="Water Dragon's Scale" imgWidth={scaleWidth} />
             </div>
-            <div id="mitts" style={mittsStyle}>
+            <div style={mittsStyle}>
                 <Item itemName="Progressive Mitts" imgWidth={mittsWidth} />
             </div>
-            <div id="courage" style={courageStyle}>
+            <div style={courageStyle}>
                 <Item itemName="Farore's Courage" imgWidth={courageWidth} />
             </div>
-            <div id="power" style={powerStyle}>
+            <div style={powerStyle}>
                 <Item itemName="Din's Power" imgWidth={powerWidth} />
             </div>
-            <div id="wisdom" style={wisdomStyle}>
+            <div style={wisdomStyle}>
                 <Item itemName="Nayru's Wisdom" imgWidth={wisdomWidth} />
             </div>
-            <div id="ballad" style={balladStyle}>
+            <div style={balladStyle}>
                 <Item itemName="Ballad of the Goddess" imgWidth={botgWidth} />
             </div>
-            <div id="soth" style={sothStyle}>
+            <div style={sothStyle}>
                 <Item itemName="Song of the Hero" imgWidth={sothWidth} />
             </div>
-            <div id="harp" style={harpStyle}>
+            <div style={harpStyle}>
                 <Item itemName="Goddess's Harp" imgWidth={harpWidth} />
             </div>
 
-            <div id="triforce" style={triforceStyle}>
+            <div style={triforceStyle}>
                 <Item itemName="Triforce" imgWidth={triforceWidth} />
             </div>
-            <div id="emeraldTablet" style={emeraldTabletStyle}>
+            <div style={emeraldTabletStyle}>
                 <Item itemName="Emerald Tablet" imgWidth={emeraldWidth} />
             </div>
-            <div id="rubyTablet" style={rubyTabletStyle}>
+            <div style={rubyTabletStyle}>
                 <Item itemName="Ruby Tablet" imgWidth={rubyWidth} />
             </div>
-            <div id="amberTablet" style={amberTabletStyle}>
+            <div style={amberTabletStyle}>
                 <Item itemName="Amber Tablet" imgWidth={amberWidth} />
             </div>
         </div>
     );
-};
-
-export default SongBlock;
+}
