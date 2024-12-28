@@ -1,4 +1,11 @@
 .itemGrid {
+    display: grid;
+    grid-template-columns: repeat(7, auto);
+    grid-auto-rows: auto;
+    justify-items: center;
+    align-items: center;
+    gap: 2px;
+
     :global(.item-container) {
         margin: auto;
     }
