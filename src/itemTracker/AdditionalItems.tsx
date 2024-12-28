@@ -12,12 +12,12 @@ export default function AdditionalItems({ width }: { width: number }) {
     };
     const bottleStyle: CSSProperties = {
         position: 'absolute',
-        bottom: width * 0.43,
+        bottom: width * 0.435,
         left: width * 0.31,
     };
     const chargeStyle: CSSProperties = {
         position: 'absolute',
-        bottom: width * 0.43,
+        bottom: width * 0.435,
         left: width * 0.54,
     };
     const tadtoneStyle: CSSProperties = {

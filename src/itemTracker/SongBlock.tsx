@@ -59,7 +59,7 @@ export default function SongBlock({ width: width }: { width: number }) {
 
     const harpStyle: CSSProperties = {
         position: 'relative',
-        bottom: width / 1.34,
+        bottom: width / 1.33,
         left: width / 2.52,
     };
 
