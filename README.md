@@ -19,11 +19,11 @@ In the center of the tracker is the **Location Tracker**. This is where the rand
 
 The left side of the tracker contains the **Dungeon Tracker** and the **Inventory** areas. Clicking the name of a dungeon will mark it as required or unrequired. When unrequired dungeons are empty (Empty Unrequired Dungeons), this will also label the dungeons locations as being able to contain progression.
 
-The **Additional Checks** section on the right is populated with exits, unrandomized checks (such as individual crystals) or additional things that are required to unlock randomized locations (such as goddess cubes).
+The section on the right is populated with **Counters** informing you about the number of checked, remaining, and logically available locations and exits. There also is a freeform text area where you can write down any **Hints**.
 
-The bottom bar of the tracker contains various controls for the entire tracker. Here, you can export your tracker state to save your progress or import a previous state. Additionally, there are **Customization** options that allow you to configure the colors in the tracker to your liking. For content creators, we recommend using *Dark Mode* along with a Chroma Key on your capture window(s) in order to capture the tracker without a background.
+The bottom bar of the tracker contains various controls for the entire tracker. Here, you can export your tracker state to save your progress. Additionally, there are **Customization** options that allow you to configure the colors in the tracker to your liking. For content creators, we recommend using *Dark Mode* along with a Chroma Key on your capture window(s) in order to capture the tracker without a background.
 
-The tracker auto-saves its state. You can safely close the tracker and click "Continue Tracker" to continue where you left off.
+The tracker auto-saves its state. You can safely close the tracker and click "Continue Tracker" to continue where you left off. You can also return to the Options menu, adjust randomizer settings, and continue with your run. This can be useful for runs with unknown or random settings.
 
 ## Reporting Issues
 
