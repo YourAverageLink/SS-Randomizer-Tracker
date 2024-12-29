@@ -10,10 +10,7 @@ import { areaHintSelector } from '../tracker/selectors';
 import { decodeHint } from './Hints';
 import styles from './LocationGroupHeader.module.css';
 import clsx from 'clsx';
-
-export interface LocationGroupContextMenuProps {
-    area: string;
-}
+import type { LocationGroupContextMenuProps } from './LocationGroupContextMenu';
 
 export default function LocationGroupHeader({
     area,

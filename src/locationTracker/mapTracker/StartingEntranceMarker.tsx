@@ -4,7 +4,7 @@ import { exitsByIdSelector, settingSelector } from '../../tracker/selectors';
 import type { ColorScheme } from '../../customization/ColorScheme';
 import { Marker } from './Marker';
 
-const StartingEntranceMarker = ({ mapWidth, onClick, selected }: { mapWidth: number; onClick: (exitId: string) => void; selected: boolean }) => {
+const StartingEntranceMarker = ({ onClick, selected }: { onClick: (exitId: string) => void; selected: boolean }) => {
     
     const startingEntranceRando = useSelector(settingSelector('random-start-entrance')) !== 'Vanilla';
     const startMapping = useSelector(exitsByIdSelector)['\\Start'];
@@ -32,7 +32,6 @@ const StartingEntranceMarker = ({ mapWidth, onClick, selected }: { mapWidth: num
                 y={85}
                 variant="square"
                 color={markerColor}
-                mapWidth={mapWidth}
                 tooltip={tooltip}
                 onClick={() => onClick(startMapping.exit.id)}
                 selected={selected}

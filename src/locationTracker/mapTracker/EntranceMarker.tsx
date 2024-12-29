@@ -13,30 +13,22 @@ import type { RootState } from '../../store/store';
 import { logicSelector } from '../../logic/selectors';
 import type { ColorScheme } from '../../customization/ColorScheme';
 import HintDescription, { decodeHint } from '../Hints';
-import type { ExitMapping } from '../../logic/Locations';
 import { useTooltipExpr } from '../../tooltips/TooltipHooks';
 import RequirementsTooltip from '../RequirementsTooltip';
-import type { LocationGroupContextMenuProps } from '../LocationGroupHeader';
 import { Marker } from './Marker';
 import { getMarkerColor, getRegionData, getSubmarkerData } from './MapUtils';
+import type { LocationGroupContextMenuProps, MapExitContextMenuProps } from '../LocationGroupContextMenu';
 
 type EntranceMarkerProps = {
     markerX: number;
     markerY: number;
     exitId: string;
     title: string;
-    mapWidth: number;
     active: boolean;
     onGlickGroup: (group: string) => void;
     onChooseEntrance: (exitId: string) => void;
     selected: boolean;
 };
-
-export interface MapExitContextMenuProps {
-    exitMapping: ExitMapping;
-    /** destination area! */
-    area: string | undefined;
-}
 
 const EntranceMarker = (props: EntranceMarkerProps) => {
     const {
@@ -44,7 +36,6 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
         exitId,
         markerX,
         markerY,
-        mapWidth,
         active,
         onGlickGroup,
         onChooseEntrance,
@@ -180,7 +171,6 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
             y={markerY}
             variant={title.includes('Trial Gate') ? 'circle' : 'square'}
             color={markerColor}
-            mapWidth={mapWidth}
             tooltip={tooltip}
             onClick={handleClick}
             onContextMenu={displayMenu}
