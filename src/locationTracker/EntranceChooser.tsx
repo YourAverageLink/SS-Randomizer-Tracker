@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import locationGroupStyles from './LocationGroup.module.css';
 import locationStyles from './Location.module.css';
 import styles from './EntranceChooser.module.css';
-import { locationLayoutSelector } from '../customization/selectors';
 import clsx from 'clsx';
 import { entrancePoolsSelector, exitsByIdSelector, usedEntrancesSelector } from '../tracker/selectors';
 import { useMemo, useState } from 'react';
@@ -12,8 +11,7 @@ import { reorderLocationsForGrid } from '../utils/Collections';
 
 const RESET_OPTION = 'RESET';
 
-export default function EntranceChooser({ exitId, onChoose }: { exitId: string, onChoose: (entranceId: string) => void }) {
-    const mapMode = useSelector(locationLayoutSelector) === 'map';
+export default function EntranceChooser({ wide, exitId, onChoose }: { wide: boolean; exitId: string, onChoose: (entranceId: string) => void }) {
 
     const dispatch = useDispatch();
     const exits = useSelector(exitsByIdSelector);
@@ -52,9 +50,9 @@ export default function EntranceChooser({ exitId, onChoose }: { exitId: string, 
                 entrances.unshift({ value: RESET_OPTION, label: 'Reset' });
             }
 
-            return mapMode ? reorderLocationsForGrid(entrances) : entrances;
+            return wide ? reorderLocationsForGrid(entrances) : entrances;
         }
-    }, [entrancePools, exit.canAssign, exit.entrance, exit.rule, filterText, mapMode, usedEntrances]);
+    }, [entrancePools, exit.canAssign, exit.entrance, exit.rule, filterText, wide, usedEntrances]);
 
     const onClickEntrance = (value: string) => {
         if (value === RESET_OPTION) {
@@ -79,7 +77,7 @@ export default function EntranceChooser({ exitId, onChoose }: { exitId: string, 
             <div className={styles.entrances}>
                 <div
                     className={clsx(locationGroupStyles.locationGroup, {
-                        [locationGroupStyles.wide]: mapMode,
+                        [locationGroupStyles.wide]: wide,
                     })}
                 >
                     {entranceOptions?.map(({ value, label }) => (

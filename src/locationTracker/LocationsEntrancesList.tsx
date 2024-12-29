@@ -10,10 +10,12 @@ import LocationGroupHeader from './LocationGroupHeader';
 
 export function LocationsEntrancesList({
     includeHeader,
+    wide,
     interfaceState,
     interfaceDispatch,
 }: {
     includeHeader?: boolean;
+    wide: boolean;
     interfaceState: InterfaceState;
     interfaceDispatch: React.Dispatch<InterfaceAction>;
 }) {
@@ -51,6 +53,7 @@ export function LocationsEntrancesList({
                     )}
                     <div style={{ overflow: 'visible auto', flex: '1' }}>
                         <Locations
+                            wide={wide}
                             onChooseEntrance={onChooseEntrance}
                             hintRegion={selectedArea}
                         />
@@ -59,6 +62,7 @@ export function LocationsEntrancesList({
             )}
             {interfaceState.type === 'choosingEntrance' && (
                 <EntranceChooser
+                    wide={wide}
                     exitId={interfaceState.exitId}
                     onChoose={(entranceId) =>
                         interfaceDispatch({

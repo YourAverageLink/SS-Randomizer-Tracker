@@ -3,15 +3,18 @@ import type { HintRegion } from '../logic/Locations';
 import LocationGroup from './LocationGroup';
 
 export function Locations({
+    wide,
     hintRegion,
     onChooseEntrance,
 }: {
+    wide: boolean,
     hintRegion: HintRegion<string>;
     onChooseEntrance: (exitId: string) => void;
 }) {
     return (
         <>
             <LocationGroup
+                wide={wide}
                 onChooseEntrance={onChooseEntrance}
                 locations={hintRegion.checks.list}
             />
@@ -23,6 +26,7 @@ export function Locations({
                         <React.Fragment key={type}>
                             <hr />
                             <LocationGroup
+                                wide={wide}
                                 onChooseEntrance={onChooseEntrance}
                                 locations={
                                     hintRegion.extraLocations[type]!.list

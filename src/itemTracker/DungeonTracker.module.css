@@ -3,6 +3,7 @@
     justify-items: center;
     grid-template-columns: repeat(14, minmax(0, 1fr));
     column-gap: 1%;
+    container-type: inline-size;
     &.sixDungeons {
         grid-template-columns: repeat(12, minmax(0, 1fr));
     }
