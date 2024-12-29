@@ -11,10 +11,12 @@ import { LocationsEntrancesList } from './locationTracker/LocationsEntrancesList
 import DungeonTracker from './itemTracker/DungeonTracker';
 import BasicCounters from './BasicCounters';
 import { HintsTracker } from './hints/HintsTracker';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { customLayoutSelector } from './customization/selectors';
 import { useMemo } from 'react';
 import { stringifyError } from './utils/Errors';
+import { setCustomLayout } from './customization/slice';
+import { Button } from 'react-bootstrap';
 
 /*
 Example custom layout JSON (for a Full HD vertical screen):
@@ -114,16 +116,57 @@ interface CustomLayout {
     components: TrackerComponentDescription[];
 }
 
+function check(arg: boolean, msg: string) {
+    if (!arg) {
+        throw new Error(`invalid custom layout: ${msg}`);
+    }
+}
+
 // Not a component!
 function parseLayout(layout: string): TrackerComponent[] {
     const data = JSON.parse(layout) as CustomLayout;
+    check(
+        data && typeof data === 'object',
+        'custom layout must be a JSON object',
+    );
+    check(
+        Array.isArray(data.components),
+        'custom layout must have `components` array',
+    );
+
     const ret: TrackerComponent[] = [];
     let key = 0;
     for (const component of data.components) {
+        check(
+            'id' in component && typeof component.id === 'string',
+            'layout component must have an `id` of type string',
+        );
         const def = components[component.id];
         if (!def) {
             throw new Error(`Unknown component ${component.id}`);
         }
+        check(
+            'layout' in component && typeof component.layout === 'object',
+            'layout component must have a `layout` object',
+        );
+        check(
+            typeof component.layout.x === 'number' &&
+                typeof component.layout.y === 'number' &&
+                typeof component.layout.width === 'number',
+            '`layout` object must have `x`, `y` and `width` of type `number`',
+        );
+        check(
+            component.layout.height === undefined ||
+                component.layout.height === null ||
+                typeof component.layout.height === 'number',
+            "`layout` object's `height` must be a number if present",
+        );
+        check(
+            component.params === undefined ||
+                component.params === null ||
+                typeof component.params === 'object',
+            "component object's `params` must be an object, if present",
+        );
         const factory = def(component.layout, component.params);
         const myKey = key;
         ret.push((interaction) => {
@@ -155,6 +198,7 @@ export function TrackerLayoutCustom({
     interfaceState: InterfaceState;
     interfaceDispatch: React.Dispatch<InterfaceAction>;
 }) {
+    const dispatch = useDispatch();
     const customLayout = useSelector(customLayoutSelector);
     const parseResult = useMemo(() => {
         try {
@@ -165,7 +209,18 @@ export function TrackerLayoutCustom({
     }, [customLayout]);
 
     if (typeof parseResult === 'string') {
-        return parseResult;
+        return (
+            <div>
+                <pre style={{ color: 'red' }}>{parseResult}</pre>
+                <Button
+                    onClick={() => {
+                        dispatch(setCustomLayout(undefined));
+                    }}
+                >
+                    Remove Custom Layout
+                </Button>
+            </div>
+        );
     }
 
     return (
