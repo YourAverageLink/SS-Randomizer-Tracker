@@ -2,6 +2,7 @@ import { Button } from 'react-bootstrap';
 import { ExportButton } from './ImportExport';
 import DiscordButton from './additionalComponents/DiscordButton';
 import { clearStoredRemote } from './LocalStorage';
+import { stringifyError } from './utils/Errors';
 
 export default function ErrorPage({
     error,
@@ -9,8 +10,7 @@ export default function ErrorPage({
     error: unknown;
     resetErrorBoundary: () => void;
 }) {
-    const errorMsg =
-        typeof error === 'object' && error != null && 'message' in error ? (error.message as string) : JSON.stringify(error);
+    const errorMsg = stringifyError(error);
     return (
         <div>
             <p>Something went wrong. Try reloading the page, reset the tracker, or load a different logic version:</p>

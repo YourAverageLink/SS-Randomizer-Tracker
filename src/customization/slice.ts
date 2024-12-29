@@ -14,6 +14,7 @@ export interface CustomizationState {
     enabledTrickLogicTricks: string[];
     counterBasis: CounterBasis;
     tumbleweed: boolean;
+    customLayout: string | undefined,
 }
 
 const initialState: CustomizationState = {
@@ -24,6 +25,7 @@ const initialState: CustomizationState = {
     enabledTrickLogicTricks: [],
     counterBasis: 'logic',
     tumbleweed: false,
+    customLayout: undefined,
 };
 
 export function preloadedCustomizationState(): CustomizationState {
@@ -61,6 +63,9 @@ const customizationSlice = createSlice({
         setTrackTumbleweed: (state, action: PayloadAction<boolean>) => {
             state.tumbleweed = action.payload;
         },
+        setCustomLayout: (state, action: PayloadAction<string | undefined>) => {
+            state.customLayout = action.payload;
+        }
     },
 });
 
@@ -72,6 +77,7 @@ export const {
     setCounterBasis,
     setEnabledSemilogicTricks,
     setTrackTumbleweed,
+    setCustomLayout,
 } = customizationSlice.actions;
 
 export default customizationSlice.reducer;

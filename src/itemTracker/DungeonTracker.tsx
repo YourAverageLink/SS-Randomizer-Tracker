@@ -31,6 +31,7 @@ import {
 } from '../logic/Locations';
 import styles from './DungeonTracker.module.css';
 import clsx from 'clsx';
+import type { InterfaceAction } from '../tracker/TrackerInterfaceReducer';
 
 const silentRealmData: Record<string, string> = {
     'Faron Silent Realm': faronTrialGate,
@@ -80,10 +81,10 @@ const dungeonData = {
 const smallKeyImages = [noSmallKey, oneSmallKey, twoSmallKey, threeSmallKey];
 
 export default function DungeonTracker({
-    setActiveArea,
+    interfaceDispatch,
     compact,
 }: {
-    setActiveArea: (area: string) => void;
+    interfaceDispatch: React.Dispatch<InterfaceAction>;
     compact?: boolean;
 }) {
     const areas = useSelector(areasSelector);
@@ -97,6 +98,9 @@ export default function DungeonTracker({
     const colspan2 = (atCol: number): CSSProperties => ({
         gridColumn: `${atCol + 1} / span 2`,
     });
+
+    const setActiveArea = (hintRegion: string) =>
+        interfaceDispatch({ type: 'selectHintRegion', hintRegion });
 
     return (
         <div>

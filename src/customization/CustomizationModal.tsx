@@ -1,14 +1,15 @@
 import { Modal, Button, Container, Row, Col, FormCheck } from 'react-bootstrap';
 import ColorBlock from './ColorBlock';
 import { type ColorScheme, darkColorScheme, lightColorScheme } from './ColorScheme';
-import { type CounterBasis, type ItemLayout, type LocationLayout, setColorScheme, setCounterBasis, setEnabledSemilogicTricks, setItemLayout, setLocationLayout, setTrackTumbleweed, setTrickSemiLogic } from './slice';
+import { type CounterBasis, type ItemLayout, type LocationLayout, setColorScheme, setCounterBasis, setCustomLayout, setEnabledSemilogicTricks, setItemLayout, setLocationLayout, setTrackTumbleweed, setTrickSemiLogic } from './slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { colorSchemeSelector, counterBasisSelector, itemLayoutSelector, locationLayoutSelector, trickSemiLogicSelector, trickSemiLogicTrickListSelector, tumbleweedSelector } from './selectors';
+import { colorSchemeSelector, counterBasisSelector, hasCustomLayoutSelector, itemLayoutSelector, locationLayoutSelector, trickSemiLogicSelector, trickSemiLogicTrickListSelector, tumbleweedSelector } from './selectors';
 import { useCallback, useMemo } from 'react';
 import { selectStyles } from './ComponentStyles';
 import Select, { type ActionMeta, type MultiValue } from 'react-select';
 import Tooltip from '../additionalComponents/Tooltip';
 import { optionsSelector } from '../logic/selectors';
+import { useAppDispatch, type ThunkResult } from '../store/store';
 
 const defaultColorSchemes = {
     Light: lightColorScheme,
@@ -28,6 +29,14 @@ const counterBases = [
     {value: 'semilogic', label: 'Semilogic'}
 ];
 
+function importCustomLayout(): ThunkResult {
+    return (dispatch, getState) => {
+        const existingLayout = getState().customization.customLayout;
+        const newLayout = window.prompt('Paste custom layout here (empty to clear)', existingLayout) || undefined;
+        dispatch(setCustomLayout(newLayout));
+    };
+}
+
 export default function CustomizationModal({
     onHide,
     show,
@@ -35,7 +44,7 @@ export default function CustomizationModal({
     show: boolean,
     onHide: () => void,
 }) {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const colorScheme = useSelector(colorSchemeSelector);
     const layout = useSelector(itemLayoutSelector);
     const locationLayout = useSelector(locationLayoutSelector);
@@ -44,6 +53,8 @@ export default function CustomizationModal({
     const tumbleweed = useSelector(tumbleweedSelector);
 
     const updateColorScheme = useCallback((scheme: ColorScheme) => dispatch(setColorScheme(scheme)), [dispatch]);
+
+    const hasCustomLayout = useSelector(hasCustomLayoutSelector);
 
     return (
         <Modal show={show} onHide={onHide}>
@@ -91,6 +102,7 @@ export default function CustomizationModal({
                                 false,
                                 { label: string; value: string }
                             >()}
+                            isDisabled={hasCustomLayout}
                             isSearchable={false}
                             value={itemLayouts.find((l) => l.value === layout)}
                             onChange={(e) => e && dispatch(setItemLayout(e.value as ItemLayout))}
@@ -107,6 +119,7 @@ export default function CustomizationModal({
                                 false,
                                 { label: string; value: string }
                             >()}
+                            isDisabled={hasCustomLayout}
                             isSearchable={false}
                             value={locationLayouts.find((l) => l.value === locationLayout)}
                             onChange={(e) => e && dispatch(setLocationLayout(e.value as LocationLayout))}
@@ -154,6 +167,20 @@ export default function CustomizationModal({
                             checked={tumbleweed}
                             onChange={(e) => dispatch(setTrackTumbleweed(e.target.checked))}
                         />
+                    </Row>
+                    <Row>
+                        <h4>Custom Layout (experimental!)</h4>
+                    </Row>
+                    <Row>
+                        <div>
+                            <Button
+                                onClick={() => {
+                                    dispatch(importCustomLayout());
+                                }}
+                            >
+                                Import custom layout
+                            </Button>
+                        </div>
                     </Row>
                 </Container>
             </Modal.Body>

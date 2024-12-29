@@ -23,3 +23,9 @@ export const counterBasisSelector = (state: RootState) =>
 
 export const tumbleweedSelector = (state: RootState) =>
     state.customization.tumbleweed;
+
+export const hasCustomLayoutSelector = (state: RootState) =>
+    Boolean(state.customization.customLayout);
+
+export const customLayoutSelector = (state: RootState) =>
+    state.customization.customLayout!;

@@ -1,7 +1,4 @@
-import {
-    useLayoutEffect,
-    useState,
-} from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import EntranceTracker from './entranceTracker/EntranceTracker';
@@ -15,6 +12,8 @@ import { useTrackerInterfaceReducer } from './tracker/TrackerInterfaceReducer';
 import LocationContextMenu from './locationTracker/LocationContextMenu';
 import LocationGroupContextMenu from './locationTracker/LocationGroupContextMenu';
 import { TrackerLayout } from './TrackerLayouts';
+import { hasCustomLayoutSelector } from './customization/selectors';
+import { TrackerLayoutCustom } from './TrackerLayoutCustom';
 
 export default function TrackerContainer() {
     const logicLoaded = useSelector(isLogicLoadedSelector);
@@ -82,16 +81,25 @@ function TrackerContents() {
     const [trackerInterfaceState, trackerInterfaceDispatch] =
         useTrackerInterfaceReducer();
 
+    const hasCustomLayout = useSelector(hasCustomLayoutSelector);
+
     return (
         <>
             <LocationContextMenu />
             <LocationGroupContextMenu
                 interfaceDispatch={trackerInterfaceDispatch}
             />
-            <TrackerLayout
-                interfaceDispatch={trackerInterfaceDispatch}
-                interfaceState={trackerInterfaceState}
-            />
+            {hasCustomLayout ? (
+                <TrackerLayoutCustom
+                    interfaceDispatch={trackerInterfaceDispatch}
+                    interfaceState={trackerInterfaceState}
+                />
+            ) : (
+                <TrackerLayout
+                    interfaceDispatch={trackerInterfaceDispatch}
+                    interfaceState={trackerInterfaceState}
+                />
+            )}
         </>
     );
 }

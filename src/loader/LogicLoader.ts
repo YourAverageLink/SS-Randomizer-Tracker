@@ -2,6 +2,7 @@ import { load } from 'js-yaml';
 import type { RawLogic, RawPresets } from '../logic/UpstreamTypes';
 import type { MultiChoiceOption, OptionDefs } from '../permalink/SettingsTypes';
 import { getLatestRelease } from './ReleasesLoader';
+import { stringifyError } from '../utils/Errors';
 
 export const LATEST_STRING = 'Latest';
 // Fallback in case the GitHub API is unreachable or rate limited
@@ -32,9 +33,7 @@ async function resolveRemote(ref: RemoteReference): Promise<[url: string, name: 
                 console.error(
                     'Could not retrieve latest release from GitHub: ' +
                         (e
-                            ? typeof e === 'object' && 'message' in e
-                                ? (e.message as string)
-                                : JSON.stringify(e)
+                            ? stringifyError(e)
                             : 'Unknown error'),
                 );
                 return [`https://raw.githubusercontent.com/ssrando/ssrando/${LATEST_KNOWN_RELEASE}`, LATEST_KNOWN_RELEASE];

@@ -35,12 +35,6 @@ export function TrackerLayout({
     const itemLayout = useSelector(itemLayoutSelector);
     const locationLayout = useSelector(locationLayoutSelector);
 
-    const setActiveArea = (area: string) =>
-        interfaceDispatch({
-            type: 'selectHintRegion',
-            hintRegion: area,
-        });
-
     // Warning: Layout horrors below.
     // This main tracker area used to be implemented with react-bootstrap's
     // Row and Col types while importing bootstrap v4 AND bootstrap v5 CSS
@@ -106,6 +100,7 @@ export function TrackerLayout({
                         </div>
                         <div style={{ flex: '1 1 0', minHeight: 0 }}>
                             <LocationsEntrancesList
+                                wide={false}
                                 interfaceState={interfaceState}
                                 interfaceDispatch={interfaceDispatch}
                             />
@@ -129,7 +124,7 @@ export function TrackerLayout({
                         }}
                     >
                         <BasicCounters />
-                        <DungeonTracker setActiveArea={setActiveArea} />
+                        <DungeonTracker interfaceDispatch={interfaceDispatch} />
                         <div style={{ height: '100%', maxHeight: 450 }}>
                             <HintsTracker />
                         </div>
@@ -151,7 +146,7 @@ export function TrackerLayout({
                             gap: '10px',
                         }}
                     >
-                        <DungeonTracker setActiveArea={setActiveArea} compact />
+                        <DungeonTracker interfaceDispatch={interfaceDispatch} compact />
                         {itemTracker}
                     </div>
                 </div>
@@ -263,6 +258,7 @@ function MapLayoutCenterColumnContainer({
                 </div>
                 <div style={{ position: 'relative', flex: '1', minHeight: 0 }}>
                     <LocationsEntrancesList
+                        wide
                         includeHeader
                         interfaceState={interfaceState}
                         interfaceDispatch={interfaceDispatch}
