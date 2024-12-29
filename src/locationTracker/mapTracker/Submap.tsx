@@ -39,7 +39,6 @@ const Submap = ({
     markerX,
     markerY,
     map,
-    mapWidth,
     activeSubmap,
     markers,
     exitParams,
@@ -55,7 +54,6 @@ const Submap = ({
     markers: MapHintRegion[];
     activeSubmap: string | undefined;
     map: string;
-    mapWidth: number;
     exitParams: ExitParams;
     currentRegionOrExit: string | undefined;
 }) => {
@@ -150,7 +148,7 @@ const Submap = ({
     const mapElement = (
         <div>
             {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
-            <img src={map} alt={`${title} Map`} width={mapWidth} style={{position: 'relative'}} onContextMenu={handleBack}/>
+            <img src={map} alt={`${title} Map`} width="100%" style={{position: 'relative'}} onContextMenu={handleBack}/>
             {markers.map((marker) => {
                 if (marker.type === 'hint_region') {
                     return (
@@ -193,7 +191,7 @@ const Submap = ({
                 role="button"
                 tabIndex={0}
             >
-                <img alt="Back to Sky" src={images[exitParams.image]} width={exitParams.width * mapWidth / 100} style={{position: 'absolute', left: `${exitParams.left}%`, top: `${exitParams.top}%`}}/>
+                <img alt="Back to Sky" src={images[exitParams.image]} width={`${exitParams.width}%`} style={{position: 'absolute', left: `${exitParams.left}%`, top: `${exitParams.top}%`}}/>
             </div>
         </div>
     );
