@@ -1,9 +1,19 @@
+:root {
+    --map-marker-size: 5.55cqw;
+}
+
 .marker {
     position: absolute;
     color: black;
     border: 2px solid #000000;
     text-align: center;
     line-height: 1.3;
+    width: var(--map-marker-size);
+    height: var(--map-marker-size);
+    font-size: 3.7cqw;
+
+    top: var(--map-marker-y);
+    left: var(--map-marker-x);
 
     &.square {
         border-radius: 0;
@@ -23,6 +33,14 @@
     display: flex;
     flex-flow: column wrap;
     pointer-events: none;
+    height: calc(var(--map-marker-size) * 1.5);
+    top: var(--map-marker-y);
+
+    left: calc(var(--map-marker-x) + var(--map-marker-size));
+
+    &.left {
+        left: calc(var(--map-marker-x) - var(--map-marker-size) / 2);
+    }
 
     .submarker {
         position: relative;
@@ -30,6 +48,9 @@
         border: 1px solid #000000;
         border-radius: 4px;
         display: flex;
+
+        width: calc(var(--map-marker-size) / 2);
+        height: calc(var(--map-marker-size) / 2);
 
         img {
             width: 100%;

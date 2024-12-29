@@ -137,7 +137,6 @@ const Submap = ({
             y={markerY}
             variant={title.includes('Silent Realm') ? 'circle' : 'rounded'}
             color={markerColor}
-            mapWidth={mapWidth}
             tooltip={tooltip}
             onClick={handleClick}
             onContextMenu={displayMenu}
@@ -160,7 +159,6 @@ const Submap = ({
                             markerX={marker.markerX}
                             markerY={marker.markerY}
                             title={marker.hintRegion!}
-                            mapWidth={mapWidth}
                             onGlickGroup={onGroupChange}
                             selected={
                                 marker.hintRegion !== undefined &&
@@ -175,7 +173,6 @@ const Submap = ({
                             markerX={marker.markerX}
                             markerY={marker.markerY}
                             title={areaGraph.exits[marker.exitId].short_name}
-                            mapWidth={mapWidth}
                             active={provinceId === activeSubmap}
                             exitId={marker.exitId}
                             selected={

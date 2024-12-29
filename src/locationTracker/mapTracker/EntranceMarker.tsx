@@ -24,7 +24,6 @@ type EntranceMarkerProps = {
     markerY: number;
     exitId: string;
     title: string;
-    mapWidth: number;
     active: boolean;
     onGlickGroup: (group: string) => void;
     onChooseEntrance: (exitId: string) => void;
@@ -37,7 +36,6 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
         exitId,
         markerX,
         markerY,
-        mapWidth,
         active,
         onGlickGroup,
         onChooseEntrance,
@@ -173,7 +171,6 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
             y={markerY}
             variant={title.includes('Trial Gate') ? 'circle' : 'square'}
             color={markerColor}
-            mapWidth={mapWidth}
             tooltip={tooltip}
             onClick={handleClick}
             onContextMenu={displayMenu}

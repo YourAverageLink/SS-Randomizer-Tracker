@@ -13,7 +13,6 @@ import type {
     InterfaceState,
 } from '../../tracker/TrackerInterfaceReducer';
 import { mapModelSelector } from './Selectors';
-import { LocationsEntrancesList } from '../LocationsEntrancesList';
 
 const images: Record<string, string> = {
     skyloftMap,
@@ -22,26 +21,17 @@ const images: Record<string, string> = {
     lanayruMap,
 };
 
-function WorldMap({
-    imgWidth: imgWidth_,
-    containerHeight,
+export const WORLD_MAP_ASPECT_RATIO = 843 / 465;
+
+export function WorldMap({
+    width: imgWidth,
     interfaceState,
     interfaceDispatch,
 }: {
-    imgWidth: number;
-    containerHeight: number;
+    width: number;
     interfaceState: InterfaceState;
     interfaceDispatch: React.Dispatch<InterfaceAction>;
 }) {
-    let imgWidth = imgWidth_;
-    // original image dimensions
-    const aspectRatio = 843 / 465;
-    let imgHeight = imgWidth / aspectRatio;
-    if (imgHeight > containerHeight * 0.55) {
-        imgHeight = containerHeight * 0.55;
-        imgWidth = imgHeight * aspectRatio;
-    }
-
     const mapModel = useSelector(mapModelSelector);
 
     const activeSubmap = interfaceState.mapView;
@@ -68,102 +58,74 @@ function WorldMap({
             ? interfaceState.exitId
             : interfaceState.hintRegion;
 
-    // TODO make the WorldMap a standalone map component
-    // and move the LocationsEntrancesList into the main
-    // tracker layout
     return (
-        <div>
-            <div
-                style={{
-                    position: 'absolute',
-                    userSelect: 'none',
-                    width: imgWidth,
-                    height: imgWidth / aspectRatio,
-                }}
-            >
-                <div>
-                    {!activeSubmap && (
-                        <>
-                            {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
-                            <img
-                                src={skyMap}
-                                alt="World Map"
-                                width={imgWidth}
-                                onContextMenu={(e) => {
-                                    e.preventDefault();
-                                }}
-                            />
-                            <StartingEntranceMarker
-                                mapWidth={imgWidth}
-                                onClick={(exitId) =>
-                                    interfaceDispatch({
-                                        type: 'chooseEntrance',
-                                        exitId,
-                                    })
-                                }
-                                selected={currentRegionOrExit === '\\Start'}
-                            />
-                        </>
-                    )}
-                    {mapModel.regions.map((marker) => (
-                        <div
-                            key={marker.hintRegion}
-                            style={{ display: !activeSubmap ? '' : 'none' }}
-                        >
-                            <MapMarker
-                                markerX={marker.markerX}
-                                markerY={marker.markerY}
-                                title={marker.hintRegion!}
-                                onGlickGroup={handleGroupClick}
-                                mapWidth={imgWidth}
-                                selected={
-                                    marker.hintRegion === currentRegionOrExit
-                                }
-                            />
-                        </div>
-                    ))}
-                    {mapModel.provinces.map((submap) => {
-                        const entry = mapData[submap.provinceId];
-                        return (
-                            <Submap
-                                key={submap.provinceId}
-                                provinceId={submap.provinceId}
-                                markerX={entry.markerX}
-                                markerY={entry.markerY}
-                                title={submap.name}
-                                onGroupChange={handleGroupClick}
-                                onSubmapChange={handleSubmapClick}
-                                onChooseEntrance={onChooseEntrance}
-                                markers={submap.regions}
-                                map={images[entry.map]}
-                                mapWidth={imgWidth}
-                                exitParams={entry.exitParams}
-                                activeSubmap={activeSubmap}
-                                currentRegionOrExit={currentRegionOrExit}
-                            />
-                        );
-                    })}
-                </div>
-            </div>
-            <div
-                style={{
-                    position: 'relative',
-                    top: imgHeight + 10,
-                    display: 'flex',
-                }}
-            >
-                <div
-                    style={{
-                        width: imgWidth,
-                        height: containerHeight * 0.43,
-                    }}
-                >
-                    <LocationsEntrancesList
-                        includeHeader
-                        interfaceState={interfaceState}
-                        interfaceDispatch={interfaceDispatch}
-                    />
-                </div>
+        <div
+            style={{
+                position: 'relative',
+                userSelect: 'none',
+                width: imgWidth,
+                height: imgWidth / WORLD_MAP_ASPECT_RATIO,
+                containerType: 'inline-size',
+            }}
+        >
+            <div>
+                {!activeSubmap && (
+                    <>
+                        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
+                        <img
+                            src={skyMap}
+                            alt="World Map"
+                            width={imgWidth}
+                            onContextMenu={(e) => {
+                                e.preventDefault();
+                            }}
+                        />
+                        <StartingEntranceMarker
+                            onClick={(exitId) =>
+                                interfaceDispatch({
+                                    type: 'chooseEntrance',
+                                    exitId,
+                                })
+                            }
+                            selected={currentRegionOrExit === '\\Start'}
+                        />
+                    </>
+                )}
+                {mapModel.regions.map((marker) => (
+                    <div
+                        key={marker.hintRegion}
+                        style={{ display: !activeSubmap ? '' : 'none' }}
+                    >
+                        <MapMarker
+                            markerX={marker.markerX}
+                            markerY={marker.markerY}
+                            title={marker.hintRegion!}
+                            onGlickGroup={handleGroupClick}
+                            selected={marker.hintRegion === currentRegionOrExit}
+                        />
+                    </div>
+                ))}
+                {mapModel.provinces.map((submap) => {
+                    const entry = mapData[submap.provinceId];
+                    return (
+                        <Submap
+                            key={submap.provinceId}
+                            provinceId={submap.provinceId}
+                            markerX={entry.markerX}
+                            markerY={entry.markerY}
+                            title={submap.name}
+                            onGroupChange={handleGroupClick}
+                            onSubmapChange={handleSubmapClick}
+                            onChooseEntrance={onChooseEntrance}
+                            markers={submap.regions}
+                            map={images[entry.map]}
+                            mapWidth={imgWidth}
+                            exitParams={entry.exitParams}
+                            activeSubmap={activeSubmap}
+                            currentRegionOrExit={currentRegionOrExit}
+                        />
+                    );
+                })}
             </div>
         </div>
     );

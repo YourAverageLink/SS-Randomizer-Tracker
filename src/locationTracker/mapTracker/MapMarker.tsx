@@ -15,13 +15,12 @@ type MapMarkerProps = {
     markerY: number;
     title: string;
     onGlickGroup: (region: string) => void;
-    mapWidth: number;
     selected: boolean;
 };
 
 
 const MapMarker = (props: MapMarkerProps) => {
-    const { onGlickGroup, title, markerX, markerY, mapWidth, selected } = props;
+    const { onGlickGroup, title, markerX, markerY, selected } = props;
     const area = useSelector((state: RootState) => areasSelector(state).find((a) => a.name === title))!;
     const data = getRegionData(area);
     const markerColor = getMarkerColor(data.checks);
@@ -59,7 +58,6 @@ const MapMarker = (props: MapMarkerProps) => {
             y={markerY}
             variant="rounded"
             color={markerColor}
-            mapWidth={mapWidth}
             tooltip={tooltip}
             onClick={handleClick}
             onContextMenu={displayMenu}

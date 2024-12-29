@@ -4,6 +4,7 @@ declare const classNames: {
     readonly rounded: 'rounded';
     readonly circle: 'circle';
     readonly submarkers: 'submarkers';
+    readonly left: 'left';
     readonly submarker: 'submarker';
 };
 export = classNames;

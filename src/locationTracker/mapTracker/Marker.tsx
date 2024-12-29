@@ -11,7 +11,7 @@ export interface SubmarkerData {
     key: string;
     image: string;
     color: keyof ColorScheme;
-};
+}
 
 const borderRadiuses: Record<MarkerVariant, string | undefined> = {
     square: styles.square,
@@ -24,7 +24,6 @@ export function Marker({
     color,
     x,
     y,
-    mapWidth,
     children,
     submarkers,
     submarkerPlacement = 'right',
@@ -37,7 +36,6 @@ export function Marker({
     color: keyof ColorScheme;
     x: number;
     y: number;
-    mapWidth: number;
     children: React.ReactNode;
     submarkers?: SubmarkerData[];
     submarkerPlacement?: SubmarkerPlacement;
@@ -46,33 +44,12 @@ export function Marker({
     onContextMenu?: (ev: React.MouseEvent) => void;
     selected: boolean;
 }) {
-    // TODO replace mapWidth with Container Queries, e.g. `5.5cqw`
-    // once we drop support for Chrome < 105, which will happen
-    // when OBS 31 releases since it includes CEF based on Chrome 126
-    const markerSize = mapWidth / 18;
+    const positionVars = {
+        '--map-marker-y': `${y}%`,
+        '--map-marker-x': `${x}%`,
+    };
     const markerStyle: CSSProperties = {
-        top: `${y}%`,
-        left: `${x}%`,
         background: `var(--scheme-${color})`,
-        width: markerSize,
-        height: markerSize,
-        fontSize: mapWidth / 27,
-    };
-
-    const submarkersStyle: CSSProperties = {
-        top: `${y}%`,
-        height: 1.25 * markerSize,
-    };
-
-    if (submarkerPlacement === 'left') {
-        submarkersStyle.left = `calc(${x}% - ${markerSize / 2}px)`;
-    } else {
-        submarkersStyle.left = `calc(${x}% + ${markerSize}px)`;
-    }
-
-    const submarkerStyle: CSSProperties = {
-        width: markerSize / 2,
-        height: markerSize / 2,
     };
 
     if (selected) {
@@ -81,7 +58,7 @@ export function Marker({
 
     return (
         // I really don't like followCursor here but otherwise the tooltip teleports to (0, 0)
-        // when the marker is removed, which may overlap with the item or dungeon tracker
+        // when the marker is removed, where it overlaps with the item or dungeon tracker
         <>
             <Tooltip content={tooltip} placement="bottom" followCursor>
                 <div
@@ -90,20 +67,19 @@ export function Marker({
                     role="button"
                     tabIndex={0}
                     onContextMenu={onContextMenu}
-                    style={markerStyle}
+                    style={{ ...markerStyle, ...positionVars }}
                     className={clsx(styles.marker, borderRadiuses[variant])}
                 >
                     <span>{children}</span>
                 </div>
             </Tooltip>
             {submarkers && (
-                <div className={styles.submarkers} style={submarkersStyle}>
+                <div className={clsx(styles.submarkers, {[styles.left]: submarkerPlacement === 'left'})} style={positionVars as CSSProperties}>
                     {submarkers?.map((data) => (
                         <div
                             key={data.key}
                             className={styles.submarker}
                             style={{
-                                ...submarkerStyle,
                                 background: `var(--scheme-${data.color})`,
                             }}
                         >

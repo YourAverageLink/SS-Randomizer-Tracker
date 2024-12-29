@@ -49,7 +49,7 @@ export function LocationsEntrancesList({
                             />
                         </div>
                     )}
-                    <div style={{ overflow: 'visible auto' }}>
+                    <div style={{ overflow: 'visible auto', flex: '1' }}>
                         <Locations
                             onChooseEntrance={onChooseEntrance}
                             hintRegion={selectedArea}
