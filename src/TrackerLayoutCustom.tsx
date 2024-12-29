@@ -16,6 +16,36 @@ import { customLayoutSelector } from './customization/selectors';
 import { useMemo } from 'react';
 import { stringifyError } from './utils/Errors';
 
+/*
+Example custom layout JSON (for a Full HD vertical screen):
+{
+  "components": [
+    {
+      "id": "dungeonTracker",
+      "layout": { "y": 10, "x": 30, "width": 500 },
+      "params": { "compact": false }
+    },
+    { "id": "regionMap", "layout": { "y": 10, "x": 550, "width": 500 } },
+    {
+      "id": "locationsEntrances",
+      "layout": { "y": 300, "x": 550, "width": 500, "height": 350 },
+      "params": { "includeHeader": true, "wide": true }
+    },
+    { "id": "gridInventory", "layout": { "y": 380, "x": 30, "width": 500 } },
+    { "id": "counters", "layout": { "y": 700, "x": 550, "width": 500 } },
+    {
+      "id": "hints",
+      "layout": { "y": 850, "x": 550, "width": 500, "height": 300 }
+    },
+    { "id": "ingameInventory", "layout": { "y": 850, "x": 30, "width": 500 } },
+    {
+      "id": "regionList",
+      "layout": { "y": 1150, "x": 550, "width": 500, "height": 600 }
+    }
+  ]
+}
+*/
+
 interface TrackerComponentLayout {
     x: number;
     y: number;
