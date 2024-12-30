@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import type { RootState } from './store/store';
-import type { TrackerState } from './tracker/slice';
+import type { RootState } from './store/Store';
+import type { TrackerState } from './tracker/Slice';
 import { type RemoteReference, formatRemote, parseRemote } from './loader/LogicLoader';
-import type { CounterBasis, CustomizationState, ItemLayout, LocationLayout } from './customization/slice';
+import type { CounterBasis, CustomizationState, ItemLayout, LocationLayout } from './customization/Slice';
 import type { ColorScheme } from './customization/ColorScheme';
-import type { SavesState } from './saves/slice';
+import type { SavesState } from './saves/Slice';
 
 const trackerStateLocalStorageKey = 'ssrTrackerState';
 const customizationStateLocalStorageKey = 'ssrTrackerCustomization';

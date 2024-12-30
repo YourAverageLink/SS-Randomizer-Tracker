@@ -1,5 +1,5 @@
 import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
-import { mapInventory, getAdditionalItems } from '../tracker/selectors';
+import { mapInventory, getAdditionalItems } from '../tracker/Selectors';
 import { type InventoryItem, isItem, itemMaxes } from './Inventory';
 import { type PotentialLocations, getSemiLogicKeys } from './KeyLogic';
 import type { Logic } from './Logic';

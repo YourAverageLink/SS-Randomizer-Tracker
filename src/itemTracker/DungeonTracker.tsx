@@ -23,7 +23,7 @@ import React from 'react';
 import AreaCounters from '../locationTracker/AreaCounters';
 import HintMarker from '../hints/HintMarker';
 import { useSelector } from 'react-redux';
-import { areasSelector, settingSelector } from '../tracker/selectors';
+import { areasSelector, settingSelector } from '../tracker/Selectors';
 import {
     type HintRegion,
     type DungeonName as DungeonNameType,

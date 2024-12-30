@@ -6,11 +6,11 @@ import {
     areasSelector,
     exitsByIdSelector,
     inLogicBitsSelector,
-} from '../../tracker/selectors';
+} from '../../tracker/Selectors';
 import { useContextMenu } from '../context-menu';
 import type { TriggerEvent } from 'react-contexify';
-import type { RootState } from '../../store/store';
-import { logicSelector } from '../../logic/selectors';
+import type { RootState } from '../../store/Store';
+import { logicSelector } from '../../logic/Selectors';
 import type { ColorScheme } from '../../customization/ColorScheme';
 import HintDescription, { decodeHint } from '../Hints';
 import { useTooltipExpr } from '../../tooltips/TooltipHooks';

@@ -30,12 +30,12 @@ import {
     formatRemote,
     parseRemote,
 } from '../loader/LogicLoader';
-import { acceptSettings, reset } from '../tracker/slice';
-import Acknowledgement from '../Acknowledgment';
+import { acceptSettings, reset } from '../tracker/Slice';
+import Acknowledgement from './Acknowledgment';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../store/store';
+import { useAppDispatch } from '../store/Store';
 import { range } from 'lodash';
-import { type LogicBundle, loadLogic } from '../logic/slice';
+import { type LogicBundle, loadLogic } from '../logic/Slice';
 import Select, { type MultiValue, type ActionMeta, type SingleValue } from 'react-select';
 import { selectStyles } from '../customization/ComponentStyles';
 import _ from 'lodash';

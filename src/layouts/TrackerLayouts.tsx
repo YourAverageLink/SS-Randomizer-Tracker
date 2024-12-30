@@ -1,27 +1,27 @@
 import { useSelector } from 'react-redux';
-import BasicCounters from './BasicCounters';
+import BasicCounters from '../BasicCounters';
 import {
     itemLayoutSelector,
     locationLayoutSelector,
-} from './customization/selectors';
-import { HintsTracker } from './hints/HintsTracker';
-import DungeonTracker from './itemTracker/DungeonTracker';
+} from '../customization/Selectors';
+import { HintsTracker } from '../hints/HintsTracker';
+import DungeonTracker from '../itemTracker/DungeonTracker';
 import GridTracker, {
     GRID_TRACKER_ASPECT_RATIO,
-} from './itemTracker/GridTracker';
+} from '../itemTracker/GridTracker';
 import ItemTracker, {
     ITEM_TRACKER_ASPECT_RATIO,
-} from './itemTracker/ItemTracker';
-import { ItemTrackerContainer } from './itemTracker/ItemTrackerContainer';
+} from '../itemTracker/ItemTracker';
+import { ItemTrackerContainer } from '../itemTracker/ItemTrackerContainer';
 import WorldMap, {
     WORLD_MAP_ASPECT_RATIO,
-} from './locationTracker/mapTracker/WorldMap';
+} from '../locationTracker/mapTracker/WorldMap';
 import type {
     InterfaceAction,
     InterfaceState,
-} from './tracker/TrackerInterfaceReducer';
-import { LocationGroupList } from './locationTracker/LocationGroupList';
-import { LocationsEntrancesList } from './locationTracker/LocationsEntrancesList';
+} from '../tracker/TrackerInterfaceReducer';
+import { LocationGroupList } from '../locationTracker/LocationGroupList';
+import { LocationsEntrancesList } from '../locationTracker/LocationsEntrancesList';
 import { useLayoutEffect, useRef, useState } from 'react';
 import useResizeObserver from '@react-hook/resize-observer';
 

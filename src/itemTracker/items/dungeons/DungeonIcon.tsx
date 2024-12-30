@@ -1,4 +1,4 @@
-import keyDownWrapper from '../../../KeyDownWrapper';
+import keyDownWrapper from '../../../utils/KeyDownWrapper';
 
 type DungeonIconProps = {
     image: string;

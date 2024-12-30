@@ -3,10 +3,10 @@ import locationGroupStyles from './LocationGroup.module.css';
 import locationStyles from './Location.module.css';
 import styles from './EntranceChooser.module.css';
 import clsx from 'clsx';
-import { entrancePoolsSelector, exitsByIdSelector, usedEntrancesSelector } from '../tracker/selectors';
+import { entrancePoolsSelector, exitsByIdSelector, usedEntrancesSelector } from '../tracker/Selectors';
 import { useMemo, useState } from 'react';
-import { mapEntrance } from '../tracker/slice';
-import keyDownWrapper from '../KeyDownWrapper';
+import { mapEntrance } from '../tracker/Slice';
+import keyDownWrapper from '../utils/KeyDownWrapper';
 import { reorderLocationsForGrid } from '../utils/Collections';
 
 const RESET_OPTION = 'RESET';

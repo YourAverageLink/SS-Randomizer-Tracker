@@ -1,15 +1,15 @@
 import { Modal, Button, Container, Row, Col, FormCheck } from 'react-bootstrap';
 import ColorBlock from './ColorBlock';
 import { type ColorScheme, darkColorScheme, lightColorScheme } from './ColorScheme';
-import { type CounterBasis, type ItemLayout, type LocationLayout, setColorScheme, setCounterBasis, setCustomLayout, setEnabledSemilogicTricks, setItemLayout, setLocationLayout, setTrackTumbleweed, setTrickSemiLogic } from './slice';
+import { type CounterBasis, type ItemLayout, type LocationLayout, setColorScheme, setCounterBasis, setCustomLayout, setEnabledSemilogicTricks, setItemLayout, setLocationLayout, setTrackTumbleweed, setTrickSemiLogic } from './Slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { colorSchemeSelector, counterBasisSelector, hasCustomLayoutSelector, itemLayoutSelector, locationLayoutSelector, trickSemiLogicSelector, trickSemiLogicTrickListSelector, tumbleweedSelector } from './selectors';
+import { colorSchemeSelector, counterBasisSelector, hasCustomLayoutSelector, itemLayoutSelector, locationLayoutSelector, trickSemiLogicSelector, trickSemiLogicTrickListSelector, tumbleweedSelector } from './Selectors';
 import { useCallback, useMemo } from 'react';
 import { selectStyles } from './ComponentStyles';
 import Select, { type ActionMeta, type MultiValue } from 'react-select';
 import Tooltip from '../additionalComponents/Tooltip';
-import { optionsSelector } from '../logic/selectors';
-import { useAppDispatch, type ThunkResult } from '../store/store';
+import { optionsSelector } from '../logic/Selectors';
+import { useAppDispatch, type ThunkResult } from '../store/Store';
 
 const defaultColorSchemes = {
     Light: lightColorScheme,

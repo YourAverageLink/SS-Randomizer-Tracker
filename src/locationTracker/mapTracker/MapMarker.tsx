@@ -1,8 +1,8 @@
 import { type MouseEvent, useCallback } from 'react';
 import 'react-contexify/dist/ReactContexify.css';
 import { useSelector } from 'react-redux';
-import type { RootState } from '../../store/store';
-import { areaHintSelector, areasSelector } from '../../tracker/selectors';
+import type { RootState } from '../../store/Store';
+import { areaHintSelector, areasSelector } from '../../tracker/Selectors';
 import HintDescription, { decodeHint } from '../Hints';
 import { useContextMenu } from '../context-menu';
 import { Marker } from './Marker';

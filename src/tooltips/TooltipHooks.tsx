@@ -19,14 +19,14 @@ import {
     getRequirementLogicalStateSelector,
     settingSelector,
     settingsSelector,
-} from '../tracker/selectors';
-import { logicSelector, optionsSelector } from '../logic/selectors';
+} from '../tracker/Selectors';
+import { logicSelector, optionsSelector } from '../logic/Selectors';
 import {
     type RootTooltipExpression,
     booleanExprToTooltipExpr,
 } from './TooltipExpression';
 import type { ExplorationNode } from '../logic/Pathfinding';
-import { trickSemiLogicSelector, trickSemiLogicTrickListSelector } from '../customization/selectors';
+import { trickSemiLogicSelector, trickSemiLogicTrickListSelector } from '../customization/Selectors';
 import { mergeRequirements } from '../logic/bitlogic/BitLogic';
 
 const TooltipsContext = createContext<TooltipComputer | null>(null);

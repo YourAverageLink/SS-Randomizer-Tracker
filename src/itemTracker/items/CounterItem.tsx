@@ -1,6 +1,6 @@
 import type { InventoryItem } from '../../logic/Inventory';
 import { useSelector } from 'react-redux';
-import { rawItemCountSelector } from '../../tracker/selectors';
+import { rawItemCountSelector } from '../../tracker/Selectors';
 import '../BasicItem.css';
 import Item from '../Item';
 import styles from './CounterItem.module.css';

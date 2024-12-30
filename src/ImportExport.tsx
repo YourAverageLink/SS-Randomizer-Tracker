@@ -1,7 +1,7 @@
 import { type ChangeEvent, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { type ThunkResult, useAppDispatch } from './store/store';
-import { type TrackerState, loadTracker } from './tracker/slice';
+import { type ThunkResult, useAppDispatch } from './store/Store';
+import { type TrackerState, loadTracker } from './tracker/Slice';
 import type { RemoteReference } from './loader/LogicLoader';
 import { Button } from 'react-bootstrap';
 

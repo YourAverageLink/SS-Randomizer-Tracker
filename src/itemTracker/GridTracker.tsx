@@ -9,9 +9,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     rawItemCountSelector,
     totalGratitudeCrystalsSelector,
-} from '../tracker/selectors';
-import { clickItem } from '../tracker/slice';
-import { tumbleweedSelector } from '../customization/selectors';
+} from '../tracker/Selectors';
+import { clickItem } from '../tracker/Slice';
+import { tumbleweedSelector } from '../customization/Selectors';
 import styles from './GridTracker.module.css';
 
 export const GRID_TRACKER_ASPECT_RATIO = 1.063;

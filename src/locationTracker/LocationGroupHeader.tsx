@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
 import AreaCounters from './AreaCounters';
 import 'react-contexify/dist/ReactContexify.css';
-import keyDownWrapper from '../KeyDownWrapper';
+import keyDownWrapper from '../utils/KeyDownWrapper';
 import type { TriggerEvent } from 'react-contexify';
 import { useContextMenu } from './context-menu';
 import type { HintRegion } from '../logic/Locations';
 import { useSelector } from 'react-redux';
-import { areaHintSelector } from '../tracker/selectors';
+import { areaHintSelector } from '../tracker/Selectors';
 import { decodeHint } from './Hints';
 import styles from './LocationGroupHeader.module.css';
 import clsx from 'clsx';

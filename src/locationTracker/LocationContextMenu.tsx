@@ -5,7 +5,7 @@ import { Menu, Item, Separator, Submenu, type ItemParams } from 'react-contexify
 import hintItems from '../data/hintItems.json';
 import type { LocationContextMenuProps } from './Location';
 import { useDispatch } from 'react-redux';
-import { clickCheck, setCheckHint } from '../tracker/slice';
+import { clickCheck, setCheckHint } from '../tracker/Slice';
 import images from '../itemTracker/Images';
 
 type CtxProps<T = void> = ItemParams<LocationContextMenuProps, T>;

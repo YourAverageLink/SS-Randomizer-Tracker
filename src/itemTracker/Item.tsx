@@ -1,8 +1,8 @@
 import allImages from './Images';
 import type { InventoryItem } from '../logic/Inventory';
 import { useDispatch, useSelector } from 'react-redux';
-import { rawItemCountSelector } from '../tracker/selectors';
-import { clickItem } from '../tracker/slice';
+import { rawItemCountSelector } from '../tracker/Selectors';
+import { clickItem } from '../tracker/Slice';
 import { BasicItem } from './BasicItem';
 
 export function Item({

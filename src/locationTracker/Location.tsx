@@ -1,4 +1,4 @@
-import keyDownWrapper from '../KeyDownWrapper';
+import keyDownWrapper from '../utils/KeyDownWrapper';
 import { useContextMenu } from './context-menu';
 import { type CSSProperties, useCallback } from 'react';
 import type { TriggerEvent } from 'react-contexify';
@@ -10,13 +10,13 @@ import exitImg from '../assets/dungeons/entrance.png';
 import { useEntrancePath, useTooltipExpr } from '../tooltips/TooltipHooks';
 import RequirementsTooltip from './RequirementsTooltip';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkHintSelector, checkSelector, exitsByIdSelector, isCheckBannedSelector } from '../tracker/selectors';
-import { clickCheck, mapEntrance } from '../tracker/slice';
+import { checkHintSelector, checkSelector, exitsByIdSelector, isCheckBannedSelector } from '../tracker/Selectors';
+import { clickCheck, mapEntrance } from '../tracker/Slice';
 import PathTooltip from './PathTooltip';
 import Tooltip from '../additionalComponents/Tooltip';
 import clsx from 'clsx';
 import styles from './Location.module.css';
-import type { RootState } from '../store/store';
+import type { RootState } from '../store/Store';
 import type { Check } from '../logic/Locations';
 
 export interface LocationContextMenuProps {

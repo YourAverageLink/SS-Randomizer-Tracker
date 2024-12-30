@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { areasSelector } from '../tracker/selectors';
+import { areasSelector } from '../tracker/Selectors';
 import type {
     InterfaceState,
     InterfaceAction,

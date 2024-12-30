@@ -4,7 +4,7 @@ import goddessCubesList_ from '../data/goddessCubes2.json';
 import _ from 'lodash';
 import { swordsToAdd } from './ThingsThatWouldBeNiceToHaveInTheDump';
 import type { DungeonName } from './Locations';
-import type { TrackerState } from '../tracker/slice';
+import type { TrackerState } from '../tracker/Slice';
 
 const collectedCubeSuffix = '_TR_Cube_Collected';
 

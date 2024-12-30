@@ -1,17 +1,17 @@
-import { type AppAction, type RootState, type Store, createStore } from '../store/store';
+import { type AppAction, type RootState, type Store, createStore } from '../store/Store';
 import { getAndPatchLogic, type RemoteReference } from '../loader/LogicLoader';
 import type { AllTypedOptions } from '../permalink/SettingsTypes';
 
 import fs from 'node:fs';
-import { loadLogic } from '../logic/slice';
+import { loadLogic } from '../logic/Slice';
 import { defaultSettings } from '../permalink/Settings';
-import { reset } from '../tracker/slice';
-import { logicSelector } from '../logic/selectors';
+import { reset } from '../tracker/Slice';
+import { logicSelector } from '../logic/Selectors';
 import {
     areasSelector,
     entrancePoolsSelector,
     exitsByIdSelector,
-} from '../tracker/selectors';
+} from '../tracker/Selectors';
 
 const main: RemoteReference = {
     type: 'forkBranch',

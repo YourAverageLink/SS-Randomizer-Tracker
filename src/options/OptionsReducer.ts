@@ -6,8 +6,8 @@ import type {
     OptionsCommand,
 } from '../permalink/SettingsTypes';
 import { useSelector } from 'react-redux';
-import type { RootState } from '../store/store';
-import { totalCountersSelector } from '../tracker/selectors';
+import type { RootState } from '../store/Store';
+import { totalCountersSelector } from '../tracker/Selectors';
 import { validateSettings } from '../permalink/Settings';
 import { type RemoteReference, loadRemoteLogic } from '../loader/LogicLoader';
 import { getStoredRemote } from '../LocalStorage';

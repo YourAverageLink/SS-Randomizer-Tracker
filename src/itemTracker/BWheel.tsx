@@ -1,7 +1,7 @@
 import Item from './Item';
 import wheel from '../assets/b wheel.png';
 import { useSelector } from 'react-redux';
-import { tumbleweedSelector } from '../customization/selectors';
+import { tumbleweedSelector } from '../customization/Selectors';
 
 export default function BWheel({ width }: { width: number }) {
     const beetleWidth = width / 5.2;

@@ -10,8 +10,8 @@ import {
 import { FixedSizeList as List, type ListChildComponentProps } from 'react-window';
 import Select, { type ActionMeta, type SingleValue } from 'react-select';
 import { useDispatch, useSelector } from 'react-redux';
-import { entrancePoolsSelector, exitsSelector, usedEntrancesSelector } from '../tracker/selectors';
-import { mapEntrance } from '../tracker/slice';
+import { entrancePoolsSelector, exitsSelector, usedEntrancesSelector } from '../tracker/Selectors';
+import { mapEntrance } from '../tracker/Slice';
 import { selectStyles } from '../customization/ComponentStyles';
 import _ from 'lodash';
 // import EntranceGraph from './EntranceGraph';

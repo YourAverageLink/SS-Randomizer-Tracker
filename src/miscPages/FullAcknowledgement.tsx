@@ -1,9 +1,9 @@
 import { Row, Col, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import Contributor from './additionalComponents/Contributor';
-import contributors from './data/contributors.json';
+import Contributor from '../additionalComponents/Contributor';
+import contributors from '../data/contributors.json';
 import './FullAcknowledgement.css';
-import DiscordButton from './additionalComponents/DiscordButton';
+import DiscordButton from '../additionalComponents/DiscordButton';
 
 function ContributorTable({
     contributorsList,

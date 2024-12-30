@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import type { RootState } from '../store/store';
+import type { RootState } from '../store/Store';
 import { parseLogic } from './Logic';
 
 const rawLogicSelector = (state: RootState) => state.logic.loaded!.logic;
