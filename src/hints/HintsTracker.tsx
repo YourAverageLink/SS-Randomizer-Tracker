@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './HintsTracker.module.css';
-import type { RootState } from '../store/store';
-import { setHintsText } from '../tracker/slice';
+import type { RootState } from '../store/Store';
+import { setHintsText } from '../tracker/Slice';
 
 // Just a basic textarea for now
 export function HintsTracker() {

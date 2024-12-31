@@ -4,10 +4,10 @@ import allImages from './Images';
 import swordBlock from '../assets/Sword_Block.png';
 
 import CrystalCounter from './items/sidequest/CrystalCounter';
-import keyDownWrapper from '../KeyDownWrapper';
+import keyDownWrapper from '../utils/KeyDownWrapper';
 import { useDispatch, useSelector } from 'react-redux';
-import { rawItemCountSelector } from '../tracker/selectors';
-import { clickItem } from '../tracker/slice';
+import { rawItemCountSelector } from '../tracker/Selectors';
+import { clickItem } from '../tracker/Slice';
 
 export default function SwordBlock({width}: {width: number}) {
     const dispatch = useDispatch();

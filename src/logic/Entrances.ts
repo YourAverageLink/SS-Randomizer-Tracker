@@ -7,7 +7,7 @@ import {
     nonRandomizedEntrances,
     nonRandomizedExits,
 } from './ThingsThatWouldBeNiceToHaveInTheDump';
-import type { TrackerState } from '../tracker/slice';
+import type { TrackerState } from '../tracker/Slice';
 import type { DungeonName, ExitMapping } from './Locations';
 
 export interface Entrance {

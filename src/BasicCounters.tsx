@@ -3,9 +3,9 @@ import {
     exitsSelector,
     getRequirementLogicalStateSelector,
     totalCountersSelector,
-} from './tracker/selectors';
+} from './tracker/Selectors';
 import Tooltip from './additionalComponents/Tooltip';
-import { counterBasisSelector } from './customization/selectors';
+import { counterBasisSelector } from './customization/Selectors';
 import type { ExitMapping, LogicalState } from './logic/Locations';
 import styles from './BasicCounters.module.css';
 

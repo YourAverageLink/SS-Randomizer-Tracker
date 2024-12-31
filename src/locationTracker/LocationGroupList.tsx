@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { isDungeon } from '../logic/Locations';
-import { areasSelector } from '../tracker/selectors';
+import { areasSelector } from '../tracker/Selectors';
 import type { InterfaceAction } from '../tracker/TrackerInterfaceReducer';
 import LocationGroupHeader from './LocationGroupHeader';
 

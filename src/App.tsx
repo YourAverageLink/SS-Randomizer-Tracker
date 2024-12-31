@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import FullAcknowledgement from './FullAcknowledgement';
+import FullAcknowledgement from './miscPages/FullAcknowledgement';
 import Options from './options/Options';
 import Tracker from './Tracker';
 import { useSelector } from 'react-redux';
-import { colorSchemeSelector } from './customization/selectors';
+import { colorSchemeSelector } from './customization/Selectors';
 import { useLayoutEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import ErrorPage from './ErrorPage';
+import ErrorPage from './miscPages/ErrorPage';
 
 function App() {
     const colorScheme = useSelector(colorSchemeSelector);

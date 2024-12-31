@@ -1,4 +1,4 @@
-import keyDownWrapper from '../KeyDownWrapper';
+import keyDownWrapper from '../utils/KeyDownWrapper';
 import clsx from 'clsx';
 import './BasicItem.css';
 import _ from 'lodash';

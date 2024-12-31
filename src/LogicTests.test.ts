@@ -1,8 +1,8 @@
-import { setCounterBasis, setEnabledSemilogicTricks, setTrickSemiLogic } from './customization/slice';
+import { setCounterBasis, setEnabledSemilogicTricks, setTrickSemiLogic } from './customization/Slice';
 import { type InventoryItem, itemMaxes } from './logic/Inventory';
 import type { LogicalState } from './logic/Locations';
 import type { TypedOptions } from './permalink/SettingsTypes';
-import type { AppAction, RootState} from './store/store';
+import type { AppAction, RootState} from './store/Store';
 import { createTestLogic } from './testing/TestingUtils';
 import {
     allSettingsSelector,
@@ -10,7 +10,7 @@ import {
     checkSelector,
     rawItemCountSelector,
     totalCountersSelector,
-} from './tracker/selectors';
+} from './tracker/Selectors';
 import {
     acceptSettings,
     clickCheck,
@@ -20,7 +20,7 @@ import {
     reset,
     setCheckHint,
     setItemCounts,
-} from './tracker/slice';
+} from './tracker/Slice';
 
 describe('full logic tests', () => {
     const tester = createTestLogic();

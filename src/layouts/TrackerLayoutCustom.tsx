@@ -2,20 +2,20 @@ import type React from 'react';
 import type {
     InterfaceAction,
     InterfaceState,
-} from './tracker/TrackerInterfaceReducer';
-import GridTracker from './itemTracker/GridTracker';
-import ItemTracker from './itemTracker/ItemTracker';
-import { LocationGroupList } from './locationTracker/LocationGroupList';
-import WorldMap from './locationTracker/mapTracker/WorldMap';
-import { LocationsEntrancesList } from './locationTracker/LocationsEntrancesList';
-import DungeonTracker from './itemTracker/DungeonTracker';
-import BasicCounters from './BasicCounters';
-import { HintsTracker } from './hints/HintsTracker';
+} from '../tracker/TrackerInterfaceReducer';
+import GridTracker from '../itemTracker/GridTracker';
+import ItemTracker from '../itemTracker/ItemTracker';
+import { LocationGroupList } from '../locationTracker/LocationGroupList';
+import WorldMap from '../locationTracker/mapTracker/WorldMap';
+import { LocationsEntrancesList } from '../locationTracker/LocationsEntrancesList';
+import DungeonTracker from '../itemTracker/DungeonTracker';
+import BasicCounters from '../BasicCounters';
+import { HintsTracker } from '../hints/HintsTracker';
 import { useDispatch, useSelector } from 'react-redux';
-import { customLayoutSelector } from './customization/selectors';
+import { customLayoutSelector } from '../customization/Selectors';
 import { useMemo } from 'react';
-import { stringifyError } from './utils/Errors';
-import { setCustomLayout } from './customization/slice';
+import { stringifyError } from '../utils/Errors';
+import { setCustomLayout } from '../customization/Slice';
 import { Button } from 'react-bootstrap';
 
 /*

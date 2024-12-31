@@ -1,11 +1,11 @@
 import React, { type CSSProperties, useMemo, useState } from 'react';
 import type { OptionsAction } from './OptionsReducer';
 import type { AllTypedOptions } from '../permalink/SettingsTypes';
-import type { LogicBundle } from '../logic/slice';
+import type { LogicBundle } from '../logic/Slice';
 import { Button, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { type RootState, useAppDispatch } from '../store/store';
-import { type Preset, addPreset, removePreset } from '../saves/slice';
+import { type RootState, useAppDispatch } from '../store/Store';
+import { type Preset, addPreset, removePreset } from '../saves/Slice';
 import { formatRemote, type RemoteReference } from '../loader/LogicLoader';
 import { encodePermalink, validateSettings } from '../permalink/Settings';
 import { useSyncSavesToLocalStorage } from '../LocalStorage';

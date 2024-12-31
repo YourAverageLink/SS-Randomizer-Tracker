@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import Item from './Item';
 import miscItemBlock from '../assets/misc_items_block.png';
 import { useSelector } from 'react-redux';
-import { rawItemCountSelector } from '../tracker/selectors';
+import { rawItemCountSelector } from '../tracker/Selectors';
 
 export default function AdditionalItems({ width }: { width: number }) {
     const pouchStyle: CSSProperties = {

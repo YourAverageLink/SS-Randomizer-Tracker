@@ -1,6 +1,6 @@
 import 'react-contexify/dist/ReactContexify.css';
 import { useSelector } from 'react-redux';
-import { exitsByIdSelector, settingSelector } from '../../tracker/selectors';
+import { exitsByIdSelector, settingSelector } from '../../tracker/Selectors';
 import type { ColorScheme } from '../../customization/ColorScheme';
 import { Marker } from './Marker';
 

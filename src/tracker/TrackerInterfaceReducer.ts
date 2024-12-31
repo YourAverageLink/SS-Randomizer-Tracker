@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import { areaGraphSelector } from '../logic/selectors';
-import { exitsByIdSelector } from '../tracker/selectors';
+import { areaGraphSelector } from '../logic/Selectors';
+import { exitsByIdSelector } from './Selectors';
 import type { AreaGraph, Logic } from '../logic/Logic';
 import type { ExitMapping } from '../logic/Locations';
 import { useReducer } from 'react';

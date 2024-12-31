@@ -3,10 +3,10 @@ import {
     areaGraphSelector,
     logicSelector,
     optionsSelector,
-} from '../logic/selectors';
+} from '../logic/Selectors';
 import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
-import type { RootState } from '../store/store';
-import { currySelector } from '../utils/redux';
+import type { RootState } from '../store/Store';
+import { currySelector } from '../utils/Redux';
 import {
     completeTriforceReq,
     doesHintDistroUseGossipStone,
@@ -67,7 +67,7 @@ import {
     counterBasisSelector,
     trickSemiLogicSelector,
     trickSemiLogicTrickListSelector,
-} from '../customization/selectors';
+} from '../customization/Selectors';
 
 const bitVectorMemoizeOptions = {
     memoizeOptions: {

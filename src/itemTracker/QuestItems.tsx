@@ -6,7 +6,7 @@ import CrystalCounter from './items/sidequest/CrystalCounter';
 import questItemBlock from '../assets/quest_items_block.png';
 
 import { useSelector } from 'react-redux';
-import { totalGratitudeCrystalsSelector } from '../tracker/selectors';
+import { totalGratitudeCrystalsSelector } from '../tracker/Selectors';
 
 export default function QuestItems({ width }: { width: number }) {
     const letterWidth = width / 6.5;

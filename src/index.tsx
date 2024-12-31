@@ -4,7 +4,7 @@ import './index.css';
 import 'tippy.js/dist/tippy.css';
 import App from './App';
 import { Provider } from 'react-redux';
-import { createStore } from './store/store';
+import { createStore } from './store/Store';
 
 if (navigator.userAgent && navigator.userAgent.includes('Chrome/103.') && navigator.userAgent.includes('OBS/')) {
     window.alert('Skyward Sword Randomizer Tracker: You seem to be using an old version of OBS Studio. ' + 

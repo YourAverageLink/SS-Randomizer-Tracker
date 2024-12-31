@@ -1,8 +1,8 @@
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import Contributor from './additionalComponents/Contributor';
-import contributors from './data/contributors.json';
-import DiscordButton from './additionalComponents/DiscordButton';
+import Contributor from '../additionalComponents/Contributor';
+import contributors from '../data/contributors.json';
+import DiscordButton from '../additionalComponents/DiscordButton';
 
 export default function Acknowledgement() {
     return (

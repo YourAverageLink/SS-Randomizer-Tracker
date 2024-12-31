@@ -2,7 +2,7 @@ import { useState } from 'react';
 import unknown from '../assets/hints/unknown.png';
 import unrequired from '../assets/No_Entrance.png';
 import required from '../assets/Entrance.png';
-import keyDownWrapper from '../KeyDownWrapper';
+import keyDownWrapper from '../utils/KeyDownWrapper';
 
 const HintMarker = () => {
     const [current, setCurrent] = useState(0);

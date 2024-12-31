@@ -6,16 +6,16 @@ import {
     Submenu,
     type ItemParams,
 } from 'react-contexify';
-import { bulkEditChecks, setHint } from '../tracker/slice';
+import { bulkEditChecks, setHint } from '../tracker/Slice';
 import { useSelector } from 'react-redux';
 import {
     areasSelector,
     checkSelector,
     settingSelector,
-} from '../tracker/selectors';
+} from '../tracker/Selectors';
 import type { TrackerLinkedEntrancePool } from '../logic/Logic';
 import { bosses } from './Hints';
-import { type ThunkResult, useAppDispatch } from '../store/store';
+import { type ThunkResult, useAppDispatch } from '../store/Store';
 import hintItems from '../data/hintItems.json';
 import { HintItem } from './LocationContextMenu';
 import type { InterfaceAction } from '../tracker/TrackerInterfaceReducer';
