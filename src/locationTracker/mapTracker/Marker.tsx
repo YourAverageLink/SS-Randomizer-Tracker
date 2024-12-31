@@ -66,7 +66,7 @@ export function Marker({
                     onKeyDown={onClick}
                     role="button"
                     tabIndex={0}
-                    onContextMenu={onContextMenu}
+                    onContextMenu={onContextMenu ?? ((e) => e.preventDefault())}
                     style={{ ...markerStyle, ...positionVars }}
                     className={clsx(styles.marker, borderRadiuses[variant])}
                 >

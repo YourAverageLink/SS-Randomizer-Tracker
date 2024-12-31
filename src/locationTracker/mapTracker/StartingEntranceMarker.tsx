@@ -4,9 +4,15 @@ import { exitsByIdSelector, settingSelector } from '../../tracker/Selectors';
 import type { ColorScheme } from '../../customization/ColorScheme';
 import { Marker } from './Marker';
 
-const StartingEntranceMarker = ({ onClick, selected }: { onClick: (exitId: string) => void; selected: boolean }) => {
-    
-    const startingEntranceRando = useSelector(settingSelector('random-start-entrance')) !== 'Vanilla';
+function StartingEntranceMarker({
+    onClick,
+    selected,
+}: {
+    onClick: (exitId: string) => void;
+    selected: boolean;
+}) {
+    const startingEntranceRando =
+        useSelector(settingSelector('random-start-entrance')) !== 'Vanilla';
     const startMapping = useSelector(exitsByIdSelector)['\\Start'];
 
     if (!startingEntranceRando) {
@@ -15,13 +21,15 @@ const StartingEntranceMarker = ({ onClick, selected }: { onClick: (exitId: strin
 
     const hasSelectedEntrance = Boolean(startMapping.entrance);
 
-    const markerColor: keyof ColorScheme = hasSelectedEntrance ? 'checked' : 'inLogic';
+    const markerColor: keyof ColorScheme = hasSelectedEntrance
+        ? 'checked'
+        : 'inLogic';
 
     const tooltip = (
         <center>
             <div>Starting Entrance</div>
             <div>Click to choose starting entrance</div>
-            {startMapping.entrance  && <div>{startMapping.entrance.name}</div>}
+            {startMapping.entrance && <div>{startMapping.entrance.name}</div>}
         </center>
     );
 
@@ -34,12 +42,13 @@ const StartingEntranceMarker = ({ onClick, selected }: { onClick: (exitId: strin
                 color={markerColor}
                 tooltip={tooltip}
                 onClick={() => onClick(startMapping.exit.id)}
+                onContextMenu={() => onClick(startMapping.exit.id)}
                 selected={selected}
             >
                 {!hasSelectedEntrance && '?'}
             </Marker>
         </>
     );
-};
+}
 
 export default StartingEntranceMarker;
