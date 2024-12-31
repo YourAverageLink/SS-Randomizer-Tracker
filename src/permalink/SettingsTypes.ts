@@ -47,7 +47,7 @@ export type OptionType = Option['type'];
 export type OptionsCommand = keyof AllTypedOptions;
 
 export interface AllTypedOptions
-    extends Omit<GeneratedOptions, 'rupeesanity' | 'shopsanity' | 'randomize-entrances'> {
+    extends Omit<GeneratedOptions, 'rupeesanity' | 'shopsanity' | 'randomize-entrances' | 'logic-mode'> {
     rupeesanity: GeneratedOptions['rupeesanity'] | 'Vanilla';
 
     // Bizzare Bazaar splits Shopsanity into three settings
@@ -65,6 +65,10 @@ export interface AllTypedOptions
     // NindyBK's Preposterous Playoffs add dungeon shortcuts
     // https://github.com/NindyBK/ssrnppbuild/pull/1
     'open-shortcuts': 'None' | 'Unrequired Dungeons Only' | 'All Dungeons' | undefined;
+
+    // Beatable Logic Only
+    // https://github.com/ssrando/ssrando/pull/599
+    'logic-mode': GeneratedOptions['logic-mode'] | 'Normal' | 'Beatable Only' | 'Beatable Then Banned';
 }
 
 export type TypedOptions = Pick<AllTypedOptions, LogicOption>;

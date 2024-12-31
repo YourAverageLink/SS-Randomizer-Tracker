@@ -652,6 +652,7 @@ export const isCheckBannedSelector = createSelector(
 const dungeonKeyLogicSelector = createSelector(
     [
         logicSelector,
+        settingSelector('logic-mode'),
         settingSelector('boss-key-mode'),
         settingSelector('small-key-mode'),
         settingsRequirementsSelector,

@@ -47,14 +47,21 @@ export interface PotentialLocations {
  */
 export function keyData(
     logic: Logic,
+    logicModeSetting: TypedOptions['logic-mode'],
     bossKeySetting: TypedOptions['boss-key-mode'],
     smallKeySetting: TypedOptions['small-key-mode'],
     settingsRequirements: Requirements,
     checkRequirements: Requirements,
     isCheckBanned: (checkId: string, check: LogicalCheck) => boolean,
     optimisticLogicBits: BitVector,
-) {
+): PotentialLocations[] {
     const locations: PotentialLocations[] = [];
+
+    // Make no assumptions for now if logic mode doesn't guarantee item
+    // placement follows logic.
+    if (logicModeSetting !== 'Normal' && logicModeSetting !== 'BiTless') {
+        return locations;
+    }
 
     const regionChecks = (region: string) =>
         logic.checksByHintRegion[region].filter(

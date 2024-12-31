@@ -99,6 +99,7 @@ const optionCategorization_ = {
         'triforce-shuffle',
     ],
     Miscellaneous: [
+        'logic-mode',
         'bit-patches',
         'damage-multiplier',
         'enabled-tricks-bitless',
