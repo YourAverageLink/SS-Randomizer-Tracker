@@ -34,11 +34,10 @@ import { acceptSettings, reset } from '../tracker/Slice';
 import Acknowledgement from './Acknowledgment';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../store/Store';
-import { range } from 'lodash';
 import { type LogicBundle, loadLogic } from '../logic/Slice';
 import Select, { type MultiValue, type ActionMeta, type SingleValue } from 'react-select';
 import { selectStyles } from '../customization/ComponentStyles';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import DiscordButton from '../additionalComponents/DiscordButton';
 import React from 'react';
 import { ImportButton } from '../ImportExport';
@@ -584,7 +583,7 @@ function Setting({
                                 label: (value as number).toString(),
                             }}
                             onChange={(e) => e && setValue(e.value)}
-                            options={range(def.min, def.max + 1).map((val) => ({
+                            options={_.range(def.min, def.max + 1).map((val) => ({
                                 value: val,
                                 label: val.toString(),
                             }))}

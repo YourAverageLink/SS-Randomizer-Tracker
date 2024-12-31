@@ -7,7 +7,7 @@ import type {
 import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
 import type { WorkerRequest, WorkerResponse } from './worker/Types';
 import { deserializeBooleanExpression, serializeLogicalExpression } from './worker/Utils';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 /**
  * The TooltipComputer acts as:

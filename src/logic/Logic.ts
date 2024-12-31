@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { BitVector } from './bitlogic/BitVector';
 import { LogicalExpression } from './bitlogic/LogicalExpression';
 import {

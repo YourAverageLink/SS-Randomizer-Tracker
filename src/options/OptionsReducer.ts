@@ -12,7 +12,7 @@ import { validateSettings } from '../permalink/Settings';
 import { type RemoteReference, loadRemoteLogic } from '../loader/LogicLoader';
 import { getStoredRemote } from '../LocalStorage';
 import { withCancel } from '../utils/CancelToken';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import type { RawLogic, RawPresets } from '../logic/UpstreamTypes';
 import { delay } from '../utils/Promises';
 

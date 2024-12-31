@@ -38,7 +38,7 @@ import {
     triforceItemReplacement,
     triforceItems,
 } from '../logic/TrackerModifications';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { LogicalExpression } from '../logic/bitlogic/LogicalExpression';
 import { TimeOfDay } from '../logic/UpstreamTypes';
 import {

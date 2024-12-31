@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import type { TypedOptions } from '../permalink/SettingsTypes';
 import type { LinkedEntrancePool, Logic, TrackerLinkedEntrancePool } from './Logic';
 import {

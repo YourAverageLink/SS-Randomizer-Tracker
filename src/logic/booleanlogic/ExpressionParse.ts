@@ -1,7 +1,7 @@
-import _ from "lodash";
-import BooleanExpression, { type Item, Op } from "./BooleanExpression";
-import { BitVector } from "../bitlogic/BitVector";
-import { andToDnf } from "../bitlogic/LogicalExpression";
+import * as _ from 'lodash-es';
+import BooleanExpression, { type Item } from './BooleanExpression';
+import { BitVector } from '../bitlogic/BitVector';
+import { andToDnf } from '../bitlogic/LogicalExpression';
 
 export function parseExpression(expression: string) {
     return booleanExpressionForTokens(splitExpression(expression));
@@ -41,11 +41,11 @@ export function booleanExprToLogicalExpr(
 ): BitVector[] {
     if (BooleanExpression.isExpression(expr)) {
         switch (expr.type) {
-            case Op.Or:
+            case 'or':
                 return expr.items.flatMap((item) =>
                     booleanExprToLogicalExpr(item, lookup),
                 );
-            case Op.And: {
+            case 'and': {
                 const mapped = expr.items.map((i) => booleanExprToLogicalExpr(i, lookup));
                 return andToDnf(mapped);
             }
@@ -54,7 +54,6 @@ export function booleanExprToLogicalExpr(
             }
         }
     }
-
 
     if (expr === 'True') {
         return [new BitVector()];

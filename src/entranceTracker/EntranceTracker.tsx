@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { entrancePoolsSelector, exitsSelector, usedEntrancesSelector } from '../tracker/Selectors';
 import { mapEntrance } from '../tracker/Slice';
 import { selectStyles } from '../customization/ComponentStyles';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 // import EntranceGraph from './EntranceGraph';
 
 type EntranceTrackerProps = {

@@ -1,16 +1,10 @@
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { BitVector } from '../../logic/bitlogic/BitVector';
 import { LogicalExpression } from '../../logic/bitlogic/LogicalExpression';
 import BooleanExpression, {
     type Item,
 } from '../../logic/booleanlogic/BooleanExpression';
 import type { LeanLogic } from './Types';
-
-function simplifier(logic: LeanLogic) {
-    return (a: string, b: string) => {
-        return a === b || Boolean(logic.impliedBy[b]?.includes(a));
-    };
-}
 
 /**
  * Converts a DNF to a readable requirements expression.
@@ -48,12 +42,6 @@ export function dnfToRequirementExpr(
     );
     */
 
-    if (sop.length === 1) {
-        return BooleanExpression.and(
-            ...[...sop[0].iter()].map((x) => logic.allItems[x]),
-        ).simplify(simplifier(logic));
-    }
-
     const conjunctions = new LogicalExpression(sop).removeDuplicates()
         .conjunctions;
 
@@ -70,6 +58,12 @@ export function dnfToRequirementExpr(
                 }
             }
         }
+    }
+
+    if (conjunctions.length === 1) {
+        return BooleanExpression.and(
+            ...[...conjunctions[0].iter()].map((x) => logic.allItems[x]),
+        ).simplify();
     }
 
     // First, remove all common factors and from our SOP so that it's "cube-free".
@@ -189,9 +183,7 @@ export function dnfToRequirementExpr(
             );
 
             // CommonFactor1 and CommonFactor2 and (Quotient and Divisor or Remainder)
-            return BooleanExpression.and(...andTerms, sum).simplify(
-                simplifier(logic),
-            );
+            return BooleanExpression.and(...andTerms, sum).simplify();
         }
     }
 
@@ -201,7 +193,7 @@ export function dnfToRequirementExpr(
         BooleanExpression.or(
             ...conjunctions.map((c) => bitVecToRequirements(logic, c)),
         ),
-    ).simplify(simplifier(logic));
+    ).simplify();
 }
 
 function genRectangles(

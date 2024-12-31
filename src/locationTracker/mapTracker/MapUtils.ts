@@ -1,6 +1,6 @@
 import type { ColorScheme } from '../../customization/ColorScheme';
 import type { CheckGroup, HintRegion } from '../../logic/Locations';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import type { SubmarkerData } from './Marker';
 import goddessCubeImg from '../../assets/sidequests/goddess_cube.png';
 import gossipStoneImg from '../../assets/sidequests/gossip_stone.png';

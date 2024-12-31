@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 export function reorderLocationsForGrid<T>(locations: T[]) {
     const partitionPoint = Math.ceil(locations.length / 2);

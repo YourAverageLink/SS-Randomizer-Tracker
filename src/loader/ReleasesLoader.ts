@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { useCallback, useId, useSyncExternalStore } from 'react';
 import { dedupePromise } from '../utils/Promises';
 

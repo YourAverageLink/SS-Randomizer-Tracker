@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import type { ExitMapping } from './Locations';
 import type { AreaGraph } from './Logic';
 import { BitVector } from './bitlogic/BitVector';

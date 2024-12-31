@@ -1,7 +1,7 @@
 import keyDownWrapper from '../utils/KeyDownWrapper';
 import clsx from 'clsx';
 import './BasicItem.css';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 /**
  * The fundamental controlled item component.

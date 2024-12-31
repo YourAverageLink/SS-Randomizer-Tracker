@@ -79,10 +79,6 @@ export const itemMaxes = {
 
 export type InventoryItem = keyof typeof itemMaxes;
 
-export const itemOrder = Object.fromEntries(
-    Object.keys(itemMaxes).map((item, idx) => [item, idx]),
-) as Record<InventoryItem, number>;
-
 export function isItem(id: string): id is InventoryItem {
     return id in itemMaxes;
 }
