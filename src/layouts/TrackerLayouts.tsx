@@ -22,8 +22,8 @@ import type {
 } from '../tracker/TrackerInterfaceReducer';
 import { LocationGroupList } from '../locationTracker/LocationGroupList';
 import { LocationsEntrancesList } from '../locationTracker/LocationsEntrancesList';
-import { useLayoutEffect, useRef, useState } from 'react';
-import useResizeObserver from '@react-hook/resize-observer';
+import { useRef } from 'react';
+import { useElementSize } from '../utils/React';
 
 export function TrackerLayout({
     interfaceState,
@@ -204,27 +204,8 @@ function MapLayoutCenterColumnContainer({
     interfaceState: InterfaceState;
     interfaceDispatch: React.Dispatch<InterfaceAction>;
 }) {
-    const [measuredWidth, setMeasuredWidth] = useState(0);
-    const [measuredHeight, setMeasuredHeight] = useState(0);
     const ref = useRef<HTMLDivElement | null>(null);
-
-    useLayoutEffect(() => {
-        const elem = ref.current;
-        if (!elem) {
-            return;
-        }
-        setMeasuredWidth(elem.clientWidth);
-        setMeasuredHeight(elem.clientHeight);
-    }, [ref]);
-
-    useResizeObserver(ref, () => {
-        const elem = ref.current;
-        if (!elem) {
-            return;
-        }
-        setMeasuredWidth(elem.clientWidth);
-        setMeasuredHeight(elem.clientHeight);
-    });
+    const { measuredWidth, measuredHeight } = useElementSize(ref);
 
     const mapWidth = Math.min(
         measuredWidth,
