@@ -2,7 +2,6 @@ import { BitVector } from '../../logic/bitlogic/BitVector';
 import { LogicalExpression } from '../../logic/bitlogic/LogicalExpression';
 import BooleanExpression, {
     type Item,
-    Op,
 } from '../../logic/booleanlogic/BooleanExpression';
 import type { SerializedBooleanExpression, SerializedItem } from './Types';
 
@@ -35,12 +34,12 @@ export function serializeBooleanExpression(
 function serializeBooleanItem(item: Item): SerializedItem {
     if (BooleanExpression.isExpression(item)) {
         switch (item.type) {
-            case Op.And:
+            case 'and':
                 return {
                     type: 'and',
                     items: item.items.map(serializeBooleanItem),
                 };
-            case Op.Or:
+            case 'or':
                 return {
                     type: 'or',
                     items: item.items.map(serializeBooleanItem),
@@ -58,6 +57,6 @@ export function deserializeBooleanExpression(
         expr.items.map((i) =>
             typeof i === 'string' ? i : deserializeBooleanExpression(i),
         ),
-        expr.type === 'and' ? Op.And : Op.Or,
+        expr.type,
     );
 }

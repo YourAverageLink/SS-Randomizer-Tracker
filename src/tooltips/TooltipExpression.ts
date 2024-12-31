@@ -1,12 +1,11 @@
 import type { Logic } from '../logic/Logic';
 import BooleanExpression, {
-    Op,
-    type ReducerArg,
+    type Item,
+    type Op,
 } from '../logic/booleanlogic/BooleanExpression';
 import type { LogicalState } from '../logic/Locations';
 import prettyItemNames_ from '../data/prettyItemNames.json';
-import _ from 'lodash';
-import { type InventoryItem, itemOrder } from '../logic/Inventory';
+import * as _ from 'lodash-es';
 
 const prettyItemNames: Record<
     string,
@@ -15,14 +14,12 @@ const prettyItemNames: Record<
 
 export interface TerminalRequirement {
     type: 'item';
-    sortIndex: number;
     item: string;
     logicalState: LogicalState;
 }
 
 export interface NonterminalRequirement {
     type: 'expr';
-    sortIndex: number;
     items: TooltipExpression[];
     op: Op;
 }
@@ -30,36 +27,77 @@ export interface NonterminalRequirement {
 export type TooltipExpression = TerminalRequirement | NonterminalRequirement;
 
 export interface RootTooltipExpression {
-    op: Op.And;
+    op: 'and';
     items: TooltipExpression[];
 }
 
 const impossible: RootTooltipExpression = {
-    op: Op.And,
+    op: 'and',
     items: [
         {
             type: 'item',
             item: 'Impossible (discover an entrance first)',
-            sortIndex: 0,
             logicalState: 'outLogic',
         },
     ],
 };
 
 const nothing: RootTooltipExpression = {
-    op: Op.And,
+    op: 'and',
     items: [
         {
             type: 'item',
             item: 'Nothing',
-            sortIndex: 0,
             logicalState: 'inLogic',
         },
     ],
 };
 
-function sortRequirements(exprs: TooltipExpression[]) {
-    return _.sortBy(exprs, (expr: TooltipExpression) => (expr.sortIndex));
+function numTerms(item: TooltipExpression): number {
+    if (item.type === 'expr') {
+        return _.sumBy(item.items, numTerms);
+    }
+    return 1;
+}
+
+function getLength(item: TooltipExpression): number {
+    if (item.type === 'expr') {
+        return numTerms(item);
+    } else {
+        return -1;
+    }
+}
+
+function getName(item: TooltipExpression): string {
+    if (item.type === 'expr') {
+        return "";
+    } else {
+        return item.item;
+    }
+}
+
+function booleanExprToTooltipExprRecursive(
+    logic: Logic,
+    expr: BooleanExpression,
+    getRequirementLogicalState: (requirement: string) => LogicalState,
+): NonterminalRequirement {
+    const mapItem = (item: Item): TooltipExpression => {
+        if (BooleanExpression.isExpression(item)) {
+            return booleanExprToTooltipExprRecursive(logic, item, getRequirementLogicalState);
+        } else {
+            return {
+                type: 'item',
+                item: getReadableItemName(logic, item),
+                logicalState: getRequirementLogicalState(item),
+            };
+        }
+    }
+    const items = expr.items.map(mapItem);
+    return {
+        type: 'expr',
+        op: expr.type,
+        items: _.sortBy(items, getLength, getName),
+    }
 }
 
 export function booleanExprToTooltipExpr(
@@ -67,68 +105,13 @@ export function booleanExprToTooltipExpr(
     expr: BooleanExpression,
     getRequirementLogicalState: (requirement: string) => LogicalState,
 ): RootTooltipExpression {
-    const reducer = (arg: ReducerArg<NonterminalRequirement>): NonterminalRequirement => {
-        if (arg.isReduced) {
-            return {
-                ...arg.accumulator,
-                sortIndex:
-                    arg.accumulator.op === Op.Or
-                        ? Math.min(
-                            arg.accumulator.sortIndex,
-                            arg.item.sortIndex,
-                        )
-                        : Math.max(
-                            arg.accumulator.sortIndex,
-                            arg.item.sortIndex,
-                        ),
-                items: sortRequirements([...arg.accumulator.items, arg.item]),
-            };
-        } else {
-            const wrappedItem: TerminalRequirement = {
-                type: 'item',
-                sortIndex: itemOrder[getBaseItem(arg.item) as InventoryItem] ?? 0,
-                item: getReadableItemName(logic, arg.item),
-                logicalState: getRequirementLogicalState(arg.item),
-            };
-            return {
-                ...arg.accumulator,
-                sortIndex:
-                    arg.accumulator.op === Op.Or
-                        ? Math.min(
-                            arg.accumulator.sortIndex,
-                            wrappedItem.sortIndex,
-                        )
-                        : Math.max(
-                            arg.accumulator.sortIndex,
-                            wrappedItem.sortIndex,
-                        ),
-                items: sortRequirements([...arg.accumulator.items, wrappedItem]),
-            };
-        }
-    };
-
-    const ntExpr = expr.reduce<NonterminalRequirement>({
-        andInitialValue: {
-            type: 'expr',
-            items: [],
-            sortIndex: Number.MIN_SAFE_INTEGER,
-            op: Op.And,
-        },
-        orInitialValue: {
-            type: 'expr',
-            items: [],
-            sortIndex: Number.MAX_SAFE_INTEGER,
-            op: Op.Or,
-        },
-        andReducer: reducer,
-        orReducer: reducer,
-    });
+    const ntExpr = booleanExprToTooltipExprRecursive(logic, expr, getRequirementLogicalState);
 
     if (!ntExpr.items.length) {
-        return ntExpr.op === Op.And ? nothing : impossible;
+        return ntExpr.op === 'and' ? nothing : impossible;
     }
 
-    if (ntExpr.op === Op.And) {
+    if (ntExpr.op === 'and') {
         return {
             items: ntExpr.items,
             op: ntExpr.op,
@@ -136,22 +119,12 @@ export function booleanExprToTooltipExpr(
     } else {
         return {
             items: [ntExpr],
-            op: Op.And,
+            op: 'and',
         };
     }
 }
 
 const itemCountPat = /^(.+) x (\d+)$/;
-
-function getBaseItem(item: string) {
-    const match = item.match(itemCountPat);
-    if (match) {
-        const [, baseName] = match;
-        return baseName;
-    }
-
-    return item;
-}
 
 function getReadableItemName(logic: Logic, item: string) {
     if (item in prettyItemNames) {

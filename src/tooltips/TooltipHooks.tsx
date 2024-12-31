@@ -10,7 +10,7 @@ import {
     useSyncExternalStore,
 } from 'react';
 import { TooltipComputer } from './TooltipComputations';
-import { noop } from 'lodash';
+import { noop } from 'lodash-es';
 import { useSelector } from 'react-redux';
 import {
     settingsRequirementsSelector,

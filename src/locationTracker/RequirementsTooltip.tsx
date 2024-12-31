@@ -1,5 +1,5 @@
 import React from 'react';
-import { Op } from '../logic/booleanlogic/BooleanExpression';
+import type { Op } from '../logic/booleanlogic/BooleanExpression';
 import type { RootTooltipExpression, TooltipExpression } from '../tooltips/TooltipExpression';
 import { addDividers } from '../utils/React';
 

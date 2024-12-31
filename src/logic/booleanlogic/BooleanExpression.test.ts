@@ -1,7 +1,7 @@
-import BooleanExpression, { Op } from './BooleanExpression';
+import BooleanExpression from './BooleanExpression';
 
 test('flattenFalse', () => {
-    const expr = new BooleanExpression([], Op.Or);
+    const expr = new BooleanExpression([], 'or');
 
     expect(expr.flatten()).toMatchInlineSnapshot(`
       BooleanExpression {
@@ -11,30 +11,16 @@ test('flattenFalse', () => {
     `);
 });
 
-test('removeDuplicateChildrenFalse', () => {
-    const expr = new BooleanExpression([], Op.Or);
-
-    // This is wrong
-    expect(expr.removeDuplicateChildren((a, b) => a === b))
-        .toMatchInlineSnapshot(`
-          BooleanExpression {
-            "items": [],
-            "type": "and",
-          }
-        `);
-});
-
 test('flattenAnother', () => {
     const expr = new BooleanExpression(
-        [new BooleanExpression([], Op.And)],
-        Op.Or,
+        [new BooleanExpression([], 'and')],
+        'or',
     );
 
-    // This is wrong
     expect(expr.flatten()).toMatchInlineSnapshot(`
       BooleanExpression {
         "items": [],
-        "type": "or",
+        "type": "and",
       }
     `);
 });

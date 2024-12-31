@@ -1,7 +1,7 @@
 import type { TypedOptions } from '../permalink/SettingsTypes';
 import { type InventoryItem, isItem } from './Inventory';
 import goddessCubesList_ from '../data/goddessCubes2.json';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { swordsToAdd } from './ThingsThatWouldBeNiceToHaveInTheDump';
 import type { DungeonName } from './Locations';
 import type { TrackerState } from '../tracker/Slice';

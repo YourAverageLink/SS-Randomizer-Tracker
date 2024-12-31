@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { useCallback } from 'react';
 import { Menu, Item, Separator, Submenu, type ItemParams } from 'react-contexify';
 
