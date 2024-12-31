@@ -15,6 +15,7 @@ import { withCancel } from '../utils/CancelToken';
 import * as _ from 'lodash-es';
 import type { RawLogic, RawPresets } from '../logic/UpstreamTypes';
 import { delay } from '../utils/Promises';
+import { convertError } from '../utils/Errors';
 
 const defaultUpstream: RemoteReference = {
     type: 'latestRelease',
@@ -134,14 +135,6 @@ export type LoadingState =
         type: 'corruptDump';
         error: string;
     };
-
-function convertError(e: unknown) {
-    return e
-        ? (typeof e === 'object' && e != null && 'message' in e)
-            ? (e.message as string)
-            : JSON.stringify(e)
-        : 'Unknown error';
-}
 
 async function loadRemote(
     remote: RemoteReference,

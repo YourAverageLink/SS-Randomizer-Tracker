@@ -2,7 +2,7 @@ import { Button } from 'react-bootstrap';
 import { ExportButton } from '../ImportExport';
 import DiscordButton from '../additionalComponents/DiscordButton';
 import { clearStoredRemote } from '../LocalStorage';
-import { stringifyError } from '../utils/Errors';
+import { convertError } from '../utils/Errors';
 import { useDispatch, useSelector } from 'react-redux';
 import { hasCustomLayoutSelector } from '../customization/Selectors';
 import { setCustomLayout } from '../customization/Slice';
@@ -14,7 +14,7 @@ export default function ErrorPage({
     error: unknown;
     resetErrorBoundary: () => void;
 }) {
-    const errorMsg = stringifyError(error);
+    const errorMsg = convertError(error);
     const hasCustomLayout = useSelector(hasCustomLayoutSelector);
     const dispatch = useDispatch();
     return (

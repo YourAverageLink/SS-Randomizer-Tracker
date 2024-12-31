@@ -174,7 +174,7 @@ const Submap = ({
                             active={provinceId === activeSubmap}
                             exitId={marker.exitId}
                             selected={
-                                marker.exitId == currentRegionOrExit ||
+                                marker.exitId === currentRegionOrExit ||
                                 (marker.hintRegion !== undefined &&
                                     marker.hintRegion === currentRegionOrExit)
                             }

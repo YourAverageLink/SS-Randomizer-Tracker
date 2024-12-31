@@ -14,7 +14,7 @@ import { HintsTracker } from '../hints/HintsTracker';
 import { useDispatch, useSelector } from 'react-redux';
 import { customLayoutSelector } from '../customization/Selectors';
 import { useMemo } from 'react';
-import { stringifyError } from '../utils/Errors';
+import { convertError } from '../utils/Errors';
 import { setCustomLayout } from '../customization/Slice';
 import { Button } from 'react-bootstrap';
 
@@ -204,7 +204,7 @@ export function TrackerLayoutCustom({
         try {
             return parseLayout(customLayout);
         } catch (e) {
-            return stringifyError(e);
+            return convertError(e);
         }
     }, [customLayout]);
 

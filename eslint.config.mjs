@@ -69,6 +69,7 @@ export default tseslint.config(
             'no-unused-vars': 'off',
             'no-param-reassign': ['error'],
             'no-bitwise': ['off'],
+            'eqeqeq': ['error', 'always'],
             'no-debugger': 'error',
             'no-implicit-coercion': 'error',
             'no-restricted-imports': [
