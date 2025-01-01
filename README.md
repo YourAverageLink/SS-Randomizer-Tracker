@@ -25,6 +25,17 @@ The bottom bar of the tracker contains various controls for the entire tracker. 
 
 The tracker auto-saves its state. You can safely close the tracker and click "Continue Tracker" to continue where you left off. You can also return to the Options menu, adjust randomizer settings, and continue with your run. This can be useful for runs with unknown or random settings.
 
+## Supported Randomizer Version
+
+The tracker should support the following randomizer versions:
+
+* The [latest stable Randomizer release](https://github.com/ssrando/ssrando/releases/latest)
+* The [latest Randomizer development build](https://nightly.link/ssrando/ssrando/workflows/build.yaml/main)
+* The [latest official beta-features build](https://nightly.link/ssrando/ssrando/workflows/build.yaml/beta-features)
+* The latest Racing build
+
+Other builds (older releases, experimental branches) are not officially supported and may or may not work.
+
 ## Reporting Issues
 
 Ran into a bug? Bugs found in the production instance should be reported [here on GitHub](https://github.com/robojumper/SS-Randomizer-Tracker/issues) or in the Discord.
