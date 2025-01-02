@@ -1,8 +1,6 @@
 import { useMemo, useState } from 'react';
 import {
     Modal,
-    Row,
-    Col,
     FormCheck,
     FormControl,
 } from 'react-bootstrap';
@@ -101,17 +99,20 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
     const row = ({ index, style }: ListChildComponentProps) => {
         const exit = filteredRows[index];
         return (
-            <Row
+            <div
                 key={exit.exit.id}
                 style={{
                     ...style,
+                    display: 'flex',
+                    gap: 4,
                     borderBottom: '1px solid black',
-                    paddingTop: '1%',
+                    alignItems: 'center',
+                    padding: '0.5%',
                     filter: !exit.canAssign ? 'opacity(0.5)' : undefined,
                 }}
             >
-                <Col style={{ display: 'flex', alignItems: 'center' }}><span>{exit.exit.name}</span></Col>
-                <Col style={{ minWidth: 0 }}>
+                <div style={{ flex: '1', display: 'flex', alignItems: 'center' }}><span>{exit.exit.name}</span></div>
+                <div style={{ flex: '1', minWidth: 0 }}>
                     <Select
                         styles={selectStyles<false, Entrance>()}
                         value={exit.entrance && { label: exit.entrance.name, value: exit.entrance.id }}
@@ -121,8 +122,8 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
                         isDisabled={!exit.canAssign}
                         filterOption={(option, search) => matches(option.data.label.toLowerCase(), search.toLowerCase())}
                     />
-                </Col>
-                <Col xs="auto">
+                </div>
+                <div>
                     <button type="button" className="tracker-button"
                         disabled={!exit.entrance}
                         onClick={() =>
@@ -133,8 +134,8 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
                     >
                         Go to
                     </button>
-                </Col>
-            </Row>
+                </div>
+            </div>
         );
     };
     return (
@@ -144,41 +145,35 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
                     Entrances
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body className="show-grid">
-                <Row style={{ paddingBottom: '3%' }}>
-                    <Col>
-                        <FormControl
-                            type="search"
-                            placeholder="Search exits"
-                            onChange={(e) => setExitSearch(e.target.value)}
-                            value={exitSearch}
-                        />
-                    </Col>
-                    <Col className="vr" style={{ background: 'transparent' }} />
-                    <Col>
-                        <FormControl
-                            type="search"
-                            placeholder="Search entrances"
-                            onChange={(e) => setEntranceSearch(e.target.value)}
-                            value={entranceSearch}
-                        />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <FormCheck
-                            type="switch"
-                            label="Clickthrough"
-                            id="clickthrough"
-                            checked={clickthrough}
-                            onChange={() => setClickthrough(!clickthrough)}
-                        />
-                    </Col>
-                    <Col className="vr" style={{ background: 'transparent' }} />
-                    <Col style={{ justifyContent: 'end' }}>
+            <Modal.Body>
+                <div style={{ display: 'flex', gap: 4 }}>
+                    <FormControl
+                        style={{ flex: '1' }}
+                        type="search"
+                        placeholder="Search exits"
+                        onChange={(e) => setExitSearch(e.target.value)}
+                        value={exitSearch}
+                    />
+                    <FormControl
+                        style={{ flex: '1' }}
+                        type="search"
+                        placeholder="Search entrances"
+                        onChange={(e) => setEntranceSearch(e.target.value)}
+                        value={entranceSearch}
+                    />
+                    <div>
                         <button type="button" className="tracker-button" onClick={clearFilters}>Clear Filters</button>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
+                <div>
+                    <FormCheck
+                        type="switch"
+                        label="Clickthrough"
+                        id="clickthrough"
+                        checked={clickthrough}
+                        onChange={() => setClickthrough(!clickthrough)}
+                    />
+                </div>
                 <List
                     itemCount={filteredRows.length}
                     height={600}
