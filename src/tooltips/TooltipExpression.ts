@@ -5,7 +5,7 @@ import BooleanExpression, {
 } from '../logic/booleanlogic/BooleanExpression';
 import type { LogicalState } from '../logic/Locations';
 import prettyItemNames_ from '../data/prettyItemNames.json';
-import * as _ from 'lodash-es';
+import { last, sortBy, sumBy } from 'es-toolkit';
 
 const prettyItemNames: Record<
     string,
@@ -55,7 +55,7 @@ const nothing: RootTooltipExpression = {
 
 function numTerms(item: TooltipExpression): number {
     if (item.type === 'expr') {
-        return _.sumBy(item.items, numTerms);
+        return sumBy(item.items, numTerms);
     }
     return 1;
 }
@@ -96,7 +96,7 @@ function booleanExprToTooltipExprRecursive(
     return {
         type: 'expr',
         op: expr.type,
-        items: _.sortBy(items, getLength, getName),
+        items: sortBy(items, [getLength, getName]),
     }
 }
 
@@ -147,5 +147,5 @@ function getReadableItemName(logic: Logic, item: string) {
         return check.name;
     }
 
-    return _.last(item.split('\\'))!;
+    return last(item.split('\\'))!;
 }

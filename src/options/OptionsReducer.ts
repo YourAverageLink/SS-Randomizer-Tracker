@@ -12,10 +12,10 @@ import { validateSettings } from '../permalink/Settings';
 import { type RemoteReference, loadRemoteLogic } from '../loader/LogicLoader';
 import { getStoredRemote } from '../LocalStorage';
 import { withCancel } from '../utils/CancelToken';
-import * as _ from 'lodash-es';
 import type { RawLogic, RawPresets } from '../logic/UpstreamTypes';
 import { delay } from '../utils/Promises';
 import { convertError } from '../utils/Errors';
+import { isEqual } from 'es-toolkit';
 
 const defaultUpstream: RemoteReference = {
     type: 'latestRelease',
@@ -109,7 +109,7 @@ function optionsReducer(storedSettings: Partial<AllTypedOptions>) {
                 const newState = {
                     ...state,
                     selectedRemote: action.remote,
-                    hasChanges: state.hasChanges || !_.isEqual(action.remote, state.selectedRemote),
+                    hasChanges: state.hasChanges || !isEqual(action.remote, state.selectedRemote),
                 };
 
                 if (action.viaImport) {
@@ -170,7 +170,7 @@ export function useOptionsState() {
     useEffect(() => {
         const [cancelToken, cancel] = withCancel();
 
-        if (_.isEqual(state.selectedRemote, loadedBundle?.remote)) {
+        if (isEqual(state.selectedRemote, loadedBundle?.remote)) {
             setLoadingState(undefined);
             return undefined;
         }

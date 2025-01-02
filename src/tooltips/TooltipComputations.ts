@@ -7,7 +7,7 @@ import type {
 import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
 import type { WorkerRequest, WorkerResponse } from './worker/Types';
 import { deserializeBooleanExpression, serializeLogicalExpression } from './worker/Utils';
-import * as _ from 'lodash-es';
+import { pick } from 'es-toolkit';
 
 /**
  * The TooltipComputer acts as:
@@ -50,7 +50,7 @@ export class TooltipComputer {
             type: 'initialize',
             opaqueBits: [...opaqueBits.iter()],
             requirements: requirements.map(serializeLogicalExpression),
-            logic: _.pick(logic, 'allItems', 'itemBits', 'impliedBy')
+            logic: pick(logic, ['allItems', 'itemBits', 'impliedBy'])
         } satisfies WorkerRequest);
         worker.onmessage = (ev: MessageEvent<WorkerResponse>) => {
             this.acceptTaskResult(ev.data.checkId, deserializeBooleanExpression(ev.data.expression));

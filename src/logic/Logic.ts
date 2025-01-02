@@ -1,4 +1,3 @@
-import * as _ from 'lodash-es';
 import { BitVector } from './bitlogic/BitVector';
 import { LogicalExpression } from './bitlogic/LogicalExpression';
 import {
@@ -26,6 +25,9 @@ import {
 } from './booleanlogic/ExpressionParse';
 import { dungeonNames } from './Locations';
 import { LogicBuilder } from './LogicBuilder';
+import { isEmpty, mapValues } from '../utils/Collections';
+import { groupBy, last } from 'es-toolkit';
+import { sortBy } from 'es-toolkit/compat';
 
 export interface Logic {
     numRequirements: number;
@@ -330,7 +332,7 @@ export function parseLogic(raw: RawLogic): Logic {
         opaqueItems.setBit(i);
     }
 
-    const checks: Logic['checks'] = _.mapValues(raw.checks, (check) => {
+    const checks: Logic['checks'] = mapValues(raw.checks, (check) => {
         const item = check['original item']
             ? splitItemIndex(check['original item'])[0]
             : undefined;
@@ -345,13 +347,13 @@ export function parseLogic(raw: RawLogic): Logic {
     for (const [cubeItem, cubeCheck] of Object.entries(cubeCollectedToCubeCheck)) {
         checks[cubeCheck] = {
             type: 'tr_cube',
-            name: _.last(cubeCheck.split('\\'))!,
+            name: last(cubeCheck.split('\\'))!,
             originalItem: undefined,
             area: checkAreaPlaceholder,
         };
         checks[cubeItem] = {
             type: 'tr_dummy',
-            name: _.last(cubeCheck.split('\\'))!,
+            name: last(cubeCheck.split('\\'))!,
             originalItem: undefined,
             area: undefined,
         };
@@ -489,7 +491,7 @@ export function parseLogic(raw: RawLogic): Logic {
             } satisfies SingleTodArea;
         }
         allAreas[area.id] = area;
-        if (!_.isEmpty(rawArea.sub_areas)) {
+        if (!isEmpty(rawArea.sub_areas)) {
             for (const rawSubArea of Object.values(rawArea.sub_areas)) {
                 const subArea = createAreaIndex(rawSubArea);
                 area.subAreas[rawSubArea.name] = subArea;
@@ -527,7 +529,7 @@ export function parseLogic(raw: RawLogic): Logic {
      */
     function populateArea(rawArea: RawArea): Area {
         const area = allAreas[rawArea.name];
-        if (!_.isEmpty(rawArea.sub_areas)) {
+        if (!isEmpty(rawArea.sub_areas)) {
             for (const rawSubArea of Object.values(rawArea.sub_areas)) {
                 populateArea(rawSubArea);
             }
@@ -811,13 +813,16 @@ export function parseLogic(raw: RawLogic): Logic {
     }
 
     const birdStatueSanity: AreaGraph['birdStatueSanity'] = {};
-    const allBirdStatues = _.groupBy(
+    const raiseMissingProvince = (entrance: RawEntrance) => {
+        throw new Error(`bird statue entrance ${entrance.short_name} is missing a province`)
+    }
+    const allBirdStatues = groupBy(
         Object.entries(raw.entrances).filter(
             ([, entrance]) =>
                 entrance.subtype === 'bird-statue-entrance' &&
                 !entrance.short_name.includes('Fire Sanctuary'),
         ),
-        ([, entrance]) => entrance.province,
+        ([, entrance]) => entrance.province ?? raiseMissingProvince(entrance),
     );
 
     for (const [exitId, exitDef] of Object.entries(raw.exits)) {
@@ -876,16 +881,18 @@ export function parseLogic(raw: RawLogic): Logic {
     const rawCheckOrder = Object.keys(raw.checks);
     for (const area of Object.keys(checksByHintRegion)) {
         // TODO compareBy, sort in place
-        checksByHintRegion[area] = _.sortBy(checksByHintRegion[area], (check) => {
+        // https://github.com/toss/es-toolkit/issues/869
+        checksByHintRegion[area] = sortBy(checksByHintRegion[area], (check) => {
             const idx = rawCheckOrder.indexOf(check);
             return idx !== -1 ? idx : Number.MAX_SAFE_INTEGER;
         });
     }
 
-    const areas = _.sortBy(
+    // https://github.com/toss/es-toolkit/issues/869
+    const areas = sortBy(
         Object.keys(checksByHintRegion),
-        (area) => dungeonOrder.indexOf(area),
-        (area) => rawCheckOrder.indexOf(checksByHintRegion[area][0]),
+        [(area) => dungeonOrder.indexOf(area),
+        (area) => rawCheckOrder.indexOf(checksByHintRegion[area][0])],
     );
 
     const bitLogic = mergeRequirements(numItems, staticRequirements);
@@ -908,7 +915,7 @@ export function parseLogic(raw: RawLogic): Logic {
     // entrances, every entrance has to be considered uniquely reachable with no way
     // to bound our exploration or to simplify these expressions as we go.
 
-    const updatedRequirements = _.mapValues(staticRequirements, (_value, idx) => bitLogic[parseInt(idx, 10)]);
+    const updatedRequirements = mapValues(staticRequirements, (_value, idx) => bitLogic[parseInt(idx, 10)]);
 
     console.log('logic building took', performance.now() - start, 'ms'); 
 

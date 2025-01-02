@@ -37,7 +37,6 @@ import { useAppDispatch } from '../store/Store';
 import { type LogicBundle, loadLogic } from '../logic/Slice';
 import Select, { type MultiValue, type ActionMeta, type SingleValue } from 'react-select';
 import { selectStyles } from '../customization/ComponentStyles';
-import * as _ from 'lodash-es';
 import DiscordButton from '../additionalComponents/DiscordButton';
 import React from 'react';
 import { ImportButton } from '../ImportExport';
@@ -48,6 +47,7 @@ import { satisfies as semverSatisfies } from 'semver';
 import { OptionsPresets } from './OptionsPresets';
 import styles from './Options.module.css';
 import clsx from 'clsx';
+import { isEqual, range } from 'es-toolkit';
 
 /** The tracker will only show these options, and tracker logic code is only allowed to access these! */
 const optionCategorization_ = {
@@ -326,7 +326,7 @@ function LogicChooser({
     const wellKnownSelectOptions = useRemoteOptions();
 
     const activeOption = wellKnownSelectOptions.find((option) =>
-        _.isEqual(option.value, selectedRemote),
+        isEqual(option.value, selectedRemote),
     );
 
     const setSelectedRemote = useCallback(
@@ -584,7 +584,7 @@ function Setting({
                                 label: (value as number).toString(),
                             }}
                             onChange={(e) => e && setValue(e.value)}
-                            options={_.range(def.min, def.max + 1).map((val) => ({
+                            options={range(def.min, def.max + 1).map((val) => ({
                                 value: val,
                                 label: val.toString(),
                             }))}

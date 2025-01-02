@@ -1,22 +1,22 @@
-import * as _ from 'lodash-es';
 import BooleanExpression, { type Item } from './BooleanExpression';
 import { BitVector } from '../bitlogic/BitVector';
 import { andToDnf } from '../bitlogic/LogicalExpression';
+import { compact } from 'es-toolkit';
 
 export function parseExpression(expression: string) {
     return booleanExpressionForTokens(splitExpression(expression));
 }
 
 function splitExpression(expression: string) {
-    return _.compact(
-        _.map(expression.split(/\s*([(&|)])\s*/g), _.trim),
+    return compact(
+        expression.split(/\s*([(&|)])\s*/g).map((part) => part.trim()),
     );
 }
 
 function booleanExpressionForTokens(expressionTokens: string[]): BooleanExpression {
     const itemsForExpression = [];
     let expressionTypeToken;
-    while (!_.isEmpty(expressionTokens)) {
+    while (expressionTokens.length) {
         const currentToken = expressionTokens.shift()!;
         if (currentToken === '&' || currentToken === '|') {
             expressionTypeToken = currentToken;

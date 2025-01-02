@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { entrancePoolsSelector, exitsSelector, usedEntrancesSelector } from '../tracker/Selectors';
 import { mapEntrance } from '../tracker/Slice';
 import { selectStyles } from '../customization/ComponentStyles';
-import * as _ from 'lodash-es';
+import { mapValues } from '../utils/Collections';
 // import EntranceGraph from './EntranceGraph';
 
 type EntranceTrackerProps = {
@@ -45,7 +45,7 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
 
     const entranceOptions: Record<string, Entrance[]> = useMemo(
         () =>
-            _.mapValues(entrancePools, (poolValue, pool) => {
+            mapValues(entrancePools, (poolValue, pool) => {
                 const entrances = poolValue.entrances
                     .filter(
                         (entrance) =>

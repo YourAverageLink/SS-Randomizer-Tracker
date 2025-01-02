@@ -1,6 +1,6 @@
-import * as _ from 'lodash-es';
 import { useCallback, useId, useSyncExternalStore } from 'react';
 import { dedupePromise } from '../utils/Promises';
+import { memoize } from 'es-toolkit';
 
 /*
  * This module implements a small GitHub releases API caching layer.
@@ -63,12 +63,12 @@ function getStoredRelease(): { isOutdated: boolean, releases: string[] | undefin
 /**
  * React expects stores to return memoized objects
  */
-const mapReleases = _.memoize(
+const mapReleases = memoize(
     (releases: string[]) => ({
         latest: releases[0],
         releases,
     }),
-    (x) => JSON.stringify(x),
+    { getCacheKey: (x) => JSON.stringify(x) },
 );
 
 function getStoredData() {

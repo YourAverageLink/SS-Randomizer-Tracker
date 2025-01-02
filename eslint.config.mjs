@@ -69,7 +69,7 @@ export default tseslint.config(
             'no-unused-vars': 'off',
             'no-param-reassign': ['error'],
             'no-bitwise': ['off'],
-            'eqeqeq': ['error', 'always'],
+            eqeqeq: ['error', 'always'],
             'no-debugger': 'error',
             'no-implicit-coercion': 'error',
             'no-restricted-imports': [
@@ -80,6 +80,19 @@ export default tseslint.config(
                             group: ['testing/*'],
                             message:
                                 'You cannot use test helpers in regular code.',
+                        },
+                    ],
+                    paths: [
+                        {
+                            name: 'es-toolkit',
+                            importNames: [
+                                'mapValues',
+                                'isEmpty',
+                                'noop',
+                                'stubTrue',
+                                'stubFalse',
+                            ],
+                            message: 'Please use functions from utils instead.',
                         },
                     ],
                 },
@@ -140,17 +153,17 @@ export default tseslint.config(
             '@typescript-eslint/no-unsafe-call': 'error',
             '@typescript-eslint/no-unsafe-member-access': 'error',
             '@typescript-eslint/no-unsafe-return': 'error',
-            "@typescript-eslint/no-unused-vars": [
-                "error",
+            '@typescript-eslint/no-unused-vars': [
+                'error',
                 {
-                    "args": "all",
-                    "argsIgnorePattern": "^_",
-                    "caughtErrors": "all",
-                    "caughtErrorsIgnorePattern": "^_",
-                    "destructuredArrayIgnorePattern": "^_",
-                    "varsIgnorePattern": "^_",
-                    "ignoreRestSiblings": true
-                }
+                    args: 'all',
+                    argsIgnorePattern: '^_',
+                    caughtErrors: 'all',
+                    caughtErrorsIgnorePattern: '^_',
+                    destructuredArrayIgnorePattern: '^_',
+                    varsIgnorePattern: '^_',
+                    ignoreRestSiblings: true,
+                },
             ],
             '@typescript-eslint/unbound-method': 'off',
 

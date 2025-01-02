@@ -38,7 +38,6 @@ import {
     triforceItemReplacement,
     triforceItems,
 } from '../logic/TrackerModifications';
-import * as _ from 'lodash-es';
 import { LogicalExpression } from '../logic/bitlogic/LogicalExpression';
 import { TimeOfDay } from '../logic/UpstreamTypes';
 import {
@@ -68,6 +67,9 @@ import {
     trickSemiLogicSelector,
     trickSemiLogicTrickListSelector,
 } from '../customization/Selectors';
+import { stubTrue } from '../utils/Function';
+import { mapValues } from '../utils/Collections';
+import { compact, groupBy, isEqual, keyBy, partition, sumBy } from 'es-toolkit';
 
 const bitVectorMemoizeOptions = {
     memoizeOptions: {
@@ -129,11 +131,11 @@ export const rawItemCountsSelector = (state: RootState) =>
 export const inventorySelector = createSelector(
     [rawItemCountsSelector],
     (rawInventory) =>
-        _.mapValues(
+        mapValues(
             itemMaxes,
-            (_val, item) => rawInventory[item as InventoryItem] ?? 0,
+            (_val, item) => rawInventory[item] ?? 0,
         ),
-    { memoizeOptions: { resultEqualityCheck: _.isEqual } },
+    { memoizeOptions: { resultEqualityCheck: isEqual } },
 );
 
 export const rawItemCountSelector = currySelector(
@@ -191,7 +193,7 @@ export function getAdditionalItems(
 export const checkItemsSelector = createSelector(
     [logicSelector, inventorySelector, checkedChecksSelector],
     getAdditionalItems,
-    { memoizeOptions: { resultEqualityCheck: _.isEqual } },
+    { memoizeOptions: { resultEqualityCheck: isEqual } },
 );
 
 export const totalGratitudeCrystalsSelector = createSelector(
@@ -280,7 +282,7 @@ export const exitsSelector = createSelector(
 
 export const exitsByIdSelector = createSelector(
     [exitsSelector],
-    (exits) => _.keyBy(exits, (e) => e.exit.id),
+    (exits) => keyBy(exits, (e) => e.exit.id),
 )
 
 /**
@@ -628,7 +630,7 @@ export const isCheckBannedSelector = createSelector(
             return cube && areaNonprogress(logic.checks[cube].area!);
         };
 
-        const gossipStoneUsed = doesHintDistroUseGossipStone[hintDistro] ?? _.stubTrue;
+        const gossipStoneUsed = doesHintDistroUseGossipStone[hintDistro] ?? stubTrue;
 
         return (checkId: string) => {
             const check = logic.checks[checkId];
@@ -815,8 +817,8 @@ export const areasSelector = createSelector(
         isAreaHidden,
         counterBasis,
     ): HintRegion[] => {
-        const exitsById = _.keyBy(allExits, (e) => e.exit.id);
-        return _.compact(
+        const exitsById = keyBy(allExits, (e) => e.exit.id);
+        return compact(
             logic.hintRegions.map((area): HintRegion | undefined => {
                 const checks = logic.checksByHintRegion[area];
                 // Loose crystal checks can be banned to not require picking them up
@@ -827,7 +829,7 @@ export const areasSelector = createSelector(
                         logic.checks[check].type === 'loose_crystal',
                 );
 
-                const [extraChecks, regularChecks_] = _.partition(
+                const [extraChecks, regularChecks_] = partition(
                     progressChecks,
                     (check) =>
                         logic.checks[check].type === 'gossip_stone' ||
@@ -861,8 +863,8 @@ export const areasSelector = createSelector(
                     };
                 };
 
-                const extraLocations = _.mapValues(
-                    _.groupBy(
+                const extraLocations: HintRegion<string>['extraLocations'] = mapValues(
+                    groupBy(
                         extraChecks,
                         (check) => logic.checks[check].type,
                     ),
@@ -916,13 +918,13 @@ export const areasSelector = createSelector(
 export const totalCountersSelector = createSelector(
     [areasSelector, exitsByIdSelector],
     (areas, exits) => {
-        const numChecked = _.sumBy(
+        const numChecked = sumBy(
             areas,
             (a) => a.checks.numTotal - a.checks.numRemaining,
         );
-        const numAccessible = _.sumBy(areas, (a) => a.checks.numAccessible);
-        const numRemaining = _.sumBy(areas, (a) => a.checks.numRemaining);
-        let numExitsAccessible = _.sumBy(areas, (a) => a.extraLocations.exits?.numAccessible ?? 0);
+        const numAccessible = sumBy(areas, (a) => a.checks.numAccessible);
+        const numRemaining = sumBy(areas, (a) => a.checks.numRemaining);
+        let numExitsAccessible = sumBy(areas, (a) => a.extraLocations.exits?.numAccessible ?? 0);
 
         const startMapping = exits['\\Start'];
         const needsStartingEntrance = !startMapping.entrance;

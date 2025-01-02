@@ -1,10 +1,10 @@
 import type { ColorScheme } from '../../customization/ColorScheme';
 import type { CheckGroup, HintRegion } from '../../logic/Locations';
-import * as _ from 'lodash-es';
 import type { SubmarkerData } from './Marker';
 import goddessCubeImg from '../../assets/sidequests/goddess_cube.png';
 import gossipStoneImg from '../../assets/sidequests/gossip_stone.png';
 import images from '../../itemTracker/Images';
+import { compact, pick } from 'es-toolkit';
 
 /**
  * Data for a single hint region, or for a province
@@ -13,7 +13,7 @@ import images from '../../itemTracker/Images';
 export type RegionCounters = Pick<HintRegion, 'checks' | 'extraLocations'>;
 
 export function getRegionData(hintRegion: HintRegion): RegionCounters {
-    return _.pick(hintRegion, 'checks', 'extraLocations');
+    return pick(hintRegion, ['checks', 'extraLocations']);
 }
 
 const initialCounters = (): CheckGroup => ({
@@ -100,7 +100,7 @@ const imageMap = {
 };
 
 export function getSubmarkerData(counters: RegionCounters): SubmarkerData[] {
-    return _.compact((['tr_cube', 'loose_crystal', 'gossip_stone'] as const).map((group) => {
+    return compact((['tr_cube', 'loose_crystal', 'gossip_stone'] as const).map((group) => {
         if (!counters.extraLocations[group]) {
             return;
         }

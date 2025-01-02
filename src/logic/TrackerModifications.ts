@@ -1,17 +1,17 @@
 import type { TypedOptions } from '../permalink/SettingsTypes';
 import { type InventoryItem, isItem } from './Inventory';
 import goddessCubesList_ from '../data/goddessCubes2.json';
-import * as _ from 'lodash-es';
 import { swordsToAdd } from './ThingsThatWouldBeNiceToHaveInTheDump';
 import type { DungeonName } from './Locations';
 import type { TrackerState } from '../tracker/Slice';
+import { invert } from 'es-toolkit';
 
 const collectedCubeSuffix = '_TR_Cube_Collected';
 
 export const goddessChestCheckToCubeCheck = Object.fromEntries(
     goddessCubesList_.map(([chest, cube]) => [chest, cube]),
 );
-export const cubeCheckToGoddessChestCheck = _.invert(
+export const cubeCheckToGoddessChestCheck = invert<string, string>(
     goddessChestCheckToCubeCheck,
 );
 export const cubeCollectedToCubeCheck = Object.fromEntries(
@@ -20,7 +20,7 @@ export const cubeCollectedToCubeCheck = Object.fromEntries(
         check,
     ]),
 );
-export const cubeCheckToCubeCollected = _.invert(cubeCollectedToCubeCheck);
+export const cubeCheckToCubeCollected = invert<string, string>(cubeCollectedToCubeCheck);
 
 export function mapToCubeCollectedRequirement(check: string) {
     return `${check}${collectedCubeSuffix}`;

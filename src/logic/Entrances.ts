@@ -1,4 +1,3 @@
-import * as _ from 'lodash-es';
 import type { TypedOptions } from '../permalink/SettingsTypes';
 import type { LinkedEntrancePool, Logic, TrackerLinkedEntrancePool } from './Logic';
 import {
@@ -9,6 +8,8 @@ import {
 } from './ThingsThatWouldBeNiceToHaveInTheDump';
 import type { TrackerState } from '../tracker/Slice';
 import type { DungeonName, ExitMapping } from './Locations';
+import { invert, sortBy } from 'es-toolkit';
+import { mapValues } from '../utils/Collections';
 
 export interface Entrance {
     name: string;
@@ -185,7 +186,7 @@ export function getExitRules(
 ) {
     const result: Record<string, ExitRule> = {};
 
-    const followToCanonicalEntrance = _.invert(logic.areaGraph.autoExits);
+    const followToCanonicalEntrance = invert<string, string>(logic.areaGraph.autoExits);
 
     const everythingRandomized = randomEntranceSetting === 'All';
     const relevantDerSetting =
@@ -356,9 +357,9 @@ export function getExits(
         'lmfSecondExit',
     ];
 
-    const sortedRules = _.sortBy(rules, ([, rule]) =>
-        assignmentOrder.indexOf(rule.type),
-    );
+    const sortedRules = sortBy(rules, [
+        ([_, rule]) => assignmentOrder.indexOf(rule.type),
+    ]);
     for (const [exitId, rule] of sortedRules) {
         switch (rule.type) {
             case 'vanilla':
@@ -452,14 +453,14 @@ export function getExits(
         }
     }
 
-    return _.sortBy(Object.values(result), (exit) => !exit.canAssign);
+    return sortBy(Object.values(result), [(exit) => !exit.canAssign]);
 }
 
 export function getUsedEntrances(
     entrancePools: Record<string, EntrancePool>,
     exits: ExitMapping[],
 ) {
-    const result = _.mapValues(entrancePools, (): string[] => []);
+    const result = mapValues(entrancePools, (): string[] => []);
 
     for (const exit of exits) {
         if (exit.canAssign && exit.entrance) {
