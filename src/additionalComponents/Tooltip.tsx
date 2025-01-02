@@ -16,6 +16,7 @@ export default function Tooltip({
         return children;
     }
     return (
+        // eslint-disable-next-line @eslint-react/no-context-provider
         <RadixTooltip.Provider delayDuration={0}>
             <RadixTooltip.Root>
                 <RadixTooltip.Trigger asChild>{children}</RadixTooltip.Trigger>

@@ -62,9 +62,9 @@ export function MakeTooltipsAvailable({ children }: { children: ReactNode }) {
     }, [settingsRequirements, logic, options, expertMode, consideredTricks, settings]);
 
     return (
-        <TooltipsContext.Provider value={analyzer}>
+        <TooltipsContext value={analyzer}>
             {children}
-        </TooltipsContext.Provider>
+        </TooltipsContext>
     );
 }
 
