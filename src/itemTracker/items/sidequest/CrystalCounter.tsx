@@ -4,9 +4,9 @@ type CrystalCounterProps = {
 };
 
 const CrystalCounter = ({ current, fontSize }: CrystalCounterProps) => (
-    <p style={{ fontSize, margin: 0 }}>
+    <div style={{ fontSize, margin: 0 }}>
         {current}
-    </p>
+    </div>
 );
 
 export default CrystalCounter;

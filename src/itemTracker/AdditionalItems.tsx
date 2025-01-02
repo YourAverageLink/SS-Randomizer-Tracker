@@ -65,7 +65,7 @@ export default function AdditionalItems({ width }: { width: number }) {
             </div>
             <div style={bottleStyle}>
                 <Item itemName="Empty Bottle" imgWidth={bottleWidth} />
-                <p
+                <div
                     style={{
                         fontSize: width * 0.12,
                         position: 'absolute',
@@ -74,14 +74,14 @@ export default function AdditionalItems({ width }: { width: number }) {
                     }}
                 >
                     {bottleCount}
-                </p>
+                </div>
             </div>
             <div style={chargeStyle}>
                 <Item itemName="Spiral Charge" imgWidth={chargeWidth} />
             </div>
             <div style={tadtoneStyle}>
                 <Item itemName="Group of Tadtones" imgWidth={tadtoneWidth} />
-                <p
+                <div
                     style={{
                         fontSize: width * 0.12,
                         position: 'absolute',
@@ -90,11 +90,11 @@ export default function AdditionalItems({ width }: { width: number }) {
                     }}
                 >
                     {tadtoneCount}
-                </p>
+                </div>
             </div>
             <div style={keyStyle}>
                 <Item itemName="Lanayru Caves Small Key" imgWidth={keyWidth} />
-                <p
+                <div
                     style={{
                         margin: 0,
                         fontSize: width / 20,
@@ -104,7 +104,7 @@ export default function AdditionalItems({ width }: { width: number }) {
                     }}
                 >
                     Caves
-                </p>
+                </div>
             </div>
             <div style={chartStyle}>
                 <Item itemName="Sea Chart" imgWidth={chartWidth} />
