@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import {
     Modal,
-    Button,
     Row,
     Col,
     FormCheck,
@@ -124,7 +123,7 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
                     />
                 </Col>
                 <Col xs="auto">
-                    <Button
+                    <button type="button" className="tracker-button"
                         disabled={!exit.entrance}
                         onClick={() =>
                             setExitSearch(
@@ -133,7 +132,7 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
                         }
                     >
                         Go to
-                    </Button>
+                    </button>
                 </Col>
             </Row>
         );
@@ -177,7 +176,7 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
                     </Col>
                     <Col className="vr" style={{ background: 'transparent' }} />
                     <Col style={{ justifyContent: 'end' }}>
-                        <Button onClick={clearFilters}>Clear Filters</Button>
+                        <button type="button" className="tracker-button" onClick={clearFilters}>Clear Filters</button>
                     </Col>
                 </Row>
                 <List
@@ -190,7 +189,7 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
                 </List>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={onHide}>Close</Button>
+                <button type="button" className="tracker-button" onClick={onHide}>Close</button>
             </Modal.Footer>
         </Modal>
         // <EntranceGraph />

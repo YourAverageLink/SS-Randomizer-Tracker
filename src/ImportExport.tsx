@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { type ThunkResult, useAppDispatch } from './store/Store';
 import { type TrackerState, loadTracker } from './tracker/Slice';
 import type { RemoteReference } from './loader/LogicLoader';
-import { Button } from 'react-bootstrap';
 
 const version = 'SSRANDO-TRACKER-NG-V2';
 
@@ -39,9 +38,9 @@ export function ExportButton() {
     }, [dispatch]);
 
     return (
-        <Button onClick={onClick}>
+        <button type="button" className="tracker-button" onClick={onClick}>
             Export
-        </Button>
+        </button>
     );
 }
 
@@ -78,7 +77,7 @@ export function ImportButton({ setLogicBranch }: { setLogicBranch: (branch: Remo
     return (
         <>
             <label style={{ margin: 0, display: 'contents' }} htmlFor="importButton">
-                <div className="btn btn-primary" style={{ display: 'flex', flexFlow: 'row', alignItems: 'center' }}>
+                <div className="tracker-button" style={{ display: 'flex', flexFlow: 'row', alignItems: 'center' }}>
                     Import Saved Run
                 </div>
             </label>

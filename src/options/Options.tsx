@@ -16,7 +16,6 @@ import {
 import { decodePermalink, encodePermalink } from '../permalink/Settings';
 import type { Option } from '../permalink/SettingsTypes';
 import {
-    Button,
     FormCheck,
     Tab,
     Tabs,
@@ -239,7 +238,7 @@ function LaunchButtons({
 
     return (
         <div className={styles.launchButtons}>
-            <Button disabled={!canResume} onClick={() => confirmLaunch()}>
+            <button type="button" className="tracker-button" disabled={!canResume} onClick={() => confirmLaunch()}>
                 <div className={styles.continueButton}>
                     <span>Continue Tracker</span>
                     <span
@@ -248,21 +247,21 @@ function LaunchButtons({
                         {counters && `${counters.numChecked}/${counters.numRemaining}`}
                     </span>
                 </div>
-            </Button>
-            <Button disabled={!canStart} onClick={() => confirmLaunch(true)}>
+            </button>
+            <button type="button" className="tracker-button" disabled={!canStart} onClick={() => confirmLaunch(true)}>
                 Launch New Tracker
-            </Button>
+            </button>
             <ImportButton
                 setLogicBranch={(remote) =>
                     dispatch({ type: 'selectRemote', remote, viaImport: true })
                 }
             />
-            <Button
+            <button type="button" className="tracker-button"
                 disabled={!hasChanges}
                 onClick={() => dispatch({ type: 'revertChanges' })}
             >
                 Undo Changes
-            </Button>
+            </button>
 
             <OptionsPresets
                 style={{ marginLeft: 'auto' }}

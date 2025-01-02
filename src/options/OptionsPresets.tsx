@@ -2,7 +2,7 @@ import React, { type CSSProperties, useMemo, useState } from 'react';
 import type { OptionsAction } from './OptionsReducer';
 import type { AllTypedOptions } from '../permalink/SettingsTypes';
 import type { LogicBundle } from '../logic/Slice';
-import { Button, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { type RootState, useAppDispatch } from '../store/Store';
 import { type Preset, addPreset, removePreset } from '../saves/Slice';
@@ -27,7 +27,7 @@ export function OptionsPresets({
 
     return (
         <>
-            <Button style={style} onClick={() => setShowModal(true)}>Presets</Button>
+            <button type="button" className="tracker-button" style={style} onClick={() => setShowModal(true)}>Presets</button>
             <PresetsModal
                 currentLogic={currentLogic}
                 currentSettings={currentSettings}
@@ -101,7 +101,7 @@ function PresetsModal({
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={onHide}>Close</Button>
+                <button type="button" className="tracker-button" onClick={onHide}>Close</button>
             </Modal.Footer>
         </Modal>
     );
@@ -136,7 +136,7 @@ function PresetRow({
                 {preset.name}
                 {!isRemotePreset && (
                     <div>
-                        <Button
+                        <button type="button" className="tracker-button"
                             onClick={(e) => {
                                 if (window.confirm(`Delete Preset ${preset.name}?`)) {
                                     appDispatch(removePreset(preset.id));
@@ -145,7 +145,7 @@ function PresetRow({
                             }}
                         >
                             🗑️
-                        </Button>
+                        </button>
                     </div>
                 )}
             </div>

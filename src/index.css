@@ -1,4 +1,5 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
+@import "./additionalComponents/button.css";
 
 :root {
   --bs-body-bg: var(--scheme-background);

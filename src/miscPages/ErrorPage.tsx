@@ -1,4 +1,3 @@
-import { Button } from 'react-bootstrap';
 import { ExportButton } from '../ImportExport';
 import DiscordButton from '../additionalComponents/DiscordButton';
 import { clearStoredRemote } from '../LocalStorage';
@@ -25,21 +24,21 @@ export default function ErrorPage({
             <p><DiscordButton /></p>
             <div style={{ display: 'flex', gap: 4 }}>
                 <ExportButton />
-                <Button onClick={() => window.location.reload()}>Reload Page</Button>
+                <button type="button" className="tracker-button" onClick={() => window.location.reload()}>Reload Page</button>
                 {hasCustomLayout && (
-                    <Button
+                    <button type="button" className="tracker-button"
                         onClick={() => {
                             dispatch(setCustomLayout(undefined));
                             resetErrorBoundary();
                         }}
                     >
                         Remove Custom Layout
-                    </Button>
+                    </button>
                 )}
-                <Button onClick={() => {
+                <button type="button" className="tracker-button" onClick={() => {
                     clearStoredRemote();
                     window.location.reload();
-                }}>Choose a different release</Button>
+                }}>Choose a different release</button>
             </div>
             <p>If the error persists, you may try clearing all cookies and site data. <strong>This will reset the tracker and revert all customization.</strong></p>
             {error && typeof error === 'object' && 'stack' in error ? <pre style={{ color: 'red' }}>{error.stack as string}</pre> : undefined}

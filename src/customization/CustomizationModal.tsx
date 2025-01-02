@@ -1,4 +1,4 @@
-import { Modal, Button, FormCheck } from 'react-bootstrap';
+import { Modal, FormCheck } from 'react-bootstrap';
 import ColorBlock from './ColorBlock';
 import {
     type ColorScheme,
@@ -120,7 +120,9 @@ export default function CustomizationModal({
                             {Object.entries(defaultColorSchemes).map(
                                 ([key, scheme]) => (
                                     <div key={key}>
-                                        <Button
+                                        <button
+                                            type="button"
+                                            className="tracker-button"
                                             style={{
                                                 background: scheme.background,
                                                 color: scheme.text,
@@ -131,7 +133,7 @@ export default function CustomizationModal({
                                             }
                                         >
                                             {key}
-                                        </Button>
+                                        </button>
                                     </div>
                                 ),
                             )}
@@ -272,9 +274,7 @@ export default function CustomizationModal({
                             name="Counter Basis"
                         />
                     </Setting>
-                    <Setting
-                        name="Track Tim"
-                    >
+                    <Setting name="Track Tim">
                         <FormCheck
                             type="switch"
                             checked={tumbleweed}
@@ -283,23 +283,29 @@ export default function CustomizationModal({
                             }
                         />
                     </Setting>
-                    <Setting
-                        name="Custom Layout (experimental!)"
-                    >
+                    <Setting name="Custom Layout (experimental!)">
                         <div>
-                            <Button
+                            <button
+                                type="button"
+                                className="tracker-button"
                                 onClick={() => {
                                     dispatch(importCustomLayout());
                                 }}
                             >
                                 Import custom layout
-                            </Button>
+                            </button>
                         </div>
                     </Setting>
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={onHide}>Close</Button>
+                <button
+                    type="button"
+                    className="tracker-button"
+                    onClick={onHide}
+                >
+                    Close
+                </button>
             </Modal.Footer>
         </Modal>
     );

@@ -1,5 +1,4 @@
 import { useLayoutEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import EntranceTracker from './entranceTracker/EntranceTracker';
 import { MakeTooltipsAvailable } from './tooltips/TooltipHooks';
@@ -125,27 +124,31 @@ function TrackerFooter() {
             >
                 <div>
                     <Link to="/">
-                        <Button>← Options</Button>
+                        <div className="tracker-button">
+                            ← Options
+                        </div>
                     </Link>
                 </div>
                 <div>
                     <ExportButton />
                 </div>
                 <div>
-                    <Button
-                        variant="primary"
+                    <button
+                        type="button"
+                        className="tracker-button"
                         onClick={() => setShowEntranceDialog(true)}
                     >
                         Entrances
-                    </Button>
+                    </button>
                 </div>
                 <div>
-                    <Button
-                        variant="primary"
+                    <button
+                        type="button"
+                        className="tracker-button"
                         onClick={() => setShowCustomizationDialog(true)}
                     >
                         Customization
-                    </Button>
+                    </button>
                 </div>
             </div>
             <CustomizationModal
