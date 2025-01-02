@@ -419,7 +419,7 @@ const PlaintextLogicInput = forwardRef(function PlaintextLogicInput(
         <div>
             <input
                 type="text"
-                className={clsx('form-control', {
+                className={clsx('tracker-input', {
                     [styles.optionsBadRemote]: badFormat,
                 })}
                 value={input}
@@ -481,7 +481,7 @@ function PermalinkChooser({
             <legend>Settings String</legend>
             <input
                 type="text"
-                className={clsx(styles.permalinkInput, 'form-control')}
+                className={clsx(styles.permalinkInput, 'tracker-input')}
                 disabled={!permalink}
                 placeholder="Select a Randomizer version first"
                 value={permalink ?? ''}

@@ -1,5 +1,6 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "./additionalComponents/button.css";
+@import "./additionalComponents/input.css";
 
 :root {
   --bs-body-bg: var(--scheme-background);
@@ -8,21 +9,6 @@
 
 .modal {
   --bs-modal-bg: var(--scheme-background);
-}
-
-.nav-tabs .nav-link.active {
-  color: var(--scheme-text);
-  background-color: var(--scheme-background);
-}
-
-.form-control {
-  color: var(--scheme-text);
-  background-color: var(--scheme-background);
-}
-
-input[type=text] {
-  color: var(--scheme-text);
-  background-color: var(--scheme-background);
 }
 
 body {

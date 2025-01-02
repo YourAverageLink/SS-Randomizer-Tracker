@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from './HintsTracker.module.css';
 import type { RootState } from '../store/Store';
 import { setHintsText } from '../tracker/Slice';
+import clsx from 'clsx';
 
 // Just a basic textarea for now
 export function HintsTracker() {
@@ -12,7 +13,7 @@ export function HintsTracker() {
     return (
         <div className={styles.hintsTracker}>
             <textarea
-                className={styles.hintsTextArea}
+                className={clsx('tracker-input', styles.hintsTextArea)}
                 placeholder="Track hints here!"
                 value={hintsText}
                 onChange={(ev) => dispatch(setHintsText(ev.target.value))}

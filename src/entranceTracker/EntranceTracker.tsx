@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import {
     Modal,
-    FormControl,
 } from 'react-bootstrap';
 import { FixedSizeList as List, type ListChildComponentProps } from 'react-window';
 import Select, { type ActionMeta, type SingleValue } from 'react-select';
@@ -146,14 +145,16 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
             </Modal.Header>
             <Modal.Body>
                 <div style={{ display: 'flex', gap: 4 }}>
-                    <FormControl
+                    <input
+                        className="tracker-input"
                         style={{ flex: '1' }}
                         type="search"
                         placeholder="Search exits"
                         onChange={(e) => setExitSearch(e.target.value)}
                         value={exitSearch}
                     />
-                    <FormControl
+                    <input
+                        className="tracker-input"
                         style={{ flex: '1' }}
                         type="search"
                         placeholder="Search entrances"
