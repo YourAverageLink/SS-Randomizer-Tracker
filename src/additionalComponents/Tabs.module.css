@@ -1,0 +1,21 @@
+.tabsList {
+    border-bottom: 1px solid color-mix(in srgb, grey 20%, transparent);;
+}
+
+.tabsButton {
+    border: none;
+    color: #0d6efd;
+    padding: 10px;
+
+    &:hover {
+        color: #0b5ed7 !important;
+    }
+
+    &[data-state=active] {
+        border-radius: 6px 6px 0 0;
+        background-color: var(--scheme-background);
+        color: var(--scheme-text) !important;
+    }
+
+    transition: all 150ms ease-out;
+}

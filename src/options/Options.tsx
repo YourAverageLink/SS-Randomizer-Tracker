@@ -16,10 +16,6 @@ import {
 import { decodePermalink, encodePermalink } from '../permalink/Settings';
 import type { Option } from '../permalink/SettingsTypes';
 import {
-    Tab,
-    Tabs,
-} from 'react-bootstrap';
-import {
     LATEST_STRING,
     type RemoteReference,
     formatRemote,
@@ -43,6 +39,8 @@ import { OptionsPresets } from './OptionsPresets';
 import styles from './Options.module.css';
 import clsx from 'clsx';
 import { isEqual, range } from 'es-toolkit';
+import * as Tabs from '../additionalComponents/Tabs';
+
 
 /** The tracker will only show these options, and tracker logic code is only allowed to access these! */
 const optionCategorization_ = {
@@ -346,9 +344,9 @@ function LogicChooser({
                     ? `: ${activeOption.label}`
                     : loadedRemoteName && `: ${loadedRemoteName}`}
             </legend>
-            <Tabs
-                defaultActiveKey="wellKnown"
-                onSelect={(e) => {
+            <Tabs.Root
+                defaultValue="wellKnown"
+                onValueChange={(e) => {
                     if (e === 'raw') {
                         inputRef.current?.setInput(
                             formatRemote(selectedRemote),
@@ -356,7 +354,15 @@ function LogicChooser({
                     }
                 }}
             >
-                <Tab key="wellKnown" eventKey="wellKnown" title="Releases">
+                <Tabs.List>
+                    <Tabs.Trigger value="wellKnown">
+                        Releases
+                    </Tabs.Trigger>
+                    <Tabs.Trigger value="raw">
+                        Beta Feature
+                    </Tabs.Trigger>
+                </Tabs.List>
+                <Tabs.Content value="wellKnown">
                     <Select
                         styles={selectStyles<
                             false,
@@ -367,8 +373,8 @@ function LogicChooser({
                         options={wellKnownSelectOptions}
                         name="Select remote"
                     />
-                </Tab>
-                <Tab key="raw" eventKey="raw" title="Beta Feature">
+                </Tabs.Content>
+                <Tabs.Content value="raw">
                     <span>
                         Find cool beta features on the Discord <DiscordButton />
                     </span>
@@ -377,8 +383,8 @@ function LogicChooser({
                         selectedRemote={selectedRemote}
                         setSelectedRemote={setSelectedRemote}
                     />
-                </Tab>
-            </Tabs>
+                </Tabs.Content>
+            </Tabs.Root>
             <LoadingStateIndicator loadingState={loadingState} />
         </div>
     );
@@ -497,11 +503,18 @@ function OptionsList({
 }) {
     return (
         <div className={styles.optionsCategory}>
-            <Tabs defaultActiveKey="Shuffles">
+            <Tabs.Root defaultValue="Shuffles">
+                <Tabs.List>
+                    {Object.keys(optionCategorization).map((key) => 
+                    <Tabs.Trigger key={key} value={key}>
+                        {key}
+                    </Tabs.Trigger>
+                    )}
+                </Tabs.List>
                 {Object.entries(optionCategorization).map(
                     ([title, categoryOptions]) => {
                         return (
-                            <Tab eventKey={title} key={title} title={title}>
+                            <Tabs.Content key={title} value={title}>
                                 <div className={styles.optionsTab}>
                                     {categoryOptions.map((command) => {
                                         const entry = options.find(
@@ -526,11 +539,11 @@ function OptionsList({
                                         );
                                     })}
                                 </div>
-                            </Tab>
+                            </Tabs.Content>
                         );
                     },
                 )}
-            </Tabs>
+            </Tabs.Root>
         </div>
     );
 }
