@@ -87,7 +87,7 @@ function PresetsModal({
     );
 
     return (
-        <Modal show={show} onHide={onHide}>
+        <Modal show={show} onHide={onHide} scrollable>
             <Modal.Header closeButton>
                 <Modal.Title>
                     Presets

@@ -109,7 +109,7 @@ export default function CustomizationModal({
     const hasCustomLayout = useSelector(hasCustomLayoutSelector);
 
     return (
-        <Modal show={show} onHide={onHide}>
+        <Modal show={show} onHide={onHide} scrollable size="lg">
             <Modal.Header closeButton>
                 <Modal.Title>Tracker Customization</Modal.Title>
             </Modal.Header>

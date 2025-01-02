@@ -139,7 +139,7 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
         );
     };
     return (
-        <Modal show={show} onHide={onHide} size="lg">
+        <Modal show={show} onHide={onHide} size="lg" scrollable>
             <Modal.Header closeButton>
                 <Modal.Title>
                     Entrances
