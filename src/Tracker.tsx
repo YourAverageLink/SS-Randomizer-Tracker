@@ -152,12 +152,12 @@ function TrackerFooter() {
                 </div>
             </div>
             <CustomizationModal
-                show={showCustomizationDialog}
-                onHide={() => setShowCustomizationDialog(false)}
+                open={showCustomizationDialog}
+                onOpenChange={setShowCustomizationDialog}
             />
             <EntranceTracker
-                show={showEntranceDialog}
-                onHide={() => setShowEntranceDialog(false)}
+                open={showEntranceDialog}
+                onOpenChange={setShowEntranceDialog}
             />
         </>
     );

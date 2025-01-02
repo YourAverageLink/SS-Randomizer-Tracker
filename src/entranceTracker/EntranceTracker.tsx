@@ -1,7 +1,4 @@
 import { useMemo, useState } from 'react';
-import {
-    Modal,
-} from 'react-bootstrap';
 import { FixedSizeList as List, type ListChildComponentProps } from 'react-window';
 import Select, { type ActionMeta, type SingleValue } from 'react-select';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,12 +6,8 @@ import { entrancePoolsSelector, exitsSelector, usedEntrancesSelector } from '../
 import { mapEntrance } from '../tracker/Slice';
 import { selectStyles } from '../customization/ComponentStyles';
 import { mapValues } from '../utils/Collections';
+import * as Dialog from '../additionalComponents/Dialog';
 // import EntranceGraph from './EntranceGraph';
-
-type EntranceTrackerProps = {
-    show: boolean;
-    onHide: () => void;
-};
 
 type Entrance = {
     value: string;
@@ -23,7 +16,8 @@ type Entrance = {
 
 const RESET_OPTION = 'RESET';
 
-function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
+function EntranceTracker({ open, onOpenChange }: {open: boolean;
+    onOpenChange: (open: boolean) => void;}) {
     const dispatch = useDispatch();
     const exits = useSelector(exitsSelector);
     const usedEntrances = useSelector(usedEntrancesSelector);
@@ -137,56 +131,68 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
         );
     };
     return (
-        <Modal show={show} onHide={onHide} size="lg" scrollable>
-            <Modal.Header closeButton>
-                <Modal.Title>
-                    Entrances
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <div style={{ display: 'flex', gap: 4 }}>
-                    <input
-                        className="tracker-input"
-                        style={{ flex: '1' }}
-                        type="search"
-                        placeholder="Search exits"
-                        onChange={(e) => setExitSearch(e.target.value)}
-                        value={exitSearch}
-                    />
-                    <input
-                        className="tracker-input"
-                        style={{ flex: '1' }}
-                        type="search"
-                        placeholder="Search entrances"
-                        onChange={(e) => setEntranceSearch(e.target.value)}
-                        value={entranceSearch}
-                    />
-                    <div>
-                        <button type="button" className="tracker-button" onClick={clearFilters}>Clear Filters</button>
+        <Dialog.Root open={open} onOpenChange={onOpenChange}>
+            <Dialog.Portal>
+                <Dialog.Overlay />
+                <Dialog.Content>
+                    <Dialog.Title>Entrances</Dialog.Title>
+                    <div style={{ display: 'flex', gap: 4 }}>
+                        <input
+                            className="tracker-input"
+                            style={{ flex: '1' }}
+                            type="search"
+                            placeholder="Search exits"
+                            onChange={(e) => setExitSearch(e.target.value)}
+                            value={exitSearch}
+                        />
+                        <input
+                            className="tracker-input"
+                            style={{ flex: '1' }}
+                            type="search"
+                            placeholder="Search entrances"
+                            onChange={(e) => setEntranceSearch(e.target.value)}
+                            value={entranceSearch}
+                        />
+                        <div>
+                            <button
+                                type="button"
+                                className="tracker-button"
+                                onClick={clearFilters}
+                            >
+                                Clear Filters
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <label htmlFor="clickthrough" style={{ paddingRight: 8 }}>Clickthrough</label>
-                    <input
-                        type="checkbox"
-                        id="clickthrough"
-                        checked={clickthrough}
-                        onChange={() => setClickthrough(!clickthrough)}
-                    />
-                </div>
-                <List
-                    itemCount={filteredRows.length}
-                    height={600}
-                    width=""
-                    itemSize={60}
-                >
-                    {row}
-                </List>
-            </Modal.Body>
-            <Modal.Footer>
-                <button type="button" className="tracker-button" onClick={onHide}>Close</button>
-            </Modal.Footer>
-        </Modal>
+                    <div>
+                        <label
+                            htmlFor="clickthrough"
+                            style={{ paddingRight: 8 }}
+                        >
+                            Clickthrough
+                        </label>
+                        <input
+                            type="checkbox"
+                            id="clickthrough"
+                            checked={clickthrough}
+                            onChange={() => setClickthrough(!clickthrough)}
+                        />
+                    </div>
+                    <List
+                        itemCount={filteredRows.length}
+                        height={600}
+                        width=""
+                        itemSize={60}
+                    >
+                        {row}
+                    </List>
+                    <Dialog.Footer>
+                        <Dialog.Close className="tracker-button">
+                            Close
+                        </Dialog.Close>
+                    </Dialog.Footer>
+                </Dialog.Content>
+            </Dialog.Portal>
+        </Dialog.Root>
         // <EntranceGraph />
     );
 }
