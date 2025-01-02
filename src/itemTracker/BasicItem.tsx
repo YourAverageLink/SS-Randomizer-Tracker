@@ -1,7 +1,7 @@
 import keyDownWrapper from '../utils/KeyDownWrapper';
 import clsx from 'clsx';
 import './BasicItem.css';
-import * as _ from 'lodash-es';
+import { last } from 'es-toolkit';
 
 /**
  * The fundamental controlled item component.
@@ -50,7 +50,7 @@ export function BasicItem({
             tabIndex={0}
             style={{ width: imgWidth }}
         >
-            <img src={images[count] ?? _.last(images)} alt={itemName} />
+            <img src={images[count] ?? last(images)} alt={itemName} />
             {children}
         </div>
     );

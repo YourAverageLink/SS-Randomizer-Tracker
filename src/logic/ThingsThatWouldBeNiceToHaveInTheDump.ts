@@ -1,9 +1,9 @@
-import * as _ from 'lodash-es';
 import type {
     OptionType,
     OptionValue,
     TypedOptions,
 } from '../permalink/SettingsTypes';
+import { stubFalse } from '../utils/Function';
 
 /** Exits that are not randomized even if ER is on. */
 export const nonRandomizedExits = [
@@ -84,11 +84,11 @@ const isS3RacingGossipStone = (stoneId: string) =>
     !s3RacingBannedGossipStones.some((s) => stoneId.includes(s));
 
 export const doesHintDistroUseGossipStone: Record<string, ((stoneId: string) => boolean) | undefined> = {
-    '2D Dowsing & Fi Hints': _.stubFalse,
-    'Boss Keysanity Fi Hints': _.stubFalse,
-    'Dowsing & Fi Hints': _.stubFalse,
-    'Remlits Tournament': _.stubFalse,
-    'Strong Dowsing All Dungeons': _.stubFalse,
+    '2D Dowsing & Fi Hints': stubFalse,
+    'Boss Keysanity Fi Hints': stubFalse,
+    'Dowsing & Fi Hints': stubFalse,
+    'Remlits Tournament': stubFalse,
+    'Strong Dowsing All Dungeons': stubFalse,
     'Pre-S3 Base': isS3RacingGossipStone,
     'Pre-S3 Variant': isS3RacingGossipStone,
     'Season 3 Tournament': isS3RacingGossipStone,

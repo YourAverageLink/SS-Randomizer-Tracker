@@ -10,7 +10,6 @@ import {
     useSyncExternalStore,
 } from 'react';
 import { TooltipComputer } from './TooltipComputations';
-import { noop } from 'lodash-es';
 import { useSelector } from 'react-redux';
 import {
     settingsRequirementsSelector,
@@ -28,6 +27,7 @@ import {
 import type { ExplorationNode } from '../logic/Pathfinding';
 import { trickSemiLogicSelector, trickSemiLogicTrickListSelector } from '../customization/Selectors';
 import { mergeRequirements } from '../logic/bitlogic/BitLogic';
+import { noop } from '../utils/Function';
 
 const TooltipsContext = createContext<TooltipComputer | null>(null);
 

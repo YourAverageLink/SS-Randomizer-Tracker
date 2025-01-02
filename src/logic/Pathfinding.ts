@@ -1,8 +1,8 @@
-import * as _ from 'lodash-es';
 import type { ExitMapping } from './Locations';
 import type { AreaGraph } from './Logic';
 import { BitVector } from './bitlogic/BitVector';
 import { TimeOfDay } from './UpstreamTypes';
+import { keyBy } from 'es-toolkit';
 
 /*
 The pathfinding algorithm starts at the Start entrance with its specific time of day,
@@ -27,7 +27,7 @@ export function exploreAreaGraph(
     exits: ExitMapping[],
     logicBits: BitVector,
 ) {
-    const mappingsByExitId = _.keyBy(exits, (exit) => exit.exit.id);
+    const mappingsByExitId = keyBy(exits, (exit) => exit.exit.id);
     const startingEntrance = mappingsByExitId['\\Start']?.entrance;
     if (!startingEntrance) {
         return undefined;

@@ -1,4 +1,3 @@
-import * as _ from 'lodash-es';
 import { useCallback } from 'react';
 import { Menu, Item, Separator, Submenu, type ItemParams } from 'react-contexify';
 
@@ -7,6 +6,7 @@ import type { LocationContextMenuProps } from './Location';
 import { useDispatch } from 'react-redux';
 import { clickCheck, setCheckHint } from '../tracker/Slice';
 import images from '../itemTracker/Images';
+import { last } from 'es-toolkit';
 
 type CtxProps<T = void> = ItemParams<LocationContextMenuProps, T>;
 interface ItemData {
@@ -78,7 +78,7 @@ export default function LocationContextMenu() {
 }
 
 export function HintItem({ itemName }: { itemName: string }) {
-    const image = _.last(images[itemName]);
+    const image = last(images[itemName]);
     return (<span style={{ display: 'flex', flexFlow: 'row nowrap' }}>
         <div style={{ width: '36px', height: '36px', paddingRight: '6px' }}>
             <img style={{ width: '100%', height: '100%', objectFit: 'contain' }} src={image} alt={itemName} />

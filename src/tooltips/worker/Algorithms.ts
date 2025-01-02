@@ -1,4 +1,4 @@
-import * as _ from 'lodash-es';
+import { maxBy, sumBy } from 'es-toolkit';
 import { BitVector } from '../../logic/bitlogic/BitVector';
 import { LogicalExpression } from '../../logic/bitlogic/LogicalExpression';
 import BooleanExpression, {
@@ -127,13 +127,13 @@ export function dnfToRequirementExpr(
             rows[row].coKernel.or(columns[col]).numSetBits;
 
         const literalsSaved = (rectRows: number[], rectCols: number[]) =>
-            _.sumBy(rectRows, (row) =>
-                _.sumBy(rectCols, (col) =>
+            sumBy(rectRows, (row) =>
+                sumBy(rectCols, (col) =>
                     matrix[row][col] ? value(col, row) : 0,
                 ),
             ) -
-            _.sumBy(rectRows, rowWeight) -
-            _.sumBy(rectCols, colWeight);
+            sumBy(rectRows, rowWeight) -
+            sumBy(rectCols, colWeight);
 
         // This is the thesis algorithm for enumerating all prime rectangles.
         // Theoretically the algorithm is branch-and-bound, but our problems
@@ -151,7 +151,7 @@ export function dnfToRequirementExpr(
         );
 
         if (allRects.length) {
-            const [, rectCols] = _.maxBy(allRects, ([rows, cols]) =>
+            const [, rectCols] = maxBy(allRects, ([rows, cols]) =>
                 literalsSaved(rows, cols),
             )!;
 
