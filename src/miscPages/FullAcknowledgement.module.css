@@ -1,0 +1,14 @@
+.ackContainer {
+    text-align: center;
+}
+
+.contributorsList {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.ackGroupHeader {
+    font-weight: bold;
+    padding-top: 1%;
+}

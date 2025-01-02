@@ -1,0 +1,17 @@
+.modal {
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 0 12px;
+}
+
+.colorPresets {
+    display: flex;
+    justify-content: space-around;
+}
+
+.setting {
+    .header {
+        font-size: 24px;
+    }
+    margin-bottom: 15px;
+}

@@ -17,10 +17,7 @@ import { decodePermalink, encodePermalink } from '../permalink/Settings';
 import type { Option } from '../permalink/SettingsTypes';
 import {
     Button,
-    Col,
     FormCheck,
-    FormLabel,
-    Row,
     Tab,
     Tabs,
 } from 'react-bootstrap';
@@ -516,19 +513,18 @@ function OptionsList({
                                             return null;
                                         }
                                         return (
-                                            <Row key={command}>
-                                                <Setting
-                                                    def={entry}
-                                                    value={settings[command]!}
-                                                    setValue={(value) =>
-                                                        dispatch({
-                                                            type: 'changeSetting',
-                                                            command,
-                                                            value,
-                                                        })
-                                                    }
-                                                />
-                                            </Row>
+                                            <Setting
+                                                key={command}
+                                                def={entry}
+                                                value={settings[command]!}
+                                                setValue={(value) =>
+                                                    dispatch({
+                                                        type: 'changeSetting',
+                                                        command,
+                                                        value,
+                                                    })
+                                                }
+                                            />
                                         );
                                     })}
                                 </div>
@@ -554,25 +550,25 @@ function Setting({
         case 'boolean':
             return (
                 <>
-                    <Col xs={5}>
+                    <div>
                         <OptionLabel option={def} />
-                    </Col>
-                    <Col xs={6}>
+                    </div>
+                    <div>
                         <FormCheck
                             type="switch"
                             checked={value as boolean}
                             onChange={(e) => setValue(e.target.checked)}
                         />
-                    </Col>
+                    </div>
                 </>
             );
         case 'int':
             return (
                 <>
-                    <Col xs={5}>
+                    <div>
                         <OptionLabel option={def} />
-                    </Col>
-                    <Col xs={6}>
+                    </div>
+                    <div>
                         <Select
                             styles={selectStyles<
                                 false,
@@ -590,16 +586,16 @@ function Setting({
                             }))}
                             name={def.name}
                         />
-                    </Col>
+                    </div>
                 </>
             );
         case 'singlechoice':
             return (
                 <>
-                    <Col xs={5}>
+                    <div>
                         <OptionLabel option={def} />
-                    </Col>
-                    <Col xs={6}>
+                    </div>
+                    <div>
                         <Select
                             styles={selectStyles<
                                 false,
@@ -617,7 +613,7 @@ function Setting({
                             }))}
                             name={def.name}
                         />
-                    </Col>
+                    </div>
                 </>
             );
         case 'multichoice': {
@@ -650,10 +646,10 @@ function Setting({
             }));
             return (
                 <>
-                    <Col xs={5}>
+                    <div>
                         <OptionLabel option={def} />
-                    </Col>
-                    <Col xs={6}>
+                    </div>
+                    <div>
                         <Select
                             styles={selectStyles<
                                 true,
@@ -672,7 +668,7 @@ function Setting({
                             options={options}
                             name={def.name}
                         />
-                    </Col>
+                    </div>
                 </>
             );
         }
@@ -706,7 +702,7 @@ const OptionLabel = React.memo(function OptionLabel({
 }) {
     return (
         <Tooltip content={<OptionTooltip>{option.help}</OptionTooltip>}>
-            <FormLabel htmlFor={option.name}>{option.name}</FormLabel>
+            <label htmlFor={option.name}>{option.name}</label>
         </Tooltip>
     );
 });

@@ -48,7 +48,7 @@
     margin: 2% 0%;
     display: flex;
     flex-flow: row wrap;
-    column-gap: 4px;
+    gap: 4px;
 }
 
 .continueButton {
@@ -78,6 +78,13 @@
 
 .optionsTab {
     margin-top: 20px;
+    @media not (max-width: 1000px) {
+        display: grid;
+        grid-template-columns: max-content auto;
+        column-gap: 40px;
+        row-gap: 6px;
+        align-items: center;
+    }
 }
 
 .optionsBadRemote {

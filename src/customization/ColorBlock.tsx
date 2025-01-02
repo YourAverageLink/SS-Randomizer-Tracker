@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Row, Col } from 'react-bootstrap';
 import { SketchPicker } from 'react-color';
 import type { ColorScheme } from './ColorScheme';
+import styles from './ColorBlock.module.css';
 
 export default function ColorBlock({
     colorName,
@@ -18,19 +18,20 @@ export default function ColorBlock({
 }) {
     const [showPicker, setShowPicker] = useState(false);
     return (
-        <div>
-            <Row>
-                <Col>{colorName}</Col>
-                <Col
+        <>
+            <div className={styles.colorBlock}>
+                <div>{colorName}</div>
+                <div
+                    className={styles.color}
                     style={{
                         background: currentColor,
                         border: '2px solid var(--scheme-text)',
                     }}
                     onClick={() => setShowPicker((prevState) => !prevState)}
                 />
-            </Row>
+            </div>
             {showPicker && (
-                <Row>
+                <div>
                     <SketchPicker
                         color={currentColor}
                         onChangeComplete={(color) => {
@@ -51,8 +52,8 @@ export default function ColorBlock({
                             '#0000FF',
                         ]}
                     />
-                </Row>
+                </div>
             )}
-        </div>
+        </>
     );
 }
