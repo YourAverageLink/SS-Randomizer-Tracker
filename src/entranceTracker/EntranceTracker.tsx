@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import {
     Modal,
-    FormCheck,
     FormControl,
 } from 'react-bootstrap';
 import { FixedSizeList as List, type ListChildComponentProps } from 'react-window';
@@ -166,9 +165,9 @@ function EntranceTracker({ show, onHide }: EntranceTrackerProps) {
                     </div>
                 </div>
                 <div>
-                    <FormCheck
-                        type="switch"
-                        label="Clickthrough"
+                    <label htmlFor="clickthrough" style={{ paddingRight: 8 }}>Clickthrough</label>
+                    <input
+                        type="checkbox"
                         id="clickthrough"
                         checked={clickthrough}
                         onChange={() => setClickthrough(!clickthrough)}

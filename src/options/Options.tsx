@@ -16,7 +16,6 @@ import {
 import { decodePermalink, encodePermalink } from '../permalink/Settings';
 import type { Option } from '../permalink/SettingsTypes';
 import {
-    FormCheck,
     Tab,
     Tabs,
 } from 'react-bootstrap';
@@ -552,12 +551,15 @@ function Setting({
                     <div>
                         <OptionLabel option={def} />
                     </div>
-                    <div>
-                        <FormCheck
-                            type="switch"
-                            checked={value as boolean}
-                            onChange={(e) => setValue(e.target.checked)}
-                        />
+                    <div className={styles.checkboxOption}>
+                        <div>
+                            <input
+                                type="checkbox"
+                                id={def.name}
+                                checked={value as boolean}
+                                onChange={(e) => setValue(e.target.checked)}
+                            />
+                        </div>
                     </div>
                 </>
             );
@@ -584,6 +586,7 @@ function Setting({
                                 label: val.toString(),
                             }))}
                             name={def.name}
+                            id={def.name}
                         />
                     </div>
                 </>
@@ -611,6 +614,7 @@ function Setting({
                                 label: val,
                             }))}
                             name={def.name}
+                            id={def.name}
                         />
                     </div>
                 </>
@@ -666,6 +670,7 @@ function Setting({
                             onChange={onChange}
                             options={options}
                             name={def.name}
+                            id={def.name}
                         />
                     </div>
                 </>

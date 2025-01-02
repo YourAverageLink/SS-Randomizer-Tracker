@@ -87,6 +87,13 @@
     }
 }
 
+.checkboxOption {
+    display: flex;
+    > div {
+        display: flex;
+    }
+}
+
 .optionsBadRemote {
     border: 1px solid red;
 }

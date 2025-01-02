@@ -1,4 +1,4 @@
-import { Modal, FormCheck } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import ColorBlock from './ColorBlock';
 import {
     type ColorScheme,
@@ -81,7 +81,7 @@ function Setting({
             <Tooltip content={tooltip ?? ''} disabled={!tooltip}>
                 <div className={styles.header}>{name}</div>
             </Tooltip>
-            <div>{children}</div>
+            <div className={styles.contents}>{children}</div>
         </div>
     );
 }
@@ -239,18 +239,22 @@ export default function CustomizationModal({
                         />
                     </Setting>
                     <Setting
-                        name="Show Trick Logic"
-                        tooltip="Choose whether checks reachable only with tricks should be highlighted in a separate color."
+                        name="Trick Logic"
+                        tooltip="Choose whether checks reachable only with tricks should be highlighted in a separate color, and which checks should be shown. An empty tricks list shows all tricks."
                     >
-                        <FormCheck
-                            type="switch"
+                        <label htmlFor="trickLogic" className={styles.checkboxLabel}>
+                            Show Trick Logic
+                        </label>
+                        <input
+                            type="checkbox"
+                            id="trickLogic"
                             checked={trickSemiLogic}
                             onChange={(e) =>
                                 dispatch(setTrickSemiLogic(e.target.checked))
                             }
                         />
+                        <TricksChooser enabled={trickSemiLogic} />
                     </Setting>
-                    <TricksChooser enabled={trickSemiLogic} />
                     <Setting
                         name="Counter Basis"
                         tooltip="Choose whether the Area/Total Locations Accessible counters should include items in semilogic."
@@ -274,9 +278,13 @@ export default function CustomizationModal({
                             name="Counter Basis"
                         />
                     </Setting>
-                    <Setting name="Track Tim">
-                        <FormCheck
-                            type="switch"
+                    <Setting name="Additional Settings">
+                        <label htmlFor="trackTim" className={styles.checkboxLabel}>
+                            Track Tim
+                        </label>
+                        <input
+                            type="checkbox"
+                            id="trackTim"
                             checked={tumbleweed}
                             onChange={(e) =>
                                 dispatch(setTrackTumbleweed(e.target.checked))
@@ -358,19 +366,14 @@ function TricksChooser({ enabled }: { enabled: boolean }) {
     );
 
     return (
-        <Setting
+        <Select
+            styles={selectStyles<true, Option>()}
+            isMulti
+            isDisabled={!enabled}
+            value={value}
+            onChange={onChange}
+            options={choices}
             name="Enabled Tricks"
-            tooltip="Enable tricks to be considered in trick logic. If no tricks are chosen, all tricks will be enabled."
-        >
-            <Select
-                styles={selectStyles<true, Option>()}
-                isMulti
-                isDisabled={!enabled}
-                value={value}
-                onChange={onChange}
-                options={choices}
-                name="Enabled Tricks"
-            />
-        </Setting>
+        />
     );
 }

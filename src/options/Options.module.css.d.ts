@@ -11,6 +11,7 @@ declare const classNames: {
     readonly bold: 'bold';
     readonly optionsCategory: 'optionsCategory';
     readonly optionsTab: 'optionsTab';
+    readonly checkboxOption: 'checkboxOption';
     readonly optionsBadRemote: 'optionsBadRemote';
 };
 export = classNames;
