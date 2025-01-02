@@ -7,11 +7,13 @@ export function Root(props: Tabs.TabsProps & React.RefAttributes<HTMLDivElement>
 }
 
 export function List(props: Tabs.TabsListProps & React.RefAttributes<HTMLDivElement>) {
-    return <Tabs.List className={clsx(props.className, styles.tabsList)} {...props} />;
+    const { className, ...rest } = props;
+    return <Tabs.List className={clsx(className, styles.tabsList)} {...rest} />;
 }
 
 export function Trigger(props: Tabs.TabsTriggerProps & React.RefAttributes<HTMLButtonElement>) {
-    return <Tabs.Trigger className={clsx(props.className, styles.tabsButton)} {...props} />;
+    const { className, ...rest } = props;
+    return <Tabs.Trigger className={clsx(className, styles.tabsButton)} {...rest} />;
 }
 
 export function Content(props: Tabs.TabsContentProps & React.RefAttributes<HTMLDivElement>) {

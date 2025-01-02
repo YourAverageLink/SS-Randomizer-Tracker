@@ -17,10 +17,11 @@ export function Portal(
 export function Overlay(
     props: Dialog.DialogOverlayProps & React.RefAttributes<HTMLDivElement>,
 ) {
+    const { className, ...rest } = props;
     return (
         <Dialog.Overlay
-            className={clsx(props.className, styles.overlay)}
-            {...props}
+            className={clsx(className, styles.overlay)}
+            {...rest}
         />
     );
 }
@@ -29,12 +30,14 @@ export function Content(
     props: Dialog.DialogContentProps &
         React.RefAttributes<HTMLDivElement> & { narrow?: boolean },
 ) {
+    const { narrow, className, ...rest } = props;
     return (
         <Dialog.Content
-            className={clsx(props.className, styles.content, {
-                [styles.narrow]: props.narrow,
+            aria-describedby={undefined}
+            className={clsx(className, styles.content, {
+                [styles.narrow]: narrow,
             })}
-            {...props}
+            {...rest}
         />
     );
 }

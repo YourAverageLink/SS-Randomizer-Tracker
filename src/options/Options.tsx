@@ -5,7 +5,6 @@ import type {
     OptionsCommand,
 } from '../permalink/SettingsTypes';
 import {
-    forwardRef,
     useCallback,
     useEffect,
     useImperativeHandle,
@@ -394,16 +393,15 @@ export interface PlaintextRef {
     setInput: (text: string) => void;
 }
 
-const PlaintextLogicInput = forwardRef(function PlaintextLogicInput(
-    {
-        selectedRemote,
-        setSelectedRemote,
-    }: {
-        selectedRemote: RemoteReference;
-        setSelectedRemote: (ref: RemoteReference) => void;
-    },
-    ref: React.ForwardedRef<PlaintextRef>,
-) {
+function PlaintextLogicInput({
+    selectedRemote,
+    setSelectedRemote,
+    ref,
+}: {
+    selectedRemote: RemoteReference;
+    setSelectedRemote: (ref: RemoteReference) => void;
+    ref: React.ForwardedRef<PlaintextRef>;
+}) {
     const [input, setInput] = useState(() => formatRemote(selectedRemote));
     const parsed = useMemo(() => parseRemote(input), [input]);
     const badFormat = !parsed;
@@ -427,7 +425,7 @@ const PlaintextLogicInput = forwardRef(function PlaintextLogicInput(
             />
         </div>
     );
-});
+}
 
 function LoadingStateIndicator({
     loadingState,
