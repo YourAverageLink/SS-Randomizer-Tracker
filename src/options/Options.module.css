@@ -80,7 +80,7 @@
     margin-top: 20px;
     @media not (max-width: 1000px) {
         display: grid;
-        grid-template-columns: max-content auto;
+        grid-template-columns: 1fr 2fr;
         column-gap: 40px;
         row-gap: 6px;
         align-items: center;
