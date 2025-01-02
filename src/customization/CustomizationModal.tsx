@@ -125,7 +125,7 @@ export default function CustomizationModal({
                                                 className="tracker-button"
                                                 style={{
                                                     background:
-                                                        scheme.background,
+                                                        `${scheme.background} !important`,
                                                     color: scheme.text,
                                                     border: '1px solid var(--scheme-text)',
                                                 }}

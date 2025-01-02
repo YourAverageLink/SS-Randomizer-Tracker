@@ -54,7 +54,7 @@ export default function LocationGroupHeader({
             className={styles.locationGroupHeader}
         >
             <div className={styles.name}>
-                <h3>{area.name}</h3>
+                {area.name}
             </div>
             <div className={styles.hint}>
                 {hint && <img src={hint.image} alt={hint.description} />}
@@ -64,12 +64,10 @@ export default function LocationGroupHeader({
                     [styles.align]: alignCounters,
                 })}
             >
-                <h3>
-                    <AreaCounters
-                        totalChecksLeftInArea={area.checks.numRemaining}
-                        totalChecksAccessible={area.checks.numAccessible}
-                    />
-                </h3>
+                <AreaCounters
+                    totalChecksLeftInArea={area.checks.numRemaining}
+                    totalChecksAccessible={area.checks.numAccessible}
+                />
             </div>
         </div>
     );

@@ -2,6 +2,7 @@
     user-select: none;
     display: flex;
     flex-flow: row nowrap;
+    font-size: 1.75rem;
 
     .name {
         flex: 1 1 auto;

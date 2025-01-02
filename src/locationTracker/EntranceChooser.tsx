@@ -67,7 +67,7 @@ export default function EntranceChooser({ wide, exitId, onChoose }: { wide: bool
 
     return (
         <div className={styles.entranceChooser}>
-            <h3>Where does {exit.exit.name} lead to?</h3>
+            <span className={styles.query}>Where does {exit.exit.name} lead to?</span>
             <input
                 className="tracker-input"
                 placeholder="Filter entrances..."
