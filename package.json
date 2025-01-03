@@ -11,7 +11,6 @@
     "@radix-ui/react-tooltip": "^1.1.6",
     "@react-hook/resize-observer": "^2.0.0",
     "@reduxjs/toolkit": "^2.0.0",
-    "@tippyjs/react": "^4.2.6",
     "clsx": "^2.0.0",
     "es-toolkit": "^1.31.0",
     "immer": "^10.0.3",
@@ -27,7 +26,6 @@
     "react-select": "^5.7.0",
     "react-window": "^1.8.8",
     "semver": "^7.6.0",
-    "tippy.js": "^6.3.7",
     "uuid": "^11.0.0"
   },
   "scripts": {
