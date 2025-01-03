@@ -33,7 +33,7 @@ import { ImportButton } from '../ImportExport';
 import Tooltip from '../additionalComponents/Tooltip';
 import { type LoadingState, type OptionsAction, useOptionsState } from './OptionsReducer';
 import { useReleases } from '../loader/ReleasesLoader';
-import { satisfies as semverSatisfies } from 'semver';
+import semverSatisfies from 'semver/functions/satisfies';
 import { OptionsPresets } from './OptionsPresets';
 import styles from './Options.module.css';
 import clsx from 'clsx';
