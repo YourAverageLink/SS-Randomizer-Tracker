@@ -1,5 +1,4 @@
-import { useLayoutEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import EntranceTracker from './entranceTracker/EntranceTracker';
 import { MakeTooltipsAvailable } from './tooltips/TooltipHooks';
@@ -34,17 +33,10 @@ export default function TrackerContainer() {
 function Tracker() {
     useSyncTrackerStateToLocalStorage();
 
-    useLayoutEffect(() => {
-        document.querySelector('html')?.classList.add('overflowHidden');
-        return () =>
-            document.querySelector('html')?.classList.remove('overflowHidden');
-    }, []);
-
     return (
         <>
             <div
                 style={{
-                    position: 'absolute',
                     width: '100vw',
                     height: '100vh',
                     overflow: 'hidden',
@@ -125,36 +117,40 @@ function TrackerFooter() {
             >
                 <div>
                     <Link to="/">
-                        <Button>← Options</Button>
+                        <div className="tracker-button">
+                            ← Options
+                        </div>
                     </Link>
                 </div>
                 <div>
                     <ExportButton />
                 </div>
                 <div>
-                    <Button
-                        variant="primary"
+                    <button
+                        type="button"
+                        className="tracker-button"
                         onClick={() => setShowEntranceDialog(true)}
                     >
                         Entrances
-                    </Button>
+                    </button>
                 </div>
                 <div>
-                    <Button
-                        variant="primary"
+                    <button
+                        type="button"
+                        className="tracker-button"
                         onClick={() => setShowCustomizationDialog(true)}
                     >
                         Customization
-                    </Button>
+                    </button>
                 </div>
             </div>
             <CustomizationModal
-                show={showCustomizationDialog}
-                onHide={() => setShowCustomizationDialog(false)}
+                open={showCustomizationDialog}
+                onOpenChange={setShowCustomizationDialog}
             />
             <EntranceTracker
-                show={showEntranceDialog}
-                onHide={() => setShowEntranceDialog(false)}
+                open={showEntranceDialog}
+                onOpenChange={setShowEntranceDialog}
             />
         </>
     );

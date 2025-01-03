@@ -1,3 +1,5 @@
+import styles from './Contributor.module.css';
+
 export default function Contributor({
     name,
     links,
@@ -6,13 +8,13 @@ export default function Contributor({
     links: { [platform: string]: string | undefined };
 }) {
     return (
-        <span style={{ padding: '1%' }}>
+        <div className={styles.contributor}>
             <span style={{ fontWeight: '500' }}>{name}</span>
             {Object.entries(links).map(([type, link]) => (
-                <a key={link} href={link} aria-label={type} style={{ padding: '0.25%' }}>
+                <a key={link} href={link} aria-label={type}>
                     <i className={`fab fa-${type}`} />
                 </a>
             ))}
-        </span>
+        </div>
     );
 }

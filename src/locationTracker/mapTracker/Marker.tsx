@@ -57,16 +57,17 @@ export function Marker({
     }
 
     return (
-        // I really don't like followCursor here but otherwise the tooltip teleports to (0, 0)
-        // when the marker is removed, where it overlaps with the item or dungeon tracker
         <>
-            <Tooltip content={tooltip} placement="bottom" followCursor>
+            <Tooltip content={tooltip} placement="bottom">
                 <div
                     onClick={onClick}
                     onKeyDown={onClick}
                     role="button"
                     tabIndex={0}
-                    onContextMenu={onContextMenu ?? ((e) => e.preventDefault())}
+                    onContextMenu={(ev) => {
+                        ev.preventDefault();
+                        onContextMenu?.(ev);
+                    }}
                     style={{ ...markerStyle, ...positionVars }}
                     className={clsx(styles.marker, borderRadiuses[variant])}
                 >

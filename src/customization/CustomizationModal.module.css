@@ -1,0 +1,28 @@
+.modal {
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 0 12px;
+    overflow: auto;
+}
+
+.colorPresets {
+    display: flex;
+    justify-content: space-around;
+}
+
+.setting {
+    .header {
+        font-size: 24px;
+    }
+
+    .contents {
+        margin-left: 12px;
+    }
+
+    margin-bottom: 15px;
+}
+
+.checkboxLabel {
+    padding-right: 8px;
+    padding-bottom: 8px;
+}

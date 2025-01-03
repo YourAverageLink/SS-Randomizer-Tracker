@@ -2,7 +2,6 @@ import React, { type CSSProperties, useMemo, useState } from 'react';
 import type { OptionsAction } from './OptionsReducer';
 import type { AllTypedOptions } from '../permalink/SettingsTypes';
 import type { LogicBundle } from '../logic/Slice';
-import { Button, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { type RootState, useAppDispatch } from '../store/Store';
 import { type Preset, addPreset, removePreset } from '../saves/Slice';
@@ -10,6 +9,7 @@ import { formatRemote, type RemoteReference } from '../loader/LogicLoader';
 import { encodePermalink, validateSettings } from '../permalink/Settings';
 import { useSyncSavesToLocalStorage } from '../LocalStorage';
 import styles from './OptionsPresets.module.css'
+import { Dialog } from '../additionalComponents/Dialog';
 
 export function OptionsPresets({
     style,
@@ -27,13 +27,13 @@ export function OptionsPresets({
 
     return (
         <>
-            <Button style={style} onClick={() => setShowModal(true)}>Presets</Button>
+            <button type="button" className="tracker-button" style={style} onClick={() => setShowModal(true)}>Presets</button>
             <PresetsModal
                 currentLogic={currentLogic}
                 currentSettings={currentSettings}
                 dispatch={dispatch}
-                onHide={() => setShowModal(false)}
-                show={showModal}
+                open={showModal}
+                onOpenChange={setShowModal}
             />
         </>
     );
@@ -54,14 +54,14 @@ function PresetsModal({
     currentLogic,
     currentSettings,
     dispatch,
-    show,
-    onHide,
+    open,
+    onOpenChange,
 }: {
     currentLogic: LogicBundle | undefined;
     currentSettings: AllTypedOptions | undefined;
     dispatch: React.Dispatch<OptionsAction>;
-    show: boolean;
-    onHide: () => void;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
 }) {
     const presets = useSelector((state: RootState) => state.saves.presets);
     const remotePresets: Preset[] | undefined = useMemo(
@@ -86,24 +86,36 @@ function PresetsModal({
         [currentLogic],
     );
 
+    const onHide = () => onOpenChange(false);
+
     return (
-        <Modal show={show} onHide={onHide}>
-            <Modal.Header closeButton>
-                <Modal.Title>
-                    Presets
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body className="show-grid">
-                <div className={styles.presetList}>
-                    {remotePresets?.map((p) => (<PresetRow preset={p} isRemotePreset dispatch={dispatch} key={p.id} onHide={onHide} />))}
-                    {presets.map((p) => (<PresetRow preset={p} dispatch={dispatch} key={p.id} onHide={onHide} />))}
-                    {currentLogic && currentSettings && <AddPresetRow currentLogic={currentLogic} currentSettings={currentSettings} />}
-                </div>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={onHide}>Close</Button>
-            </Modal.Footer>
-        </Modal>
+        <Dialog open={open} onOpenChange={onOpenChange} title="Presets">
+            <div className={styles.presetList}>
+                {remotePresets?.map((p) => (
+                    <PresetRow
+                        preset={p}
+                        isRemotePreset
+                        dispatch={dispatch}
+                        key={p.id}
+                        onHide={onHide}
+                    />
+                ))}
+                {presets.map((p) => (
+                    <PresetRow
+                        preset={p}
+                        dispatch={dispatch}
+                        key={p.id}
+                        onHide={onHide}
+                    />
+                ))}
+                {currentLogic && currentSettings && (
+                    <AddPresetRow
+                        currentLogic={currentLogic}
+                        currentSettings={currentSettings}
+                    />
+                )}
+            </div>
+        </Dialog>
     );
 }
 
@@ -136,7 +148,7 @@ function PresetRow({
                 {preset.name}
                 {!isRemotePreset && (
                     <div>
-                        <Button
+                        <button type="button" className="tracker-button"
                             onClick={(e) => {
                                 if (window.confirm(`Delete Preset ${preset.name}?`)) {
                                     appDispatch(removePreset(preset.id));
@@ -145,7 +157,7 @@ function PresetRow({
                             }}
                         >
                             🗑️
-                        </Button>
+                        </button>
                     </div>
                 )}
             </div>

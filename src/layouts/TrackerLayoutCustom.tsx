@@ -16,7 +16,6 @@ import { customLayoutSelector } from '../customization/Selectors';
 import { useMemo } from 'react';
 import { convertError } from '../utils/Errors';
 import { setCustomLayout } from '../customization/Slice';
-import { Button } from 'react-bootstrap';
 
 /*
 Example custom layout JSON (for a Full HD vertical screen):
@@ -212,13 +211,13 @@ export function TrackerLayoutCustom({
         return (
             <div>
                 <pre style={{ color: 'red' }}>{parseResult}</pre>
-                <Button
+                <button type="button" className="tracker-button"
                     onClick={() => {
                         dispatch(setCustomLayout(undefined));
                     }}
                 >
                     Remove Custom Layout
-                </Button>
+                </button>
             </div>
         );
     }

@@ -15,7 +15,8 @@
         overflow: visible scroll;
     }
 
-    h3 {
+    .query {
+        font-size: 1.75rem;
         margin: 2%;
     }
 }

@@ -5,7 +5,6 @@ import type {
     OptionsCommand,
 } from '../permalink/SettingsTypes';
 import {
-    forwardRef,
     useCallback,
     useEffect,
     useImperativeHandle,
@@ -15,15 +14,6 @@ import {
 } from 'react';
 import { decodePermalink, encodePermalink } from '../permalink/Settings';
 import type { Option } from '../permalink/SettingsTypes';
-import {
-    Button,
-    Col,
-    FormCheck,
-    FormLabel,
-    Row,
-    Tab,
-    Tabs,
-} from 'react-bootstrap';
 import {
     LATEST_STRING,
     type RemoteReference,
@@ -48,6 +38,8 @@ import { OptionsPresets } from './OptionsPresets';
 import styles from './Options.module.css';
 import clsx from 'clsx';
 import { isEqual, range } from 'es-toolkit';
+import * as Tabs from '../additionalComponents/Tabs';
+
 
 /** The tracker will only show these options, and tracker logic code is only allowed to access these! */
 const optionCategorization_ = {
@@ -242,7 +234,7 @@ function LaunchButtons({
 
     return (
         <div className={styles.launchButtons}>
-            <Button disabled={!canResume} onClick={() => confirmLaunch()}>
+            <button type="button" className="tracker-button" disabled={!canResume} onClick={() => confirmLaunch()}>
                 <div className={styles.continueButton}>
                     <span>Continue Tracker</span>
                     <span
@@ -251,21 +243,21 @@ function LaunchButtons({
                         {counters && `${counters.numChecked}/${counters.numRemaining}`}
                     </span>
                 </div>
-            </Button>
-            <Button disabled={!canStart} onClick={() => confirmLaunch(true)}>
+            </button>
+            <button type="button" className="tracker-button" disabled={!canStart} onClick={() => confirmLaunch(true)}>
                 Launch New Tracker
-            </Button>
+            </button>
             <ImportButton
                 setLogicBranch={(remote) =>
                     dispatch({ type: 'selectRemote', remote, viaImport: true })
                 }
             />
-            <Button
+            <button type="button" className="tracker-button"
                 disabled={!hasChanges}
                 onClick={() => dispatch({ type: 'revertChanges' })}
             >
                 Undo Changes
-            </Button>
+            </button>
 
             <OptionsPresets
                 style={{ marginLeft: 'auto' }}
@@ -351,9 +343,9 @@ function LogicChooser({
                     ? `: ${activeOption.label}`
                     : loadedRemoteName && `: ${loadedRemoteName}`}
             </legend>
-            <Tabs
-                defaultActiveKey="wellKnown"
-                onSelect={(e) => {
+            <Tabs.Root
+                defaultValue="wellKnown"
+                onValueChange={(e) => {
                     if (e === 'raw') {
                         inputRef.current?.setInput(
                             formatRemote(selectedRemote),
@@ -361,7 +353,15 @@ function LogicChooser({
                     }
                 }}
             >
-                <Tab key="wellKnown" eventKey="wellKnown" title="Releases">
+                <Tabs.List>
+                    <Tabs.Trigger value="wellKnown">
+                        Releases
+                    </Tabs.Trigger>
+                    <Tabs.Trigger value="raw">
+                        Beta Feature
+                    </Tabs.Trigger>
+                </Tabs.List>
+                <Tabs.Content value="wellKnown">
                     <Select
                         styles={selectStyles<
                             false,
@@ -372,8 +372,8 @@ function LogicChooser({
                         options={wellKnownSelectOptions}
                         name="Select remote"
                     />
-                </Tab>
-                <Tab key="raw" eventKey="raw" title="Beta Feature">
+                </Tabs.Content>
+                <Tabs.Content value="raw">
                     <span>
                         Find cool beta features on the Discord <DiscordButton />
                     </span>
@@ -382,8 +382,8 @@ function LogicChooser({
                         selectedRemote={selectedRemote}
                         setSelectedRemote={setSelectedRemote}
                     />
-                </Tab>
-            </Tabs>
+                </Tabs.Content>
+            </Tabs.Root>
             <LoadingStateIndicator loadingState={loadingState} />
         </div>
     );
@@ -393,16 +393,15 @@ export interface PlaintextRef {
     setInput: (text: string) => void;
 }
 
-const PlaintextLogicInput = forwardRef(function PlaintextLogicInput(
-    {
-        selectedRemote,
-        setSelectedRemote,
-    }: {
-        selectedRemote: RemoteReference;
-        setSelectedRemote: (ref: RemoteReference) => void;
-    },
-    ref: React.ForwardedRef<PlaintextRef>,
-) {
+function PlaintextLogicInput({
+    selectedRemote,
+    setSelectedRemote,
+    ref,
+}: {
+    selectedRemote: RemoteReference;
+    setSelectedRemote: (ref: RemoteReference) => void;
+    ref: React.ForwardedRef<PlaintextRef>;
+}) {
     const [input, setInput] = useState(() => formatRemote(selectedRemote));
     const parsed = useMemo(() => parseRemote(input), [input]);
     const badFormat = !parsed;
@@ -418,7 +417,7 @@ const PlaintextLogicInput = forwardRef(function PlaintextLogicInput(
         <div>
             <input
                 type="text"
-                className={clsx('form-control', {
+                className={clsx('tracker-input', {
                     [styles.optionsBadRemote]: badFormat,
                 })}
                 value={input}
@@ -426,7 +425,7 @@ const PlaintextLogicInput = forwardRef(function PlaintextLogicInput(
             />
         </div>
     );
-});
+}
 
 function LoadingStateIndicator({
     loadingState,
@@ -480,7 +479,7 @@ function PermalinkChooser({
             <legend>Settings String</legend>
             <input
                 type="text"
-                className={clsx(styles.permalinkInput, 'form-control')}
+                className={clsx(styles.permalinkInput, 'tracker-input')}
                 disabled={!permalink}
                 placeholder="Select a Randomizer version first"
                 value={permalink ?? ''}
@@ -502,11 +501,18 @@ function OptionsList({
 }) {
     return (
         <div className={styles.optionsCategory}>
-            <Tabs defaultActiveKey="Shuffles">
+            <Tabs.Root defaultValue="Shuffles">
+                <Tabs.List>
+                    {Object.keys(optionCategorization).map((key) => 
+                    <Tabs.Trigger key={key} value={key}>
+                        {key}
+                    </Tabs.Trigger>
+                    )}
+                </Tabs.List>
                 {Object.entries(optionCategorization).map(
                     ([title, categoryOptions]) => {
                         return (
-                            <Tab eventKey={title} key={title} title={title}>
+                            <Tabs.Content key={title} value={title}>
                                 <div className={styles.optionsTab}>
                                     {categoryOptions.map((command) => {
                                         const entry = options.find(
@@ -516,27 +522,26 @@ function OptionsList({
                                             return null;
                                         }
                                         return (
-                                            <Row key={command}>
-                                                <Setting
-                                                    def={entry}
-                                                    value={settings[command]!}
-                                                    setValue={(value) =>
-                                                        dispatch({
-                                                            type: 'changeSetting',
-                                                            command,
-                                                            value,
-                                                        })
-                                                    }
-                                                />
-                                            </Row>
+                                            <Setting
+                                                key={command}
+                                                def={entry}
+                                                value={settings[command]!}
+                                                setValue={(value) =>
+                                                    dispatch({
+                                                        type: 'changeSetting',
+                                                        command,
+                                                        value,
+                                                    })
+                                                }
+                                            />
                                         );
                                     })}
                                 </div>
-                            </Tab>
+                            </Tabs.Content>
                         );
                     },
                 )}
-            </Tabs>
+            </Tabs.Root>
         </div>
     );
 }
@@ -554,25 +559,28 @@ function Setting({
         case 'boolean':
             return (
                 <>
-                    <Col xs={5}>
+                    <div>
                         <OptionLabel option={def} />
-                    </Col>
-                    <Col xs={6}>
-                        <FormCheck
-                            type="switch"
-                            checked={value as boolean}
-                            onChange={(e) => setValue(e.target.checked)}
-                        />
-                    </Col>
+                    </div>
+                    <div className={styles.checkboxOption}>
+                        <div>
+                            <input
+                                type="checkbox"
+                                id={def.name}
+                                checked={value as boolean}
+                                onChange={(e) => setValue(e.target.checked)}
+                            />
+                        </div>
+                    </div>
                 </>
             );
         case 'int':
             return (
                 <>
-                    <Col xs={5}>
+                    <div>
                         <OptionLabel option={def} />
-                    </Col>
-                    <Col xs={6}>
+                    </div>
+                    <div>
                         <Select
                             styles={selectStyles<
                                 false,
@@ -589,17 +597,18 @@ function Setting({
                                 label: val.toString(),
                             }))}
                             name={def.name}
+                            id={def.name}
                         />
-                    </Col>
+                    </div>
                 </>
             );
         case 'singlechoice':
             return (
                 <>
-                    <Col xs={5}>
+                    <div>
                         <OptionLabel option={def} />
-                    </Col>
-                    <Col xs={6}>
+                    </div>
+                    <div>
                         <Select
                             styles={selectStyles<
                                 false,
@@ -616,8 +625,9 @@ function Setting({
                                 label: val,
                             }))}
                             name={def.name}
+                            id={def.name}
                         />
-                    </Col>
+                    </div>
                 </>
             );
         case 'multichoice': {
@@ -650,10 +660,10 @@ function Setting({
             }));
             return (
                 <>
-                    <Col xs={5}>
+                    <div>
                         <OptionLabel option={def} />
-                    </Col>
-                    <Col xs={6}>
+                    </div>
+                    <div>
                         <Select
                             styles={selectStyles<
                                 true,
@@ -671,8 +681,9 @@ function Setting({
                             onChange={onChange}
                             options={options}
                             name={def.name}
+                            id={def.name}
                         />
-                    </Col>
+                    </div>
                 </>
             );
         }
@@ -706,7 +717,7 @@ const OptionLabel = React.memo(function OptionLabel({
 }) {
     return (
         <Tooltip content={<OptionTooltip>{option.help}</OptionTooltip>}>
-            <FormLabel htmlFor={option.name}>{option.name}</FormLabel>
+            <label htmlFor={option.name}>{option.name}</label>
         </Tooltip>
     );
 });

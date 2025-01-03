@@ -1,35 +1,37 @@
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
-import { followCursor as followCursorPlugin } from 'tippy.js';
 import styles from './Tooltip.module.css';
+import * as RadixTooltip from '@radix-ui/react-tooltip';
 
 export default function Tooltip({
     content,
     children,
     placement,
-    followCursor,
     disabled,
 }: {
     content: React.ReactNode;
     children: React.ReactElement;
     placement?: 'bottom' | 'top';
-    followCursor?: boolean;
     disabled?: boolean;
 }) {
+    if (disabled) {
+        return children;
+    }
     return (
-        <Tippy
-            disabled={disabled}
-            placement={placement}
-            content={
-                <div className={styles.tooltip}>
-                    {content}
-                </div>
-            }
-            {...(followCursor
-                ? { followCursor, plugins: [followCursorPlugin], offset: [0, placement === 'bottom' ? 20 : 0] }
-                : {})}
-        >
-            {children}
-        </Tippy>
+        // eslint-disable-next-line @eslint-react/no-context-provider
+        <RadixTooltip.Provider delayDuration={0}>
+            <RadixTooltip.Root>
+                <RadixTooltip.Trigger asChild>{children}</RadixTooltip.Trigger>
+                <RadixTooltip.Portal>
+                    <RadixTooltip.Content
+                        hideWhenDetached
+                        className={styles.tooltip}
+                        side={placement}
+                        onContextMenu={(e) => e.preventDefault()}
+                    >
+                        {content}
+                        <RadixTooltip.Arrow className={styles.arrow} />
+                    </RadixTooltip.Content>
+                </RadixTooltip.Portal>
+            </RadixTooltip.Root>
+        </RadixTooltip.Provider>
     );
 }

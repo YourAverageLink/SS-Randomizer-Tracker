@@ -1,51 +1,73 @@
-@import "bootstrap/dist/css/bootstrap.min.css";
-
-:root {
-  --bs-body-bg: var(--scheme-background);
-  --bs-border-color-translucent: var(--scheme-text);
-}
-
-.modal {
-  --bs-modal-bg: var(--scheme-background);
-}
-
-.nav-tabs .nav-link.active {
-  color: var(--scheme-text);
-  background-color: var(--scheme-background);
-}
-
-.form-control {
-  color: var(--scheme-text);
-  background-color: var(--scheme-background);
-}
-
-input[type=text] {
-  color: var(--scheme-text);
-  background-color: var(--scheme-background);
-}
+@import './additionalComponents/button.css';
+@import './additionalComponents/input.css';
 
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: var(--scheme-text);
-}
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+        'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+        'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 
-/* Set by the main tracker on the whole document so that tooltips that are
-   temporarily scrolled out of bounds don't create scrollbars... */
-.overflowHidden {
-  overflow: hidden;
-}
+    color: var(--scheme-text);
+    background-color: var(--scheme-background);
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+    line-height: 1.5;
+    font-size: 16px;
 }
 
 @font-face {
-  font-family: "HyliaSerif";
-  src: url("assets/HyliaSerifBeta-Regular.otf") format("opentype")
+    font-family: 'HyliaSerif';
+    src: url('assets/HyliaSerifBeta-Regular.otf') format('opentype');
+}
+
+/* a bunch of styles carried over from bootstrap */
+*,
+::after,
+::before {
+    box-sizing: border-box;
+}
+
+img {
+    vertical-align: middle;
+}
+
+[role='button'] {
+    cursor: pointer;
+}
+
+[type='button']:not(:disabled),
+[type='reset']:not(:disabled),
+[type='submit']:not(:disabled),
+button:not(:disabled) {
+    cursor: pointer;
+}
+
+button,
+input,
+textarea {
+    font-family: unset;
+}
+
+legend {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+}
+
+code {
+    font-family: monospace;
+}
+
+hr {
+    opacity: 0.25;
+    border: 0;
+    margin: 1rem 0;
+    border-top: 1px solid;
+}
+
+a {
+    color: #0d6efd;
+    &:hover {
+        color: #0a58ca;
+    }
 }
