@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SketchPicker } from 'react-color';
+import { SketchPicker } from '@hello-pangea/color-picker';
 import type { ColorScheme } from './ColorScheme';
 import styles from './ColorBlock.module.css';
 
