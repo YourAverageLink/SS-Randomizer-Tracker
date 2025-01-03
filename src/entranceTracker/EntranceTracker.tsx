@@ -6,7 +6,7 @@ import { entrancePoolsSelector, exitsSelector, usedEntrancesSelector } from '../
 import { mapEntrance } from '../tracker/Slice';
 import { selectStyles } from '../customization/ComponentStyles';
 import { mapValues } from '../utils/Collections';
-import * as Dialog from '../additionalComponents/Dialog';
+import { Dialog } from '../additionalComponents/Dialog';
 // import EntranceGraph from './EntranceGraph';
 
 type Entrance = {
@@ -131,68 +131,54 @@ function EntranceTracker({ open, onOpenChange }: {open: boolean;
         );
     };
     return (
-        <Dialog.Root open={open} onOpenChange={onOpenChange}>
-            <Dialog.Portal>
-                <Dialog.Overlay />
-                <Dialog.Content>
-                    <Dialog.Title>Entrances</Dialog.Title>
-                    <div style={{ display: 'flex', gap: 4 }}>
-                        <input
-                            className="tracker-input"
-                            style={{ flex: '1' }}
-                            type="search"
-                            placeholder="Search exits"
-                            onChange={(e) => setExitSearch(e.target.value)}
-                            value={exitSearch}
-                        />
-                        <input
-                            className="tracker-input"
-                            style={{ flex: '1' }}
-                            type="search"
-                            placeholder="Search entrances"
-                            onChange={(e) => setEntranceSearch(e.target.value)}
-                            value={entranceSearch}
-                        />
-                        <div>
-                            <button
-                                type="button"
-                                className="tracker-button"
-                                onClick={clearFilters}
-                            >
-                                Clear Filters
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <label
-                            htmlFor="clickthrough"
-                            style={{ paddingRight: 8 }}
-                        >
-                            Clickthrough
-                        </label>
-                        <input
-                            type="checkbox"
-                            id="clickthrough"
-                            checked={clickthrough}
-                            onChange={() => setClickthrough(!clickthrough)}
-                        />
-                    </div>
-                    <List
-                        itemCount={filteredRows.length}
-                        height={600}
-                        width=""
-                        itemSize={60}
+        <Dialog open={open} onOpenChange={onOpenChange} title="Entrances" wide>
+            <div style={{ display: 'flex', gap: 4 }}>
+                <input
+                    className="tracker-input"
+                    style={{ flex: '1' }}
+                    type="search"
+                    placeholder="Search exits"
+                    onChange={(e) => setExitSearch(e.target.value)}
+                    value={exitSearch}
+                />
+                <input
+                    className="tracker-input"
+                    style={{ flex: '1' }}
+                    type="search"
+                    placeholder="Search entrances"
+                    onChange={(e) => setEntranceSearch(e.target.value)}
+                    value={entranceSearch}
+                />
+                <div>
+                    <button
+                        type="button"
+                        className="tracker-button"
+                        onClick={clearFilters}
                     >
-                        {row}
-                    </List>
-                    <Dialog.Footer>
-                        <Dialog.Close className="tracker-button">
-                            Close
-                        </Dialog.Close>
-                    </Dialog.Footer>
-                </Dialog.Content>
-            </Dialog.Portal>
-        </Dialog.Root>
+                        Clear Filters
+                    </button>
+                </div>
+            </div>
+            <div>
+                <label htmlFor="clickthrough" style={{ paddingRight: 8 }}>
+                    Clickthrough
+                </label>
+                <input
+                    type="checkbox"
+                    id="clickthrough"
+                    checked={clickthrough}
+                    onChange={() => setClickthrough(!clickthrough)}
+                />
+            </div>
+            <List
+                itemCount={filteredRows.length}
+                height={600}
+                width=""
+                itemSize={60}
+            >
+                {row}
+            </List>
+        </Dialog>
         // <EntranceGraph />
     );
 }

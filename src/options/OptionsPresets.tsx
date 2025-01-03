@@ -8,8 +8,8 @@ import { type Preset, addPreset, removePreset } from '../saves/Slice';
 import { formatRemote, type RemoteReference } from '../loader/LogicLoader';
 import { encodePermalink, validateSettings } from '../permalink/Settings';
 import { useSyncSavesToLocalStorage } from '../LocalStorage';
-import * as Dialog from '../additionalComponents/Dialog';
 import styles from './OptionsPresets.module.css'
+import { Dialog } from '../additionalComponents/Dialog';
 
 export function OptionsPresets({
     style,
@@ -89,44 +89,33 @@ function PresetsModal({
     const onHide = () => onOpenChange(false);
 
     return (
-        <Dialog.Root open={open} onOpenChange={onOpenChange}>
-            <Dialog.Portal>
-                <Dialog.Overlay />
-                <Dialog.Content narrow>
-                    <Dialog.Title>Presets</Dialog.Title>
-                    <div className={styles.presetList}>
-                        {remotePresets?.map((p) => (
-                            <PresetRow
-                                preset={p}
-                                isRemotePreset
-                                dispatch={dispatch}
-                                key={p.id}
-                                onHide={onHide}
-                            />
-                        ))}
-                        {presets.map((p) => (
-                            <PresetRow
-                                preset={p}
-                                dispatch={dispatch}
-                                key={p.id}
-                                onHide={onHide}
-                            />
-                        ))}
-                        {currentLogic && currentSettings && (
-                            <AddPresetRow
-                                currentLogic={currentLogic}
-                                currentSettings={currentSettings}
-                            />
-                        )}
-                    </div>
-                    <Dialog.Footer>
-                        <Dialog.Close className="tracker-button">
-                            Close
-                        </Dialog.Close>
-                    </Dialog.Footer>
-                </Dialog.Content>
-            </Dialog.Portal>
-        </Dialog.Root>
+        <Dialog open={open} onOpenChange={onOpenChange} title="Presets">
+            <div className={styles.presetList}>
+                {remotePresets?.map((p) => (
+                    <PresetRow
+                        preset={p}
+                        isRemotePreset
+                        dispatch={dispatch}
+                        key={p.id}
+                        onHide={onHide}
+                    />
+                ))}
+                {presets.map((p) => (
+                    <PresetRow
+                        preset={p}
+                        dispatch={dispatch}
+                        key={p.id}
+                        onHide={onHide}
+                    />
+                ))}
+                {currentLogic && currentSettings && (
+                    <AddPresetRow
+                        currentLogic={currentLogic}
+                        currentSettings={currentSettings}
+                    />
+                )}
+            </div>
+        </Dialog>
     );
 }
 

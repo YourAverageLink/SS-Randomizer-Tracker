@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import EntranceTracker from './entranceTracker/EntranceTracker';
 import { MakeTooltipsAvailable } from './tooltips/TooltipHooks';
@@ -33,17 +33,10 @@ export default function TrackerContainer() {
 function Tracker() {
     useSyncTrackerStateToLocalStorage();
 
-    useLayoutEffect(() => {
-        document.querySelector('html')?.classList.add('overflowHidden');
-        return () =>
-            document.querySelector('html')?.classList.remove('overflowHidden');
-    }, []);
-
     return (
         <>
             <div
                 style={{
-                    position: 'absolute',
                     width: '100vw',
                     height: '100vh',
                     overflow: 'hidden',

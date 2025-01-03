@@ -21,18 +21,6 @@ body {
     src: url('assets/HyliaSerifBeta-Regular.otf') format('opentype');
 }
 
-
-/* Set by the main tracker on the whole document so that tooltips that are
-   temporarily scrolled out of bounds don't create scrollbars... */
-.overflowHidden,
-.overflowHidden > body {
-    overflow: hidden;
-    /* this is annoyingly needed for dialogs on the main tracker
-       because radix hides overflow on the main body but the main body is empty */
-    width: 100vw;
-    height: 100vh;
-}
-
 /* a bunch of styles carried over from bootstrap */
 *,
 ::after,

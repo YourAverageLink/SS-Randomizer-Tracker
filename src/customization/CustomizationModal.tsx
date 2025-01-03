@@ -31,7 +31,7 @@ import {
 import { useCallback, useMemo } from 'react';
 import { selectStyles } from './ComponentStyles';
 import Select, { type ActionMeta, type MultiValue } from 'react-select';
-import * as Dialog from '../additionalComponents/Dialog';
+import { Dialog } from '../additionalComponents/Dialog';
 import Tooltip from '../additionalComponents/Tooltip';
 import { optionsSelector } from '../logic/Selectors';
 import { useAppDispatch, type ThunkResult } from '../store/Store';
@@ -109,226 +109,190 @@ export default function CustomizationModal({
     const hasCustomLayout = useSelector(hasCustomLayoutSelector);
 
     return (
-        <Dialog.Root open={open} onOpenChange={onOpenChange}>
-            <Dialog.Portal>
-                <Dialog.Overlay />
-                <Dialog.Content>
-                    <Dialog.Title>Tracker Customization</Dialog.Title>
-                    <div className={styles.modal}>
-                        <Setting name="Presets">
-                            <div className={styles.colorPresets}>
-                                {Object.entries(defaultColorSchemes).map(
-                                    ([key, scheme]) => (
-                                        <div key={key}>
-                                            <button
-                                                type="button"
-                                                className="tracker-button"
-                                                style={{
-                                                    background: scheme.background,
-                                                    color: scheme.text,
-                                                    border: '1px solid var(--scheme-text)',
-                                                }}
-                                                onClick={() =>
-                                                    updateColorScheme(scheme)
-                                                }
-                                            >
-                                                {key}
-                                            </button>
-                                        </div>
-                                    ),
-                                )}
-                            </div>
-                        </Setting>
-                        <Setting name="Colors">
-                            <ColorBlock
-                                colorName="Background"
-                                schemeKey="background"
-                                currentColor={colorScheme.background}
-                                colorScheme={colorScheme}
-                                updateColorScheme={updateColorScheme}
-                            />
-                            <ColorBlock
-                                colorName="Foreground"
-                                schemeKey="text"
-                                currentColor={colorScheme.text}
-                                colorScheme={colorScheme}
-                                updateColorScheme={updateColorScheme}
-                            />
-                            <ColorBlock
-                                colorName="In Logic Check"
-                                schemeKey="inLogic"
-                                currentColor={colorScheme.inLogic}
-                                colorScheme={colorScheme}
-                                updateColorScheme={updateColorScheme}
-                            />
-                            <ColorBlock
-                                colorName="Out of Logic Check"
-                                schemeKey="outLogic"
-                                currentColor={colorScheme.outLogic}
-                                colorScheme={colorScheme}
-                                updateColorScheme={updateColorScheme}
-                            />
-                            <ColorBlock
-                                colorName="Semi Logic Check"
-                                schemeKey="semiLogic"
-                                currentColor={colorScheme.semiLogic}
-                                colorScheme={colorScheme}
-                                updateColorScheme={updateColorScheme}
-                            />
-                            <ColorBlock
-                                colorName="Unrequired Dungeon"
-                                schemeKey="unrequired"
-                                currentColor={colorScheme.unrequired}
-                                colorScheme={colorScheme}
-                                updateColorScheme={updateColorScheme}
-                            />
-                            <ColorBlock
-                                colorName="Required Dungeon"
-                                schemeKey="required"
-                                currentColor={colorScheme.required}
-                                colorScheme={colorScheme}
-                                updateColorScheme={updateColorScheme}
-                            />
-                            <ColorBlock
-                                colorName="Completed Checks"
-                                schemeKey="checked"
-                                currentColor={colorScheme.checked}
-                                colorScheme={colorScheme}
-                                updateColorScheme={updateColorScheme}
-                            />
-                        </Setting>
-
-                        <Setting name="Item Tracker Settings">
-                            <Select
-                                styles={selectStyles<
-                                    false,
-                                    { label: string; value: string }
-                                >()}
-                                isDisabled={hasCustomLayout}
-                                isSearchable={false}
-                                value={itemLayouts.find(
-                                    (l) => l.value === layout,
-                                )}
-                                onChange={(e) =>
-                                    e &&
-                                    dispatch(
-                                        setItemLayout(e.value as ItemLayout),
-                                    )
-                                }
-                                options={itemLayouts}
-                                name="Item Layout"
-                            />
-                        </Setting>
-                        <Setting name="Location Tracker Settings">
-                            <Select
-                                styles={selectStyles<
-                                    false,
-                                    { label: string; value: string }
-                                >()}
-                                isDisabled={hasCustomLayout}
-                                isSearchable={false}
-                                value={locationLayouts.find(
-                                    (l) => l.value === locationLayout,
-                                )}
-                                onChange={(e) =>
-                                    e &&
-                                    dispatch(
-                                        setLocationLayout(
-                                            e.value as LocationLayout,
-                                        ),
-                                    )
-                                }
-                                options={locationLayouts}
-                                name="Location Layout"
-                            />
-                        </Setting>
-                        <Setting
-                            name="Trick Logic"
-                            tooltip="Choose whether checks reachable only with tricks should be highlighted in a separate color, and which checks should be shown. An empty tricks list shows all tricks."
-                        >
-                            <label
-                                htmlFor="trickLogic"
-                                className={styles.checkboxLabel}
-                            >
-                                Show Trick Logic
-                            </label>
-                            <input
-                                type="checkbox"
-                                id="trickLogic"
-                                checked={trickSemiLogic}
-                                onChange={(e) =>
-                                    dispatch(
-                                        setTrickSemiLogic(e.target.checked),
-                                    )
-                                }
-                            />
-                            <TricksChooser enabled={trickSemiLogic} />
-                        </Setting>
-                        <Setting
-                            name="Counter Basis"
-                            tooltip="Choose whether the Area/Total Locations Accessible counters should include items in semilogic."
-                        >
-                            <Select
-                                styles={selectStyles<
-                                    false,
-                                    { label: string; value: string }
-                                >()}
-                                isSearchable={false}
-                                value={counterBases.find(
-                                    (l) => l.value === counterBasis,
-                                )}
-                                onChange={(e) =>
-                                    e &&
-                                    dispatch(
-                                        setCounterBasis(
-                                            e.value as CounterBasis,
-                                        ),
-                                    )
-                                }
-                                options={counterBases}
-                                name="Counter Basis"
-                            />
-                        </Setting>
-                        <Setting name="Additional Settings">
-                            <label
-                                htmlFor="trackTim"
-                                className={styles.checkboxLabel}
-                            >
-                                Track Tim
-                            </label>
-                            <input
-                                type="checkbox"
-                                id="trackTim"
-                                checked={tumbleweed}
-                                onChange={(e) =>
-                                    dispatch(
-                                        setTrackTumbleweed(e.target.checked),
-                                    )
-                                }
-                            />
-                        </Setting>
-                        <Setting name="Custom Layout (experimental!)">
-                            <div>
+        <Dialog
+            open={open}
+            onOpenChange={onOpenChange}
+            title="Tracker Customization"
+            className={styles.modal}
+        >
+            <Setting name="Presets">
+                <div className={styles.colorPresets}>
+                    {Object.entries(defaultColorSchemes).map(
+                        ([key, scheme]) => (
+                            <div key={key}>
                                 <button
                                     type="button"
                                     className="tracker-button"
-                                    onClick={() => {
-                                        dispatch(importCustomLayout());
+                                    style={{
+                                        background: scheme.background,
+                                        color: scheme.text,
+                                        border: '1px solid var(--scheme-text)',
                                     }}
+                                    onClick={() => updateColorScheme(scheme)}
                                 >
-                                    Import custom layout
+                                    {key}
                                 </button>
                             </div>
-                        </Setting>
-                    </div>
-                    <Dialog.Footer>
-                        <Dialog.Close className="tracker-button">
-                            Close
-                        </Dialog.Close>
-                    </Dialog.Footer>
-                </Dialog.Content>
-            </Dialog.Portal>
-        </Dialog.Root>
+                        ),
+                    )}
+                </div>
+            </Setting>
+            <Setting name="Colors">
+                <ColorBlock
+                    colorName="Background"
+                    schemeKey="background"
+                    currentColor={colorScheme.background}
+                    colorScheme={colorScheme}
+                    updateColorScheme={updateColorScheme}
+                />
+                <ColorBlock
+                    colorName="Foreground"
+                    schemeKey="text"
+                    currentColor={colorScheme.text}
+                    colorScheme={colorScheme}
+                    updateColorScheme={updateColorScheme}
+                />
+                <ColorBlock
+                    colorName="In Logic Check"
+                    schemeKey="inLogic"
+                    currentColor={colorScheme.inLogic}
+                    colorScheme={colorScheme}
+                    updateColorScheme={updateColorScheme}
+                />
+                <ColorBlock
+                    colorName="Out of Logic Check"
+                    schemeKey="outLogic"
+                    currentColor={colorScheme.outLogic}
+                    colorScheme={colorScheme}
+                    updateColorScheme={updateColorScheme}
+                />
+                <ColorBlock
+                    colorName="Semi Logic Check"
+                    schemeKey="semiLogic"
+                    currentColor={colorScheme.semiLogic}
+                    colorScheme={colorScheme}
+                    updateColorScheme={updateColorScheme}
+                />
+                <ColorBlock
+                    colorName="Unrequired Dungeon"
+                    schemeKey="unrequired"
+                    currentColor={colorScheme.unrequired}
+                    colorScheme={colorScheme}
+                    updateColorScheme={updateColorScheme}
+                />
+                <ColorBlock
+                    colorName="Required Dungeon"
+                    schemeKey="required"
+                    currentColor={colorScheme.required}
+                    colorScheme={colorScheme}
+                    updateColorScheme={updateColorScheme}
+                />
+                <ColorBlock
+                    colorName="Completed Checks"
+                    schemeKey="checked"
+                    currentColor={colorScheme.checked}
+                    colorScheme={colorScheme}
+                    updateColorScheme={updateColorScheme}
+                />
+            </Setting>
+
+            <Setting name="Item Tracker Settings">
+                <Select
+                    styles={selectStyles<
+                        false,
+                        { label: string; value: string }
+                    >()}
+                    isDisabled={hasCustomLayout}
+                    isSearchable={false}
+                    value={itemLayouts.find((l) => l.value === layout)}
+                    onChange={(e) =>
+                        e && dispatch(setItemLayout(e.value as ItemLayout))
+                    }
+                    options={itemLayouts}
+                    name="Item Layout"
+                />
+            </Setting>
+            <Setting name="Location Tracker Settings">
+                <Select
+                    styles={selectStyles<
+                        false,
+                        { label: string; value: string }
+                    >()}
+                    isDisabled={hasCustomLayout}
+                    isSearchable={false}
+                    value={locationLayouts.find(
+                        (l) => l.value === locationLayout,
+                    )}
+                    onChange={(e) =>
+                        e &&
+                        dispatch(setLocationLayout(e.value as LocationLayout))
+                    }
+                    options={locationLayouts}
+                    name="Location Layout"
+                />
+            </Setting>
+            <Setting
+                name="Trick Logic"
+                tooltip="Choose whether checks reachable only with tricks should be highlighted in a separate color, and which checks should be shown. An empty tricks list shows all tricks."
+            >
+                <label htmlFor="trickLogic" className={styles.checkboxLabel}>
+                    Show Trick Logic
+                </label>
+                <input
+                    type="checkbox"
+                    id="trickLogic"
+                    checked={trickSemiLogic}
+                    onChange={(e) =>
+                        dispatch(setTrickSemiLogic(e.target.checked))
+                    }
+                />
+                <TricksChooser enabled={trickSemiLogic} />
+            </Setting>
+            <Setting
+                name="Counter Basis"
+                tooltip="Choose whether the Area/Total Locations Accessible counters should include items in semilogic."
+            >
+                <Select
+                    styles={selectStyles<
+                        false,
+                        { label: string; value: string }
+                    >()}
+                    isSearchable={false}
+                    value={counterBases.find((l) => l.value === counterBasis)}
+                    onChange={(e) =>
+                        e && dispatch(setCounterBasis(e.value as CounterBasis))
+                    }
+                    options={counterBases}
+                    name="Counter Basis"
+                />
+            </Setting>
+            <Setting name="Additional Settings">
+                <label htmlFor="trackTim" className={styles.checkboxLabel}>
+                    Track Tim
+                </label>
+                <input
+                    type="checkbox"
+                    id="trackTim"
+                    checked={tumbleweed}
+                    onChange={(e) =>
+                        dispatch(setTrackTumbleweed(e.target.checked))
+                    }
+                />
+            </Setting>
+            <Setting name="Custom Layout (experimental!)">
+                <div>
+                    <button
+                        type="button"
+                        className="tracker-button"
+                        onClick={() => {
+                            dispatch(importCustomLayout());
+                        }}
+                    >
+                        Import custom layout
+                    </button>
+                </div>
+            </Setting>
+        </Dialog>
     );
 }
 

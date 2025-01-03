@@ -1,25 +1,25 @@
-import * as Dialog from '@radix-ui/react-dialog';
+import * as RadixDialog from '@radix-ui/react-dialog';
 import clsx from 'clsx';
 import styles from './Dialog.module.css';
 
 export function Root(
-    props: Dialog.DialogProps & React.RefAttributes<HTMLDivElement>,
+    props: RadixDialog.DialogProps & React.RefAttributes<HTMLDivElement>,
 ) {
-    return <Dialog.Root {...props} />;
+    return <RadixDialog.Root {...props} />;
 }
 
 export function Portal(
-    props: Dialog.DialogPortalProps & React.RefAttributes<HTMLDivElement>,
+    props: RadixDialog.DialogPortalProps & React.RefAttributes<HTMLDivElement>,
 ) {
-    return <Dialog.Portal {...props} />;
+    return <RadixDialog.Portal {...props} />;
 }
 
 export function Overlay(
-    props: Dialog.DialogOverlayProps & React.RefAttributes<HTMLDivElement>,
+    props: RadixDialog.DialogOverlayProps & React.RefAttributes<HTMLDivElement>,
 ) {
     const { className, ...rest } = props;
     return (
-        <Dialog.Overlay
+        <RadixDialog.Overlay
             className={clsx(className, styles.overlay)}
             {...rest}
         />
@@ -27,12 +27,12 @@ export function Overlay(
 }
 
 export function Content(
-    props: Dialog.DialogContentProps &
+    props: RadixDialog.DialogContentProps &
         React.RefAttributes<HTMLDivElement> & { narrow?: boolean },
 ) {
     const { narrow, className, ...rest } = props;
     return (
-        <Dialog.Content
+        <RadixDialog.Content
             aria-describedby={undefined}
             className={clsx(className, styles.content, {
                 [styles.narrow]: narrow,
@@ -43,9 +43,9 @@ export function Content(
 }
 
 export function Title(
-    props: Dialog.DialogTitleProps & React.RefAttributes<HTMLDivElement>,
+    props: RadixDialog.DialogTitleProps & React.RefAttributes<HTMLDivElement>,
 ) {
-    return <Dialog.Title {...props} />;
+    return <RadixDialog.Title {...props} />;
 }
 
 export function Footer({ children }: { children: React.ReactNode }) {
@@ -53,7 +53,39 @@ export function Footer({ children }: { children: React.ReactNode }) {
 }
 
 export function Close(
-    props: Dialog.DialogCloseProps & React.RefAttributes<HTMLButtonElement>,
+    props: RadixDialog.DialogCloseProps &
+        React.RefAttributes<HTMLButtonElement>,
 ) {
-    return <Dialog.Close {...props} />;
+    return <RadixDialog.Close {...props} />;
+}
+
+export function Dialog({
+    open,
+    onOpenChange,
+    title,
+    wide,
+    className,
+    children,
+}: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    title: string;
+    wide?: boolean;
+    className?: string;
+    children: React.ReactNode;
+}) {
+    return (
+        <Root open={open} onOpenChange={onOpenChange}>
+            <Portal>
+                <Overlay />
+                <Content narrow={!wide}>
+                    <Title>{title}</Title>
+                    <div className={className}>{children}</div>
+                    <Footer>
+                        <Close className="tracker-button">Close</Close>
+                    </Footer>
+                </Content>
+            </Portal>
+        </Root>
+    );
 }
