@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { SketchPicker } from '@hello-pangea/color-picker';
+import SketchPicker from '@uiw/react-color-sketch';
 import type { ColorScheme } from './ColorScheme';
 import styles from './ColorBlock.module.css';
+import { debounce } from 'es-toolkit';
 
 export default function ColorBlock({
     colorName,
@@ -17,6 +18,7 @@ export default function ColorBlock({
     updateColorScheme: (scheme: ColorScheme) => void;
 }) {
     const [showPicker, setShowPicker] = useState(false);
+    const debouncedUpdate = debounce(updateColorScheme, 200);
     return (
         <>
             <div className={styles.colorBlock}>
@@ -34,12 +36,12 @@ export default function ColorBlock({
                 <div>
                     <SketchPicker
                         color={currentColor}
-                        onChangeComplete={(color) => {
+                        onChange={(color) => {
                             const newScheme: ColorScheme = {
                                 ...colorScheme,
                                 [schemeKey]: color.hex,
                             };
-                            updateColorScheme(newScheme);
+                            debouncedUpdate(newScheme);
                         }}
                         disableAlpha
                         presetColors={[

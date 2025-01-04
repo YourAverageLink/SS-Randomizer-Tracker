@@ -6,12 +6,12 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@hello-pangea/color-picker": "^3.2.2",
     "@radix-ui/react-dialog": "^1.1.4",
     "@radix-ui/react-tabs": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.6",
     "@react-hook/resize-observer": "^2.0.0",
     "@reduxjs/toolkit": "^2.0.0",
+    "@uiw/react-color-sketch": "^2.3.4",
     "clsx": "^2.0.0",
     "es-toolkit": "^1.31.0",
     "immer": "^10.0.3",
