@@ -5,7 +5,8 @@ import BooleanExpression, {
 } from '../logic/booleanlogic/BooleanExpression';
 import type { LogicalState } from '../logic/Locations';
 import prettyItemNames_ from '../data/prettyItemNames.json';
-import { last, sortBy, sumBy } from 'es-toolkit';
+import { last, sumBy } from 'es-toolkit';
+import { chainComparators, compareBy } from '../utils/Compare';
 
 const prettyItemNames: Record<
     string,
@@ -92,11 +93,13 @@ function booleanExprToTooltipExprRecursive(
             };
         }
     }
-    const items = expr.items.map(mapItem);
+    const items = expr.items
+        .map(mapItem)
+        .sort(chainComparators(compareBy(getLength), compareBy(getName)));
     return {
         type: 'expr',
         op: expr.type,
-        items: sortBy(items, [getLength, getName]),
+        items,
     }
 }
 

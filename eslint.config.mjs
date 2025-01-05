@@ -94,6 +94,13 @@ export default tseslint.config(
                             ],
                             message: 'Please use functions from utils instead.',
                         },
+                        {
+                            name: 'es-toolkit',
+                            importNames: [
+                                'sortBy',
+                            ],
+                            message: 'Please use .sort with functions from utils/Compare',
+                        },
                     ],
                 },
             ],

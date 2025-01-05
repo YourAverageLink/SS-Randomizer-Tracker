@@ -1,5 +1,7 @@
 @layer base, common;
 
+@import 'react-contexify/dist/ReactContexify.css';
+
 @import './additionalComponents/button.css';
 @import './additionalComponents/input.css';
 

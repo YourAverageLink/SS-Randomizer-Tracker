@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import AreaCounters from './AreaCounters';
-import 'react-contexify/dist/ReactContexify.css';
 import keyDownWrapper from '../utils/KeyDownWrapper';
 import type { TriggerEvent } from 'react-contexify';
 import { useContextMenu } from './context-menu';

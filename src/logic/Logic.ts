@@ -27,7 +27,7 @@ import { dungeonNames } from './Locations';
 import { LogicBuilder } from './LogicBuilder';
 import { isEmpty, mapValues } from '../utils/Collections';
 import { groupBy, last } from 'es-toolkit';
-import { sortBy } from 'es-toolkit/compat';
+import { chainComparators, compareBy } from '../utils/Compare';
 
 export interface Logic {
     numRequirements: number;
@@ -880,19 +880,20 @@ export function parseLogic(raw: RawLogic): Logic {
 
     const rawCheckOrder = Object.keys(raw.checks);
     for (const area of Object.keys(checksByHintRegion)) {
-        // TODO compareBy, sort in place
-        // https://github.com/toss/es-toolkit/issues/869
-        checksByHintRegion[area] = sortBy(checksByHintRegion[area], (check) => {
+        checksByHintRegion[area].sort(compareBy((check) => {
             const idx = rawCheckOrder.indexOf(check);
             return idx !== -1 ? idx : Number.MAX_SAFE_INTEGER;
-        });
+        }));
     }
 
-    // https://github.com/toss/es-toolkit/issues/869
-    const areas = sortBy(
-        Object.keys(checksByHintRegion),
-        [(area) => dungeonOrder.indexOf(area),
-        (area) => rawCheckOrder.indexOf(checksByHintRegion[area][0])],
+    const areas = Object.keys(checksByHintRegion);
+    areas.sort(
+        chainComparators(
+            compareBy((area) => dungeonOrder.indexOf(area)),
+            compareBy((area) =>
+                rawCheckOrder.indexOf(checksByHintRegion[area][0]),
+            ),
+        ),
     );
 
     const bitLogic = mergeRequirements(numItems, staticRequirements);

@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import 'react-contexify/dist/ReactContexify.css';
 import { useSelector } from 'react-redux';
 import {
     areaHintSelector,

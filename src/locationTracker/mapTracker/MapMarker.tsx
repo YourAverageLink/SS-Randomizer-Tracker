@@ -1,5 +1,4 @@
 import { type MouseEvent, useCallback } from 'react';
-import 'react-contexify/dist/ReactContexify.css';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../store/Store';
 import { areaHintSelector, areasSelector } from '../../tracker/Selectors';

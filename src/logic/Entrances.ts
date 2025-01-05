@@ -8,8 +8,9 @@ import {
 } from './ThingsThatWouldBeNiceToHaveInTheDump';
 import type { TrackerState } from '../tracker/Slice';
 import type { DungeonName, ExitMapping } from './Locations';
-import { invert, sortBy } from 'es-toolkit';
+import { invert } from 'es-toolkit';
 import { mapValues } from '../utils/Collections';
+import { compareBy } from '../utils/Compare';
 
 export interface Entrance {
     name: string;
@@ -357,10 +358,8 @@ export function getExits(
         'lmfSecondExit',
     ];
 
-    const sortedRules = sortBy(rules, [
-        ([_, rule]) => assignmentOrder.indexOf(rule.type),
-    ]);
-    for (const [exitId, rule] of sortedRules) {
+    rules.sort(compareBy(([_, rule]) => assignmentOrder.indexOf(rule.type)));
+    for (const [exitId, rule] of rules) {
         switch (rule.type) {
             case 'vanilla':
                 result[exitId] = {
@@ -452,8 +451,7 @@ export function getExits(
             }
         }
     }
-
-    return sortBy(Object.values(result), [(exit) => !exit.canAssign]);
+    return Object.values(result).sort(compareBy((exit) => !exit.canAssign));
 }
 
 export function getUsedEntrances(
