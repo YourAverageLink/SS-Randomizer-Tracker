@@ -1,4 +1,4 @@
-import React, { type CSSProperties, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import type { OptionsAction } from './OptionsReducer';
 import type { AllTypedOptions } from '../permalink/SettingsTypes';
 import type { LogicBundle } from '../logic/Slice';
@@ -10,14 +10,15 @@ import { encodePermalink, validateSettings } from '../permalink/Settings';
 import { useSyncSavesToLocalStorage } from '../LocalStorage';
 import styles from './OptionsPresets.module.css'
 import { Dialog } from '../additionalComponents/Dialog';
+import clsx from 'clsx';
 
 export function OptionsPresets({
-    style,
+    className,
     currentLogic,
     currentSettings,
     dispatch,
 }: {
-    style: CSSProperties
+    className?: string
     currentLogic: LogicBundle | undefined;
     currentSettings: AllTypedOptions | undefined;
     dispatch: React.Dispatch<OptionsAction>;
@@ -27,7 +28,7 @@ export function OptionsPresets({
 
     return (
         <>
-            <button type="button" className="tracker-button" style={style} onClick={() => setShowModal(true)}>Presets</button>
+            <button type="button" className={clsx('tracker-button', className)} onClick={() => setShowModal(true)}>Presets</button>
             <PresetsModal
                 currentLogic={currentLogic}
                 currentSettings={currentSettings}

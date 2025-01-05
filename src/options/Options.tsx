@@ -260,7 +260,7 @@ function LaunchButtons({
             </button>
 
             <OptionsPresets
-                style={{ marginLeft: 'auto' }}
+                className={styles.presetButton}
                 dispatch={dispatch}
                 currentLogic={currentLogic}
                 currentSettings={currentSettings}
@@ -477,14 +477,16 @@ function PermalinkChooser({
     return (
         <div className={clsx(styles.optionsCategory, styles.permalinkChooser)}>
             <legend>Settings String</legend>
-            <input
-                type="text"
-                className={clsx(styles.permalinkInput, 'tracker-input')}
-                disabled={!permalink}
-                placeholder="Select a Randomizer version first"
-                value={permalink ?? ''}
-                onChange={(e) => onChangePermalink(e.target.value)}
-            />
+            <div className={styles.permalinkInput}>
+                <input
+                    type="text"
+                    className="tracker-input"
+                    disabled={!permalink}
+                    placeholder="Select a Randomizer version first"
+                    value={permalink ?? ''}
+                    onChange={(e) => onChangePermalink(e.target.value)}
+                />
+            </div>
         </div>
     );
 }

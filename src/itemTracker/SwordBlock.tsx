@@ -2,8 +2,6 @@ import type { CSSProperties } from 'react';
 import Item from './Item';
 import allImages from './Images';
 import swordBlock from '../assets/Sword_Block.png';
-
-import CrystalCounter from './items/sidequest/CrystalCounter';
 import keyDownWrapper from '../utils/KeyDownWrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { rawItemCountSelector } from '../tracker/Selectors';
@@ -88,16 +86,13 @@ export default function SwordBlock({width}: {width: number}) {
                 <Item itemName="Progressive Wallet" imgWidth={walletWidth} />
             </div>
             <div
-                style={extraWalletStyle}
+                style={{ ...extraWalletStyle, fontSize: width * 0.12 }}
                 onClick={handleExtraWalletClick}
                 onKeyDown={keyDownWrapper(handleExtraWalletClick)}
                 tabIndex={0}
                 role="button"
             >
-                <CrystalCounter
-                    current={`+${extraWalletCount * 300}`}
-                    fontSize={width * 0.12}
-                />
+                {`+${extraWalletCount * 300}`}
             </div>
         </div>
     );

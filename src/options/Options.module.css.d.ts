@@ -7,6 +7,7 @@ declare const classNames: {
     readonly launchButtons: 'launchButtons';
     readonly continueButton: 'continueButton';
     readonly counters: 'counters';
+    readonly presetButton: 'presetButton';
     readonly optionsTooltip: 'optionsTooltip';
     readonly bold: 'bold';
     readonly optionsCategory: 'optionsCategory';

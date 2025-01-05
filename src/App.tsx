@@ -16,7 +16,6 @@ function createApplyColorSchemeListener() {
         if (colorScheme === prevScheme) {
             return;
         }
-        console.log('updating scheme')
         prevScheme = colorScheme;
         const html = document.querySelector('html')!;
         Object.entries(colorScheme).forEach(([key, val]) => {

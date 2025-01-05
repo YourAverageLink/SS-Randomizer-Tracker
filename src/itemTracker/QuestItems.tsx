@@ -1,7 +1,6 @@
 import type { CSSProperties } from 'react';
 import Item from './Item';
 import { GratitudeCrystals } from './items/sidequest/GratitudeCrystals';
-import CrystalCounter from './items/sidequest/CrystalCounter';
 
 import questItemBlock from '../assets/quest_items_block.png';
 
@@ -44,7 +43,7 @@ export default function QuestItems({ width }: { width: number }) {
     const crystalCount = useSelector(totalGratitudeCrystalsSelector);
 
     return (
-        <div id="quest-items">
+        <div id="quest-items" style={{ display: 'flex' }}>
             <img src={questItemBlock} alt="" width={width} />
             <div style={letterStyle}>
                 <Item itemName="Cawlin's Letter" imgWidth={letterWidth} />
@@ -61,11 +60,8 @@ export default function QuestItems({ width }: { width: number }) {
             <div style={crystalStyle}>
                 <GratitudeCrystals imgWidth={crystalWidth} />
             </div>
-            <div style={counterStyle}>
-                <CrystalCounter
-                    current={crystalCount}
-                    fontSize={crystalWidth * 1.25}
-                />
+            <div style={{ ...counterStyle, fontSize: crystalWidth * 1.25 }}>
+                {crystalCount}
             </div>
         </div>
     );

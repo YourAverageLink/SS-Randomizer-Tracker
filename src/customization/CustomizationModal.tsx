@@ -55,6 +55,17 @@ const counterBases = [
     { value: 'semilogic', label: 'Semilogic' },
 ];
 
+const colors: { key: keyof ColorScheme; name: string }[] = [
+    { key: 'background', name: 'Background' },
+    { key: 'text', name: 'Foreground' },
+    { key: 'inLogic', name: 'In Logic Check' },
+    { key: 'outLogic', name: 'Out of Logic Check' },
+    { key: 'semiLogic', name: 'Semi Logic Check' },
+    { key: 'unrequired', name: 'Unrequired Dungeon' },
+    { key: 'required', name: 'Required Dungeon' },
+    { key: 'checked', name: 'Completed Check' },
+];
+
 function importCustomLayout(): ThunkResult {
     return (dispatch, getState) => {
         const existingLayout = getState().customization.customLayout;
@@ -138,62 +149,15 @@ export default function CustomizationModal({
                 </div>
             </Setting>
             <Setting name="Colors">
-                <ColorBlock
-                    colorName="Background"
-                    schemeKey="background"
-                    currentColor={colorScheme.background}
-                    colorScheme={colorScheme}
-                    updateColorScheme={updateColorScheme}
-                />
-                <ColorBlock
-                    colorName="Foreground"
-                    schemeKey="text"
-                    currentColor={colorScheme.text}
-                    colorScheme={colorScheme}
-                    updateColorScheme={updateColorScheme}
-                />
-                <ColorBlock
-                    colorName="In Logic Check"
-                    schemeKey="inLogic"
-                    currentColor={colorScheme.inLogic}
-                    colorScheme={colorScheme}
-                    updateColorScheme={updateColorScheme}
-                />
-                <ColorBlock
-                    colorName="Out of Logic Check"
-                    schemeKey="outLogic"
-                    currentColor={colorScheme.outLogic}
-                    colorScheme={colorScheme}
-                    updateColorScheme={updateColorScheme}
-                />
-                <ColorBlock
-                    colorName="Semi Logic Check"
-                    schemeKey="semiLogic"
-                    currentColor={colorScheme.semiLogic}
-                    colorScheme={colorScheme}
-                    updateColorScheme={updateColorScheme}
-                />
-                <ColorBlock
-                    colorName="Unrequired Dungeon"
-                    schemeKey="unrequired"
-                    currentColor={colorScheme.unrequired}
-                    colorScheme={colorScheme}
-                    updateColorScheme={updateColorScheme}
-                />
-                <ColorBlock
-                    colorName="Required Dungeon"
-                    schemeKey="required"
-                    currentColor={colorScheme.required}
-                    colorScheme={colorScheme}
-                    updateColorScheme={updateColorScheme}
-                />
-                <ColorBlock
-                    colorName="Completed Checks"
-                    schemeKey="checked"
-                    currentColor={colorScheme.checked}
-                    colorScheme={colorScheme}
-                    updateColorScheme={updateColorScheme}
-                />
+                {colors.map(({ key, name }) => (
+                    <ColorBlock
+                        key={key}
+                        colorName={name}
+                        schemeKey={key}
+                        colorScheme={colorScheme}
+                        updateColorScheme={updateColorScheme}
+                    />
+                ))}
             </Setting>
 
             <Setting name="Item Tracker Settings">

@@ -7,13 +7,11 @@ import { debounce } from 'es-toolkit';
 export default function ColorBlock({
     colorName,
     colorScheme,
-    currentColor,
     schemeKey,
     updateColorScheme,
 }: {
     colorName: string;
     schemeKey: keyof ColorScheme;
-    currentColor: string;
     colorScheme: ColorScheme;
     updateColorScheme: (scheme: ColorScheme) => void;
 }) {
@@ -26,7 +24,7 @@ export default function ColorBlock({
                 <div
                     className={styles.color}
                     style={{
-                        background: currentColor,
+                        background: colorScheme[schemeKey],
                         border: '2px solid var(--scheme-text)',
                     }}
                     onClick={() => setShowPicker((prevState) => !prevState)}
@@ -35,7 +33,7 @@ export default function ColorBlock({
             {showPicker && (
                 <div>
                     <SketchPicker
-                        color={currentColor}
+                        color={colorScheme[schemeKey]}
                         onChange={(color) => {
                             const newScheme: ColorScheme = {
                                 ...colorScheme,

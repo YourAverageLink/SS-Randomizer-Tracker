@@ -1,8 +1,6 @@
 import type { CSSProperties } from 'react';
 import Item from './Item';
-import CrystalCounter from './items/sidequest/CrystalCounter';
 import { GratitudeCrystals } from './items/sidequest/GratitudeCrystals';
-
 import noTablets from '../assets/tablets/no_tablets.png';
 import { CounterItem } from './items/CounterItem';
 import { useDispatch, useSelector } from 'react-redux';
@@ -130,16 +128,14 @@ export default function GridTracker({ width }: { width: number }) {
                         textAlign: 'right',
                         bottom: '10%',
                         lineHeight: 1,
+                        fontSize: imgWidth * 0.4,
                     }}
                     onClick={handleExtraWalletClick}
                     onKeyDown={handleExtraWalletClick}
                     tabIndex={0}
                     role="button"
                 >
-                    <CrystalCounter
-                        current={`+${walletCount * 300}`}
-                        fontSize={imgWidth * 0.4}
-                    />
+                    {`+${walletCount * 300}`}
                 </div>
                 <div>
                     <Item itemName="Progressive Wallet" imgWidth={imgWidth} />
@@ -214,12 +210,10 @@ export default function GridTracker({ width }: { width: number }) {
                         bottom: 0,
                         lineHeight: 1,
                         pointerEvents: 'none',
+                        fontSize: imgWidth * 0.5
                     }}
                 >
-                    <CrystalCounter
-                        current={crystalCount}
-                        fontSize={imgWidth * 0.5}
-                    />
+                    {crystalCount}
                 </div>
                 <GratitudeCrystals imgWidth={imgWidth} grid />
             </div>
