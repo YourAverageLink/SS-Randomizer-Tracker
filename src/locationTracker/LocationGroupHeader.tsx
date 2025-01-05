@@ -10,6 +10,7 @@ import { decodeHint } from './Hints';
 import styles from './LocationGroupHeader.module.css';
 import clsx from 'clsx';
 import type { LocationGroupContextMenuProps } from './LocationGroupContextMenu';
+import Tooltip from '../additionalComponents/Tooltip';
 
 export default function LocationGroupHeader({
     area,
@@ -55,7 +56,17 @@ export default function LocationGroupHeader({
             <div className={styles.name}>{area.name}</div>
             {hints.map((hint, idx) => (
                 <div key={idx} className={styles.hint}>
-                    {<img src={hint.image} alt={hint.description} />}
+                    <Tooltip
+                        content={
+                            <span
+                                style={{ color: `var(--scheme-${hint.style})` }}
+                            >
+                                {hint.description}
+                            </span>
+                        }
+                    >
+                        <img src={hint.image} alt={hint.description} />
+                    </Tooltip>
                 </div>
             ))}
             <div
