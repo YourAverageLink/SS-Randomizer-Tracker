@@ -41,7 +41,7 @@ export default function LocationGroupHeader({
         [area, show],
     );
 
-    const hint = areaHint && decodeHint(areaHint);
+    const hints = areaHint.map(decodeHint);
 
     return (
         <div
@@ -52,12 +52,12 @@ export default function LocationGroupHeader({
             onContextMenu={displayMenu}
             className={styles.locationGroupHeader}
         >
-            <div className={styles.name}>
-                {area.name}
-            </div>
-            <div className={styles.hint}>
-                {hint && <img src={hint.image} alt={hint.description} />}
-            </div>
+            <div className={styles.name}>{area.name}</div>
+            {hints.map((hint, idx) => (
+                <div key={idx} className={styles.hint}>
+                    {<img src={hint.image} alt={hint.description} />}
+                </div>
+            ))}
             <div
                 className={clsx(styles.counter, {
                     [styles.align]: alignCounters,

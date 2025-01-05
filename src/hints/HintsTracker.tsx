@@ -14,7 +14,9 @@ export function HintsTracker() {
         <div className={styles.hintsTracker}>
             <textarea
                 className={clsx('tracker-input', styles.hintsTextArea)}
-                placeholder="Track hints here!"
+                placeholder={
+                    'Track hints here! Examples:\nUpper Barren\nFaron -> ET\nFloria -> G2'
+                }
                 value={hintsText}
                 onChange={(ev) => dispatch(setHintsText(ev.target.value))}
             />

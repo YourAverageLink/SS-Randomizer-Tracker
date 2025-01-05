@@ -32,13 +32,12 @@ const MapMarker = (props: MapMarkerProps) => {
         show({ event: e, props: { area: area.name } });
     }, [area, show]);
 
-    const areaHint = useSelector(areaHintSelector(title));
-    const hint = areaHint && decodeHint(areaHint);
+    const hints = useSelector(areaHintSelector(title));
 
     const tooltip = (
         <center>
             <div> {title} ({data.checks.numAccessible}/{data.checks.numRemaining}) </div>
-            {hint && <HintDescription hint={hint} />}
+            {hints.map((hint, idx) => <HintDescription key={idx} hint={decodeHint(hint)} />)}
         </center>
     );
 

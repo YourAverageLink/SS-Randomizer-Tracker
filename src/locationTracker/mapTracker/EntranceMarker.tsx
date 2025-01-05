@@ -116,9 +116,7 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
         ],
     );
 
-    const areaHint = useSelector(areaHintSelector(destinationRegionName ?? ''));
-
-    const hint = areaHint && decodeHint(areaHint);
+    const hints = useSelector(areaHintSelector(destinationRegionName ?? ''));
 
     // Only calculate tooltip if this region is shown
     const requirements = useTooltipExpr(exit.exit.id, active);
@@ -133,7 +131,7 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
                 <div style={{ textAlign: 'left' }}>
                     <RequirementsTooltip requirements={requirements} />
                 </div>
-                {hint && <HintDescription hint={hint} />}
+                {hints.map((hint, idx) => <HintDescription key={idx} hint={decodeHint(hint)} />)}
             </center>
         );
     } else {

@@ -1,4 +1,4 @@
-import { createSelector } from '@reduxjs/toolkit';
+import { createSelector, lruMemoize } from '@reduxjs/toolkit';
 import {
     areaGraphSelector,
     logicSelector,
@@ -70,6 +70,7 @@ import {
 import { stubTrue } from '../utils/Function';
 import { mapValues } from '../utils/Collections';
 import { compact, groupBy, isEqual, keyBy, partition, sumBy } from 'es-toolkit';
+import { parseHintsText } from '../hints/HintsParser';
 
 const bitVectorMemoizeOptions = {
     memoizeOptions: {
@@ -78,11 +79,27 @@ const bitVectorMemoizeOptions = {
     },
 };
 
+const parsedHintsSelector = createSelector(
+    [(state: RootState) => state.tracker.userHintsText, logicSelector],
+    (hintsText, logic) => parseHintsText(hintsText, logic.hintRegions),
+    {
+        memoize: lruMemoize,
+    },
+);
+
 /**
  * Selects the hint for a given area.
  */
 export const areaHintSelector = currySelector(
-    (state: RootState, area: string) => state.tracker.hints[area],
+    createSelector(
+        (_state: RootState, area: string) => area,
+        (state: RootState, area: string) => state.tracker.hints[area],
+        parsedHintsSelector,
+        (area, hint, parsedHints) => [
+            ...(hint ?? []),
+            ...(parsedHints[area] ?? []),
+        ],
+    ),
 );
 
 /**

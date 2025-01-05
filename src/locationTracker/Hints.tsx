@@ -44,7 +44,7 @@ export interface DecodedHint {
 export function decodeHint(hint: Hint): DecodedHint {
     switch (hint.type) {
         case 'barren':
-            return { description: 'Barren', image: barrenImage, style: 'checked' };
+            return { description: 'Barren', image: barrenImage, style: 'outLogic' };
         case 'sots':
             return { description: 'Spirit of the Sword', image: sotsImage, style: 'inLogic' };
         case 'path':

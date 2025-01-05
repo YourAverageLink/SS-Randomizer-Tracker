@@ -5,6 +5,7 @@ import type { RegularDungeon } from '../logic/Locations';
 import { type InventoryItem, isItem, itemMaxes } from '../logic/Inventory';
 import type { Hint } from '../locationTracker/Hints';
 import { getStoredTrackerState } from '../LocalStorage';
+import { migrateTrackerState } from '../TrackerStateMigrations';
 
 export interface TrackerState {
     /**
@@ -31,7 +32,7 @@ export interface TrackerState {
     /**
      * Hints by area
      */
-    hints: Record<string, Hint | undefined>;
+    hints: Record<string, Hint[] | undefined>;
     /**
      * Hints by check name
      */
@@ -59,7 +60,7 @@ const initialState: TrackerState = {
 };
 
 export function preloadedTrackerState(): TrackerState {
-    return { ...initialState, ...getStoredTrackerState() };
+    return migrateTrackerState({ ...initialState, ...getStoredTrackerState() });
 }
 
 const trackerSlice = createSlice({
@@ -156,7 +157,11 @@ const trackerSlice = createSlice({
             action: PayloadAction<{ areaId: string; hint: Hint | undefined }>,
         ) => {
             const { areaId, hint } = action.payload;
-            state.hints[areaId] = hint;
+            if (hint === undefined) {
+                delete state.hints[areaId];
+            } else {
+                (state.hints[areaId] ??= []).push(hint);
+            }
             state.hasBeenModified = true;
         },
         setCheckHint: (
@@ -197,9 +202,9 @@ const trackerSlice = createSlice({
         },
         loadTracker: (
             _state,
-            action: PayloadAction<TrackerState>,
+            action: PayloadAction<Partial<TrackerState>>,
         ) => {
-            return action.payload;
+            return migrateTrackerState({ ...initialState, ...action.payload });
         },
     },
 });

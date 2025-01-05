@@ -182,7 +182,7 @@ function useAreaContextMenuItems() {
         <Item key="checkAllLogic" onClick={checkAllInLogic}>Check All In Logic</Item>,
         <Item key="uncheckAll" onClick={uncheckAll}>Uncheck All</Item>,
         <Separator key="sep1" />,
-        <Submenu key="path"  label="Set Path">
+        <Submenu key="path" label="Add Path Hint">
             {bosses.map((bossName, bossIndex) => (
                 <Item
                     key={bossName}
@@ -193,9 +193,9 @@ function useAreaContextMenuItems() {
                 </Item>
             ))}
         </Submenu>,
-        <Item key="sots" onClick={handleSotsClick}>Set SotS</Item>,
-        <Item key="barren" onClick={handleBarrenClick}>Set Barren</Item>,
-        <Submenu key="item" label="Set Item">
+        <Item key="sots" onClick={handleSotsClick}>Add SotS Hint</Item>,
+        <Item key="barren" onClick={handleBarrenClick}>Add Barren Hint</Item>,
+        <Submenu key="item" label="Add Item Hint">
             {Object.entries(hintItems).map(([category, items]) => (
                 <Submenu key={category} label={category}>
                     {items.map((listItem) => (
@@ -210,7 +210,7 @@ function useAreaContextMenuItems() {
                 </Submenu>
             ))}
         </Submenu>,
-        <Item key="clearHint" onClick={handleClearClick}>Clear Hint</Item>,
+        <Item key="clearHint" onClick={handleClearClick}>Clear Hints</Item>,
     ];
 }
 
