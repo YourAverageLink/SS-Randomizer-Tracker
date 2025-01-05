@@ -40,6 +40,7 @@
 
     &.left {
         left: calc(var(--map-marker-x) - var(--map-marker-size) / 2);
+        flex-wrap: wrap-reverse;
     }
 
     .submarker {
