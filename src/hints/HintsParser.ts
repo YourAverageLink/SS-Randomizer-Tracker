@@ -18,7 +18,7 @@ export function parseHintsText(
     hintRegionNames: string[],
 ): { [hintRegion: string]: Hint[] } {
     const result: { [hintRegion: string]: Hint[] } = {};
-    if (!hintsText) {
+    if (!hintsText || !$FEATURE_FLAG_HINTS_PARSER) {
         return result;
     }
     const lines = hintsText
