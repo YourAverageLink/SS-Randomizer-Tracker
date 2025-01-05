@@ -17,10 +17,12 @@ import RequirementsTooltip from '../RequirementsTooltip';
 import { Marker } from './Marker';
 import { getMarkerColor, getRegionData, getSubmarkerData } from './MapUtils';
 import type { LocationGroupContextMenuProps, MapExitContextMenuProps } from '../LocationGroupContextMenu';
+import { hintsToSubmarkers } from '../../hints/HintsParser';
 
 type EntranceMarkerProps = {
     markerX: number;
     markerY: number;
+    submarkerPlacement: 'left' | 'right';
     exitId: string;
     title: string;
     active: boolean;
@@ -35,6 +37,7 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
         exitId,
         markerX,
         markerY,
+        submarkerPlacement,
         active,
         onGlickGroup,
         onChooseEntrance,
@@ -172,7 +175,8 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
             onClick={handleClick}
             onContextMenu={displayMenu}
             selected={selected}
-            submarkers={data && getSubmarkerData(data)}
+            submarkerPlacement={submarkerPlacement}
+            submarkers={data && [...getSubmarkerData(data), ...hintsToSubmarkers(hints)]}
         >
             {Boolean(data?.checks.numAccessible) && data?.checks.numAccessible}
             {!hasConnection && '?'}

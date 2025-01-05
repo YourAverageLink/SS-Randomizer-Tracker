@@ -1,10 +1,14 @@
-import { type Hint } from '../locationTracker/Hints';
+import { decodeHint, type Hint } from '../locationTracker/Hints';
 import dungeonData from '../data/dungeons.json';
 import { itemMaxes } from '../logic/Inventory';
+import type { SubmarkerData } from '../locationTracker/mapTracker/Marker';
 
 const barrenSots = /^([a-z0-9\s']+) (barren|dead|sots)$/;
 const path = /^([a-z0-9\s']+) -> ([a-z0-9\s']+)\s*(?:\(.*\))?$/;
-const itemNames = Object.keys(itemMaxes).map((item) => ({original: item, lower: item.toLowerCase()}));
+const itemNames = Object.keys(itemMaxes).map((item) => ({
+    original: item,
+    lower: item.toLowerCase(),
+}));
 
 /**
  * Parse whatever the user entered in the hints text area to a tracker data structure.
@@ -27,8 +31,8 @@ export function parseHintsText(
 
     const identifyRegion = (userText_: string) => {
         const userText = userText_.trim();
-        const region = hintRegions.find((candidate) =>
-            userText === candidate.lower,
+        const region = hintRegions.find(
+            (candidate) => userText === candidate.lower,
         );
         if (region) {
             // exact match
@@ -73,8 +77,7 @@ export function parseHintsText(
         const progressivePrefix = 'progressive ';
         const nonProgressiveMatch = itemNames.find((item) =>
             item.lower.startsWith(progressivePrefix)
-                ? item.lower.substring(progressivePrefix.length) ===
-                    userText
+                ? item.lower.substring(progressivePrefix.length) === userText
                 : false,
         );
         if (nonProgressiveMatch) {
@@ -89,13 +92,13 @@ export function parseHintsText(
         if (matchingItems.length === 1) {
             return matchingItems[0].original;
         }
-    }
+    };
 
     for (const line of lines) {
         const barrenSotsMatch = line.match(barrenSots);
         if (barrenSotsMatch) {
             const userRegion = barrenSotsMatch[1];
-            const ty = barrenSotsMatch[2]
+            const ty = barrenSotsMatch[2];
             const region = identifyRegion(userRegion);
             if (region) {
                 (result[region] ??= []).push({
@@ -129,10 +132,10 @@ export function parseHintsText(
             if (region) {
                 const item = identifyItem(userItem);
                 if (item) {
-                     (result[region] ??= []).push({
+                    (result[region] ??= []).push({
                         type: 'item',
                         item,
-                    }); 
+                    });
                 }
             }
             // eslint-disable-next-line sonarjs/no-redundant-jump
@@ -141,4 +144,16 @@ export function parseHintsText(
     }
 
     return result;
+}
+
+export function hintsToSubmarkers(hints: Hint[]): SubmarkerData[] {
+    return hints.map((h, idx) => {
+        const decoded = decodeHint(h);
+
+        return {
+            key: idx.toString(),
+            color: 'semiLogic',
+            image: decoded.image,
+        };
+    });
 }

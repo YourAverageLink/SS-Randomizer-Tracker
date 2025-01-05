@@ -8,10 +8,12 @@ import { Marker } from './Marker';
 import type { TriggerEvent } from 'react-contexify';
 import { getMarkerColor, getRegionData, getSubmarkerData } from './MapUtils';
 import type { LocationGroupContextMenuProps } from '../LocationGroupContextMenu';
+import { hintsToSubmarkers } from '../../hints/HintsParser';
 
 type MapMarkerProps = {
     markerX: number;
     markerY: number;
+    submarkerPlacement: 'left' | 'right';
     title: string;
     onGlickGroup: (region: string) => void;
     selected: boolean;
@@ -19,7 +21,7 @@ type MapMarkerProps = {
 
 
 const MapMarker = (props: MapMarkerProps) => {
-    const { onGlickGroup, title, markerX, markerY, selected } = props;
+    const { onGlickGroup, title, markerX, markerY, submarkerPlacement, selected } = props;
     const area = useSelector((state: RootState) => areasSelector(state).find((a) => a.name === title))!;
     const data = getRegionData(area);
     const markerColor = getMarkerColor(data.checks);
@@ -60,7 +62,8 @@ const MapMarker = (props: MapMarkerProps) => {
             onClick={handleClick}
             onContextMenu={displayMenu}
             selected={selected}
-            submarkers={getSubmarkerData(data)}
+            submarkerPlacement={submarkerPlacement}
+            submarkers={[...getSubmarkerData(data), ...hintsToSubmarkers(hints)]}
         >
             {Boolean(data.checks.numAccessible) && data.checks.numAccessible}
         </Marker>

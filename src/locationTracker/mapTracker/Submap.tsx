@@ -152,6 +152,7 @@ const Submap = ({
             onClick={handleClick}
             onContextMenu={displayMenu}
             selected={currentRegionOrExit === birdStatueExitId}
+            submarkerPlacement={'right'}
             submarkers={getSubmarkerData(data)}
         >
             {(data.checks.numAccessible > 0) ? data.checks.numAccessible : needsBirdStatueSanityExit ? '?' : ''}
@@ -170,6 +171,7 @@ const Submap = ({
                             markerX={marker.markerX}
                             markerY={marker.markerY}
                             title={marker.hintRegion!}
+                            submarkerPlacement={marker.supmarkerPlacement}
                             onGlickGroup={onGroupChange}
                             selected={
                                 marker.hintRegion !== undefined &&
@@ -191,6 +193,7 @@ const Submap = ({
                                 (marker.hintRegion !== undefined &&
                                     marker.hintRegion === currentRegionOrExit)
                             }
+                            submarkerPlacement={marker.supmarkerPlacement}
                             onGlickGroup={onGroupChange}
                             onChooseEntrance={onChooseEntrance}
                         />

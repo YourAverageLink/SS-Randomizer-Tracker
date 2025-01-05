@@ -88,17 +88,29 @@ const parsedHintsSelector = createSelector(
 );
 
 /**
+ * A map from hint region to all tracked and parsed region hints.
+ */
+export const allAreaHintsSelector = createSelector(
+    [
+        logicSelector,
+        parsedHintsSelector,
+        (state: RootState) => state.tracker.hints,
+    ],
+    (logic, parsed, tracked) => Object.fromEntries(
+        logic.hintRegions.map((region) => [region, [
+            ...(tracked[region] ?? []),
+            ...(parsed[region] ?? []),
+        ]])
+    ),
+);
+
+/**
  * Selects the hint for a given area.
  */
 export const areaHintSelector = currySelector(
     createSelector(
-        (_state: RootState, area: string) => area,
-        (state: RootState, area: string) => state.tracker.hints[area],
-        parsedHintsSelector,
-        (area, hint, parsedHints) => [
-            ...(hint ?? []),
-            ...(parsedHints[area] ?? []),
-        ],
+        [(_state: RootState, area: string) => area, allAreaHintsSelector],
+        (area, hints) => hints[area] ?? [],
     ),
 );
 
