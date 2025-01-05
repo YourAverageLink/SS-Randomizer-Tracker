@@ -129,8 +129,8 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
     if (data) {
         tooltip = (
             <center>
-                <div> {title}</div>
-                <div> {region} ({data.checks.numAccessible}/{data.checks.numRemaining}) </div>
+                <div>{title}</div>
+                <div>{region} ({data.checks.numAccessible}/{data.checks.numRemaining})</div>
                 <div style={{ textAlign: 'left' }}>
                     <RequirementsTooltip requirements={requirements} />
                 </div>
@@ -140,11 +140,11 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
     } else {
         tooltip = (
             <center>
-                <div> {title} ({canReach ? 'Accessible' : 'Inaccessible'})</div>
+                <div>{title} ({canReach ? 'Accessible' : 'Inaccessible'})</div>
                 <div style={{ textAlign: 'left' }}>
                     <RequirementsTooltip requirements={requirements} />
                 </div>
-                <div> Click to Attach {isDungeon ? 'Dungeon' : 'Silent Realm'} </div>
+                <div>Click to Attach {isDungeon ? 'Dungeon' : 'Silent Realm'}</div>
             </center>
         );
     }

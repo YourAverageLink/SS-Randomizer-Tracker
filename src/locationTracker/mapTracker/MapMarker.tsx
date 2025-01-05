@@ -38,7 +38,7 @@ const MapMarker = (props: MapMarkerProps) => {
 
     const tooltip = (
         <center>
-            <div> {title} ({data.checks.numAccessible}/{data.checks.numRemaining}) </div>
+            <div>{title} ({data.checks.numAccessible}/{data.checks.numRemaining})</div>
             {hints.map((hint, idx) => <HintDescription key={idx} hint={decodeHint(hint)} />)}
         </center>
     );

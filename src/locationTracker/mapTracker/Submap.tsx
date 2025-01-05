@@ -95,10 +95,9 @@ const Submap = ({
     const tooltip = (
         <center>
             <div>
-                {' '}
-                {title} ({data.checks.numAccessible}/{data.checks.numRemaining}){' '}
+                {title}({data.checks.numAccessible}/{data.checks.numRemaining})
             </div>
-            <div> Click to Expand </div>
+            <div>Click to Expand</div>
             {needsBirdStatueSanityExit && (
                 <div>Right-click to choose Statue</div>
             )}
