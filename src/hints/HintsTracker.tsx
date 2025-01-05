@@ -5,7 +5,7 @@ import { setHintsText } from '../tracker/Slice';
 import clsx from 'clsx';
 
 const hintsPlaceholder = $FEATURE_FLAG_HINTS_PARSER
-    ? 'Track hints here! Examples:\nUpper Barren\nFaron -> ET\nFloria -> G2'
+    ? 'Track hints here! Examples:\nUpper Barren\nFaron -> ET\nFloria -> G2\nTriforce in Boko'
     : 'Track hints here!';
 
 // Just a basic textarea for now
