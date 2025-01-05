@@ -100,6 +100,7 @@ export function WorldMap({
                         markerY={marker.markerY}
                         title={marker.hintRegion!}
                         onGlickGroup={handleGroupClick}
+                        submarkerPlacement="right"
                         selected={marker.hintRegion === currentRegionOrExit}
                     />
                 </div>
