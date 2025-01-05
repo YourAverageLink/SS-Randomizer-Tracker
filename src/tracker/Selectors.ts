@@ -68,7 +68,7 @@ import {
     trickSemiLogicTrickListSelector,
 } from '../customization/Selectors';
 import { stubTrue } from '../utils/Function';
-import { mapValues } from '../utils/Collections';
+import { emptyArray, mapValues } from '../utils/Collections';
 import { compact, groupBy, isEqual, keyBy, partition, sumBy } from 'es-toolkit';
 import { parseHintsText } from '../hints/HintsParser';
 
@@ -83,7 +83,13 @@ const parsedHintsSelector = createSelector(
     [(state: RootState) => state.tracker.userHintsText, logicSelector],
     (hintsText, logic) => parseHintsText(hintsText, logic.hintRegions),
     {
+        // Make sure we don't accumulate garbage for every single
+        // value of the hints text input
         memoize: lruMemoize,
+        memoizeOptions: {
+            // Skip rerenders if the parsed hints are deeply equal
+            resultEqualityCheck: isEqual,
+        },
     },
 );
 
@@ -96,12 +102,13 @@ export const allAreaHintsSelector = createSelector(
         parsedHintsSelector,
         (state: RootState) => state.tracker.hints,
     ],
-    (logic, parsed, tracked) => Object.fromEntries(
-        logic.hintRegions.map((region) => [region, [
-            ...(tracked[region] ?? []),
-            ...(parsed[region] ?? []),
-        ]])
-    ),
+    (logic, parsed, tracked) =>
+        Object.fromEntries(
+            logic.hintRegions.map((region) => [
+                region,
+                [...(tracked[region] ?? []), ...(parsed[region] ?? [])],
+            ]),
+        ),
 );
 
 /**
@@ -110,7 +117,7 @@ export const allAreaHintsSelector = createSelector(
 export const areaHintSelector = currySelector(
     createSelector(
         [(_state: RootState, area: string) => area, allAreaHintsSelector],
-        (area, hints) => hints[area] ?? [],
+        (area, hints) => hints[area] ?? emptyArray(),
     ),
 );
 

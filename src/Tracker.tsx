@@ -26,13 +26,18 @@ export default function TrackerContainer() {
     return (
         <MakeTooltipsAvailable>
             <Tracker />
+            <TrackerStateSaver />
         </MakeTooltipsAvailable>
     );
 }
 
-function Tracker() {
+// Split out into separate component to optimize rerenders
+function TrackerStateSaver() {
     useSyncTrackerStateToLocalStorage();
+    return null;
+}
 
+function Tracker() {
     return (
         <>
             <div
@@ -117,9 +122,7 @@ function TrackerFooter() {
             >
                 <div>
                     <Link to="/">
-                        <div className="tracker-button">
-                            ← Options
-                        </div>
+                        <div className="tracker-button">← Options</div>
                     </Link>
                 </div>
                 <div>
