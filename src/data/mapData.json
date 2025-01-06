@@ -72,7 +72,8 @@
             {
                 "region": "Faron Woods",
                 "markerX": 45,
-                "markerY": 49
+                "markerY": 49,
+                "submarkerPlacement": "left"
             },
             {
                 "region": "Lake Floria",
@@ -90,13 +91,15 @@
                 "exitPool": "dungeons",
                 "entryName": "Skyview",
                 "markerX": 58.5,
-                "markerY": 14
+                "markerY": 14,
+                "submarkerPlacement": "left"
             },
             {
                 "exitPool": "dungeons",
                 "entryName": "Ancient Cistern",
                 "markerX": 45,
-                "markerY": 72
+                "markerY": 72,
+                "submarkerPlacement": "left"
             },
             {
                 "exitPool": "silent_realms",
@@ -200,7 +203,8 @@
             {
                 "region": "Lanayru Gorge",
                 "markerX": 55,
-                "markerY": 70
+                "markerY": 70,
+                "submarkerPlacement": "left"
             }
         ],
         "entranceMarkers": [
