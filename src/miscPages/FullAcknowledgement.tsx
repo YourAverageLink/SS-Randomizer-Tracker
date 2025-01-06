@@ -27,7 +27,7 @@ function ContributorTable({
                     </div>
                     {contributor.attributions?.map((attribution, index) => (
                         <div key={index}>
-                            {attribution}
+                            <i>{attribution}</i>
                         </div>
                     ))}
                 </div>
