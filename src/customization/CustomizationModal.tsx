@@ -202,9 +202,6 @@ export default function CustomizationModal({
                 name="Trick Logic"
                 tooltip="Choose whether checks reachable only with tricks should be highlighted in a separate color, and which checks should be shown. An empty tricks list shows all tricks."
             >
-                <label htmlFor="trickLogic" className={styles.checkboxLabel}>
-                    Show Trick Logic
-                </label>
                 <input
                     type="checkbox"
                     id="trickLogic"
@@ -213,6 +210,9 @@ export default function CustomizationModal({
                         dispatch(setTrickSemiLogic(e.target.checked))
                     }
                 />
+                <label htmlFor="trickLogic" className={styles.checkboxLabel}>
+                    Show Trick Logic
+                </label>
                 <TricksChooser enabled={trickSemiLogic} />
             </Setting>
             <Setting
