@@ -21,7 +21,9 @@ const polyfills = legacy({
 */
 
 export default defineConfig(({ mode }) => {
-    const baseUrl = mode === 'production' ? '/SS-Randomizer-Tracker' : '/';
+    const isProd = mode === 'production';
+    const baseUrl = isProd ? '/SS-Randomizer-Tracker' : '/';
+
     return {
         base: baseUrl,
         build: {
@@ -29,6 +31,7 @@ export default defineConfig(({ mode }) => {
         },
         define: {
             $PUBLIC_URL: JSON.stringify(baseUrl),
+            $FEATURE_FLAG_HINTS_PARSER: JSON.stringify(!isProd),
         },
         plugins: [
             sassDts({

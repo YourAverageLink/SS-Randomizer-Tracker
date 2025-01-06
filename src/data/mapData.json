@@ -72,7 +72,8 @@
             {
                 "region": "Faron Woods",
                 "markerX": 45,
-                "markerY": 49
+                "markerY": 49,
+                "submarkerPlacement": "left"
             },
             {
                 "region": "Lake Floria",
@@ -90,13 +91,15 @@
                 "exitPool": "dungeons",
                 "entryName": "Skyview",
                 "markerX": 58.5,
-                "markerY": 14
+                "markerY": 14,
+                "submarkerPlacement": "left"
             },
             {
                 "exitPool": "dungeons",
                 "entryName": "Ancient Cistern",
                 "markerX": 45,
-                "markerY": 72
+                "markerY": 72,
+                "submarkerPlacement": "left"
             },
             {
                 "exitPool": "silent_realms",
@@ -121,7 +124,8 @@
             {
                 "region": "Eldin Volcano",
                 "markerX": 28,
-                "markerY": 73
+                "markerY": 73,
+                "submarkerPlacement": "left"
             },
             {
                 "region": "Mogma Turf",
@@ -131,12 +135,14 @@
             {
                 "region": "Volcano Summit",
                 "markerX": 60,
-                "markerY": 40
+                "markerY": 40,
+                "submarkerPlacement": "left"
             },
             {
                 "region": "Bokoblin Base",
                 "markerX": 80.7,
-                "markerY": 72
+                "markerY": 72,
+                "submarkerPlacement": "left"
             }
         ],
         "entranceMarkers": [
@@ -156,7 +162,8 @@
                 "exitPool": "silent_realms",
                 "entryName": "Eldin Silent Realm",
                 "markerX": 36,
-                "markerY": 62
+                "markerY": 62,
+                "submarkerPlacement": "left"
             }
         ]
     },
@@ -185,7 +192,8 @@
             {
                 "region": "Lanayru Caves",
                 "markerX": 55,
-                "markerY": 40
+                "markerY": 40,
+                "submarkerPlacement": "left"
             },
             {
                 "region": "Lanayru Sand Sea",
@@ -195,7 +203,8 @@
             {
                 "region": "Lanayru Gorge",
                 "markerX": 55,
-                "markerY": 70
+                "markerY": 70,
+                "submarkerPlacement": "left"
             }
         ],
         "entranceMarkers": [
@@ -203,13 +212,15 @@
                 "exitPool": "dungeons",
                 "entryName": "Lanayru Mining Facility",
                 "markerX": 64,
-                "markerY": 26
+                "markerY": 26,
+                "submarkerPlacement": "left"
             },
             {
                 "exitPool": "dungeons",
                 "entryName": "Sandship",
                 "markerX": 27,
-                "markerY": 45
+                "markerY": 45,
+                "submarkerPlacement": "left"
             },
             {
                 "exitPool": "silent_realms",
@@ -222,7 +233,8 @@
     "thunderhead": {
         "region": "Thunderhead",
         "markerX": 16,
-        "markerY": 11
+        "markerY": 11,
+        "submarkerPlacement": "left"
     },
     "sky": {
         "region": "Sky",

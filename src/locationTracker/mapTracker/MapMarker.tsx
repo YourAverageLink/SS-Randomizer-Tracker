@@ -2,16 +2,19 @@ import { type MouseEvent, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../store/Store';
 import { areaHintSelector, areasSelector } from '../../tracker/Selectors';
-import HintDescription, { decodeHint } from '../Hints';
+import HintDescription from '../HintsDescription';
 import { useContextMenu } from '../context-menu';
 import { Marker } from './Marker';
 import type { TriggerEvent } from 'react-contexify';
 import { getMarkerColor, getRegionData, getSubmarkerData } from './MapUtils';
 import type { LocationGroupContextMenuProps } from '../LocationGroupContextMenu';
+import { hintsToSubmarkers } from '../../hints/HintsParser';
+import { decodeHint } from '../../hints/Hints';
 
 type MapMarkerProps = {
     markerX: number;
     markerY: number;
+    submarkerPlacement: 'left' | 'right';
     title: string;
     onGlickGroup: (region: string) => void;
     selected: boolean;
@@ -19,7 +22,7 @@ type MapMarkerProps = {
 
 
 const MapMarker = (props: MapMarkerProps) => {
-    const { onGlickGroup, title, markerX, markerY, selected } = props;
+    const { onGlickGroup, title, markerX, markerY, submarkerPlacement, selected } = props;
     const area = useSelector((state: RootState) => areasSelector(state).find((a) => a.name === title))!;
     const data = getRegionData(area);
     const markerColor = getMarkerColor(data.checks);
@@ -32,13 +35,12 @@ const MapMarker = (props: MapMarkerProps) => {
         show({ event: e, props: { area: area.name } });
     }, [area, show]);
 
-    const areaHint = useSelector(areaHintSelector(title));
-    const hint = areaHint && decodeHint(areaHint);
+    const hints = useSelector(areaHintSelector(title));
 
     const tooltip = (
         <center>
-            <div> {title} ({data.checks.numAccessible}/{data.checks.numRemaining}) </div>
-            {hint && <HintDescription hint={hint} />}
+            <div>{title} ({data.checks.numAccessible}/{data.checks.numRemaining})</div>
+            {hints.map((hint, idx) => <HintDescription key={idx} hint={decodeHint(hint)} />)}
         </center>
     );
 
@@ -61,7 +63,8 @@ const MapMarker = (props: MapMarkerProps) => {
             onClick={handleClick}
             onContextMenu={displayMenu}
             selected={selected}
-            submarkers={getSubmarkerData(data)}
+            submarkerPlacement={submarkerPlacement}
+            submarkers={[...getSubmarkerData(data), ...hintsToSubmarkers(hints)]}
         >
             {Boolean(data.checks.numAccessible) && data.checks.numAccessible}
         </Marker>

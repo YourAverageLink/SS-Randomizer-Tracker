@@ -10,6 +10,7 @@ export type MapHintRegion = {
     hintRegion: string | undefined;
     markerX: number;
     markerY: number;
+    supmarkerPlacement: 'left' | 'right';
 } & (
     | { type: 'hint_region' }
     | {
@@ -31,17 +32,25 @@ export interface MapModel {
     regions: MapHintRegion[];
 }
 
-function getMarker(marker: (typeof mapData)['sky']): MapHintRegion {
+type MapDataMarker =
+    (typeof mapData)['sky' | 'thunderhead'];
+
+function getMarker(marker: MapDataMarker): MapHintRegion {
     return {
         type: 'hint_region',
         markerX: marker.markerX,
         markerY: marker.markerY,
         hintRegion: marker.region,
+        supmarkerPlacement:
+            'submarkerPlacement' in marker &&
+            marker.submarkerPlacement === 'left'
+                ? 'left'
+                : 'right',
     };
 }
 
 type MapDataEntranceMarker =
-    (typeof mapData)['faronSubmap']['entranceMarkers'][number];
+    (typeof mapData)['eldinSubmap']['entranceMarkers'][number];
 
 function getEntranceMarker(
     marker: MapDataEntranceMarker,
@@ -58,6 +67,7 @@ function getEntranceMarker(
         exitId,
         markerX: marker.markerX,
         markerY: marker.markerY,
+        supmarkerPlacement: marker.submarkerPlacement === 'left' ? 'left' : 'right',
         hintRegion: mapping?.entrance?.region,
     };
 }

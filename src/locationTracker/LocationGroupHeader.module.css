@@ -9,9 +9,10 @@
     }
 
     .hint {
-        flex: 0 0 10%;
+        flex: 0 0 45px;
         text-align: center;
         margin-left: auto;
+        display: flex;
 
         img {
             margin: auto;

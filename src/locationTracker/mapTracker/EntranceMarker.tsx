@@ -11,16 +11,19 @@ import type { TriggerEvent } from 'react-contexify';
 import type { RootState } from '../../store/Store';
 import { logicSelector } from '../../logic/Selectors';
 import type { ColorScheme } from '../../customization/ColorScheme';
-import HintDescription, { decodeHint } from '../Hints';
+import HintDescription from '../HintsDescription';
 import { useTooltipExpr } from '../../tooltips/TooltipHooks';
 import RequirementsTooltip from '../RequirementsTooltip';
 import { Marker } from './Marker';
 import { getMarkerColor, getRegionData, getSubmarkerData } from './MapUtils';
 import type { LocationGroupContextMenuProps, MapExitContextMenuProps } from '../LocationGroupContextMenu';
+import { hintsToSubmarkers } from '../../hints/HintsParser';
+import { decodeHint } from '../../hints/Hints';
 
 type EntranceMarkerProps = {
     markerX: number;
     markerY: number;
+    submarkerPlacement: 'left' | 'right';
     exitId: string;
     title: string;
     active: boolean;
@@ -35,6 +38,7 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
         exitId,
         markerX,
         markerY,
+        submarkerPlacement,
         active,
         onGlickGroup,
         onChooseEntrance,
@@ -116,9 +120,7 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
         ],
     );
 
-    const areaHint = useSelector(areaHintSelector(destinationRegionName ?? ''));
-
-    const hint = areaHint && decodeHint(areaHint);
+    const hints = useSelector(areaHintSelector(destinationRegionName ?? ''));
 
     // Only calculate tooltip if this region is shown
     const requirements = useTooltipExpr(exit.exit.id, active);
@@ -128,22 +130,22 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
     if (data) {
         tooltip = (
             <center>
-                <div> {title}</div>
-                <div> {region} ({data.checks.numAccessible}/{data.checks.numRemaining}) </div>
+                <div>{title}</div>
+                <div>{region} ({data.checks.numAccessible}/{data.checks.numRemaining})</div>
                 <div style={{ textAlign: 'left' }}>
                     <RequirementsTooltip requirements={requirements} />
                 </div>
-                {hint && <HintDescription hint={hint} />}
+                {hints.map((hint, idx) => <HintDescription key={idx} hint={decodeHint(hint)} />)}
             </center>
         );
     } else {
         tooltip = (
             <center>
-                <div> {title} ({canReach ? 'Accessible' : 'Inaccessible'})</div>
+                <div>{title} ({canReach ? 'Accessible' : 'Inaccessible'})</div>
                 <div style={{ textAlign: 'left' }}>
                     <RequirementsTooltip requirements={requirements} />
                 </div>
-                <div> Click to Attach {isDungeon ? 'Dungeon' : 'Silent Realm'} </div>
+                <div>Click to Attach {isDungeon ? 'Dungeon' : 'Silent Realm'}</div>
             </center>
         );
     }
@@ -174,7 +176,8 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
             onClick={handleClick}
             onContextMenu={displayMenu}
             selected={selected}
-            submarkers={data && getSubmarkerData(data)}
+            submarkerPlacement={submarkerPlacement}
+            submarkers={data && [...getSubmarkerData(data), ...hintsToSubmarkers(hints)]}
         >
             {Boolean(data?.checks.numAccessible) && data?.checks.numAccessible}
             {!hasConnection && '?'}

@@ -1,4 +1,4 @@
-import { createSelector } from '@reduxjs/toolkit';
+import { createSelector, lruMemoize } from '@reduxjs/toolkit';
 import {
     areaGraphSelector,
     logicSelector,
@@ -68,8 +68,9 @@ import {
     trickSemiLogicTrickListSelector,
 } from '../customization/Selectors';
 import { stubTrue } from '../utils/Function';
-import { mapValues } from '../utils/Collections';
+import { emptyArray, mapValues } from '../utils/Collections';
 import { compact, groupBy, isEqual, keyBy, partition, sumBy } from 'es-toolkit';
+import { parseHintsText } from '../hints/HintsParser';
 
 const bitVectorMemoizeOptions = {
     memoizeOptions: {
@@ -78,11 +79,46 @@ const bitVectorMemoizeOptions = {
     },
 };
 
+const parsedHintsSelector = createSelector(
+    [(state: RootState) => state.tracker.userHintsText, logicSelector],
+    (hintsText, logic) => parseHintsText(hintsText, logic.hintRegions),
+    {
+        // Make sure we don't accumulate garbage for every single
+        // value of the hints text input
+        memoize: lruMemoize,
+        memoizeOptions: {
+            // Skip rerenders if the parsed hints are deeply equal
+            resultEqualityCheck: isEqual,
+        },
+    },
+);
+
+/**
+ * A map from hint region to all tracked and parsed region hints.
+ */
+export const allAreaHintsSelector = createSelector(
+    [
+        logicSelector,
+        parsedHintsSelector,
+        (state: RootState) => state.tracker.hints,
+    ],
+    (logic, parsed, tracked) =>
+        Object.fromEntries(
+            logic.hintRegions.map((region) => [
+                region,
+                [...(tracked[region] ?? []), ...(parsed[region] ?? [])],
+            ]),
+        ),
+);
+
 /**
  * Selects the hint for a given area.
  */
 export const areaHintSelector = currySelector(
-    (state: RootState, area: string) => state.tracker.hints[area],
+    createSelector(
+        [(_state: RootState, area: string) => area, allAreaHintsSelector],
+        (area, hints) => hints[area] ?? emptyArray(),
+    ),
 );
 
 /**

@@ -44,7 +44,7 @@ export interface DecodedHint {
 export function decodeHint(hint: Hint): DecodedHint {
     switch (hint.type) {
         case 'barren':
-            return { description: 'Barren', image: barrenImage, style: 'checked' };
+            return { description: 'Barren', image: barrenImage, style: 'outLogic' };
         case 'sots':
             return { description: 'Spirit of the Sword', image: sotsImage, style: 'inLogic' };
         case 'path':
@@ -60,12 +60,4 @@ export function decodeHint(hint: Hint): DecodedHint {
                 style: 'inLogic',
             };
     }
-}
-
-export default function HintDescription({ hint, area }: { hint: DecodedHint, area?: string }) {
-    return (
-        <div style={{ color: `var(--scheme-${hint.style})` }}>
-            {area && `${area} - `}{hint.description}
-        </div>
-    );
 }

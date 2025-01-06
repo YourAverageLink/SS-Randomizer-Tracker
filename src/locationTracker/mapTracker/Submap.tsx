@@ -7,14 +7,15 @@ import leaveFaron from '../../assets/maps/leaveFaron.png';
 import leaveEldin from '../../assets/maps/leaveEldin.png';
 import leaveLanayru from '../../assets/maps/leaveLanayru.png';
 import { useSelector } from 'react-redux';
-import { areasSelector, checkSelector, exitsByIdSelector, settingSelector } from '../../tracker/Selectors';
+import { areaHintSelector, areasSelector, checkSelector, exitsByIdSelector, settingSelector } from '../../tracker/Selectors';
 import { areaGraphSelector } from '../../logic/Selectors';
-import HintDescription, { type DecodedHint, decodeHint } from '../Hints';
+import HintDescription from '../HintsDescription';
 import type { RootState } from '../../store/Store';
 import type { TriggerEvent } from 'react-contexify';
 import { Marker } from './Marker';
 import type { MapHintRegion } from './MapModel';
 import { combineRegionCounters, getMarkerColor, getRegionData, getSubmarkerData, initialRegionData } from './MapUtils';
+import { decodeHint } from '../../hints/Hints';
 
 export type ExitParams = {
     image: string,
@@ -29,6 +30,13 @@ const images: Record<string, string> = {
     leaveEldin,
     leaveLanayru,
 };
+
+function SubmapHint({ area }: { area: string }) {
+    const hints = useSelector(areaHintSelector(area));
+    return hints.map((hint, idx) => (
+        <HintDescription key={idx} hint={decodeHint(hint)} area={area} />
+    ));
+}
 
 const Submap = ({
     onSubmapChange,
@@ -57,19 +65,13 @@ const Submap = ({
     exitParams: ExitParams;
     currentRegionOrExit: string | undefined;
 }) => {
-    const subregionHints: { hint: DecodedHint, area: string }[] = [];
     const areas = useSelector(areasSelector);
     const exits = useSelector(exitsByIdSelector);
-    const hints = useSelector((state: RootState) => state.tracker.hints);
     let data = initialRegionData();
     for (const marker of markers) {
         const area = areas.find((area) => area.name === marker.hintRegion);
         if (area) {
             data = combineRegionCounters(data, getRegionData(area));
-            const hint = hints[area.name];
-            if (hint) {
-                subregionHints.push({ area: area.name, hint: decodeHint(hint) });
-            }
         }
     }
 
@@ -93,10 +95,21 @@ const Submap = ({
 
     const tooltip = (
         <center>
-            <div> {title} ({data.checks.numAccessible}/{data.checks.numRemaining}) </div>
-            <div> Click to Expand </div>
-            {needsBirdStatueSanityExit && <div>Right-click to choose Statue</div>}
-            {subregionHints.map(({hint, area}) => <HintDescription key={area} hint={hint} area={area} />)}
+            <div>
+                {title}({data.checks.numAccessible}/{data.checks.numRemaining})
+            </div>
+            <div>Click to Expand</div>
+            {needsBirdStatueSanityExit && (
+                <div>Right-click to choose Statue</div>
+            )}
+            {markers.map((marker, idx) =>
+                marker.hintRegion ? (
+                    <SubmapHint
+                        key={idx}
+                        area={marker.hintRegion}
+                    />
+                ) : undefined,
+            )}
         </center>
     );
 
@@ -139,6 +152,7 @@ const Submap = ({
             onClick={handleClick}
             onContextMenu={displayMenu}
             selected={currentRegionOrExit === birdStatueExitId}
+            submarkerPlacement={'right'}
             submarkers={getSubmarkerData(data)}
         >
             {(data.checks.numAccessible > 0) ? data.checks.numAccessible : needsBirdStatueSanityExit ? '?' : ''}
@@ -157,6 +171,7 @@ const Submap = ({
                             markerX={marker.markerX}
                             markerY={marker.markerY}
                             title={marker.hintRegion!}
+                            submarkerPlacement={marker.supmarkerPlacement}
                             onGlickGroup={onGroupChange}
                             selected={
                                 marker.hintRegion !== undefined &&
@@ -178,6 +193,7 @@ const Submap = ({
                                 (marker.hintRegion !== undefined &&
                                     marker.hintRegion === currentRegionOrExit)
                             }
+                            submarkerPlacement={marker.supmarkerPlacement}
                             onGlickGroup={onGroupChange}
                             onChooseEntrance={onChooseEntrance}
                         />

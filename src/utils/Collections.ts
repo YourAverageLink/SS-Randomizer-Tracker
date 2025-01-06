@@ -1,6 +1,12 @@
 // eslint-disable-next-line no-restricted-imports
 import { compact, flatten, zip, mapValues as mapValuesEsTk } from 'es-toolkit';
 
+const EMPTY_ARRAY: [] = [];
+
+export function emptyArray<T>(): T[] {
+    return EMPTY_ARRAY;
+}
+
 export function reorderLocationsForGrid<T>(locations: T[]) {
     const partitionPoint = Math.ceil(locations.length / 2);
     return compact(

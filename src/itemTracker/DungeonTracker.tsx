@@ -17,6 +17,7 @@ import trialGate from '../assets/bosses/trialGate.png';
 import faronTrialGate from '../assets/bosses/faronTrialGate.png';
 import lanayruTrialGate from '../assets/bosses/lanayruTrialGate.png';
 import eldinTrialGate from '../assets/bosses/eldinTrialGate.png';
+import dungeonDataOrig from '../data/dungeons.json';
 import DungeonName from './items/dungeons/DungeonName';
 import DungeonIcon from './items/dungeons/DungeonIcon';
 import React from 'react';
@@ -32,6 +33,7 @@ import {
 import styles from './DungeonTracker.module.css';
 import clsx from 'clsx';
 import type { InterfaceAction } from '../tracker/TrackerInterfaceReducer';
+import { keyBy } from 'es-toolkit';
 
 const silentRealmData: Record<string, string> = {
     'Faron Silent Realm': faronTrialGate,
@@ -40,43 +42,17 @@ const silentRealmData: Record<string, string> = {
     'Skyloft Silent Realm': trialGate,
 };
 
-const dungeonData = {
-    Skyview: {
-        dungeonAbbr: 'SV',
-        dungeonName: 'Skyview',
-        bossIcon: g1,
-    },
-    'Earth Temple': {
-        dungeonAbbr: 'ET',
-        dungeonName: 'Earth Temple',
-        bossIcon: scaldera,
-    },
-    'Lanayru Mining Facility': {
-        dungeonAbbr: 'LMF',
-        dungeonName: 'Lanayru Mining Facility',
-        bossIcon: moldarach,
-    },
-    'Ancient Cistern': {
-        dungeonAbbr: 'AC',
-        dungeonName: 'Ancient Cistern',
-        bossIcon: koloktos,
-    },
-    Sandship: {
-        dungeonAbbr: 'SSH',
-        dungeonName: 'Sandship',
-        bossIcon: tentalus,
-    },
-    'Fire Sanctuary': {
-        dungeonAbbr: 'FS',
-        dungeonName: 'Fire Sanctuary',
-        bossIcon: g2,
-    },
-    'Sky Keep': {
-        dungeonAbbr: 'SK',
-        dungeonName: 'Sky Keep',
-        bossIcon: dreadfuse,
-    },
-} as const;
+const dungeonData = keyBy(dungeonDataOrig, (data) => data.hintRegion);
+
+const dungeonIcons: Record<string, string> = {
+    'Skyview': g1,
+    'Earth Temple': scaldera,
+    'Lanayru Mining Facility': moldarach,
+    'Ancient Cistern': koloktos,
+    'Sandship': tentalus,
+    'Fire Sanctuary': g2,
+    "Sky Keep": dreadfuse,
+} satisfies Record<DungeonNameType, string>;
 
 const smallKeyImages = [noSmallKey, oneSmallKey, twoSmallKey, threeSmallKey];
 
@@ -153,7 +129,7 @@ export default function DungeonTracker({
                     <div style={colspan2(index * 2)} key={d.name}>
                         <DungeonName
                             setActiveArea={setActiveArea}
-                            dungeonAbbr={dungeonData[d.name].dungeonAbbr}
+                            dungeonAbbr={dungeonData[d.name].abbr}
                             dungeonName={d.name}
                         />
                     </div>
@@ -164,7 +140,7 @@ export default function DungeonTracker({
                             <div key={d.name} style={colspan2(index * 2)}>
                                 <DungeonIcon
                                     area={d.name}
-                                    image={dungeonData[d.name].bossIcon}
+                                    image={dungeonIcons[dungeonData[d.name].hintRegion]}
                                     iconLabel={d.name}
                                     groupClicked={() => setActiveArea(d.name)}
                                 />
