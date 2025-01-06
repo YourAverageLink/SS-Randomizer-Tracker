@@ -6,11 +6,11 @@ import { useContextMenu } from './context-menu';
 import type { HintRegion } from '../logic/Locations';
 import { useSelector } from 'react-redux';
 import { areaHintSelector } from '../tracker/Selectors';
-import { decodeHint } from './Hints';
 import styles from './LocationGroupHeader.module.css';
 import clsx from 'clsx';
 import type { LocationGroupContextMenuProps } from './LocationGroupContextMenu';
 import Tooltip from '../additionalComponents/Tooltip';
+import { decodeHint } from '../hints/Hints';
 
 export default function LocationGroupHeader({
     area,

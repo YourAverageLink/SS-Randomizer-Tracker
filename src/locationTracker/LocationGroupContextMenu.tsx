@@ -14,12 +14,12 @@ import {
     settingSelector,
 } from '../tracker/Selectors';
 import type { TrackerLinkedEntrancePool } from '../logic/Logic';
-import { bosses } from './Hints';
 import { type ThunkResult, useAppDispatch } from '../store/Store';
 import hintItems from '../data/hintItems.json';
 import { HintItem } from './LocationContextMenu';
 import type { InterfaceAction } from '../tracker/TrackerInterfaceReducer';
 import type { ExitMapping } from '../logic/Locations';
+import { bosses } from '../hints/Hints';
 
 export interface LocationGroupContextMenuProps {
     area: string;

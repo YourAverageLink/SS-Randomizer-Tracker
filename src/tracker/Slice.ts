@@ -3,9 +3,9 @@ import type { AllTypedOptions } from '../permalink/SettingsTypes';
 import { getInitialItems } from '../logic/TrackerModifications';
 import type { RegularDungeon } from '../logic/Locations';
 import { type InventoryItem, isItem, itemMaxes } from '../logic/Inventory';
-import type { Hint } from '../locationTracker/Hints';
 import { getStoredTrackerState } from '../LocalStorage';
 import { migrateTrackerState } from '../TrackerStateMigrations';
+import type { Hint } from '../hints/Hints';
 
 export interface TrackerState {
     /**

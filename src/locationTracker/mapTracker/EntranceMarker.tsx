@@ -11,13 +11,14 @@ import type { TriggerEvent } from 'react-contexify';
 import type { RootState } from '../../store/Store';
 import { logicSelector } from '../../logic/Selectors';
 import type { ColorScheme } from '../../customization/ColorScheme';
-import HintDescription, { decodeHint } from '../Hints';
+import HintDescription from '../HintsDescription';
 import { useTooltipExpr } from '../../tooltips/TooltipHooks';
 import RequirementsTooltip from '../RequirementsTooltip';
 import { Marker } from './Marker';
 import { getMarkerColor, getRegionData, getSubmarkerData } from './MapUtils';
 import type { LocationGroupContextMenuProps, MapExitContextMenuProps } from '../LocationGroupContextMenu';
 import { hintsToSubmarkers } from '../../hints/HintsParser';
+import { decodeHint } from '../../hints/Hints';
 
 type EntranceMarkerProps = {
     markerX: number;

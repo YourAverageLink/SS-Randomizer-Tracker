@@ -2,13 +2,14 @@ import { type MouseEvent, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../store/Store';
 import { areaHintSelector, areasSelector } from '../../tracker/Selectors';
-import HintDescription, { decodeHint } from '../Hints';
+import HintDescription from '../HintsDescription';
 import { useContextMenu } from '../context-menu';
 import { Marker } from './Marker';
 import type { TriggerEvent } from 'react-contexify';
 import { getMarkerColor, getRegionData, getSubmarkerData } from './MapUtils';
 import type { LocationGroupContextMenuProps } from '../LocationGroupContextMenu';
 import { hintsToSubmarkers } from '../../hints/HintsParser';
+import { decodeHint } from '../../hints/Hints';
 
 type MapMarkerProps = {
     markerX: number;

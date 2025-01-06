@@ -9,12 +9,13 @@ import leaveLanayru from '../../assets/maps/leaveLanayru.png';
 import { useSelector } from 'react-redux';
 import { areaHintSelector, areasSelector, checkSelector, exitsByIdSelector, settingSelector } from '../../tracker/Selectors';
 import { areaGraphSelector } from '../../logic/Selectors';
-import HintDescription, { decodeHint } from '../Hints';
+import HintDescription from '../HintsDescription';
 import type { RootState } from '../../store/Store';
 import type { TriggerEvent } from 'react-contexify';
 import { Marker } from './Marker';
 import type { MapHintRegion } from './MapModel';
 import { combineRegionCounters, getMarkerColor, getRegionData, getSubmarkerData, initialRegionData } from './MapUtils';
+import { decodeHint } from '../../hints/Hints';
 
 export type ExitParams = {
     image: string,
