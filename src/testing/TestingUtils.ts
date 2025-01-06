@@ -1,4 +1,4 @@
-import { type AppAction, type RootState, type Store, createStore } from '../store/Store';
+import { type AppAction, type RootState, type Store, type SyncThunkResult, createStore } from '../store/Store';
 import { getAndPatchLogic, type RemoteReference } from '../loader/LogicLoader';
 import type { AllTypedOptions } from '../permalink/SettingsTypes';
 
@@ -63,7 +63,7 @@ export function createTestLogic() {
             return selector(store.getState());
         },
 
-        dispatch(action: AppAction) {
+        dispatch(action: SyncThunkResult | AppAction) {
             return store.dispatch(action);
         },
 

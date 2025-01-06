@@ -3,10 +3,11 @@ import { Menu, Item, Separator, Submenu, type ItemParams } from 'react-contexify
 
 import hintItems from '../data/hintItems.json';
 import type { LocationContextMenuProps } from './Location';
-import { useDispatch } from 'react-redux';
-import { clickCheck, setCheckHint } from '../tracker/Slice';
+import { clickCheck } from '../tracker/Actions';
+import { setCheckHint } from '../tracker/Slice';
 import images from '../itemTracker/Images';
 import { last } from 'es-toolkit';
+import { useAppDispatch } from '../store/Store';
 
 type CtxProps<T = void> = ItemParams<LocationContextMenuProps, T>;
 interface ItemData {
@@ -14,7 +15,7 @@ interface ItemData {
 }
 
 export default function LocationContextMenu() {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const handleCheckClick = useCallback(
         (params: CtxProps) =>

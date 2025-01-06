@@ -3,6 +3,8 @@ import styles from './HintsTracker.module.css';
 import type { RootState } from '../store/Store';
 import { setHintsText } from '../tracker/Slice';
 import clsx from 'clsx';
+import { ItemAssignmentStatus } from './ItemAssignmentStatus';
+import { itemLocationAssignmentEnabledSelector } from '../customization/Selectors';
 
 const hintsPlaceholder = $FEATURE_FLAG_HINTS_PARSER
     ? 'Track hints here! Examples:\nUpper Barren\nFaron -> ET\nFloria -> G2\nTriforce in Boko'
@@ -14,6 +16,7 @@ export function HintsTracker() {
     const hintsText = useSelector(
         (state: RootState) => state.tracker.userHintsText,
     );
+    const autoItemAssignemt = useSelector(itemLocationAssignmentEnabledSelector);
     return (
         <div className={styles.hintsTracker}>
             <textarea
@@ -22,6 +25,7 @@ export function HintsTracker() {
                 value={hintsText}
                 onChange={(ev) => dispatch(setHintsText(ev.target.value))}
             />
+            {autoItemAssignemt && <ItemAssignmentStatus />}
         </div>
     );
 }

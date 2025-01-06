@@ -8,6 +8,7 @@ import {
     type CounterBasis,
     type ItemLayout,
     type LocationLayout,
+    setAutoItemAssignment,
     setColorScheme,
     setCounterBasis,
     setCustomLayout,
@@ -23,6 +24,7 @@ import {
     counterBasisSelector,
     hasCustomLayoutSelector,
     itemLayoutSelector,
+    itemLocationAssignmentEnabledSelector,
     locationLayoutSelector,
     trickSemiLogicSelector,
     trickSemiLogicTrickListSelector,
@@ -111,6 +113,7 @@ export default function CustomizationModal({
     const trickSemiLogic = useSelector(trickSemiLogicSelector);
     const counterBasis = useSelector(counterBasisSelector);
     const tumbleweed = useSelector(tumbleweedSelector);
+    const itemLocationAssignment = useSelector(itemLocationAssignmentEnabledSelector);
 
     const updateColorScheme = useCallback(
         (scheme: ColorScheme) => dispatch(setColorScheme(scheme)),
@@ -231,9 +234,6 @@ export default function CustomizationModal({
                 />
             </Setting>
             <Setting name="Additional Settings">
-                <label htmlFor="trackTim" className={styles.checkboxLabel}>
-                    Track Tim
-                </label>
                 <input
                     type="checkbox"
                     id="trackTim"
@@ -242,6 +242,21 @@ export default function CustomizationModal({
                         dispatch(setTrackTumbleweed(e.target.checked))
                     }
                 />
+                <label htmlFor="trackTim" className={styles.checkboxLabel}>
+                    Track Tim
+                </label>
+                <br />
+                <input
+                    type="checkbox"
+                    id="autoItemAssignemt"
+                    checked={itemLocationAssignment}
+                    onChange={(e) =>
+                        dispatch(setAutoItemAssignment(e.target.checked))
+                    }
+                />
+                <label htmlFor="autoItemAssignemt" className={styles.checkboxLabel}>
+                    Assign Items to locations while tracking
+                </label>
             </Setting>
             <Setting name="Custom Layout (experimental!)">
                 <div>

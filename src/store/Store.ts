@@ -29,6 +29,12 @@ export type RootState = ReturnType<Store['getState']>;
 export type AppDispatch = Store['dispatch'];
 export type AppAction = Parameters<AppDispatch>[0];
 export const useAppDispatch: () => AppDispatch = useDispatch;
+export type SyncThunkResult<R = void> = ThunkAction<
+    R,
+    RootState,
+    undefined,
+    Parameters<AppDispatch>[0]
+>;
 export type ThunkResult<R = void> = ThunkAction<
     R | Promise<R>,
     RootState,

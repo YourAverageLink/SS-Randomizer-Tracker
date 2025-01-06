@@ -825,9 +825,10 @@ export const checkSelector = currySelector(
                     type: 'exit',
                     logicalState,
                 };
-            } else {
+            } else if (checkId !== '') {
                 throw new Error('unknown check ' + checkId);
             }
+            return undefined as unknown as Check;
         },
     ),
 );

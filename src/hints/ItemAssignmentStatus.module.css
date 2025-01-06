@@ -1,0 +1,10 @@
+.row {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 2px;
+}
+
+.button {
+    padding: 0px 4px;
+}

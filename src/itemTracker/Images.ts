@@ -138,6 +138,7 @@ import notumbleweed from '../assets/junk/no_tumbleweed.png';
 import rareTreasure from '../assets/junk/rareTreasure.png';
 import semiRareTreasure from '../assets/junk/semiRareTreasure.png';
 import rupees from '../assets/junk/rupees.png';
+import oneSmallKey from '../assets/dungeons/1_smallKey.png';
 
 export type Images = Record<string, string[]>;
 
@@ -194,6 +195,10 @@ const images: Images = {
         rattle,
     ],
     'Gratitude Crystals': [
+        noCrystal,
+        crystal,
+    ],
+    'Gratitude Crystal Pack': [
         noCrystal,
         crystal,
     ],
@@ -478,6 +483,34 @@ const images: Images = {
     ],
     'Small Key': [
         cavesKey,
+    ],
+    'Skyview Small Key': [
+        noSmallKey,
+        oneSmallKey,
+    ],
+    'Earth Temple Small Key': [
+        noSmallKey,
+        oneSmallKey,
+    ],
+    'Lanayru Mining Facility Small Key': [
+        noSmallKey,
+        oneSmallKey,
+    ],
+    'Ancient Cistern Small Key': [
+        noSmallKey,
+        oneSmallKey,
+    ],
+    'Sandship Small Key': [
+        noSmallKey,
+        oneSmallKey,
+    ],
+    'Fire Sanctuary Small Key': [
+        noSmallKey,
+        oneSmallKey,
+    ],
+    'Sky Keep Small Key': [
+        noSmallKey,
+        oneSmallKey,
     ],
 };
 

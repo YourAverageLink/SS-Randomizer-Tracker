@@ -11,12 +11,13 @@ import { useEntrancePath, useTooltipExpr } from '../tooltips/TooltipHooks';
 import RequirementsTooltip from './RequirementsTooltip';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkHintSelector, checkSelector, exitsByIdSelector, isCheckBannedSelector } from '../tracker/Selectors';
-import { clickCheck, mapEntrance } from '../tracker/Slice';
+import { clickCheck } from '../tracker/Actions';
+import { mapEntrance } from '../tracker/Slice';
 import PathTooltip from './PathTooltip';
 import Tooltip from '../additionalComponents/Tooltip';
 import clsx from 'clsx';
 import styles from './Location.module.css';
-import type { RootState } from '../store/Store';
+import { useAppDispatch, type RootState } from '../store/Store';
 import type { Check } from '../logic/Locations';
 
 export interface LocationContextMenuProps {
@@ -43,7 +44,7 @@ function CheckLocation({
 }: {
     id: string;
 }) {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const isBanned = useSelector((state: RootState) => isCheckBannedSelector(state)(id));
 
     const check = useSelector(checkSelector(id));

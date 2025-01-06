@@ -2,8 +2,9 @@ import { setCounterBasis, setEnabledSemilogicTricks, setTrickSemiLogic } from '.
 import { type InventoryItem, itemMaxes } from './logic/Inventory';
 import type { LogicalState } from './logic/Locations';
 import type { TypedOptions } from './permalink/SettingsTypes';
-import type { AppAction, RootState} from './store/Store';
+import type { AppAction, RootState, SyncThunkResult} from './store/Store';
 import { createTestLogic } from './testing/TestingUtils';
+import { clickCheck } from './tracker/Actions';
 import {
     allSettingsSelector,
     areasSelector,
@@ -13,7 +14,6 @@ import {
 } from './tracker/Selectors';
 import {
     acceptSettings,
-    clickCheck,
     clickDungeonName,
     clickItem,
     mapEntrance,
@@ -36,7 +36,7 @@ describe('full logic tests', () => {
         return tester.readSelector(selector);
     }
 
-    function dispatch(action: AppAction) {
+    function dispatch(action: SyncThunkResult | AppAction) {
         return tester.dispatch(action);
     }
 
