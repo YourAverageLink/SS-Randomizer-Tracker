@@ -52,6 +52,7 @@
     input,
     textarea {
         font-family: unset;
+        font-size: calc(20px * 2 / 3);
     }
 
     legend {

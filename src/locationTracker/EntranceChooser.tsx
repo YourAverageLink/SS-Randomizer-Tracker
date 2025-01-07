@@ -7,7 +7,6 @@ import { entrancePoolsSelector, exitsByIdSelector, usedEntrancesSelector } from 
 import { useMemo, useState } from 'react';
 import { mapEntrance } from '../tracker/Slice';
 import keyDownWrapper from '../utils/KeyDownWrapper';
-import { reorderLocationsForGrid } from '../utils/Collections';
 
 const RESET_OPTION = 'RESET';
 
@@ -50,9 +49,9 @@ export default function EntranceChooser({ wide, exitId, onChoose }: { wide: bool
                 entrances.unshift({ value: RESET_OPTION, label: 'Reset' });
             }
 
-            return wide ? reorderLocationsForGrid(entrances) : entrances;
+            return entrances;
         }
-    }, [entrancePools, exit.canAssign, exit.entrance, exit.rule, filterText, wide, usedEntrances]);
+    }, [entrancePools, exit.canAssign, exit.entrance, exit.rule, filterText, usedEntrances]);
 
     const onClickEntrance = (value: string) => {
         if (value === RESET_OPTION) {
