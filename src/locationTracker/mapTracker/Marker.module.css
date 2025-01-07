@@ -33,7 +33,7 @@
     display: flex;
     flex-flow: column wrap;
     pointer-events: none;
-    height: calc(var(--map-marker-size) * 1.5);
+    height: calc(var(--map-marker-size) * 1.25);
     top: var(--map-marker-y);
 
     left: calc(var(--map-marker-x) + var(--map-marker-size));
