@@ -98,7 +98,10 @@ const trackerSlice = createSlice({
             if (state.lastCheckedLocation) {
                 if (newCount > count) {
                     state.checkHints[state.lastCheckedLocation] = item;
-                } else if (newCount < count) {
+                } else if (
+                    newCount < count &&
+                    state.checkHints[state.lastCheckedLocation] === item
+                ) {
                     delete state.checkHints[state.lastCheckedLocation];
                 }
             }
