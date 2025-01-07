@@ -71,6 +71,9 @@ const customizationSlice = createSlice({
         setAutoItemAssignment: (state, action: PayloadAction<boolean>) => {
             state.itemLocationAssignment = action.payload;
         },
+        resetCustomizationForTest: (_state, _action: PayloadAction<void>) => {
+            return initialState;
+        }
     },
 });
 
@@ -84,6 +87,7 @@ export const {
     setTrackTumbleweed,
     setCustomLayout,
     setAutoItemAssignment,
+    resetCustomizationForTest,
 } = customizationSlice.actions;
 
 export default customizationSlice.reducer;

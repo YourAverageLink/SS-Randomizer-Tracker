@@ -12,6 +12,7 @@ import {
     entrancePoolsSelector,
     exitsByIdSelector,
 } from '../tracker/Selectors';
+import { resetCustomizationForTest } from '../customization/Slice';
 
 const main: RemoteReference = {
     type: 'forkBranch',
@@ -53,6 +54,7 @@ export function createTestLogic() {
 
         beforeEach() {
             store.dispatch(reset({ settings: defaultSet }));
+            store.dispatch(resetCustomizationForTest());
         },
 
         /**
@@ -71,6 +73,7 @@ export function createTestLogic() {
             const area = tester.findArea(areaName);
             return (
                 area.checks.list.find((c) => c.includes(checkName)) ??
+                area.extraLocations.loose_crystal?.list.find((c) => c.includes(checkName)) ??
                 area.extraLocations.tr_cube?.list.find((c) => c.includes(checkName)) ??
                 area.extraLocations.gossip_stone?.list.find((c) =>
                     c.includes(checkName),
