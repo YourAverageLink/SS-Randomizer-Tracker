@@ -2,7 +2,8 @@
     display: flex;
     flex-flow: row wrap;
     align-items: center;
-    gap: 2px;
+    gap: 6px;
+    height: 56px;
 }
 
 .button {
