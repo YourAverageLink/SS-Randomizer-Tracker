@@ -133,7 +133,7 @@ function CheckIcon({check}: {check: Check}) {
     }
 }
 
-export function Exit({
+function Exit({
     id,
     onChooseEntrance,
     // setActiveArea,

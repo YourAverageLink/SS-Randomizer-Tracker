@@ -78,12 +78,16 @@ export default function LocationContextMenu() {
     );
 }
 
-export function HintItem({ itemName }: { itemName: string }) {
-    const image = last(images[itemName]);
+export function HintIcon({ src, alt }: { src: string; alt: string; }) {
     return (<span style={{ display: 'flex', flexFlow: 'row nowrap' }}>
         <div style={{ width: '36px', height: '36px', paddingRight: '6px' }}>
-            <img style={{ width: '100%', height: '100%', objectFit: 'contain' }} src={image} alt={itemName} />
+            <img style={{ width: '100%', height: '100%', objectFit: 'contain' }} src={src} alt={alt} />
         </div>
-        {itemName}
+        {alt}
     </span>);
+}
+
+export function HintItem({ itemName }: { itemName: string }) {
+    const image = last(images[itemName])!;
+    return <HintIcon src={image} alt={itemName} />
 }

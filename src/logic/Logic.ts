@@ -81,16 +81,6 @@ export type LinkedEntrancePool = keyof RawLogic['linked_entrances'];
 export type TrackerLinkedEntrancePool = LinkedEntrancePool | 'dungeons_unrequired';
 
 /**
- * Returns whether this is a linked entrance pool or a regular entrance pool.
- */
-export function isLinkedEntrancePool(
-    areaGraph: AreaGraph,
-    pool: string,
-): pool is LinkedEntrancePool {
-    return Boolean(pool in areaGraph.linkedEntrancePools);
-}
-
-/**
  * Is this a check that can contain mostly any random item, assuming it is unbanned?
  */
 export function isRegularItemCheck(type: LogicalCheck['type']) {

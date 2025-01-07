@@ -22,7 +22,7 @@ export const cubeCollectedToCubeCheck = Object.fromEntries(
 );
 export const cubeCheckToCubeCollected = invert<string, string>(cubeCollectedToCubeCheck);
 
-export function mapToCubeCollectedRequirement(check: string) {
+function mapToCubeCollectedRequirement(check: string) {
     return `${check}${collectedCubeSuffix}`;
 }
 

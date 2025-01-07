@@ -23,7 +23,7 @@ const images: Record<string, string> = {
 
 export const WORLD_MAP_ASPECT_RATIO = 843 / 465;
 
-export function WorldMap({
+function WorldMap({
     width,
     interfaceState,
     interfaceDispatch,

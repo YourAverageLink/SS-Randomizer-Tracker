@@ -16,10 +16,10 @@ import {
 import type { TrackerLinkedEntrancePool } from '../logic/Logic';
 import { type ThunkResult, useAppDispatch } from '../store/Store';
 import hintItems from '../data/hintItems.json';
-import { HintItem } from './LocationContextMenu';
+import { HintIcon, HintItem } from './LocationContextMenu';
 import type { InterfaceAction } from '../tracker/TrackerInterfaceReducer';
 import type { ExitMapping } from '../logic/Locations';
-import { bosses } from '../hints/Hints';
+import { bosses, pathImages } from '../hints/Hints';
 
 export interface LocationGroupContextMenuProps {
     area: string;
@@ -189,7 +189,7 @@ function useAreaContextMenuItems() {
                     onClick={handlePathClick}
                     data={{ boss: bossIndex } satisfies BossData}
                 >
-                    {bossName}
+                    <HintIcon src={pathImages[bossIndex]} alt={bossName} />
                 </Item>
             ))}
         </Submenu>,

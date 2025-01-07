@@ -5,7 +5,7 @@ import { rawItemCountSelector } from '../tracker/Selectors';
 import { clickItem } from '../tracker/Slice';
 import { BasicItem } from './BasicItem';
 
-export function Item({
+function Item({
     itemName,
     images,
     grid,
