@@ -52,12 +52,11 @@ export function decodeHint(hint: Hint): DecodedHint {
                 image: pathImages[hint.index],
                 style: 'inLogic',
             };
-        case 'item': {
+        case 'item':
             return {
                 description: hint.item,
                 image: findRepresentativeIcon(hint.item),
                 style: 'inLogic',
             };
-        }
     }
 }

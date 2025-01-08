@@ -51,7 +51,7 @@ export function LocationsEntrancesList({
                             />
                         </div>
                     )}
-                    <div style={{ overflow: 'hidden auto', flex: '1' }}>
+                    <div style={{ overflow: 'visible auto', flex: '1' }}>
                         <Locations
                             wide={wide}
                             onChooseEntrance={onChooseEntrance}
