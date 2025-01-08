@@ -36,7 +36,7 @@
     "lint": "npm run lint:ts && npm run lint:eslint",
     "generate:testData": "node ./scripts/downloadTestData.mjs",
     "generate:options": "node ./scripts/generateOptions.mjs",
-    "lint:eslint": "eslint --max-warnings 0 \"src/**/*.ts\" \"src/**/*.js\" \"src/**/*.tsx\"",
+    "lint:eslint": "eslint --max-warnings 0 \"src/**/*.ts\" \"src/**/*.tsx\"",
     "lint:ts": "tsc --noEmit"
   },
   "browserslist": [
