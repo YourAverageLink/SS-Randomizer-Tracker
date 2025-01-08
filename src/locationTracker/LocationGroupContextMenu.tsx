@@ -6,20 +6,17 @@ import {
     Submenu,
     type ItemParams,
 } from 'react-contexify';
-import { bulkEditChecks, setHint } from '../tracker/Slice';
+import { setHint } from '../tracker/Slice';
 import { useSelector } from 'react-redux';
-import {
-    areasSelector,
-    checkSelector,
-    settingSelector,
-} from '../tracker/Selectors';
+import { settingSelector } from '../tracker/Selectors';
 import type { TrackerLinkedEntrancePool } from '../logic/Logic';
-import { type ThunkResult, useAppDispatch } from '../store/Store';
+import { useAppDispatch } from '../store/Store';
 import hintItems from '../data/hintItems.json';
 import { HintIcon, HintItem } from './LocationContextMenu';
 import type { InterfaceAction } from '../tracker/TrackerInterfaceReducer';
 import type { ExitMapping } from '../logic/Locations';
 import { bosses, pathImages } from '../hints/Hints';
+import { checkOrUncheckAll } from '../tracker/Actions';
 
 export interface LocationGroupContextMenuProps {
     area: string;
@@ -41,24 +38,6 @@ interface ItemData {
 
 interface BossData {
     boss: number;
-}
-
-function checkOrUncheckAll(area: string, markChecked: boolean, onlyInLogic = false): ThunkResult {
-    return (dispatch, getState) => {
-        let checks = areasSelector(getState()).find(
-            (a) => a.name === area,
-        )?.checks.list;
-
-        if (onlyInLogic) {
-            checks = checks?.filter(
-                (c) => checkSelector(c)(getState()).logicalState === 'inLogic',
-            );
-        }
-
-        if (checks?.length) {
-            dispatch(bulkEditChecks({ checks, markChecked }));
-        }
-    };
 }
 
 function useGroupContextMenuHandlers() {
