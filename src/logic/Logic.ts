@@ -28,6 +28,7 @@ import { LogicBuilder } from './LogicBuilder';
 import { isEmpty, mapValues } from '../utils/Collections';
 import { groupBy, last } from 'es-toolkit';
 import { chainComparators, compareBy } from '../utils/Compare';
+import { itemName } from './Inventory';
 
 export interface Logic {
     numRequirements: number;
@@ -241,10 +242,6 @@ function splitItemIndex(item: string): [item: string, index: number | undefined]
     } else {
         return [match[1], parseInt(match[2], 10)];
     }
-}
-
-export function itemName(item: string, amount: number) {
-    return amount > 1 ? `${item} x ${amount}` : item;
 }
 
 const excludedItemPrefixes = [

@@ -1,5 +1,4 @@
 import type { Logic } from '../logic/Logic';
-import { getTooltipOpaqueBits } from '../logic/Inventory';
 import BooleanExpression from '../logic/booleanlogic/BooleanExpression';
 import type {
     BitLogic,
@@ -8,6 +7,7 @@ import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
 import type { WorkerRequest, WorkerResponse } from './worker/Types';
 import { deserializeBooleanExpression, serializeLogicalExpression } from './worker/Utils';
 import { pick } from 'es-toolkit';
+import { getTooltipOpaqueBits } from '../logic/TrackerModifications';
 
 /**
  * The TooltipComputer acts as:

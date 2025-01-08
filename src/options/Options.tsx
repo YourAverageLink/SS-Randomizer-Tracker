@@ -1,10 +1,11 @@
 import type {
     AllTypedOptions,
+    Option,
     OptionDefs,
     OptionValue,
     OptionsCommand,
 } from '../permalink/SettingsTypes';
-import {
+import React, {
     useCallback,
     useEffect,
     useImperativeHandle,
@@ -13,7 +14,6 @@ import {
     useState,
 } from 'react';
 import { decodePermalink, encodePermalink } from '../permalink/Settings';
-import type { Option } from '../permalink/SettingsTypes';
 import {
     LATEST_STRING,
     type RemoteReference,
@@ -28,7 +28,6 @@ import { type LogicBundle, loadLogic } from '../logic/Slice';
 import Select, { type MultiValue, type ActionMeta, type SingleValue } from 'react-select';
 import { selectStyles } from '../customization/ComponentStyles';
 import DiscordButton from '../additionalComponents/DiscordButton';
-import React from 'react';
 import { ImportButton } from '../ImportExport';
 import Tooltip from '../additionalComponents/Tooltip';
 import { type LoadingState, type OptionsAction, useOptionsState } from './OptionsReducer';

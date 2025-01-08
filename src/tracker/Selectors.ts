@@ -4,49 +4,32 @@ import {
     logicSelector,
     optionsSelector,
 } from '../logic/Selectors';
-import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
+import type { TypedOptions } from '../permalink/SettingsTypes';
 import type { RootState } from '../store/Store';
 import { currySelector } from '../utils/Redux';
 import {
-    completeTriforceReq,
     doesHintDistroUseGossipStone,
-    gotOpeningReq,
-    gotRaisingReq,
-    hordeDoorReq,
-    impaSongCheck,
-    runtimeOptions,
-    swordsToAdd,
 } from '../logic/ThingsThatWouldBeNiceToHaveInTheDump';
 import {
     type HintRegion,
     type Check,
     type DungeonName,
-    type ExitMapping,
     dungeonNames,
     isDungeon,
     type LogicalState,
     type CheckGroup,
 } from '../logic/Locations';
-import { type Logic, type LogicalCheck, itemName } from '../logic/Logic';
+import type { LogicalCheck } from '../logic/Logic';
 import {
-    cubeCheckToCubeCollected,
     cubeCheckToGoddessChestCheck,
     dungeonCompletionItems,
     goddessChestCheckToCubeCheck,
-    sothItemReplacement,
-    sothItems,
-    triforceItemReplacement,
-    triforceItems,
 } from '../logic/TrackerModifications';
-import { LogicalExpression } from '../logic/bitlogic/LogicalExpression';
-import { TimeOfDay } from '../logic/UpstreamTypes';
 import {
-    type Requirements,
     computeLeastFixedPoint,
     mergeRequirements,
 } from '../logic/bitlogic/BitLogic';
 import { validateSettings } from '../permalink/Settings';
-import { LogicBuilder } from '../logic/LogicBuilder';
 import { exploreAreaGraph } from '../logic/Pathfinding';
 import { keyData } from '../logic/KeyLogic';
 import { BitVector } from '../logic/bitlogic/BitVector';
@@ -71,6 +54,8 @@ import { stubTrue } from '../utils/Function';
 import { emptyArray, mapValues } from '../utils/Collections';
 import { compact, groupBy, isEqual, keyBy, partition, sumBy } from 'es-toolkit';
 import { parseHintsText } from '../hints/HintsParser';
+import { mapInventory, mapSettings } from '../logic/Mappers';
+import { getAdditionalItems, getNumLooseGratitudeCrystals } from '../logic/Misc';
 
 const bitVectorMemoizeOptions = {
     memoizeOptions: {
@@ -185,48 +170,6 @@ const checkedChecksSelector = createSelector(
     (checkedChecks) => new Set(checkedChecks),
 );
 
-function getNumLooseGratitudeCrystals(
-    logic: Logic,
-    checkedChecks: Set<string>,
-) {
-    return [...checkedChecks].filter(
-        (check) => logic.checks[check]?.type === 'loose_crystal',
-    ).length;
-}
-
-export function getAdditionalItems(
-    logic: Logic,
-    inventory: Record<InventoryItem, number>,
-    checkedChecks: Set<string>,
-) {
-    const result: Record<string, number> = {};
-    // Completed dungeons
-    for (const [dungeon, completionCheck] of Object.entries(
-        logic.dungeonCompletionRequirements,
-    )) {
-        if (checkedChecks.has(completionCheck)) {
-            result[dungeonCompletionItems[dungeon]] = 1;
-        }
-    }
-
-    if (inventory['Triforce'] === 3) {
-        result[dungeonCompletionItems['Sky Keep']] = 1;
-    }
-
-    // If this is a goddess cube check, mark the requirement as checked
-    // since this is the requirement used by the goddess chests.
-    for (const check of checkedChecks) {
-        const cubeCollectedItem = cubeCheckToCubeCollected[check];
-        if (cubeCollectedItem) {
-            result[cubeCollectedItem] = 1;
-        }
-    }
-
-    const looseCrystals = getNumLooseGratitudeCrystals(logic, checkedChecks);
-    result['Gratitude Crystal'] = looseCrystals;
-    return result;
-}
-
 const checkItemsSelector = createSelector(
     [logicSelector, inventorySelector, checkedChecksSelector],
     getAdditionalItems,
@@ -338,159 +281,10 @@ export const settingsRequirementsSelector = createSelector(
     mapSettings,
 );
 
-function mapSettings(
-    logic: Logic,
-    options: OptionDefs,
-    settings: TypedOptions,
-    exits: ExitMapping[],
-    requiredDungeons: string[],
-) {
-    const requirements: Requirements = {};
-    const b = new LogicBuilder(logic.allItems, logic.itemLookup, requirements);
-
-    for (const option of runtimeOptions) {
-        const [item, command, expect] = option;
-        const val = settings[command];
-        const match =
-            val !== undefined &&
-            (typeof expect === 'function' ? expect(val) : expect === val);
-        if (match) {
-            console.log('setting', item);
-            b.set(item, b.true());
-        }
-    }
-
-    // https://github.com/NindyBK/ssrnppbuild/pull/1
-    if (logic.itemBits['Lanayru Mining Facility Unrequired'] !== undefined) {
-        for (const dungeon of dungeonNames) {
-            if (!requiredDungeons.includes(dungeon)) {
-                b.trySet(`${dungeon} Unrequired`, b.true());
-            } else {
-                b.trySet(`${dungeon} Required`, b.true());
-            }
-        }
-    }
-
-    for (const option of options) {
-        if (
-            option.type === 'multichoice' &&
-            (option.command === 'enabled-tricks-glitched' ||
-                option.command === 'enabled-tricks-bitless')
-        ) {
-            const vals = settings[option.command];
-            for (const option of vals) {
-                b.set(`${option} Trick`, b.true());
-            }
-        }
-    }
-
-    const raiseGotExpr =
-        settings['got-start'] === 'Raised'
-            ? b.true()
-            : b.singleBit(impaSongCheck);
-    const neededSwords = swordsToAdd[settings['got-sword-requirement']];
-    let openGotExpr = b.singleBit(`Progressive Sword x ${neededSwords}`);
-    let hordeDoorExpr = settings['triforce-required']
-        ? b.singleBit(completeTriforceReq)
-        : b.true();
-
-    const allRequiredDungeonsBits = requiredDungeons.reduce((acc, dungeon) => {
-        if (dungeon !== 'Sky Keep') {
-            acc.setBit(logic.itemBits[dungeonCompletionItems[dungeon]]);
-        }
-        return acc;
-    }, new BitVector());
-    const dungeonsExpr = new LogicalExpression([allRequiredDungeonsBits]);
-
-    if (settings['got-dungeon-requirement'] === 'Required') {
-        openGotExpr = openGotExpr.and(dungeonsExpr);
-    } else if (settings['got-dungeon-requirement'] === 'Unrequired') {
-        hordeDoorExpr = hordeDoorExpr.and(dungeonsExpr);
-    }
-
-    b.set(gotOpeningReq, openGotExpr);
-    b.set(gotRaisingReq, raiseGotExpr);
-    b.set(hordeDoorReq, hordeDoorExpr);
-
-    const mapConnection = (from: string, to: string) => {
-        const exitArea = logic.areaGraph.areasByExit[from];
-        const exitExpr = b.singleBit(from);
-
-        let dayReq: LogicalExpression;
-        let nightReq: LogicalExpression;
-
-        if (exitArea.availability === 'abstract') {
-            dayReq = exitExpr;
-            nightReq = exitExpr;
-        } else if (exitArea.availability === TimeOfDay.Both) {
-            dayReq = exitExpr.and(b.singleBit(b.day(exitArea.id)));
-            nightReq = exitExpr.and(b.singleBit(b.night(exitArea.id)));
-        } else if (exitArea.availability === TimeOfDay.DayOnly) {
-            dayReq = exitExpr;
-            nightReq = b.false();
-        } else if (exitArea.availability === TimeOfDay.NightOnly) {
-            dayReq = b.false();
-            nightReq = exitExpr;
-        } else {
-            throw new Error('bad ToD');
-        }
-
-        const entranceDef = logic.areaGraph.entrances[to];
-        if (entranceDef.allowed_time_of_day === TimeOfDay.Both) {
-            b.addAlternative(b.day(to), dayReq);
-            b.addAlternative(b.night(to), nightReq);
-        } else if (entranceDef.allowed_time_of_day === TimeOfDay.DayOnly) {
-            b.addAlternative(to, dayReq);
-        } else if (entranceDef.allowed_time_of_day === TimeOfDay.NightOnly) {
-            b.addAlternative(to, nightReq);
-        } else {
-            throw new Error('bad ToD');
-        }
-    };
-
-    for (const mapping of exits) {
-        if (mapping.entrance) {
-            mapConnection(mapping.exit.id, mapping.entrance.id);
-        }
-    }
-
-    return requirements;
-}
-
 const inventoryRequirementsSelector = createSelector(
     [logicSelector, inventorySelector],
     mapInventory,
 );
-
-export function mapInventory(logic: Logic, itemCounts: Record<string, number>) {
-    const requirements: Requirements = {};
-    const b = new LogicBuilder(logic.allItems, logic.itemLookup, requirements);
-
-    for (const [item, count] of Object.entries(itemCounts)) {
-        if (
-            count === undefined ||
-            item === 'Sailcloth' ||
-            item === 'Tumbleweed'
-        ) {
-            continue;
-        }
-        if (item === sothItemReplacement) {
-            for (let i = 1; i <= count; i++) {
-                b.set(sothItems[i - 1], b.true());
-            }
-        } else if (item === triforceItemReplacement) {
-            for (let i = 1; i <= count; i++) {
-                b.set(triforceItems[i - 1], b.true());
-            }
-        } else {
-            for (let i = 1; i <= count; i++) {
-                b.set(itemName(item, i), b.true());
-            }
-        }
-    }
-
-    return requirements;
-}
 
 const checkRequirementsSelector = createSelector(
     [logicSelector, checkItemsSelector],
