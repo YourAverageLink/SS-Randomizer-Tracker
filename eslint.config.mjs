@@ -207,13 +207,6 @@ export default tseslint.config(
         },
     },
     {
-        name: 'setupTests',
-        files: ['**/setupTests.js'],
-        rules: {
-            'import/no-unresolved': 'off',
-        },
-    },
-    {
         name: 'tests',
         files: ['**/*.test.ts'],
         rules: {
