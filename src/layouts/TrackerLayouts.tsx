@@ -125,7 +125,7 @@ export function TrackerLayout({
                     >
                         <BasicCounters />
                         <DungeonTracker interfaceDispatch={interfaceDispatch} />
-                        <div style={{ height: '100%', maxHeight: 450 }}>
+                        <div style={{ flex: '1', maxHeight: 450 }}>
                             <HintsTracker />
                         </div>
                     </div>

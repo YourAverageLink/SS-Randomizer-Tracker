@@ -2,7 +2,7 @@ import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
 import { mapInventory, getAdditionalItems } from '../tracker/Selectors';
 import { type InventoryItem, isItem, itemMaxes } from './Inventory';
 import { type PotentialLocations, getSemiLogicKeys } from './KeyLogic';
-import type { Logic } from './Logic';
+import { isRegularItemCheck, type Logic } from './Logic';
 import { LogicBuilder } from './LogicBuilder';
 import { cubeCheckToCubeCollected } from './TrackerModifications';
 import { type Requirements, computeLeastFixedPoint, mergeRequirements } from './bitlogic/BitLogic';
@@ -150,6 +150,7 @@ function semiLogicStep(
 
             const hintedItem = checkHints[checkId];
             if (
+                isRegularItemCheck(logic.checks[checkId].type) &&
                 hintedItem !== undefined &&
                 isItem(hintedItem) &&
                 !state.assumedChecks.has(checkId)

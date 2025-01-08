@@ -29,3 +29,6 @@ export const hasCustomLayoutSelector = (state: RootState) =>
 
 export const customLayoutSelector = (state: RootState) =>
     state.customization.customLayout!;
+
+export const itemLocationAssignmentEnabledSelector = (state: RootState) =>
+    state.customization.itemLocationAssignment;

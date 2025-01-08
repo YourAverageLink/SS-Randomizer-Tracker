@@ -34,7 +34,8 @@ export interface TrackerState {
      */
     hints: Record<string, Hint[] | undefined>;
     /**
-     * Hints by check name
+     * Hints by check name. The referenced item might be an InventoryItem
+     * or a dummy item (for various junk items), use `isItem` to check.
      */
     checkHints: Record<string, string | undefined>;
     /**
@@ -45,6 +46,10 @@ export interface TrackerState {
      * A plaintext text area for the user to track hints.
      */
     userHintsText: string;
+    /**
+     * The last tracked location, for auto item-at-location tracking.
+     */
+    lastCheckedLocation: string | undefined;
 }
 
 const initialState: TrackerState = {
@@ -57,6 +62,7 @@ const initialState: TrackerState = {
     checkHints: {},
     settings: {},
     userHintsText: "",
+    lastCheckedLocation: undefined,
 };
 
 export function preloadedTrackerState(): TrackerState {
@@ -89,19 +95,36 @@ const trackerSlice = createSlice({
             }
             state.hasBeenModified = true;
             state.inventory[item] = newCount;
+
+            if (state.lastCheckedLocation) {
+                if (newCount > count) {
+                    state.checkHints[state.lastCheckedLocation] = item;
+                } else if (
+                    newCount < count &&
+                    state.checkHints[state.lastCheckedLocation] === item
+                ) {
+                    delete state.checkHints[state.lastCheckedLocation];
+                }
+            }
         },
-        clickCheck: (
+        clickCheckInternal: (
             state,
-            action: PayloadAction<{ checkId: string; markChecked?: boolean }>,
+            action: PayloadAction<{ checkId: string; canMarkForItemAssignment: boolean; markChecked?: boolean }>,
         ) => {
-            const { checkId } = action.payload;
+            const { checkId, canMarkForItemAssignment } = action.payload;
             const add = action.payload.markChecked ?? !state.checkedChecks.includes(checkId);
             if (add) {
                 state.checkedChecks.push(checkId);
+                if (canMarkForItemAssignment) {
+                    state.lastCheckedLocation = checkId;
+                }
             } else {
                 state.checkedChecks = state.checkedChecks.filter(
                     (c) => c !== checkId,
                 );
+                if (state.lastCheckedLocation === checkId) {
+                    state.lastCheckedLocation = undefined;
+                }
             }
             state.hasBeenModified = true;
         },
@@ -182,6 +205,11 @@ const trackerSlice = createSlice({
             state.userHintsText = action.payload;
             state.hasBeenModified ||= action.payload !== '';
         },
+        cancelItemAssignment: (
+            state,
+        ) => {
+            state.lastCheckedLocation = undefined;
+        },
         acceptSettings: (
             state,
             action: PayloadAction<{ settings: AllTypedOptions }>,
@@ -209,6 +237,6 @@ const trackerSlice = createSlice({
     },
 });
 
-export const { clickItem, clickCheck, setItemCounts, clickDungeonName, bulkEditChecks, mapEntrance, acceptSettings, setCheckHint, reset, setHint, setHintsText, loadTracker } = trackerSlice.actions;
+export const { clickItem, clickCheckInternal, setItemCounts, clickDungeonName, bulkEditChecks, mapEntrance, cancelItemAssignment, acceptSettings, setCheckHint, reset, setHint, setHintsText, loadTracker } = trackerSlice.actions;
 
 export default trackerSlice.reducer;

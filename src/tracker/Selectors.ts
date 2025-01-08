@@ -96,7 +96,7 @@ const parsedHintsSelector = createSelector(
 /**
  * A map from hint region to all tracked and parsed region hints.
  */
-export const allAreaHintsSelector = createSelector(
+const allAreaHintsSelector = createSelector(
     [
         logicSelector,
         parsedHintsSelector,
@@ -143,7 +143,8 @@ export const allSettingsSelector = createSelector(
 );
 
 /**
- * Selects the current logical settings.
+ * Selects the current logical settings. This is basically the same
+ * thing but differently typed to only provide the subset of logically relevant settings.
  */
 export const settingsSelector: (state: RootState) => TypedOptions =
     allSettingsSelector;
@@ -160,11 +161,11 @@ export const settingSelector: <K extends keyof TypedOptions>(
     ): TypedOptions[K] => settingsSelector(state)[setting],
 );
 
-export const rawItemCountsSelector = (state: RootState) =>
+const rawItemCountsSelector = (state: RootState) =>
     state.tracker.inventory;
 
 /** A map of all actual items to their counts. Since redux only stores partial counts, this ensures all items are present. */
-export const inventorySelector = createSelector(
+const inventorySelector = createSelector(
     [rawItemCountsSelector],
     (rawInventory) =>
         mapValues(
@@ -179,7 +180,7 @@ export const rawItemCountSelector = currySelector(
         inventorySelector(state)[item] ?? 0,
 );
 
-export const checkedChecksSelector = createSelector(
+const checkedChecksSelector = createSelector(
     [(state: RootState) => state.tracker.checkedChecks],
     (checkedChecks) => new Set(checkedChecks),
 );
@@ -226,7 +227,7 @@ export function getAdditionalItems(
     return result;
 }
 
-export const checkItemsSelector = createSelector(
+const checkItemsSelector = createSelector(
     [logicSelector, inventorySelector, checkedChecksSelector],
     getAdditionalItems,
     { memoizeOptions: { resultEqualityCheck: isEqual } },
@@ -247,7 +248,7 @@ export const totalGratitudeCrystalsSelector = createSelector(
     },
 );
 
-export const allowedStartingEntrancesSelector = createSelector(
+const allowedStartingEntrancesSelector = createSelector(
     [logicSelector, settingSelector('random-start-entrance')],
     getAllowedStartingEntrances,
 );
@@ -297,7 +298,7 @@ export const entrancePoolsSelector = createSelector(
 const mappedExitsSelector = (state: RootState) => state.tracker.mappedExits;
 
 /** Defines how exits should be resolved. */
-export const exitRulesSelector = createSelector(
+const exitRulesSelector = createSelector(
     [
         logicSelector,
         settingSelector('random-start-entrance'),
@@ -456,7 +457,7 @@ function mapSettings(
     return requirements;
 }
 
-export const inventoryRequirementsSelector = createSelector(
+const inventoryRequirementsSelector = createSelector(
     [logicSelector, inventorySelector],
     mapInventory,
 );
@@ -491,7 +492,7 @@ export function mapInventory(logic: Logic, itemCounts: Record<string, number>) {
     return requirements;
 }
 
-export const checkRequirementsSelector = createSelector(
+const checkRequirementsSelector = createSelector(
     [logicSelector, checkItemsSelector],
     mapInventory,
 );
@@ -527,7 +528,7 @@ const optimisticInventoryItemRequirementsSelector = createSelector(
  * Useful for checking if something is out of logic because of missing
  * items or generally unreachable because of missing entrances.
  */
-export const optimisticLogicBitsSelector = createSelector(
+const optimisticLogicBitsSelector = createSelector(
     [
         logicSelector,
         settingsRequirementsSelector,
@@ -557,7 +558,7 @@ export const optimisticLogicBitsSelector = createSelector(
     bitVectorMemoizeOptions,
 );
 
-export const skyKeepNonprogressSelector = createSelector(
+const skyKeepNonprogressSelector = createSelector(
     [settingsSelector],
     (settings) =>
         settings['empty-unrequired-dungeons'] === true &&
@@ -565,7 +566,7 @@ export const skyKeepNonprogressSelector = createSelector(
             settings['triforce-shuffle'] === 'Anywhere'),
 );
 
-export const areaNonprogressSelector = createSelector(
+const areaNonprogressSelector = createSelector(
     [
         skyKeepNonprogressSelector,
         settingSelector('empty-unrequired-dungeons'),
@@ -581,7 +582,7 @@ export const areaNonprogressSelector = createSelector(
     },
 );
 
-export const areaHiddenSelector = createSelector(
+const areaHiddenSelector = createSelector(
     [
         areaNonprogressSelector,
         settingSelector('randomize-entrances'),
@@ -712,35 +713,18 @@ const visibleTricksRequirementsSelector = createSelector(
     getVisibleTricksEnabledRequirements,
 );
 
-export const inTrickLogicBitsSelector = createSelector(
-    [
-        logicSelector,
-        inLogicBitsSelector,
-        settingsRequirementsSelector,
-        inventoryRequirementsSelector,
-        checkRequirementsSelector,
-        visibleTricksRequirementsSelector,
-    ],
-    (
-        logic,
-        inLogicBits,
-        settingsRequirements,
-        inventoryRequirements,
-        checkRequirements,
-        allTricksRequirements,
-    ) =>
-        computeLeastFixedPoint(
-            'TrickLogic state',
-            mergeRequirements(
-                logic.numRequirements,
-                logic.staticRequirements,
-                settingsRequirements,
-                inventoryRequirements,
-                checkRequirements,
-                allTricksRequirements,
-            ),
-            inLogicBits,
-        ),
+export const locationsForItemSelector = currySelector(
+    createSelector(
+        [
+            checkHintsSelector,
+            logicSelector,
+            (_state: RootState, item: InventoryItem) => item,
+        ],
+        (checkHints, logic, item) =>
+            Object.entries(checkHints)
+                .filter(([, itemHint]) => itemHint === item)
+                .map(([location, _]) => logic.checks[location].name),
+    ),
 );
 
 const semiLogicBitsSelector = createSelector(
@@ -825,9 +809,10 @@ export const checkSelector = currySelector(
                     type: 'exit',
                     logicalState,
                 };
-            } else {
+            } else if (checkId !== '') {
                 throw new Error('unknown check ' + checkId);
             }
+            return undefined as unknown as Check;
         },
     ),
 );

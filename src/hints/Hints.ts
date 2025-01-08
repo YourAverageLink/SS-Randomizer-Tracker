@@ -8,8 +8,7 @@ import koloktos from '../assets/hints/koloktos.png';
 import tentalus from '../assets/hints/tentalus.png';
 import g2 from '../assets/hints/g2.png';
 import type { ColorScheme } from '../customization/ColorScheme';
-import images from '../itemTracker/Images';
-import placeholderImg from '../assets/slot test.png';
+import { findRepresentativeIcon } from '../itemTracker/Images';
 
 export type Hint =
     | { type: 'barren' }
@@ -56,7 +55,7 @@ export function decodeHint(hint: Hint): DecodedHint {
         case 'item':
             return {
                 description: hint.item,
-                image: images[hint.item]?.[images[hint.item].length - 1] || placeholderImg,
+                image: findRepresentativeIcon(hint.item),
                 style: 'inLogic',
             };
     }

@@ -2,7 +2,7 @@ export type Op = 'and' | 'or';
 
 export type Item = BooleanExpression | string;
 
-export class BooleanExpression {
+class BooleanExpression {
     type: Op;
     items: Item[];
 

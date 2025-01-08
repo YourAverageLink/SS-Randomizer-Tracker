@@ -2,8 +2,7 @@ import keyDownWrapper from '../utils/KeyDownWrapper';
 import { useContextMenu } from './context-menu';
 import { type CSSProperties, useCallback } from 'react';
 import type { TriggerEvent } from 'react-contexify';
-import images from '../itemTracker/Images';
-import placeholderImg from '../assets/slot test.png';
+import images, { findRepresentativeIcon } from '../itemTracker/Images';
 import goddessCubeImg from '../assets/sidequests/goddess_cube.png';
 import gossipStoneImg from '../assets/sidequests/gossip_stone.png';
 import exitImg from '../assets/dungeons/entrance.png';
@@ -11,12 +10,13 @@ import { useEntrancePath, useTooltipExpr } from '../tooltips/TooltipHooks';
 import RequirementsTooltip from './RequirementsTooltip';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkHintSelector, checkSelector, exitsByIdSelector, isCheckBannedSelector } from '../tracker/Selectors';
-import { clickCheck, mapEntrance } from '../tracker/Slice';
+import { clickCheck } from '../tracker/Actions';
+import { mapEntrance } from '../tracker/Slice';
 import PathTooltip from './PathTooltip';
 import Tooltip from '../additionalComponents/Tooltip';
 import clsx from 'clsx';
 import styles from './Location.module.css';
-import type { RootState } from '../store/Store';
+import { useAppDispatch, type RootState } from '../store/Store';
 import type { Check } from '../logic/Locations';
 
 export interface LocationContextMenuProps {
@@ -43,7 +43,7 @@ function CheckLocation({
 }: {
     id: string;
 }) {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const isBanned = useSelector((state: RootState) => isCheckBannedSelector(state)(id));
 
     const check = useSelector(checkSelector(id));
@@ -120,7 +120,7 @@ function CheckIcon({check}: {check: Check}) {
             ];
     } else if (hintItem) {
         name = hintItem;
-        src = images[hintItem]?.[images[hintItem].length - 1] ?? placeholderImg;
+        src = findRepresentativeIcon(hintItem);
     }
     
     if (src && name) {
@@ -132,7 +132,7 @@ function CheckIcon({check}: {check: Check}) {
     }
 }
 
-export function Exit({
+function Exit({
     id,
     onChooseEntrance,
     // setActiveArea,

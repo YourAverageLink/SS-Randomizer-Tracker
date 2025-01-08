@@ -3,10 +3,10 @@ import { Menu, Item, Separator, Submenu, type ItemParams } from 'react-contexify
 
 import hintItems from '../data/hintItems.json';
 import type { LocationContextMenuProps } from './Location';
-import { useDispatch } from 'react-redux';
-import { clickCheck, setCheckHint } from '../tracker/Slice';
-import images from '../itemTracker/Images';
-import { last } from 'es-toolkit';
+import { clickCheck } from '../tracker/Actions';
+import { setCheckHint } from '../tracker/Slice';
+import { findRepresentativeIcon } from '../itemTracker/Images';
+import { useAppDispatch } from '../store/Store';
 
 type CtxProps<T = void> = ItemParams<LocationContextMenuProps, T>;
 interface ItemData {
@@ -14,7 +14,7 @@ interface ItemData {
 }
 
 export default function LocationContextMenu() {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const handleCheckClick = useCallback(
         (params: CtxProps) =>
@@ -77,12 +77,16 @@ export default function LocationContextMenu() {
     );
 }
 
-export function HintItem({ itemName }: { itemName: string }) {
-    const image = last(images[itemName]);
+export function HintIcon({ src, alt }: { src: string; alt: string; }) {
     return (<span style={{ display: 'flex', flexFlow: 'row nowrap' }}>
         <div style={{ width: '36px', height: '36px', paddingRight: '6px' }}>
-            <img style={{ width: '100%', height: '100%', objectFit: 'contain' }} src={image} alt={itemName} />
+            <img style={{ width: '100%', height: '100%', objectFit: 'contain' }} src={src} alt={alt} />
         </div>
-        {itemName}
+        {alt}
     </span>);
+}
+
+export function HintItem({ itemName }: { itemName: string }) {
+    const image = findRepresentativeIcon(itemName);
+    return <HintIcon src={image} alt={itemName} />
 }

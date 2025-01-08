@@ -1,16 +1,20 @@
 import allImages from './Images';
 import type { InventoryItem } from '../logic/Inventory';
 import { useDispatch, useSelector } from 'react-redux';
-import { rawItemCountSelector } from '../tracker/Selectors';
+import { locationsForItemSelector, rawItemCountSelector } from '../tracker/Selectors';
 import { clickItem } from '../tracker/Slice';
 import { BasicItem } from './BasicItem';
+import Tooltip from '../additionalComponents/Tooltip';
+import { addDividers } from '../utils/React';
+import type { CSSProperties } from 'react';
 
-export function Item({
+function Item({
     itemName,
     images,
     grid,
     imgWidth,
     className,
+    style,
     children,
 }: {
     images?: string[];
@@ -18,6 +22,7 @@ export function Item({
     imgWidth?: number | string;
     grid?: boolean;
     className?: string;
+    style?: CSSProperties,
     children?: React.ReactNode;
 }) {
     const dispatch = useDispatch();
@@ -38,17 +43,26 @@ export function Item({
         dispatch(clickItem({ item: itemName, take }));
     };
 
+    const relevantLocations = useSelector(locationsForItemSelector(itemName));
+
     return (
-        <BasicItem
-            className={className}
-            itemName={itemName}
-            images={itemImages}
-            count={count}
-            imgWidth={imgWidth}
-            onClick={handleClick}
+        <Tooltip
+            delay={500}
+            content={addDividers(['Found at:', ...relevantLocations], <br />)}
+            disabled={!relevantLocations.length}
         >
-            {children}
-        </BasicItem>
+            <BasicItem
+                style={style}
+                className={className}
+                itemName={itemName}
+                images={itemImages}
+                count={count}
+                imgWidth={imgWidth}
+                onClick={handleClick}
+            >
+                {children}
+            </BasicItem>
+        </Tooltip>
     );
 }
 

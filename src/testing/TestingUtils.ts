@@ -1,4 +1,4 @@
-import { type AppAction, type RootState, type Store, createStore } from '../store/Store';
+import { type AppAction, type RootState, type Store, type SyncThunkResult, createStore } from '../store/Store';
 import { getAndPatchLogic, type RemoteReference } from '../loader/LogicLoader';
 import type { AllTypedOptions } from '../permalink/SettingsTypes';
 
@@ -12,6 +12,7 @@ import {
     entrancePoolsSelector,
     exitsByIdSelector,
 } from '../tracker/Selectors';
+import { resetCustomizationForTest } from '../customization/Slice';
 
 const main: RemoteReference = {
     type: 'forkBranch',
@@ -53,6 +54,7 @@ export function createTestLogic() {
 
         beforeEach() {
             store.dispatch(reset({ settings: defaultSet }));
+            store.dispatch(resetCustomizationForTest());
         },
 
         /**
@@ -63,7 +65,7 @@ export function createTestLogic() {
             return selector(store.getState());
         },
 
-        dispatch(action: AppAction) {
+        dispatch(action: SyncThunkResult | AppAction) {
             return store.dispatch(action);
         },
 
@@ -71,6 +73,7 @@ export function createTestLogic() {
             const area = tester.findArea(areaName);
             return (
                 area.checks.list.find((c) => c.includes(checkName)) ??
+                area.extraLocations.loose_crystal?.list.find((c) => c.includes(checkName)) ??
                 area.extraLocations.tr_cube?.list.find((c) => c.includes(checkName)) ??
                 area.extraLocations.gossip_stone?.list.find((c) =>
                     c.includes(checkName),
