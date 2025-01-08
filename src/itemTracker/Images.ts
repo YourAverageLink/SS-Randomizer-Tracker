@@ -29,7 +29,6 @@ import noCrystal from '../assets/sidequests/no_crystal.png';
 import crystal from '../assets/sidequests/crystal.png';
 import noLetter from '../assets/sidequests/no_cawlins_letter.png';
 import letter from '../assets/sidequests/cawlins_letter.png';
-import cavesKey from '../assets/dungeons/1_smallKey.png';
 import noSeaChart from '../assets/no_sea_chart.png';
 import seaChart from '../assets/sea_chart.png';
 import noSpiralCharge from '../assets/no_bird_statuette.png';
@@ -217,7 +216,7 @@ const images: Images = {
     ],
     'Lanayru Caves Small Key': [
         noSmallKey,
-        cavesKey,
+        oneSmallKey,
     ],
     'Sea Chart': [
         noSeaChart,
@@ -495,7 +494,9 @@ const images: Images = {
         rupees,
     ],
     'Small Key': [
-        cavesKey,
+        // Legacy
+        noSmallKey,
+        oneSmallKey,
     ],
     'Skyview Small Key': [
         noSmallKey,

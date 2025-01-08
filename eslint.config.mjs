@@ -3,12 +3,14 @@ import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import sonarjs from 'eslint-plugin-sonarjs';
+import importPlugin from 'eslint-plugin-import';
 import { fixupPluginRules } from '@eslint/compat';
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
     { name: 'eslint/recommended', ...eslint.configs.recommended },
+    importPlugin.flatConfigs.recommended,
     reactPlugin.configs.flat['jsx-runtime'],
     {
         name: 'typescript-eslint/parser-options',
@@ -64,6 +66,7 @@ export default tseslint.config(
     },
     {
         name: 'ss-randomizer-tracker-custom',
+        files: ['**/*.{js,jsx,ts,tsx}'],
         rules: {
             'max-len': 0,
             'no-unused-vars': 'off',
@@ -96,10 +99,9 @@ export default tseslint.config(
                         },
                         {
                             name: 'es-toolkit',
-                            importNames: [
-                                'sortBy',
-                            ],
-                            message: 'Please use .sort with functions from utils/Compare',
+                            importNames: ['sortBy'],
+                            message:
+                                'Please use .sort with functions from utils/Compare',
                         },
                     ],
                 },
@@ -138,6 +140,11 @@ export default tseslint.config(
                 'chrome',
                 'caches',
                 'scheduler',
+            ],
+
+            'import/no-cycle': [
+                'error',
+                { ignoreExternal: true },
             ],
 
             'react/require-default-props': ['off'],
@@ -191,6 +198,19 @@ export default tseslint.config(
             'sonarjs/no-nested-assignment': 'off',
             'sonarjs/no-unused-expressions': 'off',
             'sonarjs/todo-tag': 'off',
+        },
+        settings: {
+            'import/resolver': {
+                ...importPlugin.configs.typescript.settings['import/resolver'],
+            },
+            'import/extensions': ['.js', '.jsx', '.ts', '.tsx']
+        },
+    },
+    {
+        name: 'setupTests',
+        files: ['**/setupTests.js'],
+        rules: {
+            'import/no-unresolved': 'off',
         },
     },
     {
