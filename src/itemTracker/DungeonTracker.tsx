@@ -8,11 +8,6 @@ import koloktos from '../assets/bosses/koloktos.png';
 import tentalus from '../assets/bosses/tentalus.png';
 import g2 from '../assets/bosses/g2.png';
 import dreadfuse from '../assets/bosses/dreadfuse.png';
-
-import noSmallKey from '../assets/dungeons/noSmallKey.png';
-import oneSmallKey from '../assets/dungeons/1_smallKey.png';
-import twoSmallKey from '../assets/dungeons/2_smallKey.png';
-import threeSmallKey from '../assets/dungeons/3_smallKey.png';
 import trialGate from '../assets/bosses/trialGate.png';
 import faronTrialGate from '../assets/bosses/faronTrialGate.png';
 import lanayruTrialGate from '../assets/bosses/lanayruTrialGate.png';
@@ -54,8 +49,6 @@ const dungeonIcons: Record<string, string> = {
     "Sky Keep": dreadfuse,
 } satisfies Record<DungeonNameType, string>;
 
-const smallKeyImages = [noSmallKey, oneSmallKey, twoSmallKey, threeSmallKey];
-
 export default function DungeonTracker({
     interfaceDispatch,
     compact,
@@ -90,41 +83,35 @@ export default function DungeonTracker({
                     const isSmallKeyHidden =
                         d.name === 'Earth Temple' && hideEtKeyPieces;
                     return (
-                    <React.Fragment key={d.name}>
-                        {!isSmallKeyHidden && (
-                            <div className={styles.keyItem}>
+                        <React.Fragment key={d.name}>
+                            {!isSmallKeyHidden && (
                                 <Item
+                                    className={styles.keyItem}
                                     itemName={
                                         d.name !== 'Earth Temple'
                                             ? `${d.name} Small Key`
                                             : 'Key Piece'
                                     }
-                                    images={
-                                        d.name !== 'Earth Temple'
-                                            ? smallKeyImages
-                                            : undefined
-                                    }
                                 />
-                            </div>
-                        )}
-                        <div
-                            style={
-                                isSmallKeyHidden
-                                    ? colspan2(index * 2)
-                                    : undefined
-                            }
-                            className={clsx(styles.keyItem, {[styles.wide]: isSmallKeyHidden})}
-                        >
+                            )}
                             <Item
+                                style={
+                                    isSmallKeyHidden
+                                        ? colspan2(index * 2)
+                                        : undefined
+                                }
+                                className={clsx(styles.keyItem, {
+                                    [styles.wide]: isSmallKeyHidden,
+                                })}
                                 itemName={
                                     d.name !== 'Sky Keep'
                                         ? `${d.name} Boss Key`
                                         : 'Stone of Trials'
                                 }
                             />
-                        </div>
-                    </React.Fragment>
-                ); })}
+                        </React.Fragment>
+                    );
+                })}
                 {dungeons.map((d, index) => (
                     <div style={colspan2(index * 2)} key={d.name}>
                         <DungeonName

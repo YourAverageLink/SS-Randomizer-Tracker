@@ -139,8 +139,21 @@ import rareTreasure from '../assets/junk/rareTreasure.png';
 import semiRareTreasure from '../assets/junk/semiRareTreasure.png';
 import rupees from '../assets/junk/rupees.png';
 import oneSmallKey from '../assets/dungeons/1_smallKey.png';
+import twoSmallKey from '../assets/dungeons/2_smallKey.png';
+import threeSmallKey from '../assets/dungeons/3_smallKey.png';
+import placeholderImg from '../assets/slot test.png';
+
+import { last } from 'es-toolkit';
 
 export type Images = Record<string, string[]>;
+
+export function findRepresentativeIcon(item: string) {
+    if (item === 'Song of the Hero') {
+        return sothGrid;
+    }
+    const list = images[item];
+    return (list && (list[1] ?? last(list))) ?? placeholderImg;
+}
 
 const images: Images = {
     'Progressive Beetle': [
@@ -487,10 +500,7 @@ const images: Images = {
     'Skyview Small Key': [
         noSmallKey,
         oneSmallKey,
-    ],
-    'Earth Temple Small Key': [
-        noSmallKey,
-        oneSmallKey,
+        twoSmallKey,
     ],
     'Lanayru Mining Facility Small Key': [
         noSmallKey,
@@ -499,14 +509,18 @@ const images: Images = {
     'Ancient Cistern Small Key': [
         noSmallKey,
         oneSmallKey,
+        twoSmallKey,
     ],
     'Sandship Small Key': [
         noSmallKey,
         oneSmallKey,
+        twoSmallKey,
     ],
     'Fire Sanctuary Small Key': [
         noSmallKey,
         oneSmallKey,
+        twoSmallKey,
+        threeSmallKey,
     ],
     'Sky Keep Small Key': [
         noSmallKey,

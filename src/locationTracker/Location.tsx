@@ -2,8 +2,7 @@ import keyDownWrapper from '../utils/KeyDownWrapper';
 import { useContextMenu } from './context-menu';
 import { type CSSProperties, useCallback } from 'react';
 import type { TriggerEvent } from 'react-contexify';
-import images from '../itemTracker/Images';
-import placeholderImg from '../assets/slot test.png';
+import images, { findRepresentativeIcon } from '../itemTracker/Images';
 import goddessCubeImg from '../assets/sidequests/goddess_cube.png';
 import gossipStoneImg from '../assets/sidequests/gossip_stone.png';
 import exitImg from '../assets/dungeons/entrance.png';
@@ -121,7 +120,7 @@ function CheckIcon({check}: {check: Check}) {
             ];
     } else if (hintItem) {
         name = hintItem;
-        src = images[hintItem]?.[images[hintItem].length - 1] ?? placeholderImg;
+        src = findRepresentativeIcon(hintItem);
     }
     
     if (src && name) {

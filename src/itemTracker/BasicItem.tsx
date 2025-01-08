@@ -16,6 +16,8 @@ export function BasicItem({
     count,
     onClick,
     children,
+    style,
+    ...restProps
 }: {
     /** A human-readable accessibility name */
     itemName: string;
@@ -29,8 +31,8 @@ export function BasicItem({
     count: number;
     /** Click callback for the main item */
     onClick: (take: boolean) => void;
-    children?: React.ReactNode,
-}) {
+    children?: React.ReactNode;
+} & Omit<React.HTMLProps<HTMLDivElement>, 'onClick'>) {
     const handleClick = (e: React.UIEvent) => {
         if (e.type === 'contextmenu') {
             onClick(true);
@@ -48,7 +50,8 @@ export function BasicItem({
             onKeyDown={keyDownWrapper(handleClick)}
             role="button"
             tabIndex={0}
-            style={{ width: imgWidth }}
+            style={{ width: imgWidth, ...style }}
+            {...restProps}
         >
             <img src={images[count] ?? last(images)} alt={itemName} />
             {children}

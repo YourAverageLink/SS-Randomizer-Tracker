@@ -713,6 +713,20 @@ const visibleTricksRequirementsSelector = createSelector(
     getVisibleTricksEnabledRequirements,
 );
 
+export const locationsForItemSelector = currySelector(
+    createSelector(
+        [
+            checkHintsSelector,
+            logicSelector,
+            (_state: RootState, item: InventoryItem) => item,
+        ],
+        (checkHints, logic, item) =>
+            Object.entries(checkHints)
+                .filter(([, itemHint]) => itemHint === item)
+                .map(([location, _]) => logic.checks[location].name),
+    ),
+);
+
 const semiLogicBitsSelector = createSelector(
     [
         logicSelector,

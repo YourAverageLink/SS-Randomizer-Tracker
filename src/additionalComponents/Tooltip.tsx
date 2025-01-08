@@ -6,18 +6,20 @@ export default function Tooltip({
     children,
     placement,
     disabled,
+    delay = 0,
 }: {
     content: React.ReactNode;
     children: React.ReactElement;
     placement?: 'bottom' | 'top';
     disabled?: boolean;
+    delay?: number;
 }) {
     if (disabled) {
         return children;
     }
     return (
         // eslint-disable-next-line @eslint-react/no-context-provider
-        <RadixTooltip.Provider delayDuration={0} disableHoverableContent>
+        <RadixTooltip.Provider delayDuration={delay} disableHoverableContent>
             <RadixTooltip.Root>
                 <RadixTooltip.Trigger asChild>{children}</RadixTooltip.Trigger>
                 <RadixTooltip.Portal>

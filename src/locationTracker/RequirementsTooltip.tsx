@@ -26,6 +26,9 @@ function TopLevelExpr({
 }: {
     expr: RootTooltipExpression;
 }) {
+    if (expr.items.length <= 1) {
+        return <Expr expr={expr.items[0]} parentOp={undefined} />;
+    }
     return (
         <ul>
             {expr.items.map((item, idx) => (

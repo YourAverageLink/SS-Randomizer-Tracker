@@ -5,8 +5,7 @@ import hintItems from '../data/hintItems.json';
 import type { LocationContextMenuProps } from './Location';
 import { clickCheck } from '../tracker/Actions';
 import { setCheckHint } from '../tracker/Slice';
-import images from '../itemTracker/Images';
-import { last } from 'es-toolkit';
+import { findRepresentativeIcon } from '../itemTracker/Images';
 import { useAppDispatch } from '../store/Store';
 
 type CtxProps<T = void> = ItemParams<LocationContextMenuProps, T>;
@@ -88,6 +87,6 @@ export function HintIcon({ src, alt }: { src: string; alt: string; }) {
 }
 
 export function HintItem({ itemName }: { itemName: string }) {
-    const image = last(images[itemName])!;
+    const image = findRepresentativeIcon(itemName);
     return <HintIcon src={image} alt={itemName} />
 }

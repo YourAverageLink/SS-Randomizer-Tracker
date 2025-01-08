@@ -34,7 +34,8 @@ export interface TrackerState {
      */
     hints: Record<string, Hint[] | undefined>;
     /**
-     * Hints by check name
+     * Hints by check name. The referenced item might be an InventoryItem
+     * or a dummy item (for various junk items), use `isItem` to check.
      */
     checkHints: Record<string, string | undefined>;
     /**
