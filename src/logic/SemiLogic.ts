@@ -1,9 +1,10 @@
 import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
-import { mapInventory, getAdditionalItems } from '../tracker/Selectors';
 import { type InventoryItem, isItem, itemMaxes } from './Inventory';
 import { type PotentialLocations, getSemiLogicKeys } from './KeyLogic';
 import { isRegularItemCheck, type Logic } from './Logic';
 import { LogicBuilder } from './LogicBuilder';
+import { mapInventory } from './Mappers';
+import { getAdditionalItems } from './Misc';
 import { cubeCheckToCubeCollected } from './TrackerModifications';
 import { type Requirements, computeLeastFixedPoint, mergeRequirements } from './bitlogic/BitLogic';
 import { BitVector } from './bitlogic/BitVector';

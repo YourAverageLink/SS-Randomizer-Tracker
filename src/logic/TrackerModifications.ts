@@ -1,10 +1,12 @@
-import type { TypedOptions } from '../permalink/SettingsTypes';
-import { type InventoryItem, isItem } from './Inventory';
+import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
+import { type InventoryItem, isItem, itemMaxes, itemName } from './Inventory';
 import goddessCubesList_ from '../data/goddessCubes2.json';
 import { swordsToAdd } from './ThingsThatWouldBeNiceToHaveInTheDump';
 import type { DungeonName } from './Locations';
 import type { TrackerState } from '../tracker/Slice';
 import { invert } from 'es-toolkit';
+import { BitVector } from './bitlogic/BitVector';
+import type { Logic } from './Logic';
 
 const collectedCubeSuffix = '_TR_Cube_Collected';
 
@@ -92,6 +94,83 @@ export function getInitialItems(
         ) {
             add(item);
         }
+    }
+
+    return items;
+}
+
+/**
+ * Returns a BitVector containing all the expressions that should be visible in the tooltips
+ * and not recursively expanded (items and various item-like requirements).
+ */
+export function getTooltipOpaqueBits(logic: Logic, options: OptionDefs, settings: TypedOptions, expertMode: boolean, consideredTricks: Set<string>) {
+    const items = new BitVector();
+    const set = (id: string) => {
+        const bit = logic.itemBits[id];
+        if (bit !== undefined) {
+            items.setBit(bit);
+        } else {
+            console.error('unknown item', id);
+        }
+    };
+
+    for (const option of options) {
+        if (
+            option.type === 'multichoice' &&
+            (option.command === 'enabled-tricks-glitched' ||
+                option.command === 'enabled-tricks-bitless')
+        ) {
+            const vals = option.choices;
+            for (const opt of vals) {
+                const considered =
+                    settings[option.command].includes(opt) ||
+                    (expertMode &&
+                        (!consideredTricks.size || consideredTricks.has(opt)));
+                if (considered) {
+                    set(`${opt} Trick`);
+                }
+            }
+        }
+    }
+
+    // All actual inventory items are shown in the tooltips
+    for (const [item, count] of Object.entries(itemMaxes)) {
+        if (count === undefined || item === 'Sailcloth' || item === 'Tumbleweed') {
+            continue;
+        }
+        if (item === sothItemReplacement) {
+            for (let i = 1; i <= count; i++) {
+                set(sothItems[i - 1]);
+            }
+        } else if (item === triforceItemReplacement) {
+            for (let i = 1; i <= count; i++) {
+                set(triforceItems[i - 1]);
+            }
+        } else {
+            for (let i = 1; i <= count; i++) {
+                set(itemName(item, i));
+            }
+        }
+    }
+
+    // Zelda's Blessing should show the various $Dungeon Completed requirements
+    for (const fakeItem of Object.values(dungeonCompletionItems)) {
+        set(fakeItem);
+    }
+
+    // Goddess chest tooltips should show the corresponding goddess cube.
+    for (const cubeItem of Object.values(cubeCheckToCubeCollected)) {
+        set(cubeItem);
+    }
+
+    // No point in revealing that the math behind 80 crystals is 13*5+15
+    for (const amt of [5, 10, 30, 40, 50, 70, 80]) {
+        set(`\\${amt} Gratitude Crystals`);
+    }
+
+    if (settings['gondo-upgrades'] === false) {
+        set('\\Skyloft\\Central Skyloft\\Bazaar\\Gondo\'s Upgrades\\Upgrade to Quick Beetle');
+        set('\\Skyloft\\Central Skyloft\\Bazaar\\Gondo\'s Upgrades\\Upgrade to Tough Beetle');
     }
 
     return items;

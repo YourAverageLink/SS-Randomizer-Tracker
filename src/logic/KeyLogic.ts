@@ -4,8 +4,8 @@ import { dungeonNames, isRegularDungeon } from './Locations';
 import { type Logic, type LogicalCheck, isRegularItemCheck } from './Logic';
 import { type Requirements, computeLeastFixedPoint, mergeRequirements } from './bitlogic/BitLogic';
 import { BitVector } from './bitlogic/BitVector';
-import { mapInventory } from '../tracker/Selectors';
 import type { TypedOptions } from '../permalink/SettingsTypes';
+import { mapInventory } from './Mappers';
 
 export interface PotentialLocations {
     item: InventoryItem;
