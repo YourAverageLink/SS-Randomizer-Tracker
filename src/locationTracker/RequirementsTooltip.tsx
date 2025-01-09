@@ -1,6 +1,9 @@
 import React from 'react';
 import type { Op } from '../logic/booleanlogic/BooleanExpression';
-import type { RootTooltipExpression, TooltipExpression } from '../tooltips/TooltipExpression';
+import type {
+    RootTooltipExpression,
+    TooltipExpression,
+} from '../tooltips/TooltipExpression';
 import { addDividers } from '../utils/React';
 
 export default function RequirementsTooltip({
@@ -10,22 +13,12 @@ export default function RequirementsTooltip({
 }) {
     return (
         <>
-            {requirements ? (
-                <TopLevelExpr
-                    expr={requirements}
-                />
-            ) : (
-                'Loading...'
-            )}
+            {requirements ? <TopLevelExpr expr={requirements} /> : 'Loading...'}
         </>
     );
 }
 
-function TopLevelExpr({
-    expr,
-}: {
-    expr: RootTooltipExpression;
-}) {
+function TopLevelExpr({ expr }: { expr: RootTooltipExpression }) {
     if (expr.items.length <= 1) {
         return <Expr expr={expr.items[0]} parentOp={undefined} />;
     }
@@ -33,10 +26,7 @@ function TopLevelExpr({
         <ul>
             {expr.items.map((item, idx) => (
                 <li key={idx}>
-                    <Expr
-                        expr={item}
-                        parentOp={undefined}
-                    />
+                    <Expr expr={item} parentOp={undefined} />
                 </li>
             ))}
         </ul>
@@ -56,11 +46,7 @@ function Expr({
                 {parentOp !== undefined && '('}
                 {addDividers(
                     expr.items.map((val, idx) => (
-                        <Expr
-                            key={idx}
-                            expr={val}
-                            parentOp={expr.op}
-                        />
+                        <Expr key={idx} expr={val} parentOp={expr.op} />
                     )),
                     <>{` ${expr.op} `}</>,
                 )}
@@ -79,5 +65,3 @@ function Expr({
         );
     }
 }
-
-

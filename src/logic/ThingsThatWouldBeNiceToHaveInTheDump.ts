@@ -25,7 +25,8 @@ export const bannedExitsAndEntrances = [
 ];
 
 /** The exit that leads from LMF to the temple of time. */
-export const lmfSecondExit = '\\Lanayru Mining Facility\\Hall of Ancient Robots\\End\\Exit to Temple of Time';
+export const lmfSecondExit =
+    '\\Lanayru Mining Facility\\Hall of Ancient Robots\\End\\Exit to Temple of Time';
 
 type OptionMapping = [
     string,
@@ -56,7 +57,11 @@ export const runtimeOptions: OptionMapping[] = [
 
     // https://github.com/NindyBK/ssrnppbuild/pull/1
     m('Open Dungeon Shortcuts option', 'open-shortcuts', 'All Dungeons'),
-    m('Open Unrequired Shortcuts option', 'open-shortcuts', 'Unrequired Dungeons Only'),
+    m(
+        'Open Unrequired Shortcuts option',
+        'open-shortcuts',
+        'Unrequired Dungeons Only',
+    ),
     m('Default Dungeon Behavior option', 'open-shortcuts', 'None'),
 ];
 
@@ -83,7 +88,10 @@ const s3RacingBannedGossipStones = [
 const isS3RacingGossipStone = (stoneId: string) =>
     !s3RacingBannedGossipStones.some((s) => stoneId.includes(s));
 
-export const doesHintDistroUseGossipStone: Record<string, ((stoneId: string) => boolean) | undefined> = {
+export const doesHintDistroUseGossipStone: Record<
+    string,
+    ((stoneId: string) => boolean) | undefined
+> = {
     '2D Dowsing & Fi Hints': stubFalse,
     'Boss Keysanity Fi Hints': stubFalse,
     'Dowsing & Fi Hints': stubFalse,
@@ -93,7 +101,6 @@ export const doesHintDistroUseGossipStone: Record<string, ((stoneId: string) => 
     'Pre-S3 Variant': isS3RacingGossipStone,
     'Season 3 Tournament': isS3RacingGossipStone,
 };
-
 
 // These requirements are populated based on required dungeons
 

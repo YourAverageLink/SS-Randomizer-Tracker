@@ -60,7 +60,9 @@ interface AbstractExitMapping {
 
 export interface ReadOnlyExitMapping extends AbstractExitMapping {
     canAssign: false;
-    rule: ExitRule & { type: 'vanilla' | 'follow' | 'lmfSecondExit' | 'linked' };
+    rule: ExitRule & {
+        type: 'vanilla' | 'follow' | 'lmfSecondExit' | 'linked';
+    };
 }
 
 export interface AssignableExitMapping extends AbstractExitMapping {

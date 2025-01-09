@@ -1,16 +1,16 @@
-import { useCallback } from 'react';
-import AreaCounters from './AreaCounters';
-import keyDownWrapper from '../utils/KeyDownWrapper';
-import type { TriggerEvent } from 'react-contexify';
-import { useContextMenu } from './context-menu';
-import type { HintRegion } from '../logic/Locations';
-import { useSelector } from 'react-redux';
-import { areaHintSelector } from '../tracker/Selectors';
-import styles from './LocationGroupHeader.module.css';
 import clsx from 'clsx';
-import type { LocationGroupContextMenuProps } from './LocationGroupContextMenu';
+import { useCallback } from 'react';
+import type { TriggerEvent } from 'react-contexify';
+import { useSelector } from 'react-redux';
 import Tooltip from '../additionalComponents/Tooltip';
 import { decodeHint } from '../hints/Hints';
+import type { HintRegion } from '../logic/Locations';
+import { areaHintSelector } from '../tracker/Selectors';
+import keyDownWrapper from '../utils/KeyDownWrapper';
+import AreaCounters from './AreaCounters';
+import { useContextMenu } from './context-menu';
+import type { LocationGroupContextMenuProps } from './LocationGroupContextMenu';
+import styles from './LocationGroupHeader.module.css';
 
 export default function LocationGroupHeader({
     area,

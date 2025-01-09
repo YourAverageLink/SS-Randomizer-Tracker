@@ -4,8 +4,8 @@
     inset: 0;
     opacity: 0.5;
     animation: overlayShow 250ms ease-in-out;
-    
-    &[data-state=closed] {
+
+    &[data-state='closed'] {
         opacity: 0;
         animation-name: overlayHide;
     }
@@ -38,7 +38,7 @@
         max-width: 600px;
     }
 
-    &[data-state=closed] {
+    &[data-state='closed'] {
         opacity: 0;
         animation-name: contentHide;
     }

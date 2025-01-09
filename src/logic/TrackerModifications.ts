@@ -1,12 +1,12 @@
-import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
-import { type InventoryItem, isItem, itemMaxes, itemName } from './Inventory';
-import goddessCubesList_ from '../data/goddessCubes2.json';
-import { swordsToAdd } from './ThingsThatWouldBeNiceToHaveInTheDump';
-import type { DungeonName } from './Locations';
-import type { TrackerState } from '../tracker/Slice';
 import { invert } from 'es-toolkit';
+import goddessCubesList_ from '../data/goddessCubes2.json';
+import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
+import type { TrackerState } from '../tracker/Slice';
 import { BitVector } from './bitlogic/BitVector';
+import { type InventoryItem, isItem, itemMaxes, itemName } from './Inventory';
+import type { DungeonName } from './Locations';
 import type { Logic } from './Logic';
+import { swordsToAdd } from './ThingsThatWouldBeNiceToHaveInTheDump';
 
 const collectedCubeSuffix = '_TR_Cube_Collected';
 
@@ -22,7 +22,9 @@ export const cubeCollectedToCubeCheck = Object.fromEntries(
         check,
     ]),
 );
-export const cubeCheckToCubeCollected = invert<string, string>(cubeCollectedToCubeCheck);
+export const cubeCheckToCubeCollected = invert<string, string>(
+    cubeCollectedToCubeCheck,
+);
 
 function mapToCubeCollectedRequirement(check: string) {
     return `${check}${collectedCubeSuffix}`;
@@ -103,7 +105,13 @@ export function getInitialItems(
  * Returns a BitVector containing all the expressions that should be visible in the tooltips
  * and not recursively expanded (items and various item-like requirements).
  */
-export function getTooltipOpaqueBits(logic: Logic, options: OptionDefs, settings: TypedOptions, expertMode: boolean, consideredTricks: Set<string>) {
+export function getTooltipOpaqueBits(
+    logic: Logic,
+    options: OptionDefs,
+    settings: TypedOptions,
+    expertMode: boolean,
+    consideredTricks: Set<string>,
+) {
     const items = new BitVector();
     const set = (id: string) => {
         const bit = logic.itemBits[id];
@@ -135,7 +143,11 @@ export function getTooltipOpaqueBits(logic: Logic, options: OptionDefs, settings
 
     // All actual inventory items are shown in the tooltips
     for (const [item, count] of Object.entries(itemMaxes)) {
-        if (count === undefined || item === 'Sailcloth' || item === 'Tumbleweed') {
+        if (
+            count === undefined ||
+            item === 'Sailcloth' ||
+            item === 'Tumbleweed'
+        ) {
             continue;
         }
         if (item === sothItemReplacement) {
@@ -169,8 +181,12 @@ export function getTooltipOpaqueBits(logic: Logic, options: OptionDefs, settings
     }
 
     if (settings['gondo-upgrades'] === false) {
-        set('\\Skyloft\\Central Skyloft\\Bazaar\\Gondo\'s Upgrades\\Upgrade to Quick Beetle');
-        set('\\Skyloft\\Central Skyloft\\Bazaar\\Gondo\'s Upgrades\\Upgrade to Tough Beetle');
+        set(
+            "\\Skyloft\\Central Skyloft\\Bazaar\\Gondo's Upgrades\\Upgrade to Quick Beetle",
+        );
+        set(
+            "\\Skyloft\\Central Skyloft\\Bazaar\\Gondo's Upgrades\\Upgrade to Tough Beetle",
+        );
     }
 
     return items;

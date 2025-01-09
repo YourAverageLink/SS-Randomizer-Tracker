@@ -1,5 +1,5 @@
-import { LogicalExpression } from './LogicalExpression';
 import { BitVector } from './BitVector';
+import { LogicalExpression } from './LogicalExpression';
 
 /**
  * Requirements are a partial logic that makes statements about the present bits
@@ -13,7 +13,10 @@ export type Requirements = Record<number, LogicalExpression>;
  */
 export type BitLogic = LogicalExpression[];
 
-export function mergeRequirements(numBits: number, ...reqs: Requirements[]): BitLogic {
+export function mergeRequirements(
+    numBits: number,
+    ...reqs: Requirements[]
+): BitLogic {
     const requirements: LogicalExpression[] = [];
     const mergedRequirements: Requirements = {};
     Object.assign(mergedRequirements, ...reqs);
@@ -23,8 +26,7 @@ export function mergeRequirements(numBits: number, ...reqs: Requirements[]): Bit
     return requirements;
 }
 
-
-/* 
+/*
  * Returns the least fixed-point of the given requirements,
  * which can be interpreted as the logical result of the given requirements.
  * This is a BitVector from which no new facts can be derived.
@@ -112,7 +114,7 @@ export function unifyRequirements(
                 if (bit === idx || opaqueBits.test(bit)) {
                     continue;
                 }
-                (unificationCandidates[bit]).push(idx);
+                unificationCandidates[bit].push(idx);
             }
         }
     }
@@ -142,7 +144,11 @@ export function unifyRequirements(
  * This breaks a cycle between `a` and `b`, and any dependencies on `a`
  * can be rewritten to depend on `b` in a later shallowSimplify call.
  */
-function tryUnifyEquivalent(requirements: LogicalExpression[], a: number, b: number) {
+function tryUnifyEquivalent(
+    requirements: LogicalExpression[],
+    a: number,
+    b: number,
+) {
     const implA = requirements[a];
     const implB = requirements[b];
 
@@ -182,8 +188,8 @@ function tryUnifyEquivalent(requirements: LogicalExpression[], a: number, b: num
  * while a DNF with exactly one conjunction can be inlined.
  *
  * Returns true iff any simplifications could be made.
- * 
- * 
+ *
+ *
  * E.g:
  *   a <= b&c | f | d
  *   b <= <false>
@@ -195,10 +201,7 @@ function tryUnifyEquivalent(requirements: LogicalExpression[], a: number, b: num
  *   d <= e
  *   f <= g&h
  */
-export function shallowSimplify(
-    opaqueBits: BitVector,
-    requirements: BitLogic,
-) {
+export function shallowSimplify(opaqueBits: BitVector, requirements: BitLogic) {
     const inliningCandidates = new BitVector();
 
     let simplified = false;
@@ -255,16 +258,16 @@ export function shallowSimplify(
 /**
  * Bottom-up propagation propagates disjuncts that consist of completely
  * opaque bits until a fixpoint is reached.
- * 
+ *
  * This is basically symbolic logical state computation - but instead
  * of computing boolean logical state bottom-up, we compute requirements
  * bottom-up, which a fixpoint being reached if requirements don't change anymore.
- * 
+ *
  * Previously the use case was implemented using a top-down algorithm, but that
  * ended up with unpredictable performance due to heuristics. Bottom-up performs well
  * and computes all tooltips very quickly (<250ms on my machine, which is not
  * quite fast enough to move it to the main thread, but pretty hard to beat).
- * 
+ *
  * The reason I investigated replacing the top-down algorithm with a bottom-
  * up algorithm is my hope that this approach will adapt better to alternative
  * or future logic implementations that don't map everything to bits, e.g. lepe's
@@ -312,7 +315,6 @@ export function bottomUpTooltipPropagation(
 
     let recentlyChanged: BitVector | undefined = undefined;
 
-
     while (changed) {
         rounds++;
         changed = false;
@@ -325,7 +327,6 @@ export function bottomUpTooltipPropagation(
         // Repeatedly apply the "rules" to further propagate
         // requirements
         for (const [idx, expr] of originalRequirements.entries()) {
-
             // If something already requires Nothing, we don't even need to
             // bother with alternative ways to fulfill this requirement
             if (requirements[idx].isTriviallyTrue()) {
@@ -333,7 +334,7 @@ export function bottomUpTooltipPropagation(
             }
 
             let additionalTerms = LogicalExpression.false();
-    
+
             for (const conj of expr.conjunctions) {
                 // We can only propagate if all mentioned bits are either opaque or refer
                 // to an expression where we've found at least one way for it to be satisfied.
@@ -367,7 +368,8 @@ export function bottomUpTooltipPropagation(
                 }
             }
 
-            const [useful, newExpr] = requirements[idx].orExtended(additionalTerms);
+            const [useful, newExpr] =
+                requirements[idx].orExtended(additionalTerms);
             if (useful) {
                 thisRoundChanged.setBit(idx);
                 changed = true;
@@ -378,7 +380,6 @@ export function bottomUpTooltipPropagation(
 
         recentlyChanged = thisRoundChanged;
     }
-
 
     // We've reached a fixed point, which means we cannot find any new paths
     // in our requirement graph. So our output requirements now contain all

@@ -1,23 +1,28 @@
-import keyDownWrapper from '../utils/KeyDownWrapper';
-import { useContextMenu } from './context-menu';
-import { type CSSProperties, useCallback } from 'react';
+import clsx from 'clsx';
+import { useCallback, type CSSProperties } from 'react';
 import type { TriggerEvent } from 'react-contexify';
-import images, { findRepresentativeIcon } from '../itemTracker/Images';
+import { useDispatch, useSelector } from 'react-redux';
+import Tooltip from '../additionalComponents/Tooltip';
+import exitImg from '../assets/dungeons/entrance.png';
 import goddessCubeImg from '../assets/sidequests/goddess_cube.png';
 import gossipStoneImg from '../assets/sidequests/gossip_stone.png';
-import exitImg from '../assets/dungeons/entrance.png';
-import { useEntrancePath, useTooltipExpr } from '../tooltips/TooltipHooks';
-import RequirementsTooltip from './RequirementsTooltip';
-import { useDispatch, useSelector } from 'react-redux';
-import { checkHintSelector, checkSelector, exitsByIdSelector, isCheckBannedSelector } from '../tracker/Selectors';
-import { clickCheck } from '../tracker/Actions';
-import { mapEntrance } from '../tracker/Slice';
-import PathTooltip from './PathTooltip';
-import Tooltip from '../additionalComponents/Tooltip';
-import clsx from 'clsx';
-import styles from './Location.module.css';
-import { useAppDispatch, type RootState } from '../store/Store';
+import images, { findRepresentativeIcon } from '../itemTracker/Images';
 import type { Check } from '../logic/Locations';
+import { useAppDispatch, type RootState } from '../store/Store';
+import { useEntrancePath, useTooltipExpr } from '../tooltips/TooltipHooks';
+import { clickCheck } from '../tracker/Actions';
+import {
+    checkHintSelector,
+    checkSelector,
+    exitsByIdSelector,
+    isCheckBannedSelector,
+} from '../tracker/Selectors';
+import { mapEntrance } from '../tracker/Slice';
+import keyDownWrapper from '../utils/KeyDownWrapper';
+import { useContextMenu } from './context-menu';
+import styles from './Location.module.css';
+import PathTooltip from './PathTooltip';
+import RequirementsTooltip from './RequirementsTooltip';
 
 export interface LocationContextMenuProps {
     checkId: string;
@@ -38,48 +43,60 @@ export default function Location({
     }
 }
 
-function CheckLocation({
-    id,
-}: {
-    id: string;
-}) {
+function CheckLocation({ id }: { id: string }) {
     const dispatch = useAppDispatch();
-    const isBanned = useSelector((state: RootState) => isCheckBannedSelector(state)(id));
+    const isBanned = useSelector((state: RootState) =>
+        isCheckBannedSelector(state)(id),
+    );
 
     const check = useSelector(checkSelector(id));
 
     const onClick = () => dispatch(clickCheck({ checkId: id }));
 
     const style = {
-        color: check.checked ? `var(--scheme-checked)` : `var(--scheme-${check.logicalState})`,
+        color: check.checked
+            ? `var(--scheme-checked)`
+            : `var(--scheme-${check.logicalState})`,
     } satisfies CSSProperties;
 
     const { show } = useContextMenu<LocationContextMenuProps>({
         id: 'location-context',
     });
 
-    const displayMenu = useCallback((e: TriggerEvent) => {
-        show({ event: e, props: { checkId: id } });
-    }, [id, show]);
+    const displayMenu = useCallback(
+        (e: TriggerEvent) => {
+            show({ event: e, props: { checkId: id } });
+        },
+        [id, show],
+    );
 
     const expr = useTooltipExpr(id);
     const path = useEntrancePath(id);
 
     return (
-        <Tooltip content={
-            <>
-                <RequirementsTooltip requirements={expr} />
-                {path && <><hr /><PathTooltip segments={path} /></>}
-                {isBanned && (
-                    <span className={styles.tooltipNote}>
-                        This location is excluded by current settings and
-                        will never be logically required.
-                    </span>
-                )}
-            </>
-        }>
+        <Tooltip
+            content={
+                <>
+                    <RequirementsTooltip requirements={expr} />
+                    {path && (
+                        <>
+                            <hr />
+                            <PathTooltip segments={path} />
+                        </>
+                    )}
+                    {isBanned && (
+                        <span className={styles.tooltipNote}>
+                            This location is excluded by current settings and
+                            will never be logically required.
+                        </span>
+                    )}
+                </>
+            }
+        >
             <div
-                className={clsx(styles.location, {[styles.checked]: check.checked})}
+                className={clsx(styles.location, {
+                    [styles.checked]: check.checked,
+                })}
                 style={style}
                 role="button"
                 onClick={onClick}
@@ -94,7 +111,7 @@ function CheckLocation({
     );
 }
 
-function CheckIcon({check}: {check: Check}) {
+function CheckIcon({ check }: { check: Check }) {
     const hintItem = useSelector(checkHintSelector(check.checkId));
     const isCheckBanned = useSelector(isCheckBannedSelector);
     let name: string | undefined = undefined;
@@ -114,15 +131,12 @@ function CheckIcon({check}: {check: Check}) {
         if (banned) {
             name += ' (not required)';
         }
-        src =
-            images['Gratitude Crystals Grid'][
-                banned ? 0 : 1
-            ];
+        src = images['Gratitude Crystals Grid'][banned ? 0 : 1];
     } else if (hintItem) {
         name = hintItem;
         src = findRepresentativeIcon(hintItem);
     }
-    
+
     if (src && name) {
         return (
             <div className={styles.hintItem}>
@@ -143,11 +157,15 @@ function Exit({
     // setActiveArea: (area: string) => void;
 }) {
     const dispatch = useDispatch();
-    const exit = useSelector((state: RootState) => exitsByIdSelector(state)[id]);
+    const exit = useSelector(
+        (state: RootState) => exitsByIdSelector(state)[id],
+    );
     const check = useSelector(checkSelector(id));
 
     const style = {
-        color: check.checked ? `var(--scheme-checked)` : `var(--scheme-${check.logicalState})`,
+        color: check.checked
+            ? `var(--scheme-checked)`
+            : `var(--scheme-${check.logicalState})`,
     };
 
     const expr = useTooltipExpr(id);
@@ -177,16 +195,20 @@ function Exit({
                     onKeyDown={keyDownWrapper(onClick)}
                     onContextMenu={(e) => {
                         e.preventDefault();
-                        dispatch(mapEntrance({
-                            from: exit.exit.id,
-                            to: undefined
-                        }));
+                        dispatch(
+                            mapEntrance({
+                                from: exit.exit.id,
+                                to: undefined,
+                            }),
+                        );
                     }}
                     data-check-id={id}
                 >
                     <div className={clsx(styles.exit, styles.text)}>
                         <span style={style}>{check.checkName}</span>
-                        <span>↳{exit.entrance?.name ?? 'Select entrance...'}</span>
+                        <span>
+                            ↳{exit.entrance?.name ?? 'Select entrance...'}
+                        </span>
                     </div>
                     <CheckIcon check={check} />
                 </div>

@@ -1,9 +1,29 @@
+import { useCallback, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Select, { type ActionMeta, type MultiValue } from 'react-select';
+import { Dialog } from '../additionalComponents/Dialog';
+import Tooltip from '../additionalComponents/Tooltip';
+import { optionsSelector } from '../logic/Selectors';
+import { type ThunkResult, useAppDispatch } from '../store/Store';
 import ColorBlock from './ColorBlock';
 import {
     type ColorScheme,
     darkColorScheme,
     lightColorScheme,
 } from './ColorScheme';
+import { selectStyles } from './ComponentStyles';
+import styles from './CustomizationModal.module.css';
+import {
+    colorSchemeSelector,
+    counterBasisSelector,
+    hasCustomLayoutSelector,
+    itemLayoutSelector,
+    itemLocationAssignmentEnabledSelector,
+    locationLayoutSelector,
+    trickSemiLogicSelector,
+    trickSemiLogicTrickListSelector,
+    tumbleweedSelector,
+} from './Selectors';
 import {
     type CounterBasis,
     type ItemLayout,
@@ -18,26 +38,6 @@ import {
     setTrackTumbleweed,
     setTrickSemiLogic,
 } from './Slice';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-    colorSchemeSelector,
-    counterBasisSelector,
-    hasCustomLayoutSelector,
-    itemLayoutSelector,
-    itemLocationAssignmentEnabledSelector,
-    locationLayoutSelector,
-    trickSemiLogicSelector,
-    trickSemiLogicTrickListSelector,
-    tumbleweedSelector,
-} from './Selectors';
-import { useCallback, useMemo } from 'react';
-import { selectStyles } from './ComponentStyles';
-import Select, { type ActionMeta, type MultiValue } from 'react-select';
-import { Dialog } from '../additionalComponents/Dialog';
-import Tooltip from '../additionalComponents/Tooltip';
-import { optionsSelector } from '../logic/Selectors';
-import { useAppDispatch, type ThunkResult } from '../store/Store';
-import styles from './CustomizationModal.module.css';
 
 const defaultColorSchemes = {
     Light: lightColorScheme,
@@ -113,7 +113,9 @@ export default function CustomizationModal({
     const trickSemiLogic = useSelector(trickSemiLogicSelector);
     const counterBasis = useSelector(counterBasisSelector);
     const tumbleweed = useSelector(tumbleweedSelector);
-    const itemLocationAssignment = useSelector(itemLocationAssignmentEnabledSelector);
+    const itemLocationAssignment = useSelector(
+        itemLocationAssignmentEnabledSelector,
+    );
 
     const updateColorScheme = useCallback(
         (scheme: ColorScheme) => dispatch(setColorScheme(scheme)),
@@ -254,7 +256,10 @@ export default function CustomizationModal({
                         dispatch(setAutoItemAssignment(e.target.checked))
                     }
                 />
-                <label htmlFor="autoItemAssignemt" className={styles.checkboxLabel}>
+                <label
+                    htmlFor="autoItemAssignemt"
+                    className={styles.checkboxLabel}
+                >
                     Assign Items to locations while tracking
                 </label>
             </Setting>

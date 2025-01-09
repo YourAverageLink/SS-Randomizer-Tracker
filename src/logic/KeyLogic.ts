@@ -1,11 +1,15 @@
 import { produce } from 'immer';
+import type { TypedOptions } from '../permalink/SettingsTypes';
 import { type InventoryItem, itemMaxes } from './Inventory';
 import { dungeonNames, isRegularDungeon } from './Locations';
 import { type Logic, type LogicalCheck, isRegularItemCheck } from './Logic';
-import { type Requirements, computeLeastFixedPoint, mergeRequirements } from './bitlogic/BitLogic';
-import { BitVector } from './bitlogic/BitVector';
-import type { TypedOptions } from '../permalink/SettingsTypes';
 import { mapInventory } from './Mappers';
+import {
+    type Requirements,
+    computeLeastFixedPoint,
+    mergeRequirements,
+} from './bitlogic/BitLogic';
+import { BitVector } from './bitlogic/BitVector';
 
 export interface PotentialLocations {
     item: InventoryItem;
@@ -16,7 +20,7 @@ export interface PotentialLocations {
 /**
  * Figures out how many keys you need for each check in a dungeon.
  * This is a bit complex unfortunately :(
- * 
+ *
  * The way this works is for every dungeon:
  * - Assuming you have all items (including small and boss keys), you can reach all dungeon checks
  * - If the small keys are known to be in the dungeon, then at least one key must be in the first
@@ -25,19 +29,19 @@ export interface PotentialLocations {
  * - Repeat until we know which checks you must access to be guaranteed to find X small keys
  * - Then all checks that are reachable with all small keys can contain the boss key, if it's known
  *   to be in the dungeon.
- * 
+ *
  * The reason this is not universally true is that this is not how keys are restricted in rando:
  * - Rando instead says "all small keys and all boss keys must be in the Dungeon Name\Main area",
  *   which excludes boss checks. But theoretically there could be a future option that allows
  *   small keys behind the boss door. In that case the function would need to be tweaked to
  *   assume you have the boss key too when figuring out small key logic, but this can't be done
  *   right now as it would cause key logic to assume small keys can be behind the boss door.
- * 
+ *
  * The correct thing to do here when rando logic becomes more complex is:
  * - Find a way to put the placement restrictions in the logic dump
  * - Assume you have the boss key when figuring out small key logic
  * - Use the placement restrictions to know whether there are small keys behind the boss door.
- * 
+ *
  * Update: This still won't work in the interesting cases. E.g. Ancient Cistern, boss door
  * reachable with 0 small keys, but Chest in Key Locked Room needs 2 keys. Semilogic figures out
  * that the small keys could be behind the boss door, which means that it can't assume that you
@@ -83,8 +87,8 @@ export function keyData(
             potentialChecks:
                 smallKeySetting === 'Vanilla'
                     ? cavesChecks.filter(
-                        (c) => logic.checks[c].originalItem === item,
-                    )
+                          (c) => logic.checks[c].originalItem === item,
+                      )
                     : cavesChecks,
         });
     }
@@ -128,21 +132,21 @@ export function keyData(
         const checksThatCanContainBossKey =
             bossKeySetting === 'Vanilla'
                 ? dungeonChecks.filter(
-                    (check) => logic.checks[check].originalItem === bossKey,
-                )
+                      (check) => logic.checks[check].originalItem === bossKey,
+                  )
                 : bossKeySetting === 'Own Dungeon'
-                    ? dungeonChecks
-                    : undefined;
+                  ? dungeonChecks
+                  : undefined;
 
         const checksThatCanContainSmallKey = smallKey
             ? smallKeySetting === 'Vanilla'
                 ? dungeonChecks.filter(
-                    (check) => logic.checks[check].originalItem === smallKey,
-                )
+                      (check) => logic.checks[check].originalItem === smallKey,
+                  )
                 : smallKeySetting === 'Own Dungeon - Restricted' ||
-                  smallKeySetting === 'Lanayru Caves Key Only'
-                    ? dungeonChecks
-                    : undefined
+                    smallKeySetting === 'Lanayru Caves Key Only'
+                  ? dungeonChecks
+                  : undefined
             : undefined;
 
         // For every kind of check, check if "optimistically" (with all items, keys, ...) all relevant checks are in logic.
@@ -219,8 +223,7 @@ export function getSemiLogicKeys(
             entry.potentialChecks.length &&
             entry.potentialChecks.every(
                 (c) =>
-                    inLogicBits.test(logic.itemBits[c]) ||
-                    checkedChecks.has(c),
+                    inLogicBits.test(logic.itemBits[c]) || checkedChecks.has(c),
             )
         ) {
             inventory[entry.item] = entry.count;

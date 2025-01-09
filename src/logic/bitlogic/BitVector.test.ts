@@ -1,4 +1,4 @@
-import { BitVector } from "./BitVector";
+import { BitVector } from './BitVector';
 
 test('basic tests', () => {
     const vec = new BitVector();

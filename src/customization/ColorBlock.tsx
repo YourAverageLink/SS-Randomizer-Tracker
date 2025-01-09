@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import SketchPicker from '@uiw/react-color-sketch';
-import type { ColorScheme } from './ColorScheme';
-import styles from './ColorBlock.module.css';
 import { debounce } from 'es-toolkit';
+import { useState } from 'react';
+import styles from './ColorBlock.module.css';
+import type { ColorScheme } from './ColorScheme';
 
 export default function ColorBlock({
     colorName,

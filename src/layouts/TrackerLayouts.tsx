@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import BasicCounters from '../BasicCounters';
 import {
@@ -13,6 +14,8 @@ import ItemTracker, {
     ITEM_TRACKER_ASPECT_RATIO,
 } from '../itemTracker/ItemTracker';
 import { ItemTrackerContainer } from '../itemTracker/ItemTrackerContainer';
+import { LocationGroupList } from '../locationTracker/LocationGroupList';
+import { LocationsEntrancesList } from '../locationTracker/LocationsEntrancesList';
 import WorldMap, {
     WORLD_MAP_ASPECT_RATIO,
 } from '../locationTracker/mapTracker/WorldMap';
@@ -20,9 +23,6 @@ import type {
     InterfaceAction,
     InterfaceState,
 } from '../tracker/TrackerInterfaceReducer';
-import { LocationGroupList } from '../locationTracker/LocationGroupList';
-import { LocationsEntrancesList } from '../locationTracker/LocationsEntrancesList';
-import { useRef } from 'react';
 import { useElementSize } from '../utils/React';
 
 export function TrackerLayout({
@@ -146,7 +146,10 @@ export function TrackerLayout({
                             gap: '10px',
                         }}
                     >
-                        <DungeonTracker interfaceDispatch={interfaceDispatch} compact />
+                        <DungeonTracker
+                            interfaceDispatch={interfaceDispatch}
+                            compact
+                        />
                         {itemTracker}
                     </div>
                 </div>

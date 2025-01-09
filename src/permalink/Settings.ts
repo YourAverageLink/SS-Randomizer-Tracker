@@ -1,6 +1,12 @@
-import PackedBitsWriter from './PackedBitsWriter';
 import PackedBitsReader from './PackedBitsReader';
-import type { Option, OptionValue, OptionDefs, AllTypedOptions, OptionsCommand } from './SettingsTypes';
+import PackedBitsWriter from './PackedBitsWriter';
+import type {
+    AllTypedOptions,
+    Option,
+    OptionDefs,
+    OptionsCommand,
+    OptionValue,
+} from './SettingsTypes';
 
 export function decodePermalink(
     optionDefs: OptionDefs,
@@ -42,12 +48,17 @@ export function defaultSettings(optionDefs: OptionDefs): AllTypedOptions {
     return settings as AllTypedOptions;
 }
 
-function validateValue(option: Option, value: unknown): OptionValue | undefined {
+function validateValue(
+    option: Option,
+    value: unknown,
+): OptionValue | undefined {
     switch (option.type) {
         case 'boolean':
             return typeof value === 'boolean' ? value : undefined;
         case 'singlechoice':
-            return typeof value === 'string' && option.choices.includes(value) ? value : undefined;
+            return typeof value === 'string' && option.choices.includes(value)
+                ? value
+                : undefined;
         case 'multichoice': {
             return Array.isArray(value) ? value : undefined;
         }
@@ -61,7 +72,10 @@ function validateValue(option: Option, value: unknown): OptionValue | undefined 
     }
 }
 
-export function validateSettings(optionDefs: OptionDefs, userSettings: Partial<AllTypedOptions>): AllTypedOptions {
+export function validateSettings(
+    optionDefs: OptionDefs,
+    userSettings: Partial<AllTypedOptions>,
+): AllTypedOptions {
     const settings: Partial<Record<OptionsCommand, OptionValue>> = {};
     for (const optionDef of optionDefs) {
         if (optionDef.permalink === false) {

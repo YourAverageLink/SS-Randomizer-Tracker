@@ -33,11 +33,13 @@
     "build": "vite build",
     "serve": "vite preview",
     "test": "vitest",
-    "lint": "npm run lint:ts && npm run lint:eslint",
+    "lint": "npm run lint:ts && npm run lint:eslint && npm run lint:prettier",
     "generate:testData": "node ./scripts/downloadTestData.mjs",
     "generate:options": "node ./scripts/generateOptions.mjs",
     "lint:eslint": "eslint --max-warnings 0 \"src/**/*.ts\" \"src/**/*.tsx\"",
-    "lint:ts": "tsc --noEmit"
+    "lint:ts": "tsc --noEmit",
+    "lint:prettier": "prettier \"src/**/*.{js,ts,tsx,cjs,mjs,cts,mts,css}\" --check",
+    "format": "prettier \"src/**/*.{js,ts,tsx,cjs,mjs,cts,mts,css}\" --write"
   },
   "browserslist": [
     ">= 0.2%",
@@ -74,6 +76,7 @@
     "eslint-plugin-sonarjs": "^3.0.1",
     "jsdom": "^25.0.1",
     "prettier": "3.4.2",
+    "prettier-plugin-organize-imports": "^4.1.0",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.17.0",
     "vite": "^6.0.0",

@@ -1,12 +1,16 @@
 import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
 import { type InventoryItem, isItem, itemMaxes } from './Inventory';
 import { type PotentialLocations, getSemiLogicKeys } from './KeyLogic';
-import { isRegularItemCheck, type Logic } from './Logic';
+import { type Logic, isRegularItemCheck } from './Logic';
 import { LogicBuilder } from './LogicBuilder';
 import { mapInventory } from './Mappers';
 import { getAdditionalItems } from './Misc';
 import { cubeCheckToCubeCollected } from './TrackerModifications';
-import { type Requirements, computeLeastFixedPoint, mergeRequirements } from './bitlogic/BitLogic';
+import {
+    type Requirements,
+    computeLeastFixedPoint,
+    mergeRequirements,
+} from './bitlogic/BitLogic';
 import { BitVector } from './bitlogic/BitVector';
 
 export interface SemiLogicState {
@@ -84,7 +88,10 @@ export function computeSemiLogic(
     const inSemiLogicBits = semiLogicState.semiLogicBits.clone();
 
     if (!expertMode) {
-        return { inSemiLogicBits, inTrickLogicBits: semiLogicState.semiLogicBits };
+        return {
+            inSemiLogicBits,
+            inTrickLogicBits: semiLogicState.semiLogicBits,
+        };
     }
 
     const settingsRequirementsWithTricks = {

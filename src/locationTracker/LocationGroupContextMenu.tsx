@@ -1,22 +1,22 @@
 import { useCallback } from 'react';
 import {
-    Menu,
     Item,
+    Menu,
     Separator,
     Submenu,
     type ItemParams,
 } from 'react-contexify';
-import { setHint } from '../tracker/Slice';
 import { useSelector } from 'react-redux';
-import { settingSelector } from '../tracker/Selectors';
+import hintItems from '../data/hintItems.json';
+import { bosses, pathImages } from '../hints/Hints';
+import type { ExitMapping } from '../logic/Locations';
 import type { TrackerLinkedEntrancePool } from '../logic/Logic';
 import { useAppDispatch } from '../store/Store';
-import hintItems from '../data/hintItems.json';
-import { HintIcon, HintItem } from './LocationContextMenu';
-import type { InterfaceAction } from '../tracker/TrackerInterfaceReducer';
-import type { ExitMapping } from '../logic/Locations';
-import { bosses, pathImages } from '../hints/Hints';
 import { checkOrUncheckAll } from '../tracker/Actions';
+import { settingSelector } from '../tracker/Selectors';
+import { setHint } from '../tracker/Slice';
+import type { InterfaceAction } from '../tracker/TrackerInterfaceReducer';
+import { HintIcon, HintItem } from './LocationContextMenu';
 
 export interface LocationGroupContextMenuProps {
     area: string;
@@ -27,7 +27,6 @@ export interface MapExitContextMenuProps {
     /** destination area! */
     area: string | undefined;
 }
-
 
 type AreaCtxProps<T = void> = ItemParams<LocationGroupContextMenuProps, T>;
 type ExitCtxProps<T = void> = ItemParams<MapExitContextMenuProps, T>;
@@ -55,7 +54,13 @@ function useGroupContextMenuHandlers() {
     const checkAllInLogic = useCallback(
         (params: AreaCtxProps | ExitCtxProps) => {
             if (params.props!.area) {
-                dispatch(checkOrUncheckAll(params.props!.area, true, /* onlyInLogic */ true));
+                dispatch(
+                    checkOrUncheckAll(
+                        params.props!.area,
+                        true,
+                        /* onlyInLogic */ true,
+                    ),
+                );
             }
         },
         [dispatch],
@@ -84,11 +89,13 @@ function useGroupContextMenuHandlers() {
 
     const handleSetItemClick = useCallback(
         (params: AreaCtxProps<ItemData> | ExitCtxProps<ItemData>) =>
-            params.props!.area && 
-            dispatch(setHint({
-                areaId: params.props!.area,
-                hint: { type: 'item', item: params.data!.item }
-            })),
+            params.props!.area &&
+            dispatch(
+                setHint({
+                    areaId: params.props!.area,
+                    hint: { type: 'item', item: params.data!.item },
+                }),
+            ),
         [dispatch],
     );
 
@@ -157,9 +164,15 @@ function useAreaContextMenuItems() {
     } = useGroupContextMenuHandlers();
 
     return [
-        <Item key="checkAll" onClick={checkAll}>Check All</Item>,
-        <Item key="checkAllLogic" onClick={checkAllInLogic}>Check All In Logic</Item>,
-        <Item key="uncheckAll" onClick={uncheckAll}>Uncheck All</Item>,
+        <Item key="checkAll" onClick={checkAll}>
+            Check All
+        </Item>,
+        <Item key="checkAllLogic" onClick={checkAllInLogic}>
+            Check All In Logic
+        </Item>,
+        <Item key="uncheckAll" onClick={uncheckAll}>
+            Uncheck All
+        </Item>,
         <Separator key="sep1" />,
         <Submenu key="path" label="Add Path Hint">
             {bosses.map((bossName, bossIndex) => (
@@ -172,8 +185,12 @@ function useAreaContextMenuItems() {
                 </Item>
             ))}
         </Submenu>,
-        <Item key="sots" onClick={handleSotsClick}>Add SotS Hint</Item>,
-        <Item key="barren" onClick={handleBarrenClick}>Add Barren Hint</Item>,
+        <Item key="sots" onClick={handleSotsClick}>
+            Add SotS Hint
+        </Item>,
+        <Item key="barren" onClick={handleBarrenClick}>
+            Add Barren Hint
+        </Item>,
         <Submenu key="item" label="Add Item Hint">
             {Object.entries(hintItems).map(([category, items]) => (
                 <Submenu key={category} label={category}>
@@ -189,7 +206,9 @@ function useAreaContextMenuItems() {
                 </Submenu>
             ))}
         </Submenu>,
-        <Item key="clearHint" onClick={handleClearClick}>Clear Hints</Item>,
+        <Item key="clearHint" onClick={handleClearClick}>
+            Clear Hints
+        </Item>,
     ];
 }
 
@@ -261,7 +280,11 @@ function BoundEntranceMenu({
     return (
         <Menu id={menuId}>
             {areaMenuItems}
-            {canChooseEntrance && <Item key="manageEntrance" onClick={manageEntrance}>Select {name} Entrance</Item>}
+            {canChooseEntrance && (
+                <Item key="manageEntrance" onClick={manageEntrance}>
+                    Select {name} Entrance
+                </Item>
+            )}
         </Menu>
     );
 }

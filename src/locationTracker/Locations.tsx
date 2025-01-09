@@ -7,7 +7,7 @@ export function Locations({
     hintRegion,
     onChooseEntrance,
 }: {
-    wide: boolean,
+    wide: boolean;
     hintRegion: HintRegion<string>;
     onChooseEntrance: (exitId: string) => void;
 }) {

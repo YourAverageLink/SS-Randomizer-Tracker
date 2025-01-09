@@ -1,11 +1,11 @@
 import { type ThunkAction, configureStore } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
 import customization, {
     preloadedCustomizationState,
 } from '../customization/Slice';
-import tracker, { preloadedTrackerState } from '../tracker/Slice';
-import saves, { preloadedSavesState } from '../saves/Slice';
 import logic from '../logic/Slice';
-import { useDispatch } from 'react-redux';
+import saves, { preloadedSavesState } from '../saves/Slice';
+import tracker, { preloadedTrackerState } from '../tracker/Slice';
 
 export function createStore() {
     return configureStore({

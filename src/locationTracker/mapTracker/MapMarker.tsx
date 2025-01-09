@@ -1,15 +1,15 @@
 import { type MouseEvent, useCallback } from 'react';
+import type { TriggerEvent } from 'react-contexify';
 import { useSelector } from 'react-redux';
+import { decodeHint } from '../../hints/Hints';
+import { hintsToSubmarkers } from '../../hints/HintsParser';
 import type { RootState } from '../../store/Store';
 import { areaHintSelector, areasSelector } from '../../tracker/Selectors';
 import HintDescription from '../HintsDescription';
-import { useContextMenu } from '../context-menu';
-import { Marker } from './Marker';
-import type { TriggerEvent } from 'react-contexify';
-import { getMarkerColor, getRegionData, getSubmarkerData } from './MapUtils';
 import type { LocationGroupContextMenuProps } from '../LocationGroupContextMenu';
-import { hintsToSubmarkers } from '../../hints/HintsParser';
-import { decodeHint } from '../../hints/Hints';
+import { useContextMenu } from '../context-menu';
+import { getMarkerColor, getRegionData, getSubmarkerData } from './MapUtils';
+import { Marker } from './Marker';
 
 type MapMarkerProps = {
     markerX: number;
@@ -20,10 +20,18 @@ type MapMarkerProps = {
     selected: boolean;
 };
 
-
 const MapMarker = (props: MapMarkerProps) => {
-    const { onGlickGroup, title, markerX, markerY, submarkerPlacement, selected } = props;
-    const area = useSelector((state: RootState) => areasSelector(state).find((a) => a.name === title))!;
+    const {
+        onGlickGroup,
+        title,
+        markerX,
+        markerY,
+        submarkerPlacement,
+        selected,
+    } = props;
+    const area = useSelector((state: RootState) =>
+        areasSelector(state).find((a) => a.name === title),
+    )!;
     const data = getRegionData(area);
     const markerColor = getMarkerColor(data.checks);
 
@@ -31,16 +39,23 @@ const MapMarker = (props: MapMarkerProps) => {
         id: 'group-context',
     });
 
-    const displayMenu = useCallback((e: MouseEvent) => {
-        show({ event: e, props: { area: area.name } });
-    }, [area, show]);
+    const displayMenu = useCallback(
+        (e: MouseEvent) => {
+            show({ event: e, props: { area: area.name } });
+        },
+        [area, show],
+    );
 
     const hints = useSelector(areaHintSelector(title));
 
     const tooltip = (
         <center>
-            <div>{title} ({data.checks.numAccessible}/{data.checks.numRemaining})</div>
-            {hints.map((hint, idx) => <HintDescription key={idx} hint={decodeHint(hint)} />)}
+            <div>
+                {title} ({data.checks.numAccessible}/{data.checks.numRemaining})
+            </div>
+            {hints.map((hint, idx) => (
+                <HintDescription key={idx} hint={decodeHint(hint)} />
+            ))}
         </center>
     );
 
@@ -64,7 +79,10 @@ const MapMarker = (props: MapMarkerProps) => {
             onContextMenu={displayMenu}
             selected={selected}
             submarkerPlacement={submarkerPlacement}
-            submarkers={[...getSubmarkerData(data), ...hintsToSubmarkers(hints)]}
+            submarkers={[
+                ...getSubmarkerData(data),
+                ...hintsToSubmarkers(hints),
+            ]}
         >
             {Boolean(data.checks.numAccessible) && data.checks.numAccessible}
         </Marker>

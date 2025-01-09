@@ -45,9 +45,7 @@ export class LogicBuilder {
 
     /** A logical expression that evaluates to true iff `item` is true. */
     singleBit(item: string): LogicalExpression {
-        return new LogicalExpression([
-            new BitVector().setBit(this.bit(item)),
-        ]);
+        return new LogicalExpression([new BitVector().setBit(this.bit(item))]);
     }
 
     /** Sets the requirement for `target` to `rhs`.*/

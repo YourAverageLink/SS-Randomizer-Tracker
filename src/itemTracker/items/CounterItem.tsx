@@ -1,5 +1,5 @@
-import type { InventoryItem } from '../../logic/Inventory';
 import { useSelector } from 'react-redux';
+import type { InventoryItem } from '../../logic/Inventory';
 import { rawItemCountSelector } from '../../tracker/Selectors';
 import '../BasicItem.css';
 import Item from '../Item';
@@ -29,4 +29,4 @@ export function CounterItem({
             )}
         </Item>
     );
-};
+}

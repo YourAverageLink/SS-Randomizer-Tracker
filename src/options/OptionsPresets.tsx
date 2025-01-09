@@ -1,16 +1,16 @@
-import React, { useMemo, useState } from 'react';
-import type { OptionsAction } from './OptionsReducer';
-import type { AllTypedOptions } from '../permalink/SettingsTypes';
-import type { LogicBundle } from '../logic/Slice';
-import { useDispatch, useSelector } from 'react-redux';
-import { type RootState, useAppDispatch } from '../store/Store';
-import { type Preset, addPreset, removePreset } from '../saves/Slice';
-import { formatRemote, type RemoteReference } from '../loader/LogicLoader';
-import { encodePermalink, validateSettings } from '../permalink/Settings';
-import { useSyncSavesToLocalStorage } from '../LocalStorage';
-import styles from './OptionsPresets.module.css'
-import { Dialog } from '../additionalComponents/Dialog';
 import clsx from 'clsx';
+import React, { useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dialog } from '../additionalComponents/Dialog';
+import { formatRemote, type RemoteReference } from '../loader/LogicLoader';
+import { useSyncSavesToLocalStorage } from '../LocalStorage';
+import type { LogicBundle } from '../logic/Slice';
+import { encodePermalink, validateSettings } from '../permalink/Settings';
+import type { AllTypedOptions } from '../permalink/SettingsTypes';
+import { addPreset, type Preset, removePreset } from '../saves/Slice';
+import { type RootState, useAppDispatch } from '../store/Store';
+import styles from './OptionsPresets.module.css';
+import type { OptionsAction } from './OptionsReducer';
 
 export function OptionsPresets({
     className,
@@ -18,7 +18,7 @@ export function OptionsPresets({
     currentSettings,
     dispatch,
 }: {
-    className?: string
+    className?: string;
     currentLogic: LogicBundle | undefined;
     currentSettings: AllTypedOptions | undefined;
     dispatch: React.Dispatch<OptionsAction>;
@@ -28,7 +28,13 @@ export function OptionsPresets({
 
     return (
         <>
-            <button type="button" className={clsx('tracker-button', className)} onClick={() => setShowModal(true)}>Presets</button>
+            <button
+                type="button"
+                className={clsx('tracker-button', className)}
+                onClick={() => setShowModal(true)}
+            >
+                Presets
+            </button>
             <PresetsModal
                 currentLogic={currentLogic}
                 currentSettings={currentSettings}
@@ -149,9 +155,15 @@ function PresetRow({
                 {preset.name}
                 {!isRemotePreset && (
                     <div>
-                        <button type="button" className="tracker-button"
+                        <button
+                            type="button"
+                            className="tracker-button"
                             onClick={(e) => {
-                                if (window.confirm(`Delete Preset ${preset.name}?`)) {
+                                if (
+                                    window.confirm(
+                                        `Delete Preset ${preset.name}?`,
+                                    )
+                                ) {
                                     appDispatch(removePreset(preset.id));
                                 }
                                 e.stopPropagation();
@@ -165,9 +177,7 @@ function PresetRow({
             <div className={styles.body}>
                 {formatRemote(preset.remote)}
                 <span className={styles.presetLogicStringSep}></span>
-                <span
-                    className={styles.permalink}
-                >
+                <span className={styles.permalink}>
                     {preset.visualPermalink}
                 </span>
             </div>

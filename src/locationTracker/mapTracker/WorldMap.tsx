@@ -1,18 +1,18 @@
-import skyMap from '../../assets/maps/Sky.png';
-import faronMap from '../../assets/maps/Faron.png';
-import eldinMap from '../../assets/maps/Eldin.png';
-import lanayruMap from '../../assets/maps/Lanayru.png';
-import skyloftMap from '../../assets/maps/Skyloft.png';
-import MapMarker from './MapMarker';
-import Submap from './Submap';
-import mapData from '../../data/mapData.json';
 import { useSelector } from 'react-redux';
-import StartingEntranceMarker from './StartingEntranceMarker';
+import eldinMap from '../../assets/maps/Eldin.png';
+import faronMap from '../../assets/maps/Faron.png';
+import lanayruMap from '../../assets/maps/Lanayru.png';
+import skyMap from '../../assets/maps/Sky.png';
+import skyloftMap from '../../assets/maps/Skyloft.png';
+import mapData from '../../data/mapData.json';
 import type {
     InterfaceAction,
     InterfaceState,
 } from '../../tracker/TrackerInterfaceReducer';
+import MapMarker from './MapMarker';
 import { mapModelSelector } from './Selectors';
+import StartingEntranceMarker from './StartingEntranceMarker';
+import Submap from './Submap';
 
 const images: Record<string, string> = {
     skyloftMap,

@@ -1,25 +1,46 @@
 import { createSelector, lruMemoize } from '@reduxjs/toolkit';
+import { compact, groupBy, isEqual, keyBy, partition, sumBy } from 'es-toolkit';
+import {
+    counterBasisSelector,
+    trickSemiLogicSelector,
+    trickSemiLogicTrickListSelector,
+} from '../customization/Selectors';
+import { parseHintsText } from '../hints/HintsParser';
+import {
+    getAllowedStartingEntrances,
+    getEntrancePools,
+    getExitRules,
+    getExits,
+    getUsedEntrances,
+} from '../logic/Entrances';
+import { type InventoryItem, itemMaxes } from '../logic/Inventory';
+import { keyData } from '../logic/KeyLogic';
+import {
+    type Check,
+    type CheckGroup,
+    type DungeonName,
+    dungeonNames,
+    type HintRegion,
+    isDungeon,
+    type LogicalState,
+} from '../logic/Locations';
+import type { LogicalCheck } from '../logic/Logic';
+import { mapInventory, mapSettings } from '../logic/Mappers';
+import {
+    getAdditionalItems,
+    getNumLooseGratitudeCrystals,
+} from '../logic/Misc';
+import { exploreAreaGraph } from '../logic/Pathfinding';
 import {
     areaGraphSelector,
     logicSelector,
     optionsSelector,
 } from '../logic/Selectors';
-import type { TypedOptions } from '../permalink/SettingsTypes';
-import type { RootState } from '../store/Store';
-import { currySelector } from '../utils/Redux';
 import {
-    doesHintDistroUseGossipStone,
-} from '../logic/ThingsThatWouldBeNiceToHaveInTheDump';
-import {
-    type HintRegion,
-    type Check,
-    type DungeonName,
-    dungeonNames,
-    isDungeon,
-    type LogicalState,
-    type CheckGroup,
-} from '../logic/Locations';
-import type { LogicalCheck } from '../logic/Logic';
+    computeSemiLogic,
+    getVisibleTricksEnabledRequirements,
+} from '../logic/SemiLogic';
+import { doesHintDistroUseGossipStone } from '../logic/ThingsThatWouldBeNiceToHaveInTheDump';
 import {
     cubeCheckToGoddessChestCheck,
     dungeonCompletionItems,
@@ -29,33 +50,13 @@ import {
     computeLeastFixedPoint,
     mergeRequirements,
 } from '../logic/bitlogic/BitLogic';
-import { validateSettings } from '../permalink/Settings';
-import { exploreAreaGraph } from '../logic/Pathfinding';
-import { keyData } from '../logic/KeyLogic';
 import { BitVector } from '../logic/bitlogic/BitVector';
-import { type InventoryItem, itemMaxes } from '../logic/Inventory';
-import {
-    getAllowedStartingEntrances,
-    getEntrancePools,
-    getExitRules,
-    getExits,
-    getUsedEntrances,
-} from '../logic/Entrances';
-import {
-    computeSemiLogic,
-    getVisibleTricksEnabledRequirements,
-} from '../logic/SemiLogic';
-import {
-    counterBasisSelector,
-    trickSemiLogicSelector,
-    trickSemiLogicTrickListSelector,
-} from '../customization/Selectors';
-import { stubTrue } from '../utils/Function';
+import { validateSettings } from '../permalink/Settings';
+import type { TypedOptions } from '../permalink/SettingsTypes';
+import type { RootState } from '../store/Store';
 import { emptyArray, mapValues } from '../utils/Collections';
-import { compact, groupBy, isEqual, keyBy, partition, sumBy } from 'es-toolkit';
-import { parseHintsText } from '../hints/HintsParser';
-import { mapInventory, mapSettings } from '../logic/Mappers';
-import { getAdditionalItems, getNumLooseGratitudeCrystals } from '../logic/Misc';
+import { stubTrue } from '../utils/Function';
+import { currySelector } from '../utils/Redux';
 
 const bitVectorMemoizeOptions = {
     memoizeOptions: {
@@ -146,17 +147,13 @@ export const settingSelector: <K extends keyof TypedOptions>(
     ): TypedOptions[K] => settingsSelector(state)[setting],
 );
 
-const rawItemCountsSelector = (state: RootState) =>
-    state.tracker.inventory;
+const rawItemCountsSelector = (state: RootState) => state.tracker.inventory;
 
 /** A map of all actual items to their counts. Since redux only stores partial counts, this ensures all items are present. */
 const inventorySelector = createSelector(
     [rawItemCountsSelector],
     (rawInventory) =>
-        mapValues(
-            itemMaxes,
-            (_val, item) => rawInventory[item] ?? 0,
-        ),
+        mapValues(itemMaxes, (_val, item) => rawInventory[item] ?? 0),
     { memoizeOptions: { resultEqualityCheck: isEqual } },
 );
 
@@ -260,10 +257,9 @@ export const exitsSelector = createSelector(
     getExits,
 );
 
-export const exitsByIdSelector = createSelector(
-    [exitsSelector],
-    (exits) => keyBy(exits, (e) => e.exit.id),
-)
+export const exitsByIdSelector = createSelector([exitsSelector], (exits) =>
+    keyBy(exits, (e) => e.exit.id),
+);
 
 /**
  * Selects the requirements that depend on state/settings, but should still be revealed during
@@ -371,8 +367,8 @@ const areaNonprogressSelector = createSelector(
             area === 'Sky Keep'
                 ? skyKeepNonprogress
                 : emptyUnrequiredDungeons && isDungeon(area)
-                    ? !requiredDungeons.includes(area)
-                    : false;
+                  ? !requiredDungeons.includes(area)
+                  : false;
     },
 );
 
@@ -461,7 +457,8 @@ export const isCheckBannedSelector = createSelector(
             return cube && areaNonprogress(logic.checks[cube].area!);
         };
 
-        const gossipStoneUsed = doesHintDistroUseGossipStone[hintDistro] ?? stubTrue;
+        const gossipStoneUsed =
+            doesHintDistroUseGossipStone[hintDistro] ?? stubTrue;
 
         return (checkId: string) => {
             const check = logic.checks[checkId];
@@ -545,10 +542,10 @@ export const getRequirementLogicalStateSelector = createSelector(
             return inLogicBits.test(bit)
                 ? 'inLogic'
                 : semiLogicBits.inSemiLogicBits.test(bit)
-                    ? 'semiLogic'
-                    : semiLogicBits.inTrickLogicBits.test(bit)
-                        ? 'trickLogic'
-                        : 'outLogic';
+                  ? 'semiLogic'
+                  : semiLogicBits.inTrickLogicBits.test(bit)
+                    ? 'trickLogic'
+                    : 'outLogic';
         },
 );
 
@@ -661,7 +658,9 @@ export const areasSelector = createSelector(
                         : state !== 'outLogic';
 
                 const checkGroup = (checks: string[]): CheckGroup => {
-                    const nonBannedChecks = checks.filter((c) => !isCheckBanned(c));
+                    const nonBannedChecks = checks.filter(
+                        (c) => !isCheckBanned(c),
+                    );
                     const remaining = nonBannedChecks.filter(
                         (c) => !checkedChecks.has(c),
                     );
@@ -678,29 +677,32 @@ export const areasSelector = createSelector(
                     };
                 };
 
-                const extraLocations: HintRegion<string>['extraLocations'] = mapValues(
-                    groupBy(
-                        extraChecks,
-                        (check) => logic.checks[check].type,
-                    ),
-                    checkGroup,
-                );
-
-                const relevantExits = logic.exitsByHintRegion[area].filter((e) => {
-                    const exitMapping = exitsById[e];
-                    if (!exitMapping) {
-                        return false;
-                    }
-                    return (
-                        exitMapping.canAssign &&
-                        exitMapping.rule.type === 'random'
+                const extraLocations: HintRegion<string>['extraLocations'] =
+                    mapValues(
+                        groupBy(
+                            extraChecks,
+                            (check) => logic.checks[check].type,
+                        ),
+                        checkGroup,
                     );
-                });
+
+                const relevantExits = logic.exitsByHintRegion[area].filter(
+                    (e) => {
+                        const exitMapping = exitsById[e];
+                        if (!exitMapping) {
+                            return false;
+                        }
+                        return (
+                            exitMapping.canAssign &&
+                            exitMapping.rule.type === 'random'
+                        );
+                    },
+                );
 
                 const remainingExits = relevantExits.filter((e) => {
                     const exitMapping = exitsById[e];
                     return !exitMapping.entrance;
-                }); 
+                });
 
                 const accessibleExits = remainingExits.filter((e) => {
                     const exitMapping = exitsById[e];
@@ -709,7 +711,7 @@ export const areasSelector = createSelector(
                         !exitMapping.rule.isKnownIrrelevant &&
                         shouldCount(getLogicalState(e))
                     );
-                }); 
+                });
 
                 extraLocations.exits = {
                     list: relevantExits,
@@ -727,7 +729,7 @@ export const areasSelector = createSelector(
                 };
             }),
         );
-    }
+    },
 );
 
 export const totalCountersSelector = createSelector(
@@ -739,7 +741,10 @@ export const totalCountersSelector = createSelector(
         );
         const numAccessible = sumBy(areas, (a) => a.checks.numAccessible);
         const numRemaining = sumBy(areas, (a) => a.checks.numRemaining);
-        let numExitsAccessible = sumBy(areas, (a) => a.extraLocations.exits?.numAccessible ?? 0);
+        let numExitsAccessible = sumBy(
+            areas,
+            (a) => a.extraLocations.exits?.numAccessible ?? 0,
+        );
 
         const startMapping = exits['\\Start'];
         const needsStartingEntrance = !startMapping.entrance;

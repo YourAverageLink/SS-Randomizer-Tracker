@@ -1,5 +1,5 @@
-import styles from './Tooltip.module.css';
 import * as RadixTooltip from '@radix-ui/react-tooltip';
+import styles from './Tooltip.module.css';
 
 export default function Tooltip({
     content,

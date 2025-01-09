@@ -1,9 +1,9 @@
-import type { CSSProperties } from 'react';
-import type { ColorScheme } from '../../customization/ColorScheme';
-import Tooltip from '../../additionalComponents/Tooltip';
-import type { TriggerEvent } from 'react-contexify';
-import styles from './Marker.module.css';
 import clsx from 'clsx';
+import type { CSSProperties } from 'react';
+import type { TriggerEvent } from 'react-contexify';
+import Tooltip from '../../additionalComponents/Tooltip';
+import type { ColorScheme } from '../../customization/ColorScheme';
+import styles from './Marker.module.css';
 
 export type MarkerVariant = 'square' | 'rounded' | 'circle';
 export type SubmarkerPlacement = 'left' | 'right';
@@ -75,7 +75,12 @@ export function Marker({
                 </div>
             </Tooltip>
             {submarkers && (
-                <div className={clsx(styles.submarkers, {[styles.left]: submarkerPlacement === 'left'})} style={positionVars as CSSProperties}>
+                <div
+                    className={clsx(styles.submarkers, {
+                        [styles.left]: submarkerPlacement === 'left',
+                    })}
+                    style={positionVars as CSSProperties}
+                >
                     {submarkers?.map((data) => (
                         <div
                             key={data.key}

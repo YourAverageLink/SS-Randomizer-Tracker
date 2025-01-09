@@ -42,9 +42,7 @@ export class LogicalExpression {
      */
     and(other: LogicalExpression | BitVector) {
         if (other instanceof BitVector) {
-            return new LogicalExpression(
-                andToDnf2(this.conjunctions, [other]),
-            );
+            return new LogicalExpression(andToDnf2(this.conjunctions, [other]));
         }
 
         if (this.isTriviallyFalse() || other.isTriviallyFalse()) {
@@ -90,7 +88,7 @@ export class LogicalExpression {
                 // remove element at idx without shifting the rest by
                 // swapping if needed
                 if (idx === terms.length - 1) {
-                    terms.pop()
+                    terms.pop();
                 } else {
                     terms[idx] = terms.pop()!;
                 }
@@ -119,12 +117,14 @@ export class LogicalExpression {
                     continue nextTerm;
                 }
             }
-            
+
             filteredOther.push(candidate);
             useful = true;
-            
         }
-        return [useful, new LogicalExpression([...self, ...filteredOther])] as const;
+        return [
+            useful,
+            new LogicalExpression([...self, ...filteredOther]),
+        ] as const;
     }
 
     /**
@@ -178,10 +178,7 @@ export function andToDnf(arr: BitVector[][]): BitVector[] {
     }
     const newExpr = [];
     for (const tuple of cartesianProduct(...arr)) {
-        const newVec = tuple.reduce(
-            (acc, val) => acc.or(val),
-            new BitVector(),
-        );
+        const newVec = tuple.reduce((acc, val) => acc.or(val), new BitVector());
         newExpr.push(newVec);
     }
     return newExpr;

@@ -1,10 +1,10 @@
+import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
-import styles from './HintsTracker.module.css';
+import { itemLocationAssignmentEnabledSelector } from '../customization/Selectors';
 import type { RootState } from '../store/Store';
 import { setHintsText } from '../tracker/Slice';
-import clsx from 'clsx';
+import styles from './HintsTracker.module.css';
 import { ItemAssignmentStatus } from './ItemAssignmentStatus';
-import { itemLocationAssignmentEnabledSelector } from '../customization/Selectors';
 
 const hintsPlaceholder = $FEATURE_FLAG_HINTS_PARSER
     ? 'Track hints here! Examples:\nUpper Barren\nFaron -> ET\nFloria -> G2\nTriforce in Boko'
@@ -16,7 +16,9 @@ export function HintsTracker() {
     const hintsText = useSelector(
         (state: RootState) => state.tracker.userHintsText,
     );
-    const autoItemAssignemt = useSelector(itemLocationAssignmentEnabledSelector);
+    const autoItemAssignemt = useSelector(
+        itemLocationAssignmentEnabledSelector,
+    );
     return (
         <div className={styles.hintsTracker}>
             <textarea

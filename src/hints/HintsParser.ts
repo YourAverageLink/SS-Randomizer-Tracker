@@ -1,6 +1,6 @@
 import dungeonData from '../data/dungeons.json';
-import { itemMaxes } from '../logic/Inventory';
 import type { SubmarkerData } from '../locationTracker/mapTracker/Marker';
+import { itemMaxes } from '../logic/Inventory';
 import { decodeHint, type Hint } from './Hints';
 
 const barrenSots = /^([a-z0-9\s']+) (barren|dead|sots)$/;

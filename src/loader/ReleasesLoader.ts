@@ -1,6 +1,6 @@
+import { memoize } from 'es-toolkit';
 import { useCallback, useId, useSyncExternalStore } from 'react';
 import { dedupePromise } from '../utils/Promises';
-import { memoize } from 'es-toolkit';
 
 /*
  * This module implements a small GitHub releases API caching layer.
@@ -44,8 +44,10 @@ export function useReleases() {
     return useSyncExternalStore(doSubscribe, getStoredData);
 }
 
-
-function getStoredRelease(): { isOutdated: boolean, releases: string[] | undefined } {
+function getStoredRelease(): {
+    isOutdated: boolean;
+    releases: string[] | undefined;
+} {
     const storedTime = localStorage.getItem('githubReleasesDataTime');
     if (storedTime !== null) {
         const lastFetch = parseInt(storedTime, 10);
@@ -95,7 +97,6 @@ async function checkForUpdates() {
         await fetchGithubReleases();
     }
 }
-
 
 interface GithubRelease {
     tag_name: string;

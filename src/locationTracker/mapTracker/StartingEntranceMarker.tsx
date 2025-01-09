@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import { exitsByIdSelector, settingSelector } from '../../tracker/Selectors';
 import type { ColorScheme } from '../../customization/ColorScheme';
+import { exitsByIdSelector, settingSelector } from '../../tracker/Selectors';
 import { Marker } from './Marker';
 
 function StartingEntranceMarker({

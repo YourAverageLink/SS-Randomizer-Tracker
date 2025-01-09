@@ -1,13 +1,14 @@
+import { pick } from 'es-toolkit';
 import type { Logic } from '../logic/Logic';
+import { getTooltipOpaqueBits } from '../logic/TrackerModifications';
+import type { BitLogic } from '../logic/bitlogic/BitLogic';
 import BooleanExpression from '../logic/booleanlogic/BooleanExpression';
-import type {
-    BitLogic,
-} from '../logic/bitlogic/BitLogic';
 import type { OptionDefs, TypedOptions } from '../permalink/SettingsTypes';
 import type { WorkerRequest, WorkerResponse } from './worker/Types';
-import { deserializeBooleanExpression, serializeLogicalExpression } from './worker/Utils';
-import { pick } from 'es-toolkit';
-import { getTooltipOpaqueBits } from '../logic/TrackerModifications';
+import {
+    deserializeBooleanExpression,
+    serializeLogicalExpression,
+} from './worker/Utils';
 
 /**
  * The TooltipComputer acts as:
@@ -50,13 +51,16 @@ export class TooltipComputer {
             type: 'initialize',
             opaqueBits: [...opaqueBits.iter()],
             requirements: requirements.map(serializeLogicalExpression),
-            logic: pick(logic, ['allItems', 'itemBits', 'impliedBy'])
+            logic: pick(logic, ['allItems', 'itemBits', 'impliedBy']),
         } satisfies WorkerRequest);
         worker.onmessage = (ev: MessageEvent<WorkerResponse>) => {
-            this.acceptTaskResult(ev.data.checkId, deserializeBooleanExpression(ev.data.expression));
+            this.acceptTaskResult(
+                ev.data.checkId,
+                deserializeBooleanExpression(ev.data.expression),
+            );
             this.isWorking = false;
             this.checkForTask();
-        }
+        };
     }
 
     notifyAll() {
@@ -115,18 +119,17 @@ export class TooltipComputer {
             return;
         }
         this.isWorking = true;
-        this.worker.postMessage({ type: 'analyze', checkId: task.checkId } satisfies WorkerRequest);
+        this.worker.postMessage({
+            type: 'analyze',
+            checkId: task.checkId,
+        } satisfies WorkerRequest);
     }
 }
 
 function createWorker() {
-    const worker = new Worker(
-        new URL(
-            './worker/Worker',
-            import.meta.url,
-        ),
-        { type: "module" }
-    );
+    const worker = new Worker(new URL('./worker/Worker', import.meta.url), {
+        type: 'module',
+    });
 
     const cleanup = () => {
         worker.terminate();

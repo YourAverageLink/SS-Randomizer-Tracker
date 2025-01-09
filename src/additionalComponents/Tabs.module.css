@@ -11,7 +11,8 @@
     border: 1px solid transparent;
     margin-bottom: -1px;
 
-    &[data-state=active], &:hover {
+    &[data-state='active'],
+    &:hover {
         border-color: #dee2e6;
         border-radius: 6px 6px 0 0;
         border-style: solid;
@@ -24,9 +25,11 @@
         color: #0b5ed7 !important;
     }
 
-    &[data-state=active] {
+    &[data-state='active'] {
         color: var(--scheme-text) !important;
     }
 
-    transition: background-color 150ms ease-out, border-color 150ms ease-out;
+    transition:
+        background-color 150ms ease-out,
+        border-color 150ms ease-out;
 }

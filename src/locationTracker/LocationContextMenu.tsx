@@ -1,12 +1,17 @@
 import { useCallback } from 'react';
-import { Menu, Item, Separator, Submenu, type ItemParams } from 'react-contexify';
-
+import {
+    Item,
+    Menu,
+    Separator,
+    Submenu,
+    type ItemParams,
+} from 'react-contexify';
 import hintItems from '../data/hintItems.json';
-import type { LocationContextMenuProps } from './Location';
-import { clickCheck } from '../tracker/Actions';
-import { setCheckHint } from '../tracker/Slice';
 import { findRepresentativeIcon } from '../itemTracker/Images';
 import { useAppDispatch } from '../store/Store';
+import { clickCheck } from '../tracker/Actions';
+import { setCheckHint } from '../tracker/Slice';
+import type { LocationContextMenuProps } from './Location';
 
 type CtxProps<T = void> = ItemParams<LocationContextMenuProps, T>;
 interface ItemData {
@@ -18,37 +23,45 @@ export default function LocationContextMenu() {
 
     const handleCheckClick = useCallback(
         (params: CtxProps) =>
-            dispatch(clickCheck({
-                checkId: params.props!.checkId,
-                markChecked: true,
-            })),
+            dispatch(
+                clickCheck({
+                    checkId: params.props!.checkId,
+                    markChecked: true,
+                }),
+            ),
         [dispatch],
     );
 
     const handleUncheckClick = useCallback(
         (params: CtxProps) =>
-            dispatch(clickCheck({
-                checkId: params.props!.checkId,
-                markChecked: false,
-            })),
+            dispatch(
+                clickCheck({
+                    checkId: params.props!.checkId,
+                    markChecked: false,
+                }),
+            ),
         [dispatch],
     );
 
     const handleSetItemClick = useCallback(
         (params: CtxProps<ItemData>) =>
-            dispatch(setCheckHint({
-                checkId: params.props!.checkId,
-                hint: params.data!.item,
-            })),
+            dispatch(
+                setCheckHint({
+                    checkId: params.props!.checkId,
+                    hint: params.data!.item,
+                }),
+            ),
         [dispatch],
     );
 
     const handleClearItemClick = useCallback(
         (params: CtxProps<ItemData>) =>
-            dispatch(setCheckHint({
-                checkId: params.props!.checkId,
-                hint: undefined,
-            })),
+            dispatch(
+                setCheckHint({
+                    checkId: params.props!.checkId,
+                    hint: undefined,
+                }),
+            ),
         [dispatch],
     );
 
@@ -77,16 +90,26 @@ export default function LocationContextMenu() {
     );
 }
 
-export function HintIcon({ src, alt }: { src: string; alt: string; }) {
-    return (<span style={{ display: 'flex', flexFlow: 'row nowrap' }}>
-        <div style={{ width: '36px', height: '36px', paddingRight: '6px' }}>
-            <img style={{ width: '100%', height: '100%', objectFit: 'contain' }} src={src} alt={alt} />
-        </div>
-        {alt}
-    </span>);
+export function HintIcon({ src, alt }: { src: string; alt: string }) {
+    return (
+        <span style={{ display: 'flex', flexFlow: 'row nowrap' }}>
+            <div style={{ width: '36px', height: '36px', paddingRight: '6px' }}>
+                <img
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain',
+                    }}
+                    src={src}
+                    alt={alt}
+                />
+            </div>
+            {alt}
+        </span>
+    );
 }
 
 export function HintItem({ itemName }: { itemName: string }) {
     const image = findRepresentativeIcon(itemName);
-    return <HintIcon src={image} alt={itemName} />
+    return <HintIcon src={image} alt={itemName} />;
 }

@@ -1,8 +1,8 @@
+import { keyBy } from 'es-toolkit';
+import { BitVector } from './bitlogic/BitVector';
 import type { ExitMapping } from './Locations';
 import type { AreaGraph } from './Logic';
-import { BitVector } from './bitlogic/BitVector';
 import { TimeOfDay } from './UpstreamTypes';
-import { keyBy } from 'es-toolkit';
 
 /*
 The pathfinding algorithm starts at the Start entrance with its specific time of day,
@@ -105,8 +105,7 @@ export function exploreAreaGraph(
                     ) {
                         reachableChecks[location.id] = workItem;
                     }
-                    const entrance =
-                        mappingsByExitId[location.id]?.entrance;
+                    const entrance = mappingsByExitId[location.id]?.entrance;
                     if (entrance) {
                         const destArea = areaGraph.areasByEntrance[entrance.id];
                         const nextNode = {

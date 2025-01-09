@@ -1,34 +1,34 @@
 import type { CSSProperties } from 'react';
 
-import Item from './Item';
-import g1 from '../assets/bosses/g1.png';
-import scaldera from '../assets/bosses/scaldera.png';
-import moldarach from '../assets/bosses/moldarach.png';
-import koloktos from '../assets/bosses/koloktos.png';
-import tentalus from '../assets/bosses/tentalus.png';
-import g2 from '../assets/bosses/g2.png';
-import dreadfuse from '../assets/bosses/dreadfuse.png';
-import trialGate from '../assets/bosses/trialGate.png';
-import faronTrialGate from '../assets/bosses/faronTrialGate.png';
-import lanayruTrialGate from '../assets/bosses/lanayruTrialGate.png';
-import eldinTrialGate from '../assets/bosses/eldinTrialGate.png';
-import dungeonDataOrig from '../data/dungeons.json';
-import DungeonName from './items/dungeons/DungeonName';
-import DungeonIcon from './items/dungeons/DungeonIcon';
+import clsx from 'clsx';
+import { keyBy } from 'es-toolkit';
 import React from 'react';
-import AreaCounters from '../locationTracker/AreaCounters';
-import HintMarker from '../hints/HintMarker';
 import { useSelector } from 'react-redux';
-import { areasSelector, settingSelector } from '../tracker/Selectors';
+import dreadfuse from '../assets/bosses/dreadfuse.png';
+import eldinTrialGate from '../assets/bosses/eldinTrialGate.png';
+import faronTrialGate from '../assets/bosses/faronTrialGate.png';
+import g1 from '../assets/bosses/g1.png';
+import g2 from '../assets/bosses/g2.png';
+import koloktos from '../assets/bosses/koloktos.png';
+import lanayruTrialGate from '../assets/bosses/lanayruTrialGate.png';
+import moldarach from '../assets/bosses/moldarach.png';
+import scaldera from '../assets/bosses/scaldera.png';
+import tentalus from '../assets/bosses/tentalus.png';
+import trialGate from '../assets/bosses/trialGate.png';
+import dungeonDataOrig from '../data/dungeons.json';
+import HintMarker from '../hints/HintMarker';
+import AreaCounters from '../locationTracker/AreaCounters';
 import {
-    type HintRegion,
     type DungeonName as DungeonNameType,
+    type HintRegion,
     isDungeon,
 } from '../logic/Locations';
-import styles from './DungeonTracker.module.css';
-import clsx from 'clsx';
+import { areasSelector, settingSelector } from '../tracker/Selectors';
 import type { InterfaceAction } from '../tracker/TrackerInterfaceReducer';
-import { keyBy } from 'es-toolkit';
+import styles from './DungeonTracker.module.css';
+import Item from './Item';
+import DungeonIcon from './items/dungeons/DungeonIcon';
+import DungeonName from './items/dungeons/DungeonName';
 
 const silentRealmData: Record<string, string> = {
     'Faron Silent Realm': faronTrialGate,
@@ -40,13 +40,13 @@ const silentRealmData: Record<string, string> = {
 const dungeonData = keyBy(dungeonDataOrig, (data) => data.hintRegion);
 
 const dungeonIcons: Record<string, string> = {
-    'Skyview': g1,
+    Skyview: g1,
     'Earth Temple': scaldera,
     'Lanayru Mining Facility': moldarach,
     'Ancient Cistern': koloktos,
-    'Sandship': tentalus,
+    Sandship: tentalus,
     'Fire Sanctuary': g2,
-    "Sky Keep": dreadfuse,
+    'Sky Keep': dreadfuse,
 } satisfies Record<DungeonNameType, string>;
 
 export default function DungeonTracker({
@@ -57,8 +57,8 @@ export default function DungeonTracker({
     compact?: boolean;
 }) {
     const areas = useSelector(areasSelector);
-    const dungeons = areas.filter((a) =>
-        isDungeon(a.name) && !a.hidden,
+    const dungeons = areas.filter(
+        (a) => isDungeon(a.name) && !a.hidden,
     ) as HintRegion<DungeonNameType>[];
     const silentRealms = areas.filter((a) => a.name.includes('Silent Realm'));
 
@@ -127,7 +127,11 @@ export default function DungeonTracker({
                             <div key={d.name} style={colspan2(index * 2)}>
                                 <DungeonIcon
                                     area={d.name}
-                                    image={dungeonIcons[dungeonData[d.name].hintRegion]}
+                                    image={
+                                        dungeonIcons[
+                                            dungeonData[d.name].hintRegion
+                                        ]
+                                    }
                                     iconLabel={d.name}
                                     groupClicked={() => setActiveArea(d.name)}
                                 />
@@ -136,8 +140,12 @@ export default function DungeonTracker({
                         {dungeons.map((d, index) => (
                             <div key={d.name} style={colspan2(index * 2)}>
                                 <AreaCounters
-                                    totalChecksLeftInArea={d.checks.numRemaining}
-                                    totalChecksAccessible={d.checks.numAccessible}
+                                    totalChecksLeftInArea={
+                                        d.checks.numRemaining
+                                    }
+                                    totalChecksAccessible={
+                                        d.checks.numAccessible
+                                    }
                                 />
                             </div>
                         ))}

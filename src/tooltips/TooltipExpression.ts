@@ -1,11 +1,11 @@
-import type { Logic } from '../logic/Logic';
+import { last, sumBy } from 'es-toolkit';
+import prettyItemNames_ from '../data/prettyItemNames.json';
 import BooleanExpression, {
     type Item,
     type Op,
 } from '../logic/booleanlogic/BooleanExpression';
 import type { LogicalState } from '../logic/Locations';
-import prettyItemNames_ from '../data/prettyItemNames.json';
-import { last, sumBy } from 'es-toolkit';
+import type { Logic } from '../logic/Logic';
 import { chainComparators, compareBy } from '../utils/Compare';
 
 const prettyItemNames: Record<
@@ -71,7 +71,7 @@ function getLength(item: TooltipExpression): number {
 
 function getName(item: TooltipExpression): string {
     if (item.type === 'expr') {
-        return "";
+        return '';
     } else {
         return item.item;
     }
@@ -84,7 +84,11 @@ function booleanExprToTooltipExprRecursive(
 ): NonterminalRequirement {
     const mapItem = (item: Item): TooltipExpression => {
         if (BooleanExpression.isExpression(item)) {
-            return booleanExprToTooltipExprRecursive(logic, item, getRequirementLogicalState);
+            return booleanExprToTooltipExprRecursive(
+                logic,
+                item,
+                getRequirementLogicalState,
+            );
         } else {
             return {
                 type: 'item',
@@ -92,7 +96,7 @@ function booleanExprToTooltipExprRecursive(
                 logicalState: getRequirementLogicalState(item),
             };
         }
-    }
+    };
     const items = expr.items
         .map(mapItem)
         .sort(chainComparators(compareBy(getLength), compareBy(getName)));
@@ -100,7 +104,7 @@ function booleanExprToTooltipExprRecursive(
         type: 'expr',
         op: expr.type,
         items,
-    }
+    };
 }
 
 export function booleanExprToTooltipExpr(
@@ -108,7 +112,11 @@ export function booleanExprToTooltipExpr(
     expr: BooleanExpression,
     getRequirementLogicalState: (requirement: string) => LogicalState,
 ): RootTooltipExpression {
-    const ntExpr = booleanExprToTooltipExprRecursive(logic, expr, getRequirementLogicalState);
+    const ntExpr = booleanExprToTooltipExprRecursive(
+        logic,
+        expr,
+        getRequirementLogicalState,
+    );
 
     if (!ntExpr.items.length) {
         return ntExpr.op === 'and' ? nothing : impossible;

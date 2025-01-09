@@ -74,4 +74,3 @@ export function isItem(id: string): id is InventoryItem {
 export function itemName(item: string, amount: number) {
     return amount > 1 ? `${item} x ${amount}` : item;
 }
-

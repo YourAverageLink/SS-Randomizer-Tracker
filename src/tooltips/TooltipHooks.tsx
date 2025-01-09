@@ -9,25 +9,28 @@ import {
     useState,
     useSyncExternalStore,
 } from 'react';
-import { TooltipComputer } from './TooltipComputations';
 import { useSelector } from 'react-redux';
 import {
-    settingsRequirementsSelector,
+    trickSemiLogicSelector,
+    trickSemiLogicTrickListSelector,
+} from '../customization/Selectors';
+import { mergeRequirements } from '../logic/bitlogic/BitLogic';
+import type { ExplorationNode } from '../logic/Pathfinding';
+import { logicSelector, optionsSelector } from '../logic/Selectors';
+import {
+    getRequirementLogicalStateSelector,
     inLogicPathfindingSelector,
     optimisticPathfindingSelector,
-    getRequirementLogicalStateSelector,
     settingSelector,
+    settingsRequirementsSelector,
     settingsSelector,
 } from '../tracker/Selectors';
-import { logicSelector, optionsSelector } from '../logic/Selectors';
+import { noop } from '../utils/Function';
+import { TooltipComputer } from './TooltipComputations';
 import {
     type RootTooltipExpression,
     booleanExprToTooltipExpr,
 } from './TooltipExpression';
-import type { ExplorationNode } from '../logic/Pathfinding';
-import { trickSemiLogicSelector, trickSemiLogicTrickListSelector } from '../customization/Selectors';
-import { mergeRequirements } from '../logic/bitlogic/BitLogic';
-import { noop } from '../utils/Function';
 
 const TooltipsContext = createContext<TooltipComputer | null>(null);
 
@@ -51,7 +54,14 @@ export function MakeTooltipsAvailable({ children }: { children: ReactNode }) {
             settingsRequirements,
         );
         setAnalyzer(
-            new TooltipComputer(logic, options, settings, expertMode, consideredTricks, bitLogic),
+            new TooltipComputer(
+                logic,
+                options,
+                settings,
+                expertMode,
+                consideredTricks,
+                bitLogic,
+            ),
         );
         return () => {
             setAnalyzer((oldAnalyzer) => {
@@ -59,13 +69,16 @@ export function MakeTooltipsAvailable({ children }: { children: ReactNode }) {
                 return null;
             });
         };
-    }, [settingsRequirements, logic, options, expertMode, consideredTricks, settings]);
+    }, [
+        settingsRequirements,
+        logic,
+        options,
+        expertMode,
+        consideredTricks,
+        settings,
+    ]);
 
-    return (
-        <TooltipsContext value={analyzer}>
-            {children}
-        </TooltipsContext>
-    );
+    return <TooltipsContext value={analyzer}>{children}</TooltipsContext>;
 }
 
 /** Compute the tooltip expression for a given check. This will return undefined until results are available. */

@@ -1,6 +1,9 @@
 import { type StylesConfig } from 'react-select';
 
-export function selectStyles<IsMulti extends boolean, Option>(): StylesConfig<Option, IsMulti> {
+export function selectStyles<IsMulti extends boolean, Option>(): StylesConfig<
+    Option,
+    IsMulti
+> {
     return {
         control: (baseStyles) => ({
             ...baseStyles,
@@ -24,7 +27,7 @@ export function selectStyles<IsMulti extends boolean, Option>(): StylesConfig<Op
         }),
         singleValue: (baseStyles) => ({
             ...baseStyles,
-            color: `color-mix(in srgb, var(--scheme-text) 90%, transparent)`
-        })
+            color: `color-mix(in srgb, var(--scheme-text) 90%, transparent)`,
+        }),
     };
 }

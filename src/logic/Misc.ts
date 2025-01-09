@@ -1,8 +1,8 @@
 import type { InventoryItem } from './Inventory';
 import type { Logic } from './Logic';
 import {
-    dungeonCompletionItems,
     cubeCheckToCubeCollected,
+    dungeonCompletionItems,
 } from './TrackerModifications';
 
 export function getNumLooseGratitudeCrystals(

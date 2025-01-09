@@ -1,10 +1,10 @@
+import clsx from 'clsx';
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../store/Store';
 import { checkHintsSelector, checkSelector } from '../tracker/Selectors';
-import { useCallback } from 'react';
 import { cancelItemAssignment } from '../tracker/Slice';
 import styles from './ItemAssignmentStatus.module.css';
-import clsx from 'clsx';
 
 export function ItemAssignmentStatus() {
     const lastSelection = useSelector(

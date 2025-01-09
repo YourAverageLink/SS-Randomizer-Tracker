@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Contributor from '../additionalComponents/Contributor';
-import contributors from '../data/contributors.json';
 import DiscordButton from '../additionalComponents/DiscordButton';
+import contributors from '../data/contributors.json';
 import styles from './Acknowledgement.module.css';
 
 export default function Acknowledgement() {

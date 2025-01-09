@@ -1,12 +1,12 @@
-import sotsImage from '../assets/hints/sots.png';
 import barrenImage from '../assets/hints/barren.png';
+import sotsImage from '../assets/hints/sots.png';
 
 import g1 from '../assets/hints/g1.png';
-import scaldera from '../assets/hints/scaldera.png';
-import moldarach from '../assets/hints/moldarach.png';
-import koloktos from '../assets/hints/koloktos.png';
-import tentalus from '../assets/hints/tentalus.png';
 import g2 from '../assets/hints/g2.png';
+import koloktos from '../assets/hints/koloktos.png';
+import moldarach from '../assets/hints/moldarach.png';
+import scaldera from '../assets/hints/scaldera.png';
+import tentalus from '../assets/hints/tentalus.png';
 import type { ColorScheme } from '../customization/ColorScheme';
 import { findRepresentativeIcon } from '../itemTracker/Images';
 
@@ -16,14 +16,7 @@ export type Hint =
     | { type: 'path'; index: number }
     | { type: 'item'; item: string };
 
-export const pathImages = [
-    g1,
-    scaldera,
-    moldarach,
-    koloktos,
-    tentalus,
-    g2,
-];
+export const pathImages = [g1, scaldera, moldarach, koloktos, tentalus, g2];
 
 export const bosses = [
     'Ghirahim 1',
@@ -43,9 +36,17 @@ export interface DecodedHint {
 export function decodeHint(hint: Hint): DecodedHint {
     switch (hint.type) {
         case 'barren':
-            return { description: 'Barren', image: barrenImage, style: 'outLogic' };
+            return {
+                description: 'Barren',
+                image: barrenImage,
+                style: 'outLogic',
+            };
         case 'sots':
-            return { description: 'Spirit of the Sword', image: sotsImage, style: 'inLogic' };
+            return {
+                description: 'Spirit of the Sword',
+                image: sotsImage,
+                style: 'inLogic',
+            };
         case 'path':
             return {
                 description: `Path to ${bosses[hint.index]}`,
