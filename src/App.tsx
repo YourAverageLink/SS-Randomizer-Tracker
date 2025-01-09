@@ -1,14 +1,14 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import FullAcknowledgement from './miscPages/FullAcknowledgement';
-import Options from './options/Options';
-import Tracker from './Tracker';
-import { ErrorBoundary } from 'react-error-boundary';
-import ErrorPage from './miscPages/ErrorPage';
-import { useStore } from 'react-redux';
-import type { RootState } from './store/Store';
 import { useLayoutEffect } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { useStore } from 'react-redux';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import type { ColorScheme } from './customization/ColorScheme';
 import { colorSchemeSelector } from './customization/Selectors';
+import ErrorPage from './miscPages/ErrorPage';
+import FullAcknowledgement from './miscPages/FullAcknowledgement';
+import Options from './options/Options';
+import type { RootState } from './store/Store';
+import Tracker from './Tracker';
 
 function createApplyColorSchemeListener() {
     let prevScheme: ColorScheme | undefined = undefined;

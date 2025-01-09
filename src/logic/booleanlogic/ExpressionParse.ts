@@ -1,7 +1,7 @@
-import BooleanExpression, { type Item } from './BooleanExpression';
+import { compact } from 'es-toolkit';
 import { BitVector } from '../bitlogic/BitVector';
 import { andToDnf } from '../bitlogic/LogicalExpression';
-import { compact } from 'es-toolkit';
+import BooleanExpression, { type Item } from './BooleanExpression';
 
 export function parseExpression(expression: string) {
     return booleanExpressionForTokens(splitExpression(expression));
@@ -13,7 +13,9 @@ function splitExpression(expression: string) {
     );
 }
 
-function booleanExpressionForTokens(expressionTokens: string[]): BooleanExpression {
+function booleanExpressionForTokens(
+    expressionTokens: string[],
+): BooleanExpression {
     const itemsForExpression = [];
     let expressionTypeToken;
     while (expressionTokens.length) {
@@ -21,7 +23,8 @@ function booleanExpressionForTokens(expressionTokens: string[]): BooleanExpressi
         if (currentToken === '&' || currentToken === '|') {
             expressionTypeToken = currentToken;
         } else if (currentToken === '(') {
-            const childExpression = booleanExpressionForTokens(expressionTokens);
+            const childExpression =
+                booleanExpressionForTokens(expressionTokens);
             itemsForExpression.push(childExpression);
         } else if (currentToken === ')') {
             break;
@@ -46,7 +49,9 @@ export function booleanExprToLogicalExpr(
                     booleanExprToLogicalExpr(item, lookup),
                 );
             case 'and': {
-                const mapped = expr.items.map((i) => booleanExprToLogicalExpr(i, lookup));
+                const mapped = expr.items.map((i) =>
+                    booleanExprToLogicalExpr(i, lookup),
+                );
                 return andToDnf(mapped);
             }
             default: {

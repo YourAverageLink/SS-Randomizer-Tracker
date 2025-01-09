@@ -1,12 +1,15 @@
-import allImages from './Images';
-import type { InventoryItem } from '../logic/Inventory';
-import { useDispatch, useSelector } from 'react-redux';
-import { locationsForItemSelector, rawItemCountSelector } from '../tracker/Selectors';
-import { clickItem } from '../tracker/Slice';
-import { BasicItem } from './BasicItem';
-import Tooltip from '../additionalComponents/Tooltip';
-import { addDividers } from '../utils/React';
 import type { CSSProperties } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Tooltip from '../additionalComponents/Tooltip';
+import type { InventoryItem } from '../logic/Inventory';
+import {
+    locationsForItemSelector,
+    rawItemCountSelector,
+} from '../tracker/Selectors';
+import { clickItem } from '../tracker/Slice';
+import { addDividers } from '../utils/React';
+import { BasicItem } from './BasicItem';
+import allImages from './Images';
 
 function Item({
     itemName,
@@ -22,7 +25,7 @@ function Item({
     imgWidth?: number | string;
     grid?: boolean;
     className?: string;
-    style?: CSSProperties,
+    style?: CSSProperties;
     children?: React.ReactNode;
 }) {
     const dispatch = useDispatch();

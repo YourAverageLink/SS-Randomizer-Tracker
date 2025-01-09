@@ -46,8 +46,8 @@ export interface RawCheck {
 }
 
 export interface ExitLink {
-    exit_from_outside: string | string[],
-    exit_from_inside: string,
+    exit_from_outside: string | string[];
+    exit_from_inside: string;
 }
 
 export interface RawLogic {
@@ -55,20 +55,20 @@ export interface RawLogic {
     checks: Record<string, RawCheck>;
     /** LocationId -> Area - Location Name */
     gossip_stones: Record<string, string>;
-    exits: Record<string, RawExit>,
-    entrances: Record<string, RawEntrance>,
+    exits: Record<string, RawExit>;
+    entrances: Record<string, RawEntrance>;
     areas: RawArea;
     linked_entrances: {
         silent_realms: {
-            [realm: string]: ExitLink
-        },
+            [realm: string]: ExitLink;
+        };
         dungeons: {
-            [dungeon: string]: ExitLink
-        }
-    }
+            [dungeon: string]: ExitLink;
+        };
+    };
     dungeon_completion_requirements: {
-        [dungeon: string]: string,
-    }
+        [dungeon: string]: string;
+    };
 }
 
 export interface RawPresets {

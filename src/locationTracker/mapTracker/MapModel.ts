@@ -1,6 +1,6 @@
+import mapData from '../../data/mapData.json';
 import type { ExitMapping } from '../../logic/Locations';
 import type { AreaGraph } from '../../logic/Logic';
-import mapData from '../../data/mapData.json';
 
 export type MapHintRegion = {
     /**
@@ -21,7 +21,11 @@ export type MapHintRegion = {
 );
 
 export interface MapProvince {
-    provinceId: 'skyloftSubmap' | 'faronSubmap' | 'eldinSubmap' | 'lanayruSubmap';
+    provinceId:
+        | 'skyloftSubmap'
+        | 'faronSubmap'
+        | 'eldinSubmap'
+        | 'lanayruSubmap';
     name: string;
     regions: MapHintRegion[];
 }
@@ -32,8 +36,7 @@ export interface MapModel {
     regions: MapHintRegion[];
 }
 
-type MapDataMarker =
-    (typeof mapData)['sky' | 'thunderhead'];
+type MapDataMarker = (typeof mapData)['sky' | 'thunderhead'];
 
 function getMarker(marker: MapDataMarker): MapHintRegion {
     return {
@@ -67,7 +70,8 @@ function getEntranceMarker(
         exitId,
         markerX: marker.markerX,
         markerY: marker.markerY,
-        supmarkerPlacement: marker.submarkerPlacement === 'left' ? 'left' : 'right',
+        supmarkerPlacement:
+            marker.submarkerPlacement === 'left' ? 'left' : 'right',
         hintRegion: mapping?.entrance?.region,
     };
 }
@@ -90,12 +94,14 @@ function getProvince(
     };
 }
 
-type ProvinceResult = {
-    type: 'ok',
-    result: string | undefined,
-} | {
-    type: 'err',
-};
+type ProvinceResult =
+    | {
+          type: 'ok';
+          result: string | undefined;
+      }
+    | {
+          type: 'err';
+      };
 
 /** For a given hint region, get the owning map view. */
 export function getOwningProvince(

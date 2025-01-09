@@ -1,18 +1,23 @@
-import { type AppAction, type RootState, type Store, type SyncThunkResult, createStore } from '../store/Store';
-import { getAndPatchLogic, type RemoteReference } from '../loader/LogicLoader';
-import type { AllTypedOptions } from '../permalink/SettingsTypes';
-
 import fs from 'node:fs';
+import { resetCustomizationForTest } from '../customization/Slice';
+import { getAndPatchLogic, type RemoteReference } from '../loader/LogicLoader';
+import { logicSelector } from '../logic/Selectors';
 import { loadLogic } from '../logic/Slice';
 import { defaultSettings } from '../permalink/Settings';
-import { reset } from '../tracker/Slice';
-import { logicSelector } from '../logic/Selectors';
+import type { AllTypedOptions } from '../permalink/SettingsTypes';
+import {
+    createStore,
+    type AppAction,
+    type RootState,
+    type Store,
+    type SyncThunkResult,
+} from '../store/Store';
 import {
     areasSelector,
     entrancePoolsSelector,
     exitsByIdSelector,
 } from '../tracker/Selectors';
-import { resetCustomizationForTest } from '../customization/Slice';
+import { reset } from '../tracker/Slice';
 
 const main: RemoteReference = {
     type: 'forkBranch',
@@ -73,8 +78,12 @@ export function createTestLogic() {
             const area = tester.findArea(areaName);
             return (
                 area.checks.list.find((c) => c.includes(checkName)) ??
-                area.extraLocations.loose_crystal?.list.find((c) => c.includes(checkName)) ??
-                area.extraLocations.tr_cube?.list.find((c) => c.includes(checkName)) ??
+                area.extraLocations.loose_crystal?.list.find((c) =>
+                    c.includes(checkName),
+                ) ??
+                area.extraLocations.tr_cube?.list.find((c) =>
+                    c.includes(checkName),
+                ) ??
                 area.extraLocations.gossip_stone?.list.find((c) =>
                     c.includes(checkName),
                 )
@@ -106,10 +115,11 @@ export function createTestLogic() {
          */
         findExit(areaName: string, exitName: string) {
             const area = tester.findArea(areaName);
-            const exitId = area.extraLocations.exits?.list.find((e) => e.includes(exitName));
+            const exitId = area.extraLocations.exits?.list.find((e) =>
+                e.includes(exitName),
+            );
             expect(exitId).toBeTruthy();
-            const exit = tester
-                .readSelector(exitsByIdSelector)[exitId!];
+            const exit = tester.readSelector(exitsByIdSelector)[exitId!];
             expect(exit).toBeDefined();
             return exit;
         },
@@ -120,7 +130,9 @@ export function createTestLogic() {
          */
         expectExitAbsent(areaName: string, exitName: string) {
             const area = tester.findArea(areaName);
-            const exitId = area.extraLocations.exits?.list.find((e) => e.includes(exitName));
+            const exitId = area.extraLocations.exits?.list.find((e) =>
+                e.includes(exitName),
+            );
             expect(exitId).toBeUndefined();
         },
 

@@ -1,13 +1,13 @@
+import clsx from 'clsx';
 import Location from './Location';
 import styles from './LocationGroup.module.css';
-import clsx from 'clsx';
 
 export default function LocationGroup({
     wide,
     locations,
     onChooseEntrance,
 }: {
-    wide: boolean,
+    wide: boolean;
     /* the list of locations this group contains */
     locations: string[];
     onChooseEntrance: (exitId: string) => void;
@@ -20,7 +20,10 @@ export default function LocationGroup({
         >
             {locations.map((location) => (
                 <div key={location} className={styles.locationCell}>
-                    <Location onChooseEntrance={onChooseEntrance} id={location} />
+                    <Location
+                        onChooseEntrance={onChooseEntrance}
+                        id={location}
+                    />
                 </div>
             ))}
         </div>

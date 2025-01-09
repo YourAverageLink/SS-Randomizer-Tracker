@@ -1,8 +1,8 @@
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
-import type { AllTypedOptions } from '../permalink/SettingsTypes';
-import type { RemoteReference } from '../loader/LogicLoader';
 import { v4 as uuidv4 } from 'uuid';
+import type { RemoteReference } from '../loader/LogicLoader';
 import { getStoredSaves } from '../LocalStorage';
+import type { AllTypedOptions } from '../permalink/SettingsTypes';
 
 export interface Preset {
     id: string;
@@ -40,17 +40,16 @@ const savesSlice = createSlice({
     initialState,
     reducers: {
         addPreset: (state, action: PayloadAction<Omit<Preset, 'id'>>) => {
-            state.presets.push({ id: uuidv4(), ...action.payload })
+            state.presets.push({ id: uuidv4(), ...action.payload });
         },
         removePreset: (state, action: PayloadAction<string>) => {
-            state.presets = state.presets.filter((p) => p.id !== action.payload);
+            state.presets = state.presets.filter(
+                (p) => p.id !== action.payload,
+            );
         },
     },
 });
 
-export const {
-    addPreset,
-    removePreset,
-} = savesSlice.actions;
+export const { addPreset, removePreset } = savesSlice.actions;
 
 export default savesSlice.reducer;

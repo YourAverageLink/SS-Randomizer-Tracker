@@ -1,8 +1,8 @@
 import { load } from 'js-yaml';
 import type { RawLogic, RawPresets } from '../logic/UpstreamTypes';
 import type { MultiChoiceOption, OptionDefs } from '../permalink/SettingsTypes';
-import { getLatestRelease } from './ReleasesLoader';
 import { convertError } from '../utils/Errors';
+import { getLatestRelease } from './ReleasesLoader';
 
 export const LATEST_STRING = 'Latest';
 // Fallback in case the GitHub API is unreachable or rate limited
@@ -23,27 +23,39 @@ export type RemoteReference =
           branch: string;
       };
 
-async function resolveRemote(ref: RemoteReference): Promise<[url: string, name: string]> {
+async function resolveRemote(
+    ref: RemoteReference,
+): Promise<[url: string, name: string]> {
     switch (ref.type) {
         case 'latestRelease':
             try {
                 const latest = await getLatestRelease();
-                return [`https://raw.githubusercontent.com/ssrando/ssrando/${latest}`, latest];
+                return [
+                    `https://raw.githubusercontent.com/ssrando/ssrando/${latest}`,
+                    latest,
+                ];
             } catch (e) {
                 console.error(
                     'Could not retrieve latest release from GitHub: ' +
-                        (e
-                            ? convertError(e)
-                            : 'Unknown error'),
+                        (e ? convertError(e) : 'Unknown error'),
                 );
-                return [`https://raw.githubusercontent.com/ssrando/ssrando/${LATEST_KNOWN_RELEASE}`, LATEST_KNOWN_RELEASE];
+                return [
+                    `https://raw.githubusercontent.com/ssrando/ssrando/${LATEST_KNOWN_RELEASE}`,
+                    LATEST_KNOWN_RELEASE,
+                ];
             }
         case 'releaseVersion':
             // Hack: This is a custom logic dump backported to 2.1.1
             if (ref.versionTag === 'v2.1.1') {
-                return [`https://raw.githubusercontent.com/robojumper/ssrando/logic-v2.1.1`, formatRemote(ref)];
+                return [
+                    `https://raw.githubusercontent.com/robojumper/ssrando/logic-v2.1.1`,
+                    formatRemote(ref),
+                ];
             }
-            return [`https://raw.githubusercontent.com/ssrando/ssrando/${ref.versionTag}`, formatRemote(ref)];
+            return [
+                `https://raw.githubusercontent.com/ssrando/ssrando/${ref.versionTag}`,
+                formatRemote(ref),
+            ];
         case 'forkBranch':
             return [
                 `https://raw.githubusercontent.com/${ref.author}/${
@@ -69,8 +81,10 @@ export function formatRemote(ref: RemoteReference) {
     }
 }
 
-const prBranchPattern = /^https:\/\/github.com\/([^/]+)\/ssrando\/tree\/([^/]+)$/;
-const extendedPrBranchPattern = /^https:\/\/github.com\/([^/]+)\/([^/]+)\/(?:tree|releases\/tag)\/([^/]+)$/;
+const prBranchPattern =
+    /^https:\/\/github.com\/([^/]+)\/ssrando\/tree\/([^/]+)$/;
+const extendedPrBranchPattern =
+    /^https:\/\/github.com\/([^/]+)\/([^/]+)\/(?:tree|releases\/tag)\/([^/]+)$/;
 const branchPattern = /^([^/]+)(?:[/|:])([^/]+)$/;
 const versionPattern = /^v\d+\.\d+\.\d+$/;
 
@@ -106,8 +120,7 @@ export function parseRemote(remote: string): RemoteReference | undefined {
     }
 }
 
-const baseFileUrl = (remoteUrl: string, file: string) =>
-    `${remoteUrl}/${file}`;
+const baseFileUrl = (remoteUrl: string, file: string) => `${remoteUrl}/${file}`;
 
 const loadFileFromUrl = async (url: string) => {
     const response = await fetch(url);
@@ -129,22 +142,21 @@ export async function loadRemoteLogic(
     const [baseUrl, remoteName] = await resolveRemote(remote);
     const loader = (file: string) => loadFile(baseUrl, file);
 
-    return [
-        ...(await getAndPatchLogic(loader)),
-        remoteName,
-    ];
+    return [...(await getAndPatchLogic(loader)), remoteName];
 }
 
-export async function getAndPatchLogic(loader: (fileName: string) => Promise<string>) {
-    const parseYaml = async <T, >(file: string) => {
+export async function getAndPatchLogic(
+    loader: (fileName: string) => Promise<string>,
+) {
+    const parseYaml = async <T>(file: string) => {
         const text = await loader(file);
         return load(text) as T;
-    }
+    };
 
-    const parseJson = async <T, >(file: string) => {
+    const parseJson = async <T>(file: string) => {
         const text = await loader(file);
         return JSON.parse(text) as T;
-    }
+    };
 
     const [logic, options, presets] = await Promise.all([
         parseYaml<RawLogic>('dump.yaml'),
@@ -165,9 +177,5 @@ export async function getAndPatchLogic(loader: (fileName: string) => Promise<str
         choices,
     };
 
-    return [
-        logic,
-        patchedOptions,
-        presets,
-    ] as const;
+    return [logic, patchedOptions, presets] as const;
 }

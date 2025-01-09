@@ -1,8 +1,8 @@
-import allImages from '../../Images';
-import { totalGratitudeCrystalsSelector } from '../../../tracker/Selectors';
 import { useDispatch, useSelector } from 'react-redux';
+import { totalGratitudeCrystalsSelector } from '../../../tracker/Selectors';
 import { clickItem } from '../../../tracker/Slice';
 import { BasicItem } from '../../BasicItem';
+import allImages from '../../Images';
 
 export function GratitudeCrystals({
     className,

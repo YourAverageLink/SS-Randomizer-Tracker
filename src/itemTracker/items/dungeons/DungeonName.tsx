@@ -1,11 +1,14 @@
-import keyDownWrapper from '../../../utils/KeyDownWrapper';
+import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
-import { dungeonCompletedSelector, requiredDungeonsSelector } from '../../../tracker/Selectors';
 import type { DungeonName as DungeonNameType } from '../../../logic/Locations';
 import type { RootState } from '../../../store/Store';
+import {
+    dungeonCompletedSelector,
+    requiredDungeonsSelector,
+} from '../../../tracker/Selectors';
 import { clickDungeonName } from '../../../tracker/Slice';
-import styles from './DungeonName.module.css'
-import clsx from 'clsx';
+import keyDownWrapper from '../../../utils/KeyDownWrapper';
+import styles from './DungeonName.module.css';
 
 type DungeonNameProps = {
     dungeonAbbr: string;
@@ -15,7 +18,9 @@ type DungeonNameProps = {
 
 const DungeonName = (props: DungeonNameProps) => {
     const { dungeonName, dungeonAbbr, setActiveArea } = props;
-    const required = useSelector((state: RootState) => requiredDungeonsSelector(state).includes(dungeonName))
+    const required = useSelector((state: RootState) =>
+        requiredDungeonsSelector(state).includes(dungeonName),
+    );
     const completed = useSelector(dungeonCompletedSelector(dungeonName));
     const dispatch = useDispatch();
 
@@ -23,7 +28,9 @@ const DungeonName = (props: DungeonNameProps) => {
         color: `var(--scheme-${required ? 'required' : 'unrequired'})`,
     };
 
-    const dungeonChange = () => dungeonName !== 'Sky Keep' && dispatch(clickDungeonName({ dungeonName }));
+    const dungeonChange = () =>
+        dungeonName !== 'Sky Keep' &&
+        dispatch(clickDungeonName({ dungeonName }));
     const onRightClick = (e: React.UIEvent) => {
         setActiveArea(dungeonName);
         e.preventDefault();
@@ -37,7 +44,12 @@ const DungeonName = (props: DungeonNameProps) => {
             tabIndex={0}
             onContextMenu={onRightClick}
         >
-            <span className={clsx(styles.dungeonName, { [styles.complete]: completed })} style={currentStyle}>
+            <span
+                className={clsx(styles.dungeonName, {
+                    [styles.complete]: completed,
+                })}
+                style={currentStyle}
+            >
                 {dungeonAbbr}
             </span>
         </div>

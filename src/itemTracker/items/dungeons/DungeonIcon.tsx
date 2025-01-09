@@ -19,9 +19,14 @@ const DungeonIcon = (props: DungeonIconProps) => {
             role="button"
             tabIndex={0}
             onKeyDown={keyDownWrapper(onClick)}
-            style={{...(width ? {} : { width: '100%' })}}
+            style={{ ...(width ? {} : { width: '100%' }) }}
         >
-            <img src={image} alt={iconLabel} width={width} style={{...(width ? {} : { width: '100%' })}} />
+            <img
+                src={image}
+                alt={iconLabel}
+                width={width}
+                style={{ ...(width ? {} : { width: '100%' }) }}
+            />
         </div>
     );
 };

@@ -1,6 +1,6 @@
 /**
  * A function that can compare values as expected by JS Array.prototype.sort:
- * 
+ *
  *  * A negative value indicates that a should come before b.
  *  * A positive value indicates that a should come after b.
  *  * Zero [or NaN] indicates that a and b are considered equal.
@@ -23,7 +23,7 @@ export function compareBy<T>(fn: (arg: T) => CompareKey): Comparator<T> {
             return 1;
         }
         return 0;
-    }
+    };
 }
 
 /** Chain two or more comparison functions. If the first returns 0 for equal, try the next one as a tiebreaker and so on. */

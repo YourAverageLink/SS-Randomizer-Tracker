@@ -1,14 +1,14 @@
-import { useSelector } from 'react-redux';
-import { areaGraphSelector } from '../logic/Selectors';
-import { exitsByIdSelector } from './Selectors';
-import type { AreaGraph, Logic } from '../logic/Logic';
-import type { ExitMapping } from '../logic/Locations';
 import { useReducer } from 'react';
+import { useSelector } from 'react-redux';
 import {
     getOwningProvince,
     type MapModel,
 } from '../locationTracker/mapTracker/MapModel';
 import { mapModelSelector } from '../locationTracker/mapTracker/Selectors';
+import type { ExitMapping } from '../logic/Locations';
+import type { AreaGraph, Logic } from '../logic/Logic';
+import { areaGraphSelector } from '../logic/Selectors';
+import { exitsByIdSelector } from './Selectors';
 
 export type InterfaceState =
     | {
@@ -74,7 +74,11 @@ function getHintRegionForEntrance(
     return areaGraph.entranceHintRegions[entranceId];
 }
 
-function getInitialState(mapModel: MapModel, areaGraph: AreaGraph, exits: Record<string, ExitMapping>): InterfaceState {
+function getInitialState(
+    mapModel: MapModel,
+    areaGraph: AreaGraph,
+    exits: Record<string, ExitMapping>,
+): InterfaceState {
     const startingExit = exits['\\Start'];
 
     // If the user needs to select a starting entrance, prompt first
@@ -100,7 +104,6 @@ function getInitialState(mapModel: MapModel, areaGraph: AreaGraph, exits: Record
             mapView,
             hintRegion,
         };
-
     }
     return {
         type: 'viewingChecks',
@@ -120,7 +123,9 @@ function interfaceReducer(
     ): InterfaceStateInternal => {
         // Make sure initial state is resolved
         const state =
-            state_.type === 'initial' ? getInitialState(mapModel, areaGraph, exits) : state_;
+            state_.type === 'initial'
+                ? getInitialState(mapModel, areaGraph, exits)
+                : state_;
         switch (action.type) {
             case 'selectMapView': {
                 if (state.type === 'choosingEntrance') {

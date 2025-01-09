@@ -1,21 +1,21 @@
 import type React from 'react';
+import { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import BasicCounters from '../BasicCounters';
+import { customLayoutSelector } from '../customization/Selectors';
+import { setCustomLayout } from '../customization/Slice';
+import { HintsTracker } from '../hints/HintsTracker';
+import DungeonTracker from '../itemTracker/DungeonTracker';
+import GridTracker from '../itemTracker/GridTracker';
+import ItemTracker from '../itemTracker/ItemTracker';
+import { LocationGroupList } from '../locationTracker/LocationGroupList';
+import { LocationsEntrancesList } from '../locationTracker/LocationsEntrancesList';
+import WorldMap from '../locationTracker/mapTracker/WorldMap';
 import type {
     InterfaceAction,
     InterfaceState,
 } from '../tracker/TrackerInterfaceReducer';
-import GridTracker from '../itemTracker/GridTracker';
-import ItemTracker from '../itemTracker/ItemTracker';
-import { LocationGroupList } from '../locationTracker/LocationGroupList';
-import WorldMap from '../locationTracker/mapTracker/WorldMap';
-import { LocationsEntrancesList } from '../locationTracker/LocationsEntrancesList';
-import DungeonTracker from '../itemTracker/DungeonTracker';
-import BasicCounters from '../BasicCounters';
-import { HintsTracker } from '../hints/HintsTracker';
-import { useDispatch, useSelector } from 'react-redux';
-import { customLayoutSelector } from '../customization/Selectors';
-import { useMemo } from 'react';
 import { convertError } from '../utils/Errors';
-import { setCustomLayout } from '../customization/Slice';
 
 /*
 Example custom layout JSON (for a Full HD vertical screen):
@@ -211,7 +211,9 @@ export function TrackerLayoutCustom({
         return (
             <div>
                 <pre style={{ color: 'red' }}>{parseResult}</pre>
-                <button type="button" className="tracker-button"
+                <button
+                    type="button"
+                    className="tracker-button"
                     onClick={() => {
                         dispatch(setCustomLayout(undefined));
                     }}

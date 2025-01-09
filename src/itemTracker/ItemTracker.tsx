@@ -1,14 +1,14 @@
 import type { CSSProperties } from 'react';
-import BWheel from './BWheel';
-import SwordBlock from './SwordBlock';
-import SongBlock from './SongBlock';
-import QuestItems from './QuestItems';
 import AdditionalItems from './AdditionalItems';
+import BWheel from './BWheel';
 import styles from './ItemTracker.module.css';
+import QuestItems from './QuestItems';
+import SongBlock from './SongBlock';
+import SwordBlock from './SwordBlock';
 
 export const ITEM_TRACKER_ASPECT_RATIO = 0.585;
 
-const COLUMN_WIDTH_INV = 2.10;
+const COLUMN_WIDTH_INV = 2.1;
 const B_WHEEL_SIZE_INV = 1.27;
 
 export default function ItemTracker({ width }: { width: number }) {

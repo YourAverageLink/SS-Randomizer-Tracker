@@ -1,10 +1,10 @@
-import type { ColorScheme } from '../../customization/ColorScheme';
-import type { CheckGroup, HintRegion } from '../../logic/Locations';
-import type { SubmarkerData } from './Marker';
+import { compact, pick } from 'es-toolkit';
 import goddessCubeImg from '../../assets/sidequests/goddess_cube.png';
 import gossipStoneImg from '../../assets/sidequests/gossip_stone.png';
+import type { ColorScheme } from '../../customization/ColorScheme';
 import images from '../../itemTracker/Images';
-import { compact, pick } from 'es-toolkit';
+import type { CheckGroup, HintRegion } from '../../logic/Locations';
+import type { SubmarkerData } from './Marker';
 
 /**
  * Data for a single hint region, or for a province
@@ -38,7 +38,10 @@ export function combineRegionCounters(
     left: RegionCounters,
     right: RegionCounters,
 ): RegionCounters {
-    const combineCounters = (left: CheckGroup | undefined, right: CheckGroup | undefined): CheckGroup => {
+    const combineCounters = (
+        left: CheckGroup | undefined,
+        right: CheckGroup | undefined,
+    ): CheckGroup => {
         if (left === undefined) {
             return right ?? initialCounters();
         } else if (right === undefined) {
@@ -87,7 +90,7 @@ export function getMarkerColor({
 
 function getExtraMarkerColor(group: CheckGroup): keyof ColorScheme | undefined {
     if (group.numRemaining === 0) {
-        return undefined; 
+        return undefined;
     } else {
         return getMarkerColor(group);
     }
@@ -100,18 +103,20 @@ const imageMap = {
 };
 
 export function getSubmarkerData(counters: RegionCounters): SubmarkerData[] {
-    return compact((['tr_cube', 'loose_crystal', 'gossip_stone'] as const).map((group) => {
-        if (!counters.extraLocations[group]) {
-            return;
-        }
-        const color = getExtraMarkerColor(counters.extraLocations[group]);
-        if (!color) {
-            return;
-        }
-        return {
-            key: group,
-            image: imageMap[group],
-            color,
-        }
-    }));
+    return compact(
+        (['tr_cube', 'loose_crystal', 'gossip_stone'] as const).map((group) => {
+            if (!counters.extraLocations[group]) {
+                return;
+            }
+            const color = getExtraMarkerColor(counters.extraLocations[group]);
+            if (!color) {
+                return;
+            }
+            return {
+                key: group,
+                image: imageMap[group],
+                color,
+            };
+        }),
+    );
 }

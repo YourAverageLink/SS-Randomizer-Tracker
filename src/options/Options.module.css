@@ -21,14 +21,14 @@
 
 .logicAndPermalink {
     display: grid;
-    grid-template-areas: "logic permalink";
+    grid-template-areas: 'logic permalink';
     grid-template-columns: 30% 70%;
     gap: 2px;
 
     @media (max-width: 1000px) {
         grid-template-areas:
-            "logic"
-            "permalink";
+            'logic'
+            'permalink';
         grid-template-columns: 100%;
     }
 }

@@ -1,17 +1,28 @@
-import { useDispatch, useSelector } from 'react-redux';
-import locationGroupStyles from './LocationGroup.module.css';
-import locationStyles from './Location.module.css';
-import styles from './EntranceChooser.module.css';
 import clsx from 'clsx';
-import { entrancePoolsSelector, exitsByIdSelector, usedEntrancesSelector } from '../tracker/Selectors';
 import { useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    entrancePoolsSelector,
+    exitsByIdSelector,
+    usedEntrancesSelector,
+} from '../tracker/Selectors';
 import { mapEntrance } from '../tracker/Slice';
 import keyDownWrapper from '../utils/KeyDownWrapper';
+import styles from './EntranceChooser.module.css';
+import locationStyles from './Location.module.css';
+import locationGroupStyles from './LocationGroup.module.css';
 
 const RESET_OPTION = 'RESET';
 
-export default function EntranceChooser({ wide, exitId, onChoose }: { wide: boolean; exitId: string, onChoose: (entranceId: string) => void }) {
-
+export default function EntranceChooser({
+    wide,
+    exitId,
+    onChoose,
+}: {
+    wide: boolean;
+    exitId: string;
+    onChoose: (entranceId: string) => void;
+}) {
     const dispatch = useDispatch();
     const exits = useSelector(exitsByIdSelector);
     const entrancePools = useSelector(entrancePoolsSelector);
@@ -19,7 +30,7 @@ export default function EntranceChooser({ wide, exitId, onChoose }: { wide: bool
     const exit = exits[exitId];
 
     const [filterText, setFilterText] = useState('');
-    
+
     const matches = (name: string, searchString: string) => {
         if (!searchString) {
             return true;
@@ -51,22 +62,29 @@ export default function EntranceChooser({ wide, exitId, onChoose }: { wide: bool
 
             return entrances;
         }
-    }, [entrancePools, exit.canAssign, exit.entrance, exit.rule, filterText, usedEntrances]);
+    }, [
+        entrancePools,
+        exit.canAssign,
+        exit.entrance,
+        exit.rule,
+        filterText,
+        usedEntrances,
+    ]);
 
     const onClickEntrance = (value: string) => {
         if (value === RESET_OPTION) {
             dispatch(mapEntrance({ from: exitId, to: undefined }));
         } else {
-            dispatch(
-                mapEntrance({ from: exitId, to: value }),
-            );
+            dispatch(mapEntrance({ from: exitId, to: value }));
         }
         onChoose(value);
-    }
+    };
 
     return (
         <div className={styles.entranceChooser}>
-            <span className={styles.query}>Where does {exit.exit.name} lead to?</span>
+            <span className={styles.query}>
+                Where does {exit.exit.name} lead to?
+            </span>
             <input
                 className="tracker-input"
                 placeholder="Filter entrances..."

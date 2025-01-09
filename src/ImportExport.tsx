@@ -1,8 +1,8 @@
 import { type ChangeEvent, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
+import type { RemoteReference } from './loader/LogicLoader';
 import { type ThunkResult, useAppDispatch } from './store/Store';
 import { type TrackerState, loadTracker } from './tracker/Slice';
-import type { RemoteReference } from './loader/LogicLoader';
 
 const version = 'SSRANDO-TRACKER-NG-V2';
 
@@ -44,13 +44,19 @@ export function ExportButton() {
     );
 }
 
-export function ImportButton({ setLogicBranch }: { setLogicBranch: (branch: RemoteReference) => void }) {
+export function ImportButton({
+    setLogicBranch,
+}: {
+    setLogicBranch: (branch: RemoteReference) => void;
+}) {
     const dispatch = useDispatch();
 
     const doImport = (text: string) => {
         const importVal = JSON.parse(text) as ExportState;
         if (importVal.version !== version) {
-            window.alert('This export was made with an incompatible version of the Tracker and cannot be imported here.');
+            window.alert(
+                'This export was made with an incompatible version of the Tracker and cannot be imported here.',
+            );
             return;
         }
         dispatch(loadTracker(importVal.state));
@@ -72,16 +78,32 @@ export function ImportButton({ setLogicBranch }: { setLogicBranch: (branch: Remo
             }
             doImport(e.target.result as string);
         };
-    }
+    };
 
     return (
         <>
-            <label style={{ margin: 0, display: 'contents' }} htmlFor="importButton">
-                <div className="tracker-button" style={{ display: 'flex', flexFlow: 'row', alignItems: 'center' }}>
+            <label
+                style={{ margin: 0, display: 'contents' }}
+                htmlFor="importButton"
+            >
+                <div
+                    className="tracker-button"
+                    style={{
+                        display: 'flex',
+                        flexFlow: 'row',
+                        alignItems: 'center',
+                    }}
+                >
                     Import Saved Run
                 </div>
             </label>
-            <input style={{ display: 'none' }} type="file" id="importButton" accept=".json" onChange={readFile} />
+            <input
+                style={{ display: 'none' }}
+                type="file"
+                id="importButton"
+                accept=".json"
+                onChange={readFile}
+            />
         </>
     );
 }

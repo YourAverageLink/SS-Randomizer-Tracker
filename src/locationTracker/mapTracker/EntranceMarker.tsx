@@ -1,5 +1,12 @@
 import { useCallback } from 'react';
+import type { TriggerEvent } from 'react-contexify';
 import { useSelector } from 'react-redux';
+import type { ColorScheme } from '../../customization/ColorScheme';
+import { decodeHint } from '../../hints/Hints';
+import { hintsToSubmarkers } from '../../hints/HintsParser';
+import { logicSelector } from '../../logic/Selectors';
+import type { RootState } from '../../store/Store';
+import { useTooltipExpr } from '../../tooltips/TooltipHooks';
 import {
     areaHintSelector,
     areasSelector,
@@ -7,18 +14,14 @@ import {
     inLogicBitsSelector,
 } from '../../tracker/Selectors';
 import { useContextMenu } from '../context-menu';
-import type { TriggerEvent } from 'react-contexify';
-import type { RootState } from '../../store/Store';
-import { logicSelector } from '../../logic/Selectors';
-import type { ColorScheme } from '../../customization/ColorScheme';
 import HintDescription from '../HintsDescription';
-import { useTooltipExpr } from '../../tooltips/TooltipHooks';
+import type {
+    LocationGroupContextMenuProps,
+    MapExitContextMenuProps,
+} from '../LocationGroupContextMenu';
 import RequirementsTooltip from '../RequirementsTooltip';
-import { Marker } from './Marker';
 import { getMarkerColor, getRegionData, getSubmarkerData } from './MapUtils';
-import type { LocationGroupContextMenuProps, MapExitContextMenuProps } from '../LocationGroupContextMenu';
-import { hintsToSubmarkers } from '../../hints/HintsParser';
-import { decodeHint } from '../../hints/Hints';
+import { Marker } from './Marker';
 
 type EntranceMarkerProps = {
     markerX: number;
@@ -44,8 +47,8 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
         onChooseEntrance,
         selected,
     } = props;
-    const exit = useSelector((state: RootState) =>
-        exitsByIdSelector(state)[exitId],
+    const exit = useSelector(
+        (state: RootState) => exitsByIdSelector(state)[exitId],
     );
     const inLogicBits = useSelector(inLogicBitsSelector);
     const logic = useSelector(logicSelector);
@@ -57,7 +60,7 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
     const area = useSelector((state: RootState) =>
         areasSelector(state).find((r) => r.name === region),
     );
-    
+
     const hasConnection = area !== undefined;
     const canReach = inLogicBits.test(logic.itemBits[exit.exit.id]);
     const isUnrequiredDungeon =
@@ -131,21 +134,30 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
         tooltip = (
             <center>
                 <div>{title}</div>
-                <div>{region} ({data.checks.numAccessible}/{data.checks.numRemaining})</div>
+                <div>
+                    {region} ({data.checks.numAccessible}/
+                    {data.checks.numRemaining})
+                </div>
                 <div style={{ textAlign: 'left' }}>
                     <RequirementsTooltip requirements={requirements} />
                 </div>
-                {hints.map((hint, idx) => <HintDescription key={idx} hint={decodeHint(hint)} />)}
+                {hints.map((hint, idx) => (
+                    <HintDescription key={idx} hint={decodeHint(hint)} />
+                ))}
             </center>
         );
     } else {
         tooltip = (
             <center>
-                <div>{title} ({canReach ? 'Accessible' : 'Inaccessible'})</div>
+                <div>
+                    {title} ({canReach ? 'Accessible' : 'Inaccessible'})
+                </div>
                 <div style={{ textAlign: 'left' }}>
                     <RequirementsTooltip requirements={requirements} />
                 </div>
-                <div>Click to Attach {isDungeon ? 'Dungeon' : 'Silent Realm'}</div>
+                <div>
+                    Click to Attach {isDungeon ? 'Dungeon' : 'Silent Realm'}
+                </div>
             </center>
         );
     }
@@ -177,7 +189,9 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
             onContextMenu={displayMenu}
             selected={selected}
             submarkerPlacement={submarkerPlacement}
-            submarkers={data && [...getSubmarkerData(data), ...hintsToSubmarkers(hints)]}
+            submarkers={
+                data && [...getSubmarkerData(data), ...hintsToSubmarkers(hints)]
+            }
         >
             {Boolean(data?.checks.numAccessible) && data?.checks.numAccessible}
             {!hasConnection && '?'}

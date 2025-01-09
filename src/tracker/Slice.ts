@@ -1,11 +1,11 @@
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
-import type { AllTypedOptions } from '../permalink/SettingsTypes';
-import { getInitialItems } from '../logic/TrackerModifications';
-import type { RegularDungeon } from '../logic/Locations';
-import { type InventoryItem, isItem, itemMaxes } from '../logic/Inventory';
 import { getStoredTrackerState } from '../LocalStorage';
 import { migrateTrackerState } from '../TrackerStateMigrations';
 import type { Hint } from '../hints/Hints';
+import { type InventoryItem, isItem, itemMaxes } from '../logic/Inventory';
+import type { RegularDungeon } from '../logic/Locations';
+import { getInitialItems } from '../logic/TrackerModifications';
+import type { AllTypedOptions } from '../permalink/SettingsTypes';
 
 export interface TrackerState {
     /**
@@ -61,7 +61,7 @@ const initialState: TrackerState = {
     hints: {},
     checkHints: {},
     settings: {},
-    userHintsText: "",
+    userHintsText: '',
     lastCheckedLocation: undefined,
 };
 
@@ -109,10 +109,16 @@ const trackerSlice = createSlice({
         },
         clickCheckInternal: (
             state,
-            action: PayloadAction<{ checkId: string; canMarkForItemAssignment: boolean; markChecked?: boolean }>,
+            action: PayloadAction<{
+                checkId: string;
+                canMarkForItemAssignment: boolean;
+                markChecked?: boolean;
+            }>,
         ) => {
             const { checkId, canMarkForItemAssignment } = action.payload;
-            const add = action.payload.markChecked ?? !state.checkedChecks.includes(checkId);
+            const add =
+                action.payload.markChecked ??
+                !state.checkedChecks.includes(checkId);
             if (add) {
                 state.checkedChecks.push(checkId);
                 if (canMarkForItemAssignment) {
@@ -132,7 +138,7 @@ const trackerSlice = createSlice({
             state,
             action: PayloadAction<{ item: InventoryItem; count: number }[]>,
         ) => {
-            for (const {item, count} of action.payload) {
+            for (const { item, count } of action.payload) {
                 state.inventory[item] = count;
             }
             state.hasBeenModified = true;
@@ -143,7 +149,9 @@ const trackerSlice = createSlice({
         ) => {
             const { dungeonName } = action.payload;
             if (state.requiredDungeons.includes(dungeonName)) {
-                state.requiredDungeons = state.requiredDungeons.filter((c) => c !== dungeonName);
+                state.requiredDungeons = state.requiredDungeons.filter(
+                    (c) => c !== dungeonName,
+                );
             } else {
                 state.requiredDungeons.push(dungeonName);
             }
@@ -198,16 +206,11 @@ const trackerSlice = createSlice({
             state.checkHints[checkId] = hint;
             state.hasBeenModified = true;
         },
-        setHintsText: (
-            state,
-            action: PayloadAction<string>
-        ) => {
+        setHintsText: (state, action: PayloadAction<string>) => {
             state.userHintsText = action.payload;
             state.hasBeenModified ||= action.payload !== '';
         },
-        cancelItemAssignment: (
-            state,
-        ) => {
+        cancelItemAssignment: (state) => {
             state.lastCheckedLocation = undefined;
         },
         acceptSettings: (
@@ -226,17 +229,28 @@ const trackerSlice = createSlice({
                 ...initialState,
                 settings: settings,
                 inventory: getInitialItems(settings),
-            }
+            };
         },
-        loadTracker: (
-            _state,
-            action: PayloadAction<Partial<TrackerState>>,
-        ) => {
+        loadTracker: (_state, action: PayloadAction<Partial<TrackerState>>) => {
             return migrateTrackerState({ ...initialState, ...action.payload });
         },
     },
 });
 
-export const { clickItem, clickCheckInternal, setItemCounts, clickDungeonName, bulkEditChecks, mapEntrance, cancelItemAssignment, acceptSettings, setCheckHint, reset, setHint, setHintsText, loadTracker } = trackerSlice.actions;
+export const {
+    clickItem,
+    clickCheckInternal,
+    setItemCounts,
+    clickDungeonName,
+    bulkEditChecks,
+    mapEntrance,
+    cancelItemAssignment,
+    acceptSettings,
+    setCheckHint,
+    reset,
+    setHint,
+    setHintsText,
+    loadTracker,
+} = trackerSlice.actions;
 
 export default trackerSlice.reducer;

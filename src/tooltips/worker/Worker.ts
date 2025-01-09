@@ -6,13 +6,13 @@ import {
 } from '../../logic/bitlogic/BitLogic';
 import { BitVector } from '../../logic/bitlogic/BitVector';
 import { LogicalExpression } from '../../logic/bitlogic/LogicalExpression';
+import BooleanExpression from '../../logic/booleanlogic/BooleanExpression';
+import { dnfToRequirementExpr } from './Algorithms';
+import type { LeanLogic, WorkerRequest, WorkerResponse } from './Types';
 import {
     deserializeLogicalExpression,
     serializeBooleanExpression,
 } from './Utils';
-import type { LeanLogic, WorkerRequest, WorkerResponse } from './Types';
-import BooleanExpression from '../../logic/booleanlogic/BooleanExpression';
-import { dnfToRequirementExpr } from './Algorithms';
 
 /**
  * This module contains various strategies to turn the requirements into a more compact and readable
@@ -55,15 +55,29 @@ onmessage = (ev: MessageEvent<WorkerRequest>) => {
                 // First, perform some cheap optimizations that will help every
                 // query afterwards.
                 removeDuplicates(g.requirementsForBottomUp);
-                while (shallowSimplify(g.opaqueBits, g.requirementsForBottomUp)) {
+                while (
+                    shallowSimplify(g.opaqueBits, g.requirementsForBottomUp)
+                ) {
                     removeDuplicates(g.requirementsForBottomUp);
                 }
-            } while (unifyRequirements(g.opaqueBits, g.requirementsForBottomUp));
-            console.log('worker', 'initializing and pre-simplifying took', performance.now() - start, 'ms');
+            } while (
+                unifyRequirements(g.opaqueBits, g.requirementsForBottomUp)
+            );
+            console.log(
+                'worker',
+                'initializing and pre-simplifying took',
+                performance.now() - start,
+                'ms',
+            );
 
             const start2 = performance.now();
             bottomUpTooltipPropagation(g.opaqueBits, g.requirementsForBottomUp);
-            console.log('worker', 'fixpoint propagation took', performance.now() - start2, 'ms');
+            console.log(
+                'worker',
+                'fixpoint propagation took',
+                performance.now() - start2,
+                'ms',
+            );
 
             break;
         }
@@ -72,7 +86,14 @@ onmessage = (ev: MessageEvent<WorkerRequest>) => {
                 throw new Error('needs to be initialized first!!!!');
             }
             const expr = analyze(ev.data.checkId);
-            console.log('worker', 'total time for', ev.data.checkId, 'was', performance.now() - start, 'ms');
+            console.log(
+                'worker',
+                'total time for',
+                ev.data.checkId,
+                'was',
+                performance.now() - start,
+                'ms',
+            );
             postMessage({
                 checkId: ev.data.checkId,
                 expression: serializeBooleanExpression(expr),
@@ -83,9 +104,19 @@ onmessage = (ev: MessageEvent<WorkerRequest>) => {
 
 function analyze(checkId: string): BooleanExpression {
     const bit = g.logic.itemBits[checkId];
-    const bottomUpExpression = g.requirementsForBottomUp[bit].removeDuplicates();
+    const bottomUpExpression =
+        g.requirementsForBottomUp[bit].removeDuplicates();
     const simplifyStart = performance.now();
-    const simplified = dnfToRequirementExpr(g.logic, bottomUpExpression.conjunctions);
-    console.log('  ', 'worker', 'simplifying took', performance.now() - simplifyStart, 'ms');
+    const simplified = dnfToRequirementExpr(
+        g.logic,
+        bottomUpExpression.conjunctions,
+    );
+    console.log(
+        '  ',
+        'worker',
+        'simplifying took',
+        performance.now() - simplifyStart,
+        'ms',
+    );
     return simplified;
 }

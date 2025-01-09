@@ -1,13 +1,13 @@
 import type { CSSProperties } from 'react';
-import Item from './Item';
-import allImages from './Images';
-import swordBlock from '../assets/Sword_Block.png';
-import keyDownWrapper from '../utils/KeyDownWrapper';
 import { useDispatch, useSelector } from 'react-redux';
+import swordBlock from '../assets/Sword_Block.png';
 import { rawItemCountSelector } from '../tracker/Selectors';
 import { clickItem } from '../tracker/Slice';
+import keyDownWrapper from '../utils/KeyDownWrapper';
+import allImages from './Images';
+import Item from './Item';
 
-export default function SwordBlock({width}: {width: number}) {
+export default function SwordBlock({ width }: { width: number }) {
     const dispatch = useDispatch();
     const handleExtraWalletClick = () => {
         dispatch(clickItem({ item: 'Extra Wallet', take: false }));
@@ -96,4 +96,4 @@ export default function SwordBlock({width}: {width: number}) {
             </div>
         </div>
     );
-};
+}

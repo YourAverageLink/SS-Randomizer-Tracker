@@ -1,28 +1,40 @@
 import { useCallback } from 'react';
-import MapMarker from './MapMarker';
-import EntranceMarker from './EntranceMarker';
-import keyDownWrapper from '../../utils/KeyDownWrapper';
-import leaveSkyloft from '../../assets/maps/leaveSkyloft.png';
-import leaveFaron from '../../assets/maps/leaveFaron.png';
-import leaveEldin from '../../assets/maps/leaveEldin.png';
-import leaveLanayru from '../../assets/maps/leaveLanayru.png';
-import { useSelector } from 'react-redux';
-import { areaHintSelector, areasSelector, checkSelector, exitsByIdSelector, settingSelector } from '../../tracker/Selectors';
-import { areaGraphSelector } from '../../logic/Selectors';
-import HintDescription from '../HintsDescription';
-import type { RootState } from '../../store/Store';
 import type { TriggerEvent } from 'react-contexify';
-import { Marker } from './Marker';
-import type { MapHintRegion } from './MapModel';
-import { combineRegionCounters, getMarkerColor, getRegionData, getSubmarkerData, initialRegionData } from './MapUtils';
+import { useSelector } from 'react-redux';
+import leaveEldin from '../../assets/maps/leaveEldin.png';
+import leaveFaron from '../../assets/maps/leaveFaron.png';
+import leaveLanayru from '../../assets/maps/leaveLanayru.png';
+import leaveSkyloft from '../../assets/maps/leaveSkyloft.png';
 import { decodeHint } from '../../hints/Hints';
+import { areaGraphSelector } from '../../logic/Selectors';
+import type { RootState } from '../../store/Store';
+import {
+    areaHintSelector,
+    areasSelector,
+    checkSelector,
+    exitsByIdSelector,
+    settingSelector,
+} from '../../tracker/Selectors';
+import keyDownWrapper from '../../utils/KeyDownWrapper';
+import HintDescription from '../HintsDescription';
+import EntranceMarker from './EntranceMarker';
+import MapMarker from './MapMarker';
+import type { MapHintRegion } from './MapModel';
+import {
+    combineRegionCounters,
+    getMarkerColor,
+    getRegionData,
+    getSubmarkerData,
+    initialRegionData,
+} from './MapUtils';
+import { Marker } from './Marker';
 
 export type ExitParams = {
-    image: string,
-    width: number,
-    left: number,
-    top: number
-}
+    image: string;
+    width: number;
+    left: number;
+    top: number;
+};
 
 const images: Record<string, string> = {
     leaveSkyloft,
@@ -80,16 +92,22 @@ const Submap = ({
     let markerColor = getMarkerColor(data.checks);
 
     const birdSanityOn = useSelector(settingSelector('random-start-statues'));
-    const birdStatueSanityPool = birdSanityOn && areaGraph.birdStatueSanity[title];
+    const birdStatueSanityPool =
+        birdSanityOn && areaGraph.birdStatueSanity[title];
     const needsBirdStatueSanityExit =
-        birdStatueSanityPool && exits[birdStatueSanityPool.exit].entrance === undefined;
+        birdStatueSanityPool &&
+        exits[birdStatueSanityPool.exit].entrance === undefined;
     const exitCheck = useSelector(
         (state: RootState) =>
             needsBirdStatueSanityExit &&
             checkSelector(birdStatueSanityPool.exit)(state),
     );
 
-    if (exitCheck && exitCheck.logicalState !== 'outLogic' && data.checks.numAccessible === 0) {
+    if (
+        exitCheck &&
+        exitCheck.logicalState !== 'outLogic' &&
+        data.checks.numAccessible === 0
+    ) {
         markerColor = exitCheck.logicalState;
     }
 
@@ -104,10 +122,7 @@ const Submap = ({
             )}
             {markers.map((marker, idx) =>
                 marker.hintRegion ? (
-                    <SubmapHint
-                        key={idx}
-                        area={marker.hintRegion}
-                    />
+                    <SubmapHint key={idx} area={marker.hintRegion} />
                 ) : undefined,
             )}
         </center>
@@ -155,14 +170,24 @@ const Submap = ({
             submarkerPlacement={'right'}
             submarkers={getSubmarkerData(data)}
         >
-            {(data.checks.numAccessible > 0) ? data.checks.numAccessible : needsBirdStatueSanityExit ? '?' : ''}
+            {data.checks.numAccessible > 0
+                ? data.checks.numAccessible
+                : needsBirdStatueSanityExit
+                  ? '?'
+                  : ''}
         </Marker>
     );
 
     const mapElement = (
         <div>
             {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
-            <img src={map} alt={`${title} Map`} width="100%" style={{position: 'relative'}} onContextMenu={handleBack}/>
+            <img
+                src={map}
+                alt={`${title} Map`}
+                width="100%"
+                style={{ position: 'relative' }}
+                onContextMenu={handleBack}
+            />
             {markers.map((marker) => {
                 if (marker.type === 'hint_region') {
                     return (
@@ -175,10 +200,10 @@ const Submap = ({
                             onGlickGroup={onGroupChange}
                             selected={
                                 marker.hintRegion !== undefined &&
-                                    marker.hintRegion === currentRegionOrExit
+                                marker.hintRegion === currentRegionOrExit
                             }
                         />
-                    )
+                    );
                 } else {
                     return (
                         <EntranceMarker
@@ -207,17 +232,26 @@ const Submap = ({
                 role="button"
                 tabIndex={0}
             >
-                <img alt="Back to Sky" src={images[exitParams.image]} width={`${exitParams.width}%`} style={{position: 'absolute', left: `${exitParams.left}%`, top: `${exitParams.top}%`}}/>
+                <img
+                    alt="Back to Sky"
+                    src={images[exitParams.image]}
+                    width={`${exitParams.width}%`}
+                    style={{
+                        position: 'absolute',
+                        left: `${exitParams.left}%`,
+                        top: `${exitParams.top}%`,
+                    }}
+                />
             </div>
         </div>
     );
-    
+
     return (
         <div>
-            <div style={{display:(provinceId === activeSubmap ? '' : 'none')}}>
+            <div style={{ display: provinceId === activeSubmap ? '' : 'none' }}>
                 {mapElement}
             </div>
-            <div style={{display:(!activeSubmap ? '' : 'none')}}>
+            <div style={{ display: !activeSubmap ? '' : 'none' }}>
                 {markerElement}
             </div>
         </div>

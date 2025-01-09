@@ -1,12 +1,12 @@
 import { useSelector } from 'react-redux';
 import { areasSelector } from '../tracker/Selectors';
 import type {
-    InterfaceState,
     InterfaceAction,
+    InterfaceState,
 } from '../tracker/TrackerInterfaceReducer';
 import EntranceChooser from './EntranceChooser';
-import { Locations } from './Locations';
 import LocationGroupHeader from './LocationGroupHeader';
+import { Locations } from './Locations';
 
 export function LocationsEntrancesList({
     includeHeader,

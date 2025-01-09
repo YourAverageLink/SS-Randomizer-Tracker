@@ -49,12 +49,18 @@ export class BitVector {
 
     /** Creates a new BitVector consisting of the bits that are both in `this` and `other`. */
     and(other: BitVector) {
-        return new BitVector(other.data & this.data, intersection(other.intSet, this.intSet));
+        return new BitVector(
+            other.data & this.data,
+            intersection(other.intSet, this.intSet),
+        );
     }
 
     /** Creates a new BitVector consisting of the bits that are in `this` or in `other`. */
     or(other: BitVector) {
-        return new BitVector(other.data | this.data, union(other.intSet, this.intSet));
+        return new BitVector(
+            other.data | this.data,
+            union(other.intSet, this.intSet),
+        );
     }
 
     /** Returns true iff `bit` is set in this BitVector. */
@@ -64,7 +70,10 @@ export class BitVector {
 
     /** Returns true iff all the bits in `this` are also set in `other`. */
     isSubsetOf(other: BitVector) {
-        return this.numSetBits <= other.numSetBits && (this.data | other.data) === other.data;
+        return (
+            this.numSetBits <= other.numSetBits &&
+            (this.data | other.data) === other.data
+        );
     }
 
     /** Returns true iff all the bits in `this` are also set in `other` and the other way around. */
@@ -76,7 +85,7 @@ export class BitVector {
      * slow
      */
     toString(domainSize: number) {
-        let str = "";
+        let str = '';
         for (let bit = domainSize - 1; bit >= 0; bit--) {
             if (this.data & (ONE << BigInt(bit))) {
                 str += '1';
@@ -104,16 +113,16 @@ export class BitVector {
 
     /** Iterates over all set bits in this BitVector. */
     iter() {
-        return this.intSet.values()
+        return this.intSet.values();
     }
 
     /** Assuming that this vector has a single set bit, returns it. */
     getSingleSetBit(): number {
-        return this.intSet.values().next().value as number
+        return this.intSet.values().next().value as number;
     }
 
     /** Returns the number of bits set in this BitVector. */
     get numSetBits() {
-        return this.intSet.size
+        return this.intSet.size;
     }
 }

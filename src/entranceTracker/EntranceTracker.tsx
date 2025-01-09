@@ -1,13 +1,19 @@
 import { useMemo, useState } from 'react';
-import { FixedSizeList as List, type ListChildComponentProps } from 'react-window';
-import Select, { type ActionMeta, type SingleValue } from 'react-select';
 import { useDispatch, useSelector } from 'react-redux';
-import { entrancePoolsSelector, exitsSelector, usedEntrancesSelector } from '../tracker/Selectors';
-import { mapEntrance } from '../tracker/Slice';
-import { selectStyles } from '../customization/ComponentStyles';
-import { mapValues } from '../utils/Collections';
+import Select, { type ActionMeta, type SingleValue } from 'react-select';
+import {
+    FixedSizeList as List,
+    type ListChildComponentProps,
+} from 'react-window';
 import { Dialog } from '../additionalComponents/Dialog';
-// import EntranceGraph from './EntranceGraph';
+import { selectStyles } from '../customization/ComponentStyles';
+import {
+    entrancePoolsSelector,
+    exitsSelector,
+    usedEntrancesSelector,
+} from '../tracker/Selectors';
+import { mapEntrance } from '../tracker/Slice';
+import { mapValues } from '../utils/Collections';
 
 type Entrance = {
     value: string;
@@ -16,8 +22,13 @@ type Entrance = {
 
 const RESET_OPTION = 'RESET';
 
-function EntranceTracker({ open, onOpenChange }: {open: boolean;
-    onOpenChange: (open: boolean) => void;}) {
+function EntranceTracker({
+    open,
+    onOpenChange,
+}: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+}) {
     const dispatch = useDispatch();
     const exits = useSelector(exitsSelector);
     const usedEntrances = useSelector(usedEntrancesSelector);
@@ -53,20 +64,19 @@ function EntranceTracker({ open, onOpenChange }: {open: boolean;
         [entrancePools, usedEntrances],
     );
 
-    const onEntranceChange = 
-        (
-            from: string,
-            selectedOption: SingleValue<Entrance>,
-            meta: ActionMeta<Entrance>,
-        ) => {
-            if (meta.action === 'select-option') {
-                if (!selectedOption || selectedOption.value === RESET_OPTION) {
-                    dispatch(mapEntrance({ from, to: undefined }))
-                } else {
-                    dispatch(mapEntrance({ from, to: selectedOption.value }))
-                }
+    const onEntranceChange = (
+        from: string,
+        selectedOption: SingleValue<Entrance>,
+        meta: ActionMeta<Entrance>,
+    ) => {
+        if (meta.action === 'select-option') {
+            if (!selectedOption || selectedOption.value === RESET_OPTION) {
+                dispatch(mapEntrance({ from, to: undefined }));
+            } else {
+                dispatch(mapEntrance({ from, to: selectedOption.value }));
             }
-        };
+        }
+    };
 
     const entranceLower = entranceSearch.toLowerCase();
     const exitLower = exitSearch.toLowerCase();
@@ -77,7 +87,7 @@ function EntranceTracker({ open, onOpenChange }: {open: boolean;
         }
         const fragments = searchString.split(' ');
         return fragments.every((fragment) => name.includes(fragment.trim()));
-    }
+    };
 
     const filteredRows = exits.filter((e) => {
         return (
@@ -103,20 +113,42 @@ function EntranceTracker({ open, onOpenChange }: {open: boolean;
                     filter: !exit.canAssign ? 'opacity(0.5)' : undefined,
                 }}
             >
-                <div style={{ flex: '1', display: 'flex', alignItems: 'center' }}><span>{exit.exit.name}</span></div>
+                <div
+                    style={{ flex: '1', display: 'flex', alignItems: 'center' }}
+                >
+                    <span>{exit.exit.name}</span>
+                </div>
                 <div style={{ flex: '1', minWidth: 0 }}>
                     <Select
                         styles={selectStyles<false, Entrance>()}
-                        value={exit.entrance && { label: exit.entrance.name, value: exit.entrance.id }}
-                        onChange={(...args) => onEntranceChange(exit.exit.id, ...args)}
-                        options={exit.canAssign ? entranceOptions[exit.rule.pool] : undefined}
+                        value={
+                            exit.entrance && {
+                                label: exit.entrance.name,
+                                value: exit.entrance.id,
+                            }
+                        }
+                        onChange={(...args) =>
+                            onEntranceChange(exit.exit.id, ...args)
+                        }
+                        options={
+                            exit.canAssign
+                                ? entranceOptions[exit.rule.pool]
+                                : undefined
+                        }
                         name={exit.entrance?.name}
                         isDisabled={!exit.canAssign}
-                        filterOption={(option, search) => matches(option.data.label.toLowerCase(), search.toLowerCase())}
+                        filterOption={(option, search) =>
+                            matches(
+                                option.data.label.toLowerCase(),
+                                search.toLowerCase(),
+                            )
+                        }
                     />
                 </div>
                 <div>
-                    <button type="button" className="tracker-button"
+                    <button
+                        type="button"
+                        className="tracker-button"
                         disabled={!exit.entrance}
                         onClick={() =>
                             setExitSearch(
@@ -179,7 +211,6 @@ function EntranceTracker({ open, onOpenChange }: {open: boolean;
                 {row}
             </List>
         </Dialog>
-        // <EntranceGraph />
     );
 }
 

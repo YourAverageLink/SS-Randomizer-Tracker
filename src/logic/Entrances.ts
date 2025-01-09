@@ -1,16 +1,20 @@
+import { invert } from 'es-toolkit';
 import type { TypedOptions } from '../permalink/SettingsTypes';
-import type { LinkedEntrancePool, Logic, TrackerLinkedEntrancePool } from './Logic';
+import type { TrackerState } from '../tracker/Slice';
+import { mapValues } from '../utils/Collections';
+import { compareBy } from '../utils/Compare';
+import type { DungeonName, ExitMapping } from './Locations';
+import type {
+    LinkedEntrancePool,
+    Logic,
+    TrackerLinkedEntrancePool,
+} from './Logic';
 import {
     bannedExitsAndEntrances,
     lmfSecondExit,
     nonRandomizedEntrances,
     nonRandomizedExits,
 } from './ThingsThatWouldBeNiceToHaveInTheDump';
-import type { TrackerState } from '../tracker/Slice';
-import type { DungeonName, ExitMapping } from './Locations';
-import { invert } from 'es-toolkit';
-import { mapValues } from '../utils/Collections';
-import { compareBy } from '../utils/Compare';
 
 export interface Entrance {
     name: string;
@@ -94,16 +98,19 @@ export function getEntrancePools(
     randomDungeonEntranceSetting: TypedOptions['randomize-dungeon-entrances'],
     requiredDungeons: DungeonName[],
 ) {
-    const relevantDerSetting = randomDungeonEntranceSetting ?? randomEntranceSetting;
-    const requiredDungeonsSeparately = relevantDerSetting === 'Required Dungeons Separately';
-    const skyKeepVanilla = relevantDerSetting !== 'All Surface Dungeons + Sky Keep' && relevantDerSetting !== 'Required Dungeons Separately';
+    const relevantDerSetting =
+        randomDungeonEntranceSetting ?? randomEntranceSetting;
+    const requiredDungeonsSeparately =
+        relevantDerSetting === 'Required Dungeons Separately';
+    const skyKeepVanilla =
+        relevantDerSetting !== 'All Surface Dungeons + Sky Keep' &&
+        relevantDerSetting !== 'Required Dungeons Separately';
     const requiredDungeons_: string[] = requiredDungeons;
 
     const result: Record<string, EntrancePool> = {};
     for (const [pool, entries] of Object.entries(
         areaGraph.linkedEntrancePools,
     )) {
-        
         result[pool] = {
             usedEntrancesExcluded: true,
             entrances: [],
@@ -127,8 +134,11 @@ export function getEntrancePools(
                 name: areaGraph.entrances[entranceId].short_name,
             };
 
-
-            if (requiredDungeonsSeparately && pool === 'dungeons' && !requiredDungeons_.includes(entry)) {
+            if (
+                requiredDungeonsSeparately &&
+                pool === 'dungeons' &&
+                !requiredDungeons_.includes(entry)
+            ) {
                 result['dungeons_unrequired'].entrances.push(val);
             } else {
                 result[pool].entrances.push(val);
@@ -187,7 +197,9 @@ export function getExitRules(
 ) {
     const result: Record<string, ExitRule> = {};
 
-    const followToCanonicalEntrance = invert<string, string>(logic.areaGraph.autoExits);
+    const followToCanonicalEntrance = invert<string, string>(
+        logic.areaGraph.autoExits,
+    );
 
     const everythingRandomized = randomEntranceSetting === 'All';
     const relevantDerSetting =
@@ -270,7 +282,9 @@ export function getExitRules(
         if (poolData) {
             const [pool, entry, isOutsideExit] = poolData;
             if (
-                (pool === 'dungeons' && dungeonEntrancesRandomized && (entry !== 'Sky Keep' || !skyKeepVanilla)) ||
+                (pool === 'dungeons' &&
+                    dungeonEntrancesRandomized &&
+                    (entry !== 'Sky Keep' || !skyKeepVanilla)) ||
                 (pool === 'silent_realms' && randomTrialsSetting)
             ) {
                 if (isOutsideExit) {

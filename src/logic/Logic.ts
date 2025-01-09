@@ -1,17 +1,6 @@
-import { BitVector } from './bitlogic/BitVector';
-import { LogicalExpression } from './bitlogic/LogicalExpression';
-import {
-    type RawLogic,
-    type RawArea,
-    TimeOfDay,
-    type RawEntrance,
-    type RawExit,
-} from './UpstreamTypes';
-import {
-    cubeCheckToCubeCollected,
-    cubeCollectedToCubeCheck,
-    dungeonCompletionItems,
-} from './TrackerModifications';
+import { groupBy, last } from 'es-toolkit';
+import { isEmpty, mapValues } from '../utils/Collections';
+import { chainComparators, compareBy } from '../utils/Compare';
 import {
     type Requirements,
     mergeRequirements,
@@ -19,16 +8,27 @@ import {
     shallowSimplify,
     unifyRequirements,
 } from './bitlogic/BitLogic';
+import { BitVector } from './bitlogic/BitVector';
+import { LogicalExpression } from './bitlogic/LogicalExpression';
 import {
     booleanExprToLogicalExpr,
     parseExpression,
 } from './booleanlogic/ExpressionParse';
+import { itemName } from './Inventory';
 import { dungeonNames } from './Locations';
 import { LogicBuilder } from './LogicBuilder';
-import { isEmpty, mapValues } from '../utils/Collections';
-import { groupBy, last } from 'es-toolkit';
-import { chainComparators, compareBy } from '../utils/Compare';
-import { itemName } from './Inventory';
+import {
+    cubeCheckToCubeCollected,
+    cubeCollectedToCubeCheck,
+    dungeonCompletionItems,
+} from './TrackerModifications';
+import {
+    type RawArea,
+    type RawEntrance,
+    type RawExit,
+    type RawLogic,
+    TimeOfDay,
+} from './UpstreamTypes';
 
 export interface Logic {
     numRequirements: number;
@@ -44,13 +44,13 @@ export interface Logic {
     impliedBy: Record<string, string[]>;
     /** Maps from items K to items V such that for every V: K -> V */
     implies: Record<string, string[]>;
-    itemBits: Record<string, number>,
+    itemBits: Record<string, number>;
     areaGraph: AreaGraph;
     checks: Record<string, LogicalCheck>;
     hintRegions: string[];
     checksByHintRegion: Record<string, string[]>;
     exitsByHintRegion: Record<string, string[]>;
-    dungeonCompletionRequirements: { [dungeon: string]: string }
+    dungeonCompletionRequirements: { [dungeon: string]: string };
 }
 
 export interface LogicalCheck {
@@ -79,7 +79,9 @@ export interface LogicalCheck {
 export type LocationAvailability = TimeOfDay | 'abstract';
 
 export type LinkedEntrancePool = keyof RawLogic['linked_entrances'];
-export type TrackerLinkedEntrancePool = LinkedEntrancePool | 'dungeons_unrequired';
+export type TrackerLinkedEntrancePool =
+    | LinkedEntrancePool
+    | 'dungeons_unrequired';
 
 /**
  * Is this a check that can contain mostly any random item, assuming it is unbanned?
@@ -106,7 +108,7 @@ export function isRegularItemCheck(type: LogicalCheck['type']) {
  * The AreaGraph is a parsed dump with some preprocessing for TimeOfDay logic.
  * This graph will be mapped to a self-contained BitLogic for logical state.
  * The BitLogic results can the be used to interpret edges in this graph.
- * 
+ *
  * This area graph maintains the structure of the area requirements, which could help
  * implementing a more structured grounding algorithm for tooltip requirements in the future.
  */
@@ -138,7 +140,7 @@ export interface AreaGraph {
      * An entrance pool without linkage.
      */
     birdStatueSanity: {
-        [pool: string]: { exit: string, entrances: string[] };
+        [pool: string]: { exit: string; entrances: string[] };
     };
 }
 
@@ -149,7 +151,10 @@ export interface EntranceLinkage {
     entrances: [insideEntrance: string, outsideEntrance: string];
 }
 
-export type DayNightRequirements = { day: LogicalExpression, night: LogicalExpression };
+export type DayNightRequirements = {
+    day: LogicalExpression;
+    night: LogicalExpression;
+};
 
 interface CommonArea {
     abstract: boolean;
@@ -180,7 +185,10 @@ export interface DualTodArea extends CommonArea {
  */
 export interface SingleTodArea extends CommonArea {
     availability: TimeOfDay.DayOnly | TimeOfDay.NightOnly;
-    locations: Location<LogicalExpression, TimeOfDay.DayOnly | TimeOfDay.NightOnly>[];
+    locations: Location<
+        LogicalExpression,
+        TimeOfDay.DayOnly | TimeOfDay.NightOnly
+    >[];
     canSleep: false;
     abstract: false;
 }
@@ -205,37 +213,46 @@ interface AbstractLocation<R, T extends LocationAvailability> {
     /** The fully resolved check/exit/location id. */
     id: string;
     /** The actual requirements expression(s) to get this location... */
-    requirements: R,
+    requirements: R;
     /** ...from its owning area with this Time of Day. */
     areaAvailability: T;
 }
 
-interface MapExit<R, T extends LocationAvailability> extends AbstractLocation<R, T> {
+interface MapExit<R, T extends LocationAvailability>
+    extends AbstractLocation<R, T> {
     type: 'mapExit';
 }
 
-interface LogicalExit<R, T extends LocationAvailability> extends AbstractLocation<R, T> {
+interface LogicalExit<R, T extends LocationAvailability>
+    extends AbstractLocation<R, T> {
     type: 'logicalExit';
     /** The destination area. */
     toArea: string;
 }
 
-interface VirtualLocation<R, T extends LocationAvailability> extends AbstractLocation<R, T> {
+interface VirtualLocation<R, T extends LocationAvailability>
+    extends AbstractLocation<R, T> {
     type: 'virtualLocation';
 }
 
-interface CheckRenameMe<R, T extends LocationAvailability> extends AbstractLocation<R, T> {
+interface CheckRenameMe<R, T extends LocationAvailability>
+    extends AbstractLocation<R, T> {
     type: 'check';
     /** Whether this instance of the location was the primary (unprefixed) mention. */
     isPrimaryLocation: boolean;
 }
 
-type Location<R, T extends LocationAvailability> = MapExit<R, T> | LogicalExit<R, T> | VirtualLocation<R, T> | CheckRenameMe<R, T>;
-
+type Location<R, T extends LocationAvailability> =
+    | MapExit<R, T>
+    | LogicalExit<R, T>
+    | VirtualLocation<R, T>
+    | CheckRenameMe<R, T>;
 
 const itemIndexPat = /^(.+) #(\d+)$/;
 
-function splitItemIndex(item: string): [item: string, index: number | undefined] {
+function splitItemIndex(
+    item: string,
+): [item: string, index: number | undefined] {
     const match = item.match(itemIndexPat);
     if (!match) {
         return [item, undefined];
@@ -258,12 +275,12 @@ const excludedItemPrefixes = [
     'Semi Rare Treasure #',
     'Silver Rupee #',
     'Hint #',
-]
+];
 
 /**
  * Turns all "<Item> #<number>" requirements into "<Item> x <number+1>"
  * requirements - this works better with the tracker.
- * 
+ *
  * Also filters out items the tracker doesn't really interact with, such as
  * hint items, treasures, ... which cuts about 400 bits from our logic.
  */
@@ -304,9 +321,7 @@ const checkAreaPlaceholder = 'filled-in-later';
 export function parseLogic(raw: RawLogic): Logic {
     const start = performance.now();
 
-    const { newItems, impliedBy, implies } = preprocessItems(
-        raw.items,
-    );
+    const { newItems, impliedBy, implies } = preprocessItems(raw.items);
     const rawItems = [
         ...newItems,
         ...Object.keys(cubeCollectedToCubeCheck),
@@ -331,7 +346,9 @@ export function parseLogic(raw: RawLogic): Logic {
         } as const;
     });
 
-    for (const [cubeItem, cubeCheck] of Object.entries(cubeCollectedToCubeCheck)) {
+    for (const [cubeItem, cubeCheck] of Object.entries(
+        cubeCollectedToCubeCheck,
+    )) {
         checks[cubeCheck] = {
             type: 'tr_cube',
             name: last(cubeCheck.split('\\'))!,
@@ -376,7 +393,7 @@ export function parseLogic(raw: RawLogic): Logic {
     const entranceHintAreas: AreaGraph['entranceHintRegions'] = {};
 
     const entrancesByShortName: {
-        [shortName: string]: { def: RawEntrance; id: string, region: string };
+        [shortName: string]: { def: RawEntrance; id: string; region: string };
     } = {};
     let idx = 0;
     for (const rawItem of rawItems) {
@@ -523,8 +540,7 @@ export function parseLogic(raw: RawLogic): Logic {
         }
 
         const getHintRegion = (locationId: string) => {
-            let region: string | null | undefined =
-                rawArea.hint_region;
+            let region: string | null | undefined = rawArea.hint_region;
             if (
                 !region &&
                 (locationId.includes('Temple of Time') ||
@@ -548,7 +564,7 @@ export function parseLogic(raw: RawLogic): Logic {
                 throw new Error(`check ${locationId} has no region?`);
             }
             return region;
-        }
+        };
 
         if (rawArea.exits) {
             for (const [exit, exitRequirementExpression] of Object.entries(
@@ -568,7 +584,10 @@ export function parseLogic(raw: RawLogic): Logic {
                             type: 'logicalExit',
                             id: fullExitName,
                             toArea: destArea.id,
-                            requirements: toDualTodExpr(area.availability, expr),
+                            requirements: toDualTodExpr(
+                                area.availability,
+                                expr,
+                            ),
                             areaAvailability: area.availability,
                         });
                     } else {
@@ -576,7 +595,10 @@ export function parseLogic(raw: RawLogic): Logic {
                             type: 'logicalExit',
                             id: fullExitName,
                             toArea: destArea.id,
-                            requirements: toSingleTodExpr(area.availability, expr),
+                            requirements: toSingleTodExpr(
+                                area.availability,
+                                expr,
+                            ),
                             areaAvailability: area.availability,
                         });
                     }
@@ -586,7 +608,9 @@ export function parseLogic(raw: RawLogic): Logic {
 
                     if (area.availability === 'abstract') {
                         if (fullExitName !== '\\Start') {
-                            throw new Error('abstract area may only lead to start exit');
+                            throw new Error(
+                                'abstract area may only lead to start exit',
+                            );
                         }
                         area.locations.push({
                             type: 'mapExit',
@@ -598,14 +622,20 @@ export function parseLogic(raw: RawLogic): Logic {
                         area.locations.push({
                             type: 'mapExit',
                             id: fullExitName,
-                            requirements: toDualTodExpr(area.availability, expr),
+                            requirements: toDualTodExpr(
+                                area.availability,
+                                expr,
+                            ),
                             areaAvailability: area.availability,
                         });
                     } else {
                         area.locations.push({
                             type: 'mapExit',
                             id: fullExitName,
-                            requirements: toSingleTodExpr(area.availability, expr),
+                            requirements: toSingleTodExpr(
+                                area.availability,
+                                expr,
+                            ),
                             areaAvailability: area.availability,
                         });
                     }
@@ -760,7 +790,7 @@ export function parseLogic(raw: RawLogic): Logic {
 
     // Ensure we discovered all checks in our logical requirements
     if (Object.values(checks).some((c) => c.area === checkAreaPlaceholder)) {
-        throw new Error("could not discover check area");
+        throw new Error('could not discover check area');
     }
 
     const vanillaConnections: AreaGraph['vanillaConnections'] = {};
@@ -801,8 +831,10 @@ export function parseLogic(raw: RawLogic): Logic {
 
     const birdStatueSanity: AreaGraph['birdStatueSanity'] = {};
     const raiseMissingProvince = (entrance: RawEntrance) => {
-        throw new Error(`bird statue entrance ${entrance.short_name} is missing a province`)
-    }
+        throw new Error(
+            `bird statue entrance ${entrance.short_name} is missing a province`,
+        );
+    };
     const allBirdStatues = groupBy(
         Object.entries(raw.entrances).filter(
             ([, entrance]) =>
@@ -824,7 +856,6 @@ export function parseLogic(raw: RawLogic): Logic {
         }
     }
 
-
     const areaGraph: AreaGraph = {
         areas: allAreas,
         rootArea,
@@ -845,9 +876,12 @@ export function parseLogic(raw: RawLogic): Logic {
     }, {});
 
     // Now map our area graph to BitLogic
-    const newBuilder = new LogicBuilder(rawItems, itemLookup, staticRequirements);
+    const newBuilder = new LogicBuilder(
+        rawItems,
+        itemLookup,
+        staticRequirements,
+    );
     mapAreaToBitLogic(newBuilder, areaGraph, opaqueItems);
-
 
     // check for orphaned locations. This again should probably not be in here
     // but in the rando instead...
@@ -867,10 +901,12 @@ export function parseLogic(raw: RawLogic): Logic {
 
     const rawCheckOrder = Object.keys(raw.checks);
     for (const area of Object.keys(checksByHintRegion)) {
-        checksByHintRegion[area].sort(compareBy((check) => {
-            const idx = rawCheckOrder.indexOf(check);
-            return idx !== -1 ? idx : Number.MAX_SAFE_INTEGER;
-        }));
+        checksByHintRegion[area].sort(
+            compareBy((check) => {
+                const idx = rawCheckOrder.indexOf(check);
+                return idx !== -1 ? idx : Number.MAX_SAFE_INTEGER;
+            }),
+        );
     }
 
     const areas = Object.keys(checksByHintRegion);
@@ -903,9 +939,12 @@ export function parseLogic(raw: RawLogic): Logic {
     // entrances, every entrance has to be considered uniquely reachable with no way
     // to bound our exploration or to simplify these expressions as we go.
 
-    const updatedRequirements = mapValues(staticRequirements, (_value, idx) => bitLogic[parseInt(idx, 10)]);
+    const updatedRequirements = mapValues(
+        staticRequirements,
+        (_value, idx) => bitLogic[parseInt(idx, 10)],
+    );
 
-    console.log('logic building took', performance.now() - start, 'ms'); 
+    console.log('logic building took', performance.now() - start, 'ms');
 
     return {
         numRequirements: rawItems.length,
@@ -980,8 +1019,13 @@ function mapAreaToBitLogic(
             case 'logicalExit':
                 {
                     const destArea = areaGraph.areas[location.toArea];
-                    if (destArea.availability === 'abstract' || location.areaAvailability === 'abstract') {
-                        throw new Error('abstract areas cannot have logical exits between them');
+                    if (
+                        destArea.availability === 'abstract' ||
+                        location.areaAvailability === 'abstract'
+                    ) {
+                        throw new Error(
+                            'abstract areas cannot have logical exits between them',
+                        );
                     }
                     if (destArea.availability === TimeOfDay.Both) {
                         opaqueItems.clearBit(b.bit(b.day(destArea.id)));
@@ -1000,14 +1044,18 @@ function mapAreaToBitLogic(
                                     b.singleBit(b.night(area.id)),
                                 ),
                             );
-                        } else if (location.areaAvailability === TimeOfDay.DayOnly) {
-                            b.addAlternative(b.day(destArea.id), location.requirements.and(
-                                b.singleBit(area.id),
-                            ));
+                        } else if (
+                            location.areaAvailability === TimeOfDay.DayOnly
+                        ) {
+                            b.addAlternative(
+                                b.day(destArea.id),
+                                location.requirements.and(b.singleBit(area.id)),
+                            );
                         } else {
-                            b.addAlternative(b.night(destArea.id), location.requirements.and(
-                                b.singleBit(area.id),
-                            ));
+                            b.addAlternative(
+                                b.night(destArea.id),
+                                location.requirements.and(b.singleBit(area.id)),
+                            );
                         }
                     } else {
                         opaqueItems.clearBit(b.bit(destArea.id));
@@ -1015,13 +1063,21 @@ function mapAreaToBitLogic(
                         if (location.areaAvailability === TimeOfDay.Both) {
                             const [timedReq, timedArea] =
                                 destArea.availability === TimeOfDay.DayOnly
-                                    ? [location.requirements.day, b.day(area.id)]
-                                    : [location.requirements.night, b.night(area.id)];
+                                    ? [
+                                          location.requirements.day,
+                                          b.day(area.id),
+                                      ]
+                                    : [
+                                          location.requirements.night,
+                                          b.night(area.id),
+                                      ];
                             b.addAlternative(
                                 destArea.id,
                                 timedReq.and(b.singleBit(timedArea)),
                             );
-                        } else if (location.areaAvailability === destArea.availability) {
+                        } else if (
+                            location.areaAvailability === destArea.availability
+                        ) {
                             b.addAlternative(
                                 destArea.id,
                                 location.requirements.and(b.singleBit(area.id)),
@@ -1045,14 +1101,10 @@ function mapAreaToBitLogic(
         } else {
             let areaReq: string;
             if (area.availability === TimeOfDay.Both) {
-                if (
-                    entranceDef.allowed_time_of_day ===
-                    TimeOfDay.DayOnly
-                ) {
+                if (entranceDef.allowed_time_of_day === TimeOfDay.DayOnly) {
                     areaReq = b.day(area.id);
                 } else if (
-                    entranceDef.allowed_time_of_day ===
-                    TimeOfDay.NightOnly
+                    entranceDef.allowed_time_of_day === TimeOfDay.NightOnly
                 ) {
                     areaReq = b.night(area.id);
                 } else {
@@ -1081,7 +1133,10 @@ function getCheckType(
         return 'trial_treasure';
     } else if (checkType.includes('Loose Crystals')) {
         return 'loose_crystal';
-    } else if (checkType.includes('Beedle') && checkType.includes('Shop Purchases')) {
+    } else if (
+        checkType.includes('Beedle') &&
+        checkType.includes('Shop Purchases')
+    ) {
         return 'beedle_shop';
     } else if (checkType.includes('Gear Shop Purchases')) {
         return 'gear_shop';
@@ -1089,7 +1144,7 @@ function getCheckType(
         return 'potion_shop';
     } else if (
         checkType.includes('Tadtones') &&
-        !checkName.includes('Water Dragon\'s Reward')
+        !checkName.includes("Water Dragon's Reward")
     ) {
         return 'tadtone';
     } else {

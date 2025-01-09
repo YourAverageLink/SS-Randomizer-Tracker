@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import EntranceTracker from './entranceTracker/EntranceTracker';
-import { MakeTooltipsAvailable } from './tooltips/TooltipHooks';
-import CustomizationModal from './customization/CustomizationModal';
 import { Link, Navigate } from 'react-router-dom';
-import { isLogicLoadedSelector } from './logic/Selectors';
+import CustomizationModal from './customization/CustomizationModal';
+import { hasCustomLayoutSelector } from './customization/Selectors';
+import EntranceTracker from './entranceTracker/EntranceTracker';
 import { ExportButton } from './ImportExport';
+import { TrackerLayoutCustom } from './layouts/TrackerLayoutCustom';
+import { TrackerLayout } from './layouts/TrackerLayouts';
 import { useSyncTrackerStateToLocalStorage } from './LocalStorage';
-import { useTrackerInterfaceReducer } from './tracker/TrackerInterfaceReducer';
 import LocationContextMenu from './locationTracker/LocationContextMenu';
 import LocationGroupContextMenu from './locationTracker/LocationGroupContextMenu';
-import { TrackerLayout } from './layouts/TrackerLayouts';
-import { hasCustomLayoutSelector } from './customization/Selectors';
-import { TrackerLayoutCustom } from './layouts/TrackerLayoutCustom';
+import { isLogicLoadedSelector } from './logic/Selectors';
+import { MakeTooltipsAvailable } from './tooltips/TooltipHooks';
+import { useTrackerInterfaceReducer } from './tracker/TrackerInterfaceReducer';
 
 export default function TrackerContainer() {
     const logicLoaded = useSelector(isLogicLoadedSelector);

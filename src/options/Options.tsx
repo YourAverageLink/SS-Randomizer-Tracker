@@ -1,10 +1,5 @@
-import type {
-    AllTypedOptions,
-    Option,
-    OptionDefs,
-    OptionValue,
-    OptionsCommand,
-} from '../permalink/SettingsTypes';
+import clsx from 'clsx';
+import { isEqual, range } from 'es-toolkit';
 import React, {
     useCallback,
     useEffect,
@@ -13,32 +8,44 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { decodePermalink, encodePermalink } from '../permalink/Settings';
+import { useNavigate } from 'react-router-dom';
+import Select, {
+    type ActionMeta,
+    type MultiValue,
+    type SingleValue,
+} from 'react-select';
+import semverSatisfies from 'semver/functions/satisfies';
+import DiscordButton from '../additionalComponents/DiscordButton';
+import * as Tabs from '../additionalComponents/Tabs';
+import Tooltip from '../additionalComponents/Tooltip';
+import { selectStyles } from '../customization/ComponentStyles';
+import { ImportButton } from '../ImportExport';
 import {
     LATEST_STRING,
     type RemoteReference,
     formatRemote,
     parseRemote,
 } from '../loader/LogicLoader';
+import { useReleases } from '../loader/ReleasesLoader';
+import { type LogicBundle, loadLogic } from '../logic/Slice';
+import { decodePermalink, encodePermalink } from '../permalink/Settings';
+import type {
+    AllTypedOptions,
+    Option,
+    OptionDefs,
+    OptionValue,
+    OptionsCommand,
+} from '../permalink/SettingsTypes';
+import { useAppDispatch } from '../store/Store';
 import { acceptSettings, reset } from '../tracker/Slice';
 import Acknowledgement from './Acknowledgment';
-import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../store/Store';
-import { type LogicBundle, loadLogic } from '../logic/Slice';
-import Select, { type MultiValue, type ActionMeta, type SingleValue } from 'react-select';
-import { selectStyles } from '../customization/ComponentStyles';
-import DiscordButton from '../additionalComponents/DiscordButton';
-import { ImportButton } from '../ImportExport';
-import Tooltip from '../additionalComponents/Tooltip';
-import { type LoadingState, type OptionsAction, useOptionsState } from './OptionsReducer';
-import { useReleases } from '../loader/ReleasesLoader';
-import semverSatisfies from 'semver/functions/satisfies';
-import { OptionsPresets } from './OptionsPresets';
 import styles from './Options.module.css';
-import clsx from 'clsx';
-import { isEqual, range } from 'es-toolkit';
-import * as Tabs from '../additionalComponents/Tabs';
-
+import { OptionsPresets } from './OptionsPresets';
+import {
+    type LoadingState,
+    type OptionsAction,
+    useOptionsState,
+} from './OptionsReducer';
 
 /** The tracker will only show these options, and tracker logic code is only allowed to access these! */
 const optionCategorization_ = {
@@ -169,7 +176,11 @@ export default function Options() {
                     loadingState={loadingState}
                     loadedRemoteName={loaded?.remoteName}
                 />
-                <PermalinkChooser dispatch={dispatch} options={loaded?.options} settings={settings} />
+                <PermalinkChooser
+                    dispatch={dispatch}
+                    options={loaded?.options}
+                    settings={settings}
+                />
             </div>
             <LaunchButtons
                 hasChanges={hasChanges}
@@ -233,17 +244,26 @@ function LaunchButtons({
 
     return (
         <div className={styles.launchButtons}>
-            <button type="button" className="tracker-button" disabled={!canResume} onClick={() => confirmLaunch()}>
+            <button
+                type="button"
+                className="tracker-button"
+                disabled={!canResume}
+                onClick={() => confirmLaunch()}
+            >
                 <div className={styles.continueButton}>
                     <span>Continue Tracker</span>
-                    <span
-                        className={styles.counters}
-                    >
-                        {counters && `${counters.numChecked}/${counters.numRemaining}`}
+                    <span className={styles.counters}>
+                        {counters &&
+                            `${counters.numChecked}/${counters.numRemaining}`}
                     </span>
                 </div>
             </button>
-            <button type="button" className="tracker-button" disabled={!canStart} onClick={() => confirmLaunch(true)}>
+            <button
+                type="button"
+                className="tracker-button"
+                disabled={!canStart}
+                onClick={() => confirmLaunch(true)}
+            >
                 Launch New Tracker
             </button>
             <ImportButton
@@ -251,7 +271,9 @@ function LaunchButtons({
                     dispatch({ type: 'selectRemote', remote, viaImport: true })
                 }
             />
-            <button type="button" className="tracker-button"
+            <button
+                type="button"
+                className="tracker-button"
                 disabled={!hasChanges}
                 onClick={() => dispatch({ type: 'revertChanges' })}
             >
@@ -268,7 +290,7 @@ function LaunchButtons({
     );
 }
 
-const leastSupportedRelease = ">=2.1.1";
+const leastSupportedRelease = '>=2.1.1';
 
 function useRemoteOptions() {
     const githubReleases = useReleases();
@@ -290,16 +312,19 @@ function useRemoteOptions() {
         }));
 
         if (githubReleases) {
-            const supportedReleases = githubReleases.releases.filter((r) => semverSatisfies(r, leastSupportedRelease));
-            remotes.push(...supportedReleases.map((r) => ({
-                value: { type: 'releaseVersion', versionTag: r } as const,
-                label: r,
-            })));
+            const supportedReleases = githubReleases.releases.filter((r) =>
+                semverSatisfies(r, leastSupportedRelease),
+            );
+            remotes.push(
+                ...supportedReleases.map((r) => ({
+                    value: { type: 'releaseVersion', versionTag: r } as const,
+                    label: r,
+                })),
+            );
         }
         return remotes;
     }, [githubReleases]);
 }
-
 
 /** A component to choose your logic release. */
 function LogicChooser({
@@ -353,12 +378,8 @@ function LogicChooser({
                 }}
             >
                 <Tabs.List>
-                    <Tabs.Trigger value="wellKnown">
-                        Releases
-                    </Tabs.Trigger>
-                    <Tabs.Trigger value="raw">
-                        Beta Feature
-                    </Tabs.Trigger>
+                    <Tabs.Trigger value="wellKnown">Releases</Tabs.Trigger>
+                    <Tabs.Trigger value="raw">Beta Feature</Tabs.Trigger>
                 </Tabs.List>
                 <Tabs.Content value="wellKnown">
                     <Select
@@ -437,8 +458,8 @@ function LoadingStateIndicator({
                 {loadingState?.type === 'loading'
                     ? '⏳'
                     : loadingState
-                        ? `❌ ${loadingState.error}`
-                        : '✅'}
+                      ? `❌ ${loadingState.error}`
+                      : '✅'}
             </span>
         </div>
     );
@@ -504,11 +525,11 @@ function OptionsList({
         <div className={styles.optionsCategory}>
             <Tabs.Root defaultValue="Shuffles">
                 <Tabs.List>
-                    {Object.keys(optionCategorization).map((key) => 
-                    <Tabs.Trigger key={key} value={key}>
-                        {key}
-                    </Tabs.Trigger>
-                    )}
+                    {Object.keys(optionCategorization).map((key) => (
+                        <Tabs.Trigger key={key} value={key}>
+                            {key}
+                        </Tabs.Trigger>
+                    ))}
                 </Tabs.List>
                 {Object.entries(optionCategorization).map(
                     ([title, categoryOptions]) => {

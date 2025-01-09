@@ -1,11 +1,20 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import type { ColorScheme } from './customization/ColorScheme';
+import type {
+    CounterBasis,
+    CustomizationState,
+    ItemLayout,
+    LocationLayout,
+} from './customization/Slice';
+import {
+    type RemoteReference,
+    formatRemote,
+    parseRemote,
+} from './loader/LogicLoader';
+import type { SavesState } from './saves/Slice';
 import type { RootState } from './store/Store';
 import type { TrackerState } from './tracker/Slice';
-import { type RemoteReference, formatRemote, parseRemote } from './loader/LogicLoader';
-import type { CounterBasis, CustomizationState, ItemLayout, LocationLayout } from './customization/Slice';
-import type { ColorScheme } from './customization/ColorScheme';
-import type { SavesState } from './saves/Slice';
 
 const trackerStateLocalStorageKey = 'ssrTrackerState';
 const customizationStateLocalStorageKey = 'ssrTrackerCustomization';
@@ -20,12 +29,19 @@ const trickSemilogicLocalStorageKey = 'ssrTrackerTrickLogic';
 const counterBasisLocalStorageKey = 'ssrTrackerCounterBasis';
 
 export function useSyncTrackerStateToLocalStorage() {
-    const rawRemote = useSelector((state: RootState) => state.logic.loaded!.remote);
+    const rawRemote = useSelector(
+        (state: RootState) => state.logic.loaded!.remote,
+    );
     const trackerState = useSelector((state: RootState) => state.tracker);
-    const customizationState = useSelector((state: RootState) => state.customization);
+    const customizationState = useSelector(
+        (state: RootState) => state.customization,
+    );
 
     useEffect(() => {
-        localStorage.setItem(trackerStateLocalStorageKey, JSON.stringify(trackerState));
+        localStorage.setItem(
+            trackerStateLocalStorageKey,
+            JSON.stringify(trackerState),
+        );
     }, [trackerState]);
 
     useEffect(() => {
@@ -36,8 +52,11 @@ export function useSyncTrackerStateToLocalStorage() {
     }, [rawRemote]);
 
     useEffect(() => {
-        localStorage.setItem(customizationStateLocalStorageKey, JSON.stringify(customizationState))
-    }, [customizationState])
+        localStorage.setItem(
+            customizationStateLocalStorageKey,
+            JSON.stringify(customizationState),
+        );
+    }, [customizationState]);
 }
 
 export function useSyncSavesToLocalStorage() {
@@ -50,7 +69,9 @@ export function useSyncSavesToLocalStorage() {
 
 export function getStoredTrackerState(): Partial<TrackerState> | undefined {
     const stateJson = localStorage.getItem(trackerStateLocalStorageKey);
-    return stateJson ? JSON.parse(stateJson) as Partial<TrackerState> : undefined;
+    return stateJson
+        ? (JSON.parse(stateJson) as Partial<TrackerState>)
+        : undefined;
 }
 
 const logicMigrations: Record<string, string> = {
@@ -63,7 +84,7 @@ export function getStoredCustomization(): Partial<
     Omit<CustomizationState, 'colorScheme'> & {
         colorScheme: Partial<ColorScheme>;
     }
-    > {
+> {
     const entireCustomization = localStorage.getItem(
         customizationStateLocalStorageKey,
     );
@@ -110,24 +131,30 @@ export function clearStoredRemote() {
 
 export function getStoredSaves(): Partial<SavesState> | undefined {
     const saves = localStorage.getItem(savesLocalStorageKey);
-    return saves ? JSON.parse(saves) as SavesState : undefined;
+    return saves ? (JSON.parse(saves) as SavesState) : undefined;
 }
 
 // Legacy
 
 function getStoredItemLayout(): ItemLayout | undefined {
-    const itemLayout = (localStorage.getItem(itemLayoutLocalStorageKey) as ItemLayout | null);
+    const itemLayout = localStorage.getItem(
+        itemLayoutLocalStorageKey,
+    ) as ItemLayout | null;
     return itemLayout ?? undefined;
 }
 
 function getStoredLocationLayout(): LocationLayout | undefined {
-    const locationLayout = (localStorage.getItem(locationLayoutLocalStorageKey) as LocationLayout | null);
+    const locationLayout = localStorage.getItem(
+        locationLayoutLocalStorageKey,
+    ) as LocationLayout | null;
     return locationLayout ?? undefined;
 }
 
 function getStoredColorScheme(): Partial<ColorScheme> | undefined {
     const schemeJson = localStorage.getItem(colorSchemeLocalStorageKey);
-    return schemeJson ? (JSON.parse(schemeJson) as Partial<ColorScheme>) : undefined;
+    return schemeJson
+        ? (JSON.parse(schemeJson) as Partial<ColorScheme>)
+        : undefined;
 }
 
 function getStoredTrickSemiLogic(): boolean | undefined {

@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import required from '../assets/Entrance.png';
 import unknown from '../assets/hints/unknown.png';
 import unrequired from '../assets/No_Entrance.png';
-import required from '../assets/Entrance.png';
 import keyDownWrapper from '../utils/KeyDownWrapper';
 
 const HintMarker = () => {
@@ -21,9 +21,13 @@ const HintMarker = () => {
             onKeyDown={keyDownWrapper(handleClick)}
             role="button"
             tabIndex={0}
-            style={{width: '100%'}}
+            style={{ width: '100%' }}
         >
-            <img src={images[current]} alt={altTexts[current]} style={{width: '100%'}} />
+            <img
+                src={images[current]}
+                alt={altTexts[current]}
+                style={{ width: '100%' }}
+            />
         </div>
     );
 };

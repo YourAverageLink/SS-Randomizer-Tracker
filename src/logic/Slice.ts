@@ -1,7 +1,7 @@
-import type { OptionDefs } from '../permalink/SettingsTypes';
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
-import type { RawLogic, RawPresets } from './UpstreamTypes';
 import type { RemoteReference } from '../loader/LogicLoader';
+import type { OptionDefs } from '../permalink/SettingsTypes';
+import type { RawLogic, RawPresets } from './UpstreamTypes';
 
 /**
  * Relevant data loaded from an ssrando upstream.
@@ -20,7 +20,7 @@ export interface LogicBundle {
 }
 
 export interface LogicState {
-    loaded: LogicBundle | undefined,
+    loaded: LogicBundle | undefined;
 }
 
 const initialState: LogicState = {
@@ -31,10 +31,7 @@ const logicSlice = createSlice({
     name: 'logic',
     initialState,
     reducers: {
-        loadLogic: (
-            state,
-            action: PayloadAction<LogicBundle>,
-        ) => {
+        loadLogic: (state, action: PayloadAction<LogicBundle>) => {
             state.loaded = action.payload;
         },
     },

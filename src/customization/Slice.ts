@@ -1,6 +1,6 @@
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { getStoredCustomization } from '../LocalStorage';
 import { type ColorScheme, lightColorScheme } from './ColorScheme';
-import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export type ItemLayout = 'grid' | 'inventory';
 export type LocationLayout = 'list' | 'map';
@@ -14,7 +14,7 @@ export interface CustomizationState {
     enabledTrickLogicTricks: string[];
     counterBasis: CounterBasis;
     tumbleweed: boolean;
-    customLayout: string | undefined,
+    customLayout: string | undefined;
     itemLocationAssignment: boolean;
 }
 
@@ -73,7 +73,7 @@ const customizationSlice = createSlice({
         },
         resetCustomizationForTest: (_state, _action: PayloadAction<void>) => {
             return initialState;
-        }
+        },
     },
 });
 

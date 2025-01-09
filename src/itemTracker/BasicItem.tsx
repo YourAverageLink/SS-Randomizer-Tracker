@@ -1,7 +1,7 @@
-import keyDownWrapper from '../utils/KeyDownWrapper';
 import clsx from 'clsx';
-import './BasicItem.css';
 import { last } from 'es-toolkit';
+import keyDownWrapper from '../utils/KeyDownWrapper';
+import './BasicItem.css';
 
 /**
  * The fundamental controlled item component.

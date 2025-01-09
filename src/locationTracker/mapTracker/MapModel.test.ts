@@ -25,8 +25,14 @@ describe('tracker interaction', () => {
     }
 
     /** Set a particular settings value. */
-    function updateSettings<K extends keyof TypedOptions>(option: K, value: TypedOptions[K]) {
-        const settings = { ...readSelector(allSettingsSelector), [option]: value };
+    function updateSettings<K extends keyof TypedOptions>(
+        option: K,
+        value: TypedOptions[K],
+    ) {
+        const settings = {
+            ...readSelector(allSettingsSelector),
+            [option]: value,
+        };
         dispatch(acceptSettings({ settings }));
     }
 
@@ -39,7 +45,8 @@ describe('tracker interaction', () => {
           }
         `);
 
-        expect(getOwningProvince(mapModel, 'Faron Woods')).toMatchInlineSnapshot(`
+        expect(getOwningProvince(mapModel, 'Faron Woods'))
+            .toMatchInlineSnapshot(`
           {
             "result": "faronSubmap",
             "type": "ok",
@@ -51,19 +58,22 @@ describe('tracker interaction', () => {
         updateSettings('randomize-entrances', 'All Surface Dungeons');
         let mapModel;
         mapModel = readSelector(mapModelSelector);
-        expect(getOwningProvince(mapModel, 'Earth Temple')).toMatchInlineSnapshot(`
+        expect(getOwningProvince(mapModel, 'Earth Temple'))
+            .toMatchInlineSnapshot(`
           {
             "type": "err",
           }
         `);
         dispatch(
             mapEntrance({
-                from: tester.findExit('Faron Woods', 'Exit to Skyview Temple').exit.id,
+                from: tester.findExit('Faron Woods', 'Exit to Skyview Temple')
+                    .exit.id,
                 to: tester.findEntranceId('Earth Temple', 'Main Entrance'),
             }),
         );
         mapModel = readSelector(mapModelSelector);
-        expect(getOwningProvince(mapModel, 'Earth Temple')).toMatchInlineSnapshot(`
+        expect(getOwningProvince(mapModel, 'Earth Temple'))
+            .toMatchInlineSnapshot(`
           {
             "result": "faronSubmap",
             "type": "ok",

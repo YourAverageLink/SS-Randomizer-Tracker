@@ -7,13 +7,13 @@ import { type ExitMapping, dungeonNames } from './Locations';
 import type { Logic } from './Logic';
 import { LogicBuilder } from './LogicBuilder';
 import {
-    runtimeOptions,
-    impaSongCheck,
-    swordsToAdd,
     completeTriforceReq,
     gotOpeningReq,
     gotRaisingReq,
     hordeDoorReq,
+    impaSongCheck,
+    runtimeOptions,
+    swordsToAdd,
 } from './ThingsThatWouldBeNiceToHaveInTheDump';
 import {
     dungeonCompletionItems,

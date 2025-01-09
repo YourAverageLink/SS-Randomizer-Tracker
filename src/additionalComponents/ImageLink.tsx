@@ -3,9 +3,9 @@ export default function ImageLink({
     href,
     src,
 }: {
-    href: string,
-    alt: string,
-    src: string,
+    href: string;
+    alt: string;
+    src: string;
 }) {
     return (
         <a href={href}>

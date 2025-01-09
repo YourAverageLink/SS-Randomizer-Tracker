@@ -32,7 +32,9 @@ class PackedBitsReader {
 
             const mask = ((1 << bitsToRead) - 1) << this.currentBitIndex;
             const currentByte = this.bytes[this.currentByteIndex];
-            value = ((currentByte & mask) >> this.currentBitIndex) << bitsRead | value;
+            value =
+                (((currentByte & mask) >> this.currentBitIndex) << bitsRead) |
+                value;
 
             this.currentBitIndex += bitsToRead;
             this.currentByteIndex += this.currentBitIndex >> 3;

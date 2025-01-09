@@ -1,16 +1,16 @@
 import type { CSSProperties } from 'react';
-import Item from './Item';
-import { GratitudeCrystals } from './items/sidequest/GratitudeCrystals';
-import noTablets from '../assets/tablets/no_tablets.png';
-import { CounterItem } from './items/CounterItem';
 import { useDispatch, useSelector } from 'react-redux';
+import noTablets from '../assets/tablets/no_tablets.png';
+import { tumbleweedSelector } from '../customization/Selectors';
 import {
     rawItemCountSelector,
     totalGratitudeCrystalsSelector,
 } from '../tracker/Selectors';
 import { clickItem } from '../tracker/Slice';
-import { tumbleweedSelector } from '../customization/Selectors';
 import styles from './GridTracker.module.css';
+import Item from './Item';
+import { CounterItem } from './items/CounterItem';
+import { GratitudeCrystals } from './items/sidequest/GratitudeCrystals';
 
 export const GRID_TRACKER_ASPECT_RATIO = 1.063;
 
@@ -210,7 +210,7 @@ export default function GridTracker({ width }: { width: number }) {
                         bottom: 0,
                         lineHeight: 1,
                         pointerEvents: 'none',
-                        fontSize: imgWidth * 0.5
+                        fontSize: imgWidth * 0.5,
                     }}
                 >
                     {crystalCount}

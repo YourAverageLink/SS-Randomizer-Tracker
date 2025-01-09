@@ -1,21 +1,21 @@
+import { isEqual } from 'es-toolkit';
 import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { type RemoteReference, loadRemoteLogic } from '../loader/LogicLoader';
+import { getStoredRemote } from '../LocalStorage';
+import type { RawLogic, RawPresets } from '../logic/UpstreamTypes';
+import { validateSettings } from '../permalink/Settings';
 import type {
     AllTypedOptions,
     OptionDefs,
     OptionValue,
     OptionsCommand,
 } from '../permalink/SettingsTypes';
-import { useSelector } from 'react-redux';
 import type { RootState } from '../store/Store';
 import { totalCountersSelector } from '../tracker/Selectors';
-import { validateSettings } from '../permalink/Settings';
-import { type RemoteReference, loadRemoteLogic } from '../loader/LogicLoader';
-import { getStoredRemote } from '../LocalStorage';
 import { withCancel } from '../utils/CancelToken';
-import type { RawLogic, RawPresets } from '../logic/UpstreamTypes';
-import { delay } from '../utils/Promises';
 import { convertError } from '../utils/Errors';
-import { isEqual } from 'es-toolkit';
+import { delay } from '../utils/Promises';
 
 const defaultUpstream: RemoteReference = {
     type: 'latestRelease',
@@ -41,22 +41,22 @@ export type OptionsAction =
           value: OptionValue;
       }
     | {
-        type: 'changeSettings';
-        settings: AllTypedOptions,
-    }
+          type: 'changeSettings';
+          settings: AllTypedOptions;
+      }
     | {
-        type: 'selectRemote';
-        remote: RemoteReference,
-        viaImport?: boolean;
-    }
+          type: 'selectRemote';
+          remote: RemoteReference;
+          viaImport?: boolean;
+      }
     | {
-        type: 'applyPreset';
-        remote: RemoteReference,
-        settings: AllTypedOptions;
-    }
+          type: 'applyPreset';
+          remote: RemoteReference;
+          settings: AllTypedOptions;
+      }
     | {
-        type: 'revertChanges';
-    };
+          type: 'revertChanges';
+      };
 
 function initialOptionsState({
     reduxRemote,
@@ -103,13 +103,15 @@ function optionsReducer(storedSettings: Partial<AllTypedOptions>) {
                     ...state,
                     selectedRemote: action.remote,
                     settings: action.settings,
-                }
+                };
             }
             case 'selectRemote': {
                 const newState = {
                     ...state,
                     selectedRemote: action.remote,
-                    hasChanges: state.hasChanges || !isEqual(action.remote, state.selectedRemote),
+                    hasChanges:
+                        state.hasChanges ||
+                        !isEqual(action.remote, state.selectedRemote),
                 };
 
                 if (action.viaImport) {
@@ -132,9 +134,9 @@ export type LoadingState =
           error: string;
       }
     | {
-        type: 'corruptDump';
-        error: string;
-    };
+          type: 'corruptDump';
+          error: string;
+      };
 
 async function loadRemote(
     remote: RemoteReference,
@@ -147,10 +149,10 @@ async function loadRemote(
 }
 
 export function useOptionsState() {
-    const reduxLoaded = useSelector(
-        (state: RootState) => state.logic.loaded,
+    const reduxLoaded = useSelector((state: RootState) => state.logic.loaded);
+    const reduxSettings = useSelector(
+        (state: RootState) => state.tracker.settings,
     );
-    const reduxSettings = useSelector((state: RootState) => state.tracker.settings);
     const [state, dispatch] = useReducer(
         optionsReducer(reduxSettings),
         { reduxRemote: reduxLoaded?.remote, reduxSettings },
@@ -205,7 +207,9 @@ export function useOptionsState() {
     }, [dispatch, loadedBundle?.remote, state.selectedRemote]);
 
     const validatedSettings = useMemo(
-        () => loadedBundle && validateSettings(loadedBundle.options, state.settings),
+        () =>
+            loadedBundle &&
+            validateSettings(loadedBundle.options, state.settings),
         [loadedBundle, state.settings],
     );
 
@@ -234,8 +238,16 @@ export function useOptionsState() {
             evalError = convertError(e);
         }
 
-        return [completeState.tracker.hasBeenModified ? counters : undefined, evalError] as const;
-    }, [completeState.customization, completeState.tracker, loadedBundle, state.settings]);
+        return [
+            completeState.tracker.hasBeenModified ? counters : undefined,
+            evalError,
+        ] as const;
+    }, [
+        completeState.customization,
+        completeState.tracker,
+        loadedBundle,
+        state.settings,
+    ]);
 
     const returnedLoadingState: LoadingState | undefined =
         loadingState ??
