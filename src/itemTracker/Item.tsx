@@ -62,6 +62,7 @@ function Item({
                 count={count}
                 imgWidth={imgWidth}
                 onClick={handleClick}
+                dragItemName={itemName}
             >
                 {children}
             </BasicItem>

@@ -166,6 +166,7 @@ const Submap = ({
             tooltip={tooltip}
             onClick={handleClick}
             onContextMenu={displayMenu}
+            onItemDrag={() => {}}
             selected={currentRegionOrExit === birdStatueExitId}
             submarkerPlacement={'right'}
             submarkers={getSubmarkerData(data)}

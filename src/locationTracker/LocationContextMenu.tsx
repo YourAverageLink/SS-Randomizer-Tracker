@@ -11,12 +11,10 @@ import { findRepresentativeIcon } from '../itemTracker/Images';
 import { useAppDispatch } from '../store/Store';
 import { clickCheck } from '../tracker/Actions';
 import { setCheckHint } from '../tracker/Slice';
-import type { LocationContextMenuProps } from './Location';
+import type { ItemData, LocationContextMenuProps } from './Location';
 
 type CtxProps<T = void> = ItemParams<LocationContextMenuProps, T>;
-interface ItemData {
-    item: string;
-}
+
 
 export default function LocationContextMenu() {
     const dispatch = useAppDispatch();

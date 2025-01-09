@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import type { TriggerEvent } from 'react-contexify';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import type { ColorScheme } from '../../customization/ColorScheme';
 import { decodeHint } from '../../hints/Hints';
 import { hintsToSubmarkers } from '../../hints/HintsParser';
@@ -22,6 +22,8 @@ import type {
 import RequirementsTooltip from '../RequirementsTooltip';
 import { getMarkerColor, getRegionData, getSubmarkerData } from './MapUtils';
 import { Marker } from './Marker';
+import type { ItemData } from '../Location';
+import { setHint } from '../../tracker/Slice';
 
 type EntranceMarkerProps = {
     markerX: number;
@@ -60,6 +62,8 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
     const area = useSelector((state: RootState) =>
         areasSelector(state).find((r) => r.name === region),
     );
+
+    const dispatch = useDispatch();
 
     const hasConnection = area !== undefined;
     const canReach = inLogicBits.test(logic.itemBits[exit.exit.id]);
@@ -178,6 +182,17 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
         }
     };
 
+    const handleItemDrag = useCallback(
+        (params: ItemData) =>
+            area && dispatch(
+                setHint({
+                    areaId: area.name,
+                    hint: { type: 'item', item: params.item },
+                }),
+            ),
+        [dispatch],
+    );
+
     return (
         <Marker
             x={markerX}
@@ -187,6 +202,7 @@ const EntranceMarker = (props: EntranceMarkerProps) => {
             tooltip={tooltip}
             onClick={handleClick}
             onContextMenu={displayMenu}
+            onItemDrag={handleItemDrag}
             selected={selected}
             submarkerPlacement={submarkerPlacement}
             submarkers={

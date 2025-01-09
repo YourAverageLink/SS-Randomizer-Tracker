@@ -4,13 +4,22 @@ import swordBlock from '../assets/Sword_Block.png';
 import { rawItemCountSelector } from '../tracker/Selectors';
 import { clickItem } from '../tracker/Slice';
 import keyDownWrapper from '../utils/KeyDownWrapper';
-import allImages from './Images';
+import allImages, { findRepresentativeIcon } from './Images';
 import Item from './Item';
 
 export default function SwordBlock({ width }: { width: number }) {
     const dispatch = useDispatch();
     const handleExtraWalletClick = () => {
         dispatch(clickItem({ item: 'Extra Wallet', take: false }));
+    };
+
+    const handleExtraWalletDrag = (event: React.DragEvent<HTMLDivElement>) => {
+        // This doesn't seem to work
+        event.dataTransfer.setData("text/plain", 'Extra Wallet');
+        event.dataTransfer.effectAllowed = "move";
+        const dragIcon = new Image(36, 36);
+        dragIcon.src = findRepresentativeIcon('Extra Wallet');
+        event.dataTransfer.setDragImage(dragIcon, 18, 18);
     };
 
     const swordStyle: CSSProperties = {
@@ -88,6 +97,7 @@ export default function SwordBlock({ width }: { width: number }) {
             <div
                 style={{ ...extraWalletStyle, fontSize: width * 0.12 }}
                 onClick={handleExtraWalletClick}
+                onDragStart={handleExtraWalletDrag}
                 onKeyDown={keyDownWrapper(handleExtraWalletClick)}
                 tabIndex={0}
                 role="button"

@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useCallback } from 'react';
 import type { TriggerEvent } from 'react-contexify';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Tooltip from '../additionalComponents/Tooltip';
 import { decodeHint } from '../hints/Hints';
 import type { HintRegion } from '../logic/Locations';
@@ -11,6 +11,12 @@ import AreaCounters from './AreaCounters';
 import { useContextMenu } from './context-menu';
 import type { LocationGroupContextMenuProps } from './LocationGroupContextMenu';
 import styles from './LocationGroupHeader.module.css';
+import { setHint } from '../tracker/Slice';
+
+interface ItemRegionHint {
+    region: string,
+    item: string,
+}
 
 export default function LocationGroupHeader({
     area,
@@ -21,9 +27,32 @@ export default function LocationGroupHeader({
     setActiveArea: (area: string) => void;
     alignCounters?: boolean;
 }) {
+    const dispatch = useDispatch();
     const onClick = useCallback(
         () => setActiveArea(area.name),
         [area.name, setActiveArea],
+    );
+
+    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+    };
+    
+    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        const itemName = event.dataTransfer.getData("text/plain");
+        handleItemDrag({region: area.name, item: itemName});
+    };
+
+    const handleItemDrag = useCallback(
+        (params: ItemRegionHint) =>
+            dispatch(
+                setHint({
+                    areaId: params.region,
+                    hint: { type: 'item', item: params.item },
+                }),
+            ),
+        [dispatch],
     );
 
     const areaHint = useSelector(areaHintSelector(area.name));
@@ -47,6 +76,8 @@ export default function LocationGroupHeader({
     return (
         <div
             onClick={onClick}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
             onKeyDown={keyDownWrapper(onClick)}
             role="button"
             tabIndex={0}

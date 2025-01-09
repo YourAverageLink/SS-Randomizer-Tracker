@@ -11,6 +11,7 @@ import styles from './GridTracker.module.css';
 import Item from './Item';
 import { CounterItem } from './items/CounterItem';
 import { GratitudeCrystals } from './items/sidequest/GratitudeCrystals';
+import { findRepresentativeIcon } from './Images';
 
 export const GRID_TRACKER_ASPECT_RATIO = 1.063;
 
@@ -18,6 +19,15 @@ export default function GridTracker({ width }: { width: number }) {
     const dispatch = useDispatch();
     const handleExtraWalletClick = () => {
         dispatch(clickItem({ item: 'Extra Wallet', take: false }));
+    };
+
+    const handleExtraWalletDrag = (event: React.DragEvent<HTMLDivElement>) => {
+        // This doesn't seem to work
+        event.dataTransfer.setData("text/plain", 'Extra Wallet');
+        event.dataTransfer.effectAllowed = "move";
+        const dragIcon = new Image(36, 36);
+        dragIcon.src = findRepresentativeIcon('Extra Wallet');
+        event.dataTransfer.setDragImage(dragIcon, 18, 18);
     };
 
     const emeraldTabletStyle: CSSProperties = {
@@ -131,6 +141,7 @@ export default function GridTracker({ width }: { width: number }) {
                         fontSize: imgWidth * 0.4,
                     }}
                     onClick={handleExtraWalletClick}
+                    onDragStart={handleExtraWalletDrag}
                     onKeyDown={handleExtraWalletClick}
                     tabIndex={0}
                     role="button"

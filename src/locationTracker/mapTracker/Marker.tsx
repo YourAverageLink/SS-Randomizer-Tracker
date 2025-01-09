@@ -1,9 +1,10 @@
 import clsx from 'clsx';
-import type { CSSProperties } from 'react';
+import { type CSSProperties } from 'react';
 import type { TriggerEvent } from 'react-contexify';
 import Tooltip from '../../additionalComponents/Tooltip';
 import type { ColorScheme } from '../../customization/ColorScheme';
 import styles from './Marker.module.css';
+import type { ItemData } from '../Location';
 
 export type MarkerVariant = 'square' | 'rounded' | 'circle';
 export type SubmarkerPlacement = 'left' | 'right';
@@ -30,6 +31,7 @@ export function Marker({
     tooltip,
     onClick,
     onContextMenu,
+    onItemDrag,
     selected,
 }: {
     variant: MarkerVariant;
@@ -42,6 +44,7 @@ export function Marker({
     tooltip?: React.ReactNode;
     onClick: (ev: TriggerEvent) => void;
     onContextMenu?: (ev: React.MouseEvent) => void;
+    onItemDrag: (params: ItemData) => void;
     selected: boolean;
 }) {
     const positionVars = {
@@ -56,11 +59,25 @@ export function Marker({
         markerStyle.boxShadow = `0 0 20px var(--scheme-${color})`;
     }
 
+    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+    };
+    
+    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        const itemName = event.dataTransfer.getData("text/plain");
+        console.log(itemName);
+        onItemDrag({item: itemName});
+    };
+
     return (
         <>
             <Tooltip content={tooltip} placement="bottom">
                 <div
                     onClick={onClick}
+                    onDragOver={handleDragOver}
+                    onDrop={handleDrop}
                     onKeyDown={onClick}
                     role="button"
                     tabIndex={0}

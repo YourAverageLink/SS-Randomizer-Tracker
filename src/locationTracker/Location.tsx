@@ -17,7 +17,7 @@ import {
     exitsByIdSelector,
     isCheckBannedSelector,
 } from '../tracker/Selectors';
-import { mapEntrance } from '../tracker/Slice';
+import { mapEntrance, setCheckHint } from '../tracker/Slice';
 import keyDownWrapper from '../utils/KeyDownWrapper';
 import { useContextMenu } from './context-menu';
 import styles from './Location.module.css';
@@ -26,6 +26,9 @@ import RequirementsTooltip from './RequirementsTooltip';
 
 export interface LocationContextMenuProps {
     checkId: string;
+}
+export interface ItemData {
+    item: string;
 }
 
 export default function Location({
@@ -70,6 +73,28 @@ function CheckLocation({ id }: { id: string }) {
         [id, show],
     );
 
+    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+      };
+    
+    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        const itemName = event.dataTransfer.getData("text/plain");
+        handleItemDrag({item: itemName});
+    };
+
+    const handleItemDrag = useCallback(
+        (params: ItemData) =>
+            dispatch(
+                setCheckHint({
+                    checkId: id,
+                    hint: params.item,
+                }),
+            ),
+        [dispatch],
+    );
+
     const expr = useTooltipExpr(id);
     const path = useEntrancePath(id);
 
@@ -102,6 +127,8 @@ function CheckLocation({ id }: { id: string }) {
                 onClick={onClick}
                 onKeyDown={keyDownWrapper(onClick)}
                 onContextMenu={displayMenu}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
                 data-check-id={id}
             >
                 <span className={styles.text}>{check.checkName}</span>

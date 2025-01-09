@@ -1,6 +1,6 @@
 import { type MouseEvent, useCallback } from 'react';
 import type { TriggerEvent } from 'react-contexify';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { decodeHint } from '../../hints/Hints';
 import { hintsToSubmarkers } from '../../hints/HintsParser';
 import type { RootState } from '../../store/Store';
@@ -10,6 +10,8 @@ import type { LocationGroupContextMenuProps } from '../LocationGroupContextMenu'
 import { useContextMenu } from '../context-menu';
 import { getMarkerColor, getRegionData, getSubmarkerData } from './MapUtils';
 import { Marker } from './Marker';
+import type { ItemData } from '../Location';
+import { setHint } from '../../tracker/Slice';
 
 type MapMarkerProps = {
     markerX: number;
@@ -38,6 +40,8 @@ const MapMarker = (props: MapMarkerProps) => {
     const { show } = useContextMenu<LocationGroupContextMenuProps>({
         id: 'group-context',
     });
+
+    const dispatch = useDispatch();
 
     const displayMenu = useCallback(
         (e: MouseEvent) => {
@@ -68,6 +72,17 @@ const MapMarker = (props: MapMarkerProps) => {
         }
     };
 
+    const handleItemDrag = useCallback(
+        (params: ItemData) =>
+            dispatch(
+                setHint({
+                    areaId: area.name,
+                    hint: { type: 'item', item: params.item },
+                }),
+            ),
+        [dispatch],
+    );
+
     return (
         <Marker
             x={markerX}
@@ -77,6 +92,7 @@ const MapMarker = (props: MapMarkerProps) => {
             tooltip={tooltip}
             onClick={handleClick}
             onContextMenu={displayMenu}
+            onItemDrag={handleItemDrag}
             selected={selected}
             submarkerPlacement={submarkerPlacement}
             submarkers={[
