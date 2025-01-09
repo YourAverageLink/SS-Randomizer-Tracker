@@ -52,6 +52,10 @@
     input,
     textarea {
         font-family: inherit;
+        font-size: inherit;
+    }
+
+    textarea {
         font-size: calc(20px * 2 / 3);
     }
 
