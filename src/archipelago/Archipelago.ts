@@ -395,6 +395,11 @@ export class APClientManager {
             await client.login(server, slot, 'Skyward Sword', {
                 tags: ['Tracker'],
                 password: password,
+                version: {
+                    major: 0,
+                    minor: 6,
+                    build: 7,
+                },
             });
             this.client = client;
             this.status = {
