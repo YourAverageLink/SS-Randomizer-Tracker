@@ -102,10 +102,8 @@ export function getEntrancePools(
     const relevantDerSetting =
         randomDungeonEntranceSetting ?? randomEntranceSetting;
     const requiredDungeonsSeparately =
-        relevantDerSetting === 'Required Dungeons Separately';
-    const skyKeepVanilla =
-        relevantDerSetting !== 'All Surface Dungeons + Sky Keep' &&
-        relevantDerSetting !== 'Required Dungeons Separately';
+        relevantDerSetting === 'Required Dungeons Only';
+    const skyKeepVanilla = false; // not disabled by a setting
     const requiredDungeons_: string[] = requiredDungeons;
 
     const result: Record<string, EntrancePool> = {};
@@ -202,15 +200,13 @@ export function getExitRules(
         logic.areaGraph.autoExits,
     );
 
-    const everythingRandomized = randomEntranceSetting === 'All';
+    const everythingRandomized = randomEntranceSetting === 'All Entrances';
     const relevantDerSetting =
         randomDungeonEntranceSetting ?? randomEntranceSetting;
     const dungeonEntrancesRandomized = relevantDerSetting !== 'None';
     const requiredDungeonsSeparately =
-        relevantDerSetting === 'Required Dungeons Separately';
-    const skyKeepVanilla =
-        relevantDerSetting !== 'All Surface Dungeons + Sky Keep' &&
-        relevantDerSetting !== 'Required Dungeons Separately';
+        relevantDerSetting === 'Required Dungeons Only';
+    const skyKeepVanilla = false; // not disabled by a setting
 
     for (const exitId of Object.keys(logic.areaGraph.exits)) {
         if (
