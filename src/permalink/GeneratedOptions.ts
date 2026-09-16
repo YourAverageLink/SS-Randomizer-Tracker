@@ -21,7 +21,7 @@ export interface GeneratedOptions {
     /** Triforce Shuffle */
     'triforce-shuffle': 'Vanilla' | 'Sky Keep' | 'Anywhere';
     /** Randomize Entrances */
-    'randomize-entrances': 'None' | 'Required Dungeons Separately' | 'All Surface Dungeons' | 'All Surface Dungeons + Sky Keep';
+    'randomize-entrances': 'None' | 'Required Dungeons Only' | 'Required Dungeons' | 'All Entrances';
     /** Randomize Silent Realms */
     'randomize-trials': boolean;
     /** No Spoiler Log */
