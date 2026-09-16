@@ -180,15 +180,12 @@ describe('full logic tests', () => {
                 .hidden;
         expect(skyKeepHidden()).toBe(true);
 
-        updateSettings(
-            'randomize-entrances',
-            'All Surface Dungeons + Sky Keep',
-        );
+        updateSettings('randomize-entrances', 'Dungeons Only');
         expect(skyKeepHidden()).toBe(false);
 
-        updateSettings('randomize-entrances', 'All Surface Dungeons');
-        expect(skyKeepHidden()).toBe(true);
-        updateSettings('randomize-entrances', 'Required Dungeons Separately');
+        // updateSettings('randomize-entrances', 'All Surface Dungeons');
+        // expect(skyKeepHidden()).toBe(true);
+        updateSettings('randomize-entrances', 'Required Dungeons Only');
         expect(skyKeepHidden()).toBe(true);
 
         updateSettings('triforce-shuffle', 'Sky Keep');
@@ -435,9 +432,9 @@ describe('full logic tests', () => {
         expect(readSelector(totalCountersSelector).numExitsAccessible).toBe(0);
     });
 
-    it('handles DER = Required Dungeons Separately', () => {
+    it('handles DER = Required Dungeons Only', () => {
         updateSettingsWithFullInventory();
-        updateSettings('randomize-entrances', 'Required Dungeons Separately');
+        updateSettings('randomize-entrances', 'Required Dungeons Only');
         updateSettings('empty-unrequired-dungeons', false);
         updateSettings('triforce-required', false);
         updateSettings('triforce-shuffle', 'Anywhere');
@@ -496,6 +493,7 @@ describe('full logic tests', () => {
         );
     });
 
+    /*
     it('handles DER = All Surface Dungeons', () => {
         updateSettingsWithFullInventory();
         updateSettings('randomize-entrances', 'All Surface Dungeons');
@@ -536,13 +534,11 @@ describe('full logic tests', () => {
 
         expect(readSelector(totalCountersSelector).numExitsAccessible).toBe(6);
     });
+    */
 
-    it('handles DER = All Surface Dungeons + Sky Keep', () => {
+    it('handles DER = Dungeons Only', () => {
         updateSettingsWithFullInventory();
-        updateSettings(
-            'randomize-entrances',
-            'All Surface Dungeons + Sky Keep',
-        );
+        updateSettings('randomize-entrances', 'Dungeons Only');
         updateSettings('empty-unrequired-dungeons', true);
         updateSettings('triforce-required', false);
         updateSettings('triforce-shuffle', 'Anywhere');
@@ -587,10 +583,7 @@ describe('full logic tests', () => {
     });
 
     it('handles num accessible exits correctly', () => {
-        updateSettings(
-            'randomize-entrances',
-            'All Surface Dungeons + Sky Keep',
-        );
+        updateSettings('randomize-entrances', 'Dungeons Only');
         updateSettings('random-start-statues', false);
 
         dispatch(clickItem({ item: 'Stone of Trials', take: false }));

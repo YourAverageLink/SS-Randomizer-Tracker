@@ -67,7 +67,7 @@ describe('tracker interface reducer', () => {
             acceptSettings({
                 settings: {
                     ...settings,
-                    'randomize-entrances': 'All Surface Dungeons',
+                    'randomize-entrances': 'Dungeons Only',
                 },
             }),
         );

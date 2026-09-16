@@ -55,7 +55,7 @@ describe('tracker interaction', () => {
     });
 
     it('correctly assigns dungeons in other regions', () => {
-        updateSettings('randomize-entrances', 'All Surface Dungeons');
+        updateSettings('randomize-entrances', 'Dungeons Only');
         let mapModel;
         mapModel = readSelector(mapModelSelector);
         expect(getOwningProvince(mapModel, 'Earth Temple'))

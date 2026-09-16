@@ -385,8 +385,7 @@ const areaHiddenSelector = createSelector(
             areaNonprogress(area) &&
             (!isDungeon(area) ||
                 (area === 'Sky Keep' &&
-                    dungeonEntranceSetting !==
-                        'All Surface Dungeons + Sky Keep'));
+                    dungeonEntranceSetting !== 'Dungeons Only'));
     },
 );
 

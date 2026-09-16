@@ -185,9 +185,8 @@
   bits: 2
   choices:
     - None
-    - Required Dungeons Separately
-    - All Surface Dungeons
-    - All Surface Dungeons + Sky Keep
+    - Required Dungeons Only
+    - Dungeons Only
   default: None
   help: "Shuffles entrances with one another.
         **None**: entrances are vanilla.
